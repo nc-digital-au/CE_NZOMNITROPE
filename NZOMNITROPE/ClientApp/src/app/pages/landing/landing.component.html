@@ -1,0 +1,44 @@
+<div class="blank-layout-container justify-content-center">
+  <div class="position-relative row w-100 h-100">
+    <div class="col-lg-7 col-xl-8 bg-gredient p-0">
+      <div class="left-panel p-24 h-100">
+        <div class="row justify-content-center w-100">
+          <div class="col-lg-9 max-width-form text-center">
+            <h4 class="f-w-700 f-s-24 m-0 m-b-30" style="line-height: 1.5em;">Boehringer Ingelheim Medicines Request Program</h4>
+            <span class="f-s-14 d-block mat-body-1 m-t-8">This site is intended for Australian healthcare professionals and not for the public.</span>
+
+            <div class="m-t-30 m-b-30 landing-actions">
+              <a mat-flat-button color="primary" class="m-b-6" href="/bff/login">
+                Login
+              </a>
+              <div class="or-border d-flex align-items-center justify-content-center w-100">
+                &nbsp;
+                or
+                &nbsp;
+              </div>
+              <button mat-flat-button color="accent" class="m-t-6"
+                [routerLink]="[routeLinks.authentication.prescriber.register]">
+                Register
+              </button>
+            </div>
+
+            <span class="d-block f-w-500 d-block m-t-24">
+              Forgot password?
+              <a [routerLink]="[routeLinks.authentication.account.forgotPassword]" class="text-decoration-none text-primary f-w-500 f-s-14">
+                Click here
+              </a>
+            </span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <div class="col-lg-5 col-xl-4 p-0 d-lg-block d-none">
+      <div class="p-32 d-flex align-items-start align-items-lg-center justify-content-center h-100">
+        <div class="right-panel align-items-center justify-content-center img-height d-flex">
+          <img src="/assets/images/svgs/Boehringer_Standalone_Lung_RGB_Accent-Green.svg" alt="login" />
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

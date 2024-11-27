@@ -1,0 +1,35 @@
+<div [formGroupName]="controlKey">
+    <ng-template *ngIf="showEmail">
+        <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">
+            Email
+        </mat-label>
+        <mat-form-field appearance="outline" class="w-100">
+            <input matInput type="email" formControlName="email" />
+            <mat-error>{{ setErrorMessage('email', 'Email')}}</mat-error>
+        </mat-form-field>
+    </ng-template>
+    <section>
+        <div class="row">
+            <div class="col-lg-6">
+                <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">
+                    Phone
+                </mat-label>
+                <mat-form-field appearance="outline" class="w-100">
+                    <input matInput type="text" formControlName="phone" />
+                    <mat-error>{{ setErrorMessage('phone', 'Phone number')}}</mat-error>
+                </mat-form-field>
+            </div>
+            <div class="col-lg-6">
+                <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">
+                    Mobile
+                </mat-label>
+                <mat-form-field appearance="outline" class="w-100" >
+                    <input matInput type="text" formControlName="mobile" />
+                    <mat-error>{{ setErrorMessage('mobile', 'Mobile number')}}</mat-error>
+                </mat-form-field>
+            </div>
+        </div>
+        <mat-error class="mat-form-error" *ngIf="contactForm.errors?.['oneRequired'] && submitted">Please provide at least one contact number</mat-error>
+    </section>
+</div>
+

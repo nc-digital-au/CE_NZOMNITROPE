@@ -1,0 +1,10 @@
+:host {
+  display: contents;
+}
+
+mat-label {
+  &.required:after {
+    content: " *";
+    color: red;
+  }
+}

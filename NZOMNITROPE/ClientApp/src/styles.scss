@@ -1,0 +1,18 @@
+/* You can add global styles to this file, and also import other style files */
+
+html, body { height: 100%; }
+body { margin: 0; }
+
+.header-brand-logo{
+    width: 90px;
+    padding: 16px;
+}
+
+mdc-button mdc-button--outlined mat-mdc-outlined-button mat-primary mat-mdc-button-base{
+    border-radius: 0.125rem;
+    border-width: 2px;
+}
+
+.nowrap {
+    white-space: nowrap;
+}

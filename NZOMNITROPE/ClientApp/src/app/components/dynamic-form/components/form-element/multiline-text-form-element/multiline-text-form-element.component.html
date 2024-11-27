@@ -1,0 +1,7 @@
+<mat-form-field appearance="outline" class="w-100" [formGroup]="form">
+  <textarea matInput [formControlName]="multilineTextFormElement.name" [rows]="5" [placeholder]="multilineTextFormElement.placeholder">
+  </textarea>
+  <mat-error>
+    {{ setErrorMessage(form, multilineTextFormElement.name, multilineTextFormElement.errorLabel) }}
+  </mat-error>
+</mat-form-field>

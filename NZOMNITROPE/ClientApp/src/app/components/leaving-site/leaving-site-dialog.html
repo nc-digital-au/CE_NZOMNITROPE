@@ -1,0 +1,16 @@
+<h2 mat-dialog-title>You are about to leave Boehringer Medicines Request</h2>
+<mat-dialog-content>
+  <p class="mat-body-1 lh-24">
+    For further information contact Boehringer Ingelheim on 1800 226 315 or refer to the OFEV <sup>®</sup> <a class="themed-link" href="https://rss.medsinfo.com.au/by/pi.cfm?product=bypofevc">Product Information</a>.
+  </p>
+  <p>
+    Do you wish to proceed?
+  </p>
+</mat-dialog-content>
+<mat-dialog-actions>
+    <div class="button-group">
+        <button mat-flat-button  mat-dialog-close class="secondary">No</button>
+        <a mat-flat-button [mat-dialog-close]="true" cdkFocusInitial class="primary" target="_blank" href="{{data.url}}">Proceed</a>      
+    </div>
+</mat-dialog-actions>
+

@@ -1,0 +1,134 @@
+import { Component, DestroyRef, inject } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { FormGroup } from '@angular/forms';
+import { MatButton } from '@angular/material/button';
+import { MatCard, MatCardContent, MatCardHeader, MatCardSubtitle, MatCardTitle } from '@angular/material/card';
+import { ActivatedRoute, RouterLink } from '@angular/router';
+import { finalize } from 'rxjs';
+import { DynamicFormComponent } from 'src/app/components/dynamic-form/dynamic-form.component';
+import { DynamicForm } from 'src/app/components/dynamic-form/models/dynamic-form.model';
+import { TextFormInputElement } from 'src/app/components/dynamic-form/models/form-elements/text-form-input-element.model';
+import { InlineAlertComponent } from 'src/app/components/inline-alert/inline-alert.component';
+import { ValidationProblemDetail } from 'src/app/interceptors/error.interceptor';
+import { AccountServiceProxy, ResetPasswordDto } from 'src/app/services/service-proxies/service-proxies';
+import { routeLinks } from 'src/app/utils/routes';
+import { equalValidator } from 'src/app/utils/validators/equal.validator';
+import { PrescriberValidator } from 'src/app/utils/validators/prescriber.validator';
+
+@Component({
+  selector: 'app-reset-password',
+  standalone: true,
+  imports: [
+    RouterLink,
+    MatCard,
+    MatCardHeader,
+    MatCardTitle,
+    MatCardSubtitle,
+    MatCardTitle,
+    MatCardContent,
+    MatButton,
+    DynamicFormComponent,
+    InlineAlertComponent,
+  ],
+  templateUrl: './reset-password.component.html',
+  styleUrl: './reset-password.component.scss',
+})
+export class ResetPasswordComponent {
+  formDefinition: DynamicForm;
+  token: string;
+  destroyRef = inject(DestroyRef);
+  formSubmitted = false;
+  isSuccess = true;
+  responseProblem: ValidationProblemDetail;
+  routeLinks = routeLinks;
+
+  form: FormGroup<{}>;
+
+  constructor(
+    private readonly route: ActivatedRoute,
+    private readonly _accountService: AccountServiceProxy,
+  ) {
+    this.route.queryParamMap.subscribe(paramMap => {
+      if (paramMap.has('token')) {
+        this.token = paramMap.get('token').replaceAll(' ', '+');
+        this.buildForm();
+      }
+    })
+  }
+
+  onFormSubmit(): void {
+    if (this.form.valid) {
+      const formValue = this.form.value as any;
+      this._accountService.resetPassword(new ResetPasswordDto({
+        token: this.token,
+        email: formValue.email,
+        ahpraNumber: formValue.ahpraNumber,
+        password: formValue.password,
+        confirmPassword: formValue.confirmPassword,
+      }))
+        .pipe(
+          takeUntilDestroyed(this.destroyRef),
+          finalize(() => {
+            this.formSubmitted = true;
+          }),
+        )
+        .subscribe({
+          next: (response => {
+            this.isSuccess = response.isSuccess;
+          }),
+          error: (err => {
+            this.isSuccess = false;
+            this.responseProblem = err.problemDetails;
+          }),
+        });
+    }
+  }
+
+  private buildForm(): void {
+    this.formDefinition = new DynamicForm([
+      new TextFormInputElement({
+        name: 'email',
+        label: 'Email',
+        validation: {
+          required: true,
+          email: true,
+        },
+      }),
+      new TextFormInputElement({
+        name: 'ahpraNumber',
+        label: 'AHPRA number',
+        validation: {
+          required: true,
+          maxLength: 13,
+          custom: [
+            PrescriberValidator.ahpraNumberFormat,
+          ],
+        },
+      }),
+      new TextFormInputElement({
+        name: 'password',
+        label: 'Password',
+        validation: {
+          required: true,
+          password: true,
+          minLength: 8,
+          custom: [
+            equalValidator,
+          ],
+        },
+      }),
+      new TextFormInputElement({
+        name: 'confirmPassword',
+        label: 'Confirm password',
+        validation: {
+          required: true,
+          password: true,
+          minLength: 8,
+          custom: [
+            equalValidator,
+          ],
+        },
+      }),
+    ]);
+  }
+}

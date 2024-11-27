@@ -1,0 +1,8 @@
+<app-dynamic-form [formDefinition]="formDefinition" (formCreated)="onFormCreated($event)"
+  (tempFormCreated)="tempForm = $event">@if (tempForm && tempForm.submitted && !allCriteriasAccepted) {
+    <app-inline-alert [success]="false" [margin]="0" theme="bg-light-primary" color="text-primary">
+      The patient doesn’t meet the criteria for enrolment.
+    </app-inline-alert>
+  }
+  <ng-content></ng-content>
+</app-dynamic-form>

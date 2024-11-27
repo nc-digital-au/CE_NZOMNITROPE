@@ -1,0 +1,61 @@
+<div [formGroupName]="controlKey">
+    <section>
+        <div class="p-16 bg-light-secondary rounded m-y-20">
+            <h5 class="mat-subtitle-2 text-secondary d-flex align-items-center f-w-600">
+                Patient details
+            </h5>
+        </div>
+        <div class="row">
+            <div class="col-lg-6 col-sm-12">
+                <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16" for="title">
+                    Title*
+                </mat-label>
+                <mat-form-field appearance="outline" class="w-100">
+                    <mat-select formControlName="title">
+                        <mat-option *ngFor="let opt of titleOptions" [value]="opt">{{ opt }}</mat-option>
+                    </mat-select>
+                    <mat-error>{{ setErrorMessage(patientForm,'title', 'Title') }}</mat-error>
+                </mat-form-field>
+            </div>
+            <div class="col-lg-12"> 
+                <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16" for="firstName">
+                    First name*
+                </mat-label>
+                <mat-form-field appearance="outline" class="w-100">
+                    <input matInput type="text" formControlName="firstName" />
+                    <mat-error>{{ setErrorMessage(patientForm,'firstName', 'First name') }}</mat-error>
+                </mat-form-field>
+                
+                <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16" for="lastName">
+                    Last name*
+                </mat-label>
+                <mat-form-field appearance="outline" class="w-100">
+                    <input matInput type="text" formControlName="lastName" />
+                    <mat-error>{{ setErrorMessage(patientForm,'lastName', 'Last name') }}</mat-error>
+                </mat-form-field>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <mat-label class="mat-subtitle-2 f-w-600 m-b-16 d-block">Date of birth*</mat-label>
+                        <mat-form-field appearance="outline" class="w-100" color="primary">
+                            <input matInput [matDatepicker]="dateOfBirth" formControlName="dateOfBirth" placeholder="DD/MM/YYYY"/>
+                            <mat-datepicker-toggle matIconSuffix [for]="dateOfBirth"></mat-datepicker-toggle>
+                            <mat-datepicker #dateOfBirth></mat-datepicker>
+                            <mat-error>{{ setErrorMessage(patientForm, 'dateOfBirth', 'Date of birth')}}</mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-6">
+                        <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16" for="gender">
+                            Gender*
+                        </mat-label>
+                        <mat-form-field appearance="outline" class="w-100">
+                            <mat-select formControlName="gender">
+                                <mat-option *ngFor="let opt of eGender | keyvalue" [value]="opt.value">{{ opt.value }}</mat-option>
+                            </mat-select>
+                            <mat-error>{{ setErrorMessage(patientForm,'gender', 'Gender') }}</mat-error>
+                        </mat-form-field>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

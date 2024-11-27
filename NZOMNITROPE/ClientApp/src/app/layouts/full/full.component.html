@@ -1,0 +1,104 @@
+<div
+  autosize
+  autoFocus
+  [ngClass]="{
+    'sidebarNav-horizontal': options.horizontal,
+    cardBorder: options.cardBorder
+  }"
+  [dir]="options.dir!"
+>
+  <!-- ============================================================== -->
+  <!-- VerticalHeader -->
+  <!-- ============================================================== -->
+  @if(!options.horizontal) {
+  <app-header
+    [showToggle]="!isOver"
+    (toggleCollapsed)="toggleCollapsed()"
+    (toggleMobileNav)="sidenav.toggle()"
+  ></app-header>
+  } @else {
+  <!-- horizontal header -->
+  <app-horizontal-header
+    (toggleMobileNav)="sidenav.toggle()"
+  ></app-horizontal-header>
+  }
+
+  <mat-sidenav-container class="mainWrapper">
+    <!-- ============================================================== -->
+    <!-- horizontal Sidebar -->
+    <!-- ============================================================== -->
+    @if(resView) {
+    <mat-sidenav
+      #leftsidenav
+      [mode]="'over'"
+      [opened]="options.sidenavOpened && !isTablet"
+      (openedChange)="onSidenavOpenedChange($event)"
+      (closedStart)="onSidenavClosedStart()"
+      class="sidebarNav"
+    >
+      <app-sidebar> </app-sidebar>
+      <ng-scrollbar
+        class="position-relative mini-scroll"
+        style="height: calc(100vh - 230px)"
+      >
+        <mat-nav-list class="sidebar-list">
+          @for(item of navItems; track item) {
+          <app-nav-item [item]="item" (notify)="sidenav.toggle()">
+          </app-nav-item>
+          }
+        </mat-nav-list>
+      </ng-scrollbar>
+    </mat-sidenav>
+    }
+
+    <!-- ============================================================== -->
+    <!-- Main Content -->
+    <!-- ============================================================== -->
+    <mat-sidenav-content class="contentWrapper">
+      <app-horizontal-sidebar></app-horizontal-sidebar>
+      <main
+        class="pageWrapper"
+        [ngClass]="{
+          maxWidth: options.boxed
+        }"
+      >
+        <!-- ============================================================== -->
+        <!-- Outlet -->
+        <!-- ============================================================== -->
+        <router-outlet></router-outlet>
+        
+      </main>
+      <footer>
+        <div class="footer-centered" [ngClass]="{
+          maxWidth: options.boxed}">
+          <div class="row">
+            <div class="col-sm-12">
+              <ul id="footer-menu">
+                <li>
+                  <a (click)="openTermsOfUse()">Terms of use</a>
+                </li>
+                <li>
+                  <a (click)="openContactUs()">Contact us</a>
+                </li>
+                <li>
+                  <app-leaving-site [linkUrl]="contactValue.BI_PRIVACY_POLICY_LINK" linkLocation="Privacy Policy"></app-leaving-site>
+                </li>
+              </ul>
+              <p>
+              To report an adverse event: Telephone {{contactValue.BOEHRINGER_CONTACT}} or via <a href="mailto:{{contactValue.SUPPORT_EMAIL}}">{{contactValue.SUPPORT_EMAIL}}</a>.
+              
+              Please refer to the full OFEV® Product Information before prescribing, which can be accessed <app-leaving-site [linkUrl]="contactValue.PI_LINK" linkLocation="here"></app-leaving-site>. 
+              
+              References: 1. Australian Approved Product Information for OFEV<sup>®</sup> (nintedanib).
+              
+              OFEV<sup>®</sup> is a registered trademark of Boehringer Ingelheim Pty Ltd under licence. OEFV is sponsored and distributed by Boehringer Ingelheim Pty Ltd. 
+              
+              Boehringer Ingelheim Pty Ltd, ACN 52 000 452 308, Level 1, 78 Waterloo Road North Ryde, NSW 2113, Australia. PO Box 1969, Macquarie Centre, NSW 2113, Australia.  <sup>®</sup>Registered Trademark. November 2024. PC-AU-104179.</p>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>
+

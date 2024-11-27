@@ -1,0 +1,53 @@
+<h1 class="title">Welcome to the <br/>Boehringer Ingelheim Medicines Request Program </h1>
+<div class="grid-container">
+    <div class="block-green-one grid-item">
+        <div class="row">
+            <div class="col-lg-6">
+                <img src="../../../assets/images/svgs/Boehringer_Standalone_Lung_RGB_Accent-Green.svg" style="width: 90%; padding-top: 24px;">
+                <!-- <svg-icon src="assets/images/svgs/Boehringer_Standalone_Lung_RGB_Accent-Green.svg" svgClass="title-block-image"></svg-icon>  -->
+            </div>
+            <div class="col-lg-6">
+                <h2>About OFEV® (nintedanib)<sup class="sub">1</sup></h2>
+                <p>
+                    OFEV<sup>®</sup> (nintedanib) monotherapy is indicated for the treatment of:
+                </p>
+                <ul>      
+                    <li style="color: #fff;">
+                            Idiopathic Pulmonary Fibrosis (IPF)
+                    </li>
+                    <li style="color: #fff;">
+                            Other chronic fibrosing Interstitial Lung Diseases (ILDs) with a progressive phenotype
+                    </li>
+                    <li style="color: #fff;">
+                        Slowing the rate of decline in pulmonary function in patients with systemic sclerosis                    
+                    </li>
+                </ul>
+                <div class="button-group">
+                    <div class="button-row">
+                        <a mat-flat-button [routerLink]="['/patients/enrol']" routerLinkActive="router-link-active"  color="primary"> Enrol patient</a>
+                        <a mat-flat-button [routerLink]="['/patients/dashboard']" color="primary"> My patient dashboard</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="block-gray-warm grid-item">
+        <div class="row">
+            <div class="col-lg-6">
+                <svg-icon src="assets/images/svgs/Boehringer_Standalone_Notebook_RGB_Dark-Green.svg" svgClass="title-block-image"></svg-icon> 
+            </div>
+            <div class="col-lg-6">
+                <h2>Program Resources</h2>
+                <p>
+                    The below materials are provided to support both healthcare professionals and patients to understand the Program and how it works:
+                </p>
+                <div class="button-group">
+                    <div class="button-row">
+                        <a mat-stroked-button (click)="openEligibilityCriteria()" color="tertiary"> Patient Eligibility Criteria</a>
+                        <a mat-stroked-button href="#" color="tertiary"> Patient Consent Form</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

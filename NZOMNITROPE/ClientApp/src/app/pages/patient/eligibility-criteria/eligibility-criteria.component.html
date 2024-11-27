@@ -1,0 +1,32 @@
+<div id="eligibility">
+    <div class="row">
+        <div [ngClass]="isDialog ? 'col-lg-4 col-sm-6' : 'col-lg-6'">
+            <svg-icon src="/assets/images/svgs/Boehringer_Standalone_Pill_RGB_Dark-Green.svg"></svg-icon> 
+        </div>
+        <div [ngClass]="isDialog ? 'col-lg-8 col-sm-6' : 'col-lg-6'">
+            <h2>Patient Eligibility Criteria</h2>
+        <p>
+            To be considered for the Boehringer Ingelheim Medicines Request Program, patients must fulfill the following eligibility criteria: 
+        </p>
+        <ul>
+            <li>
+                Patient is on the transplant list.
+            </li>
+            <li>
+                Patient is not eligible for an ILD clinical trial.
+            </li>
+            <li>
+                MDT Consensus of advanced IPF/PF-ILD     
+            </li>
+            <li>
+                MDT consensus to initiate OFEV to stabilise patient for transplant.
+            </li>
+        </ul>
+        <p>
+            For the full list of contraindications, special warnings, precautions, and potential side effects, please refer to the OFEV® Product Information at <app-leaving-site [linkUrl]="contactValue.PI_LINK" [linkLocation]="contactValue.PI_LINK"></app-leaving-site> before prescribing.    
+        </p>
+        </div>
+    </div>
+</div>
+
+

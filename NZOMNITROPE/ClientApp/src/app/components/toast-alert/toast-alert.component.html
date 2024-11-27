@@ -1,0 +1,7 @@
+<div class="d-flex">
+  <span class="example-pizza-party" matSnackBarLabel [innerHTML]="data.message">
+  </span>
+  <span matSnackBarActions>
+    <button class="m-l-10" mat-stroked-button matSnackBarAction (click)="snackBarRef.dismissWithAction()" color="primary">dismiss</button>
+  </span>
+</div>

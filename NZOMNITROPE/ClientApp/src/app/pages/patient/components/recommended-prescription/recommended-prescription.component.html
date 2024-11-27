@@ -1,0 +1,35 @@
+
+<div [formGroupName]="controlKey">
+    <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16" for="drug">
+        Drug name
+    </mat-label>
+    <mat-form-field appearance="outline" class="w-100">
+        <input matInput type="text" disabled value="OFEV® (nintedanib)"/>
+    </mat-form-field>
+    <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16" for="dose">
+        Dosage*
+    </mat-label>
+    <mat-form-field appearance="outline" class="w-100">
+        <mat-select formControlName="dose">
+            <mat-option *ngFor="let opt of eDosage | keyvalue" [value]="opt.key">{{ opt.value }}</mat-option>
+        </mat-select>
+        <mat-error>{{ setErrorMessage('dose', 'Dosage') }}</mat-error>
+    </mat-form-field>
+    <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16" for="repeats">
+        Repeats
+    </mat-label>
+    <mat-form-field appearance="outline" class="w-100">
+        <mat-select formControlName="repeats">
+            <mat-option *ngFor="let opt of repeatOptions" [value]="opt">{{ opt }}</mat-option>
+        </mat-select>
+        <mat-error>{{ setErrorMessage('repeats', 'Repeats') }}</mat-error>
+    </mat-form-field>
+    <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">
+        Additional instructions
+    </mat-label>
+    <mat-form-field appearance="outline" class="w-100" color="primary">
+        <textarea matInput rows="5" formGroupName="instructions" placeholder="Please provide any additional instructions for your patient"></textarea>
+        <mat-error>{{setErrorMessage('instructions', 'Dosage instructions')}}</mat-error>
+    </mat-form-field>
+</div>
+

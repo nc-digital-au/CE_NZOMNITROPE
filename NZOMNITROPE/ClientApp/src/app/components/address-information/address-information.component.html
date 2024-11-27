@@ -1,0 +1,57 @@
+<div [formGroupName]="controlKey">
+    <div class="row m-t-20">
+        <div class="col-lg-12">
+            <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">Search address</mat-label>
+            <mat-form-field appearance="outline" class="w-100" color="primary">
+                <input matInput #placesRef="ngx-places" ngx-gp-autocomplete [options]='options' (onAddressChange)="handleAddressChange($event)"/>
+            </mat-form-field>
+        </div>
+        <div class="col-lg-6">
+            <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">Unit number</mat-label>
+            <mat-form-field appearance="outline" class="w-100" color="primary">
+                <input matInput type="text" formControlName="unitNumber" />
+                <mat-error>{{setErrorMessage('unitNumber', 'Unit number')}}</mat-error>
+            </mat-form-field>
+        </div>
+        <div class="col-lg-12">
+            <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">Street address</mat-label>
+            <mat-form-field appearance="outline" class="w-100" color="primary">
+                <input matInput type="text" formControlName="streetAddress" />
+                <mat-error>{{setErrorMessage('streetAddress', 'Street address')}}</mat-error>
+            </mat-form-field>
+        </div>
+
+        <div class="col-lg-12">
+            <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">City</mat-label>
+            <mat-form-field appearance="outline" class="w-100" color="primary">
+                <input matInput type="text" formControlName="city" />
+                <mat-error>{{setErrorMessage('city', 'City')}}</mat-error>
+            </mat-form-field>
+        </div>
+
+        <div class="col-lg-6">
+            <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-8">
+                State
+            </mat-label>
+            <mat-form-field appearance="outline" class="w-100">
+                <mat-select formControlName="addressState">
+                    <mat-option 
+                        *ngFor="let addState of eAddressState | keyvalue" 
+                        [value]="addState.value">
+                        {{ addState.key }}
+                    </mat-option>
+                </mat-select>
+                <mat-error>{{setErrorMessage('addressState', 'State')}}</mat-error>
+            </mat-form-field>
+        </div>
+
+        <div class="col-lg-6">
+            <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">Post Code</mat-label>
+            <mat-form-field appearance="outline" class="w-100" color="primary">
+                <input matInput type="text" formControlName="postcode" />
+                <mat-error>{{setErrorMessage('postcode', 'Postcode')}}</mat-error>
+            </mat-form-field>
+        </div>
+    </div>
+</div>
+

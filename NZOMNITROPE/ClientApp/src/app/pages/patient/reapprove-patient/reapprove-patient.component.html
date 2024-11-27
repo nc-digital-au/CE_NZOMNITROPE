@@ -1,0 +1,113 @@
+@if (patient) {
+  @if (!resupplySuccess) {
+    <div>
+      <h2>Reapprove {{ patient.firstName }} {{ patient.lastName }}</h2>
+      <p>*Indicates mandatory field</p>
+      @if (submitting) {
+        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+      }
+      <mat-card class="cardWithShadow theme-card">
+        <mat-card-content class="b-t-1">
+          <mat-stepper #stepper [orientation]="(stepperOrientation | async)!" [linear]="true">
+    
+            <mat-step [stepControl]="eligibilityForm">
+              <ng-template matStepLabel>Eligibility</ng-template>
+              <app-eligibility-form (formCreated)="eligibilityForm = $event">
+                <app-inline-alert [success]="false" [margin]="0" theme="bg-light-warning" color="text-warning">
+                  If your patient is no longer eligible, please complete the discontinuation form.
+                </app-inline-alert>
+                <div class="d-flex align-items-center justify-content-between">
+                  <button mat-stroked-button color="accent" (click)="onCloseForm()">Cancel</button>
+                  <button mat-flat-button color="primary" type="submit" (click)="onEligibilityCriteriaNext()">Next</button>
+                </div>
+              </app-eligibility-form>
+            </mat-step>
+    
+            <mat-step [stepControl]="patientForm">
+              <ng-template matStepLabel>Patient</ng-template>
+              <div class="m-t-20">
+                <app-patient-form (formCreated)="patientForm = $event" [patient]="patient">
+                  <div class="d-flex align-items-center justify-content-between">
+                    <div>
+                      <button mat-stroked-button color="accent" (click)="onCloseForm()">Cancel</button>
+                      <button mat-flat-button color="accent" class="m-l-10" matStepperPrevious>Back</button>
+                    </div>
+                    <button mat-flat-button color="primary" type="submit" matStepperNext>Next</button>
+                  </div>
+                </app-patient-form>
+              </div>
+            </mat-step>
+    
+            <mat-step [stepControl]="prescriptionForm">
+              <ng-template matStepLabel>Prescription</ng-template>
+              <app-prescription-form (formCreated)="prescriptionForm = $event">
+                <div class="d-flex align-items-center justify-content-between">
+                  <div>
+                    <button mat-stroked-button color="accent" (click)="onCloseForm()">Cancel</button>
+                    <button mat-flat-button color="accent" class="m-l-10" matStepperPrevious>Back</button>
+                  </div>
+                  <button mat-flat-button color="primary" type="submit" matStepperNext>Next</button>
+                </div>
+              </app-prescription-form>
+            </mat-step>
+    
+            <mat-step [stepControl]="termsForm">
+              <ng-template matStepLabel>Submit</ng-template>
+              <app-terms-form (formCreated)="termsForm = $event">
+                
+                @if(!resupplySuccess && resupplyProblem) {
+                  <app-inline-alert [success]="false" [margin]="0">
+                    Patient resupply failed.
+        
+                    @if (resupplyProblem && resupplyProblem.errors) {
+                      Please check the following fields and then try to submit again.
+                      <ul>
+                        @for (problem of resupplyProblem.errors; track problem.propertyName) {
+                          <li>{{ problem.message }}</li>
+                        }
+                      </ul>
+                    }
+                  </app-inline-alert>
+                }
+                <div class="d-flex align-items-center justify-content-between">
+                  <div>
+                    <button mat-stroked-button color="accent" (click)="onCloseForm()">Cancel</button>
+                    <button mat-flat-button color="accent" class="m-l-10" matStepperPrevious>Back</button>
+                  </div>
+                  <button mat-flat-button color="primary" type="submit" (click)="onFormSubmit()" [disabled]="submitting">
+                    @if (!submitting) {
+                      Submit
+                    }
+                    @else {
+                      <div class="d-flex">
+                        <mat-spinner [diameter]="20" color="accent" class="m-r-10"></mat-spinner>
+                        Submitting
+                      </div>
+                    }
+                  </button>
+                </div>
+              </app-terms-form>
+            </mat-step>
+    
+          </mat-stepper>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  }
+  @else {
+    <h2 mat-dialog-title>Thank you for submitting your patient's reapproval.</h2>
+    <mat-dialog-content>
+      <div class="p-16 bg-light-info rounded m-y-20 text-info">
+        <div class="icon-block">
+          <svg-icon src="assets/images/svgs/information-mark-circle.svg" svgClass="icon-block-image"></svg-icon>
+          <div class="icon-block-content">
+            To finalise OEFV® access for your patient, send a signed prescription to ePharmacy, Reply Paid 612 Virgina QLD 4014. ePharmacy will
+            liaise directly with the patient to dispense and deliver OFEV®.
+          </div>
+        </div>
+      </div>
+      <mat-divider></mat-divider>
+      <app-prescription [patientId]="patient.id" (downloaded)="onCloseForm()"></app-prescription>
+    </mat-dialog-content>
+  }
+}

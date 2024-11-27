@@ -1,0 +1,19 @@
+.title-block-image {
+  width: 90%;
+  padding-top: 24px;
+}
+
+@media (max-width: 600px) {
+  .grid-container {
+    flex-direction: column;
+
+    .grid-item {
+      width: 100%;
+    }
+  }
+}
+
+.sub {
+  vertical-align: sub;
+  font-size: 0.8em;
+}

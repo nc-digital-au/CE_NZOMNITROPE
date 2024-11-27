@@ -1,0 +1,80 @@
+<div>
+  <h2>Transfer {{patient.firstName}} {{patient.lastName}}</h2>
+  <p>*Indicates mandatory field</p>
+  @if (submitting) {
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+  }
+  <mat-card class="cardWithShadow theme-card">
+    <mat-card-content class="b-t-1">
+      <mat-stepper #stepper [orientation]="(stepperOrientation | async)!" [linear]="true">
+
+        <mat-step [stepControl]="patientForm">
+          <ng-template matStepLabel>Patient</ng-template>
+          <div class="m-t-20">
+            <app-patient-form (formCreated)="patientForm = $event" [patient]="patient">
+              <div class="d-flex align-items-center justify-content-between">
+                <button mat-stroked-button color="accent" (click)="onCloseForm()" type="button">Cancel</button>
+                <button mat-flat-button color="primary" type="submit" matStepperNext>Next</button>
+              </div>
+            </app-patient-form>
+          </div>
+        </mat-step>
+
+        <mat-step [stepControl]="hcpForm">
+          <ng-template matStepLabel>Nominate</ng-template>
+          <div class="m-t-20">
+            <app-hcp-form (formCreated)="hcpForm = $event">
+              <div class="d-flex align-items-center justify-content-between">
+                <div>
+                  <button mat-stroked-button color="accent" (click)="onCloseForm()" type="button">Cancel</button>
+                  <button mat-flat-button color="accent" class="m-l-10" matStepperPrevious>Back</button>
+                </div>
+                <button mat-flat-button color="primary" type="submit" matStepperNext>Next</button>
+              </div>
+            </app-hcp-form>
+          </div>
+        </mat-step>
+
+        <mat-step [stepControl]="consentForm">
+          <ng-template matStepLabel>Consent</ng-template>
+          <div class="m-t-20">
+            <app-consent-form (formCreated)="consentForm = $event">
+              <div class="d-flex align-items-center justify-content-between">
+                <div>
+                  <button mat-stroked-button color="accent" (click)="onCloseForm()" type="button">Cancel</button>
+                  <button mat-flat-button color="accent" class="m-l-10" matStepperPrevious>Back</button>
+                </div>
+                <button mat-flat-button color="primary" type="submit" (click)="onFormSubmit()" [disabled]="submitting">
+                  @if (!submitting) {
+                    Submit
+                  }
+                  @else {
+                    <div class="d-flex">
+                      <mat-spinner [diameter]="20" color="accent" class="m-r-10"></mat-spinner>
+                      Submitting
+                    </div>
+                  }
+                </button>
+              </div>
+            </app-consent-form>
+          </div>
+        </mat-step>
+
+        <mat-step>
+          <ng-template matStepLabel>Done</ng-template>
+          <h2>Transfer submitted</h2>
+          <app-inline-alert>
+            Thank you. You have successfully submitted your Patient Transfer request.
+            Your nominated Healthcare Professional will be contacted to accept the patient transfer.
+            Should the nominated HCP decline the request - the patient will remain in your care unless
+            another patient request
+            form is completed.
+          </app-inline-alert>
+          <div class="d-flex align-items-center justify-content-end">
+            <button mat-flat-button color="accent" (click)="onCloseForm()">Close</button>
+          </div>
+        </mat-step>
+      </mat-stepper>
+    </mat-card-content>
+  </mat-card>
+</div>

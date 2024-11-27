@@ -1,0 +1,14 @@
+h1 {
+  white-space: break-spaces;
+  line-height: 1;
+}
+
+.nowrap {
+  display: inline-block;
+}
+
+@media (max-width: 600px) {
+  h1 {
+    font-size: 4.5vw !important;
+  }
+}

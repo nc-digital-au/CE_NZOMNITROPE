@@ -1,0 +1,17 @@
+@for (formElement of groupFormElement.children; track formElement) {
+  <app-form-element [formElement]="formElement" [form]="form" [formClass]="formClass"></app-form-element>
+}
+@if (groupFormElement.options) {
+  @if (groupFormElement.options.requireAtLeastOne && tempForm.submitted && form.errors && form.errors['oneRequired']) {
+    <div class="col-lg-12">
+      <mat-error class="mat-form-error require-one-error">
+        @if (groupFormElement.options.requireAtLeastOneMessage) {
+          {{ groupFormElement.options.requireAtLeastOneMessage }}
+        }
+        @else {
+          Please fill up at least one field
+        }
+      </mat-error>
+    </div>
+  }
+}

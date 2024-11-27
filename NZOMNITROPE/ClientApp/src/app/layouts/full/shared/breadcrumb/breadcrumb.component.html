@@ -1,0 +1,23 @@
+<div class="p-b-16 overflow-hidden">
+  <div>
+    <div class="row">
+      <div class="col-lg-8 col-sm-6">
+        <div
+          class="d-flex align-items-center overflow-hidden justify-content-start list-style-none"
+        >
+          <ul class="breadcrumb list-style-none d-flex p-l-0">
+            @for (url of pageInfo?.['urls']; track url.url;let index = $index,last
+            = $last ) { @if(!last){
+
+            <li class="breadcrumb-item" [routerLink]="url.url">
+              <a [routerLink]="url.url">{{ url.title }}</a>
+            </li>
+            }@else {
+            <li class="breadcrumb-item active text-primary">{{ url.title }}</li>
+            } }
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

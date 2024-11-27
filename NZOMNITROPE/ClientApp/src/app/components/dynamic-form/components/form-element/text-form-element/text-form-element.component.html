@@ -1,0 +1,16 @@
+
+@if (!textFormElement.hidden) {
+  <mat-form-field appearance="outline" class="w-100" [formGroup]="form">
+    <input matInput [type]="inputType" [formControlName]="textFormElement.name" />
+    <mat-hint [innerHTML]="textFormElement.hint">
+    </mat-hint>
+    <mat-error>
+      {{ setErrorMessage(form, textFormElement.name, textFormElement.errorLabel) }}
+    </mat-error>
+  </mat-form-field>
+}
+@else {
+  <ng-container [formGroup]="form">
+    <input [type]="inputType" [formControlName]="textFormElement.name" />
+  </ng-container>
+}

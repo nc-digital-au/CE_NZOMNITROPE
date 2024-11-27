@@ -1,0 +1,22 @@
+<mat-toolbar class="topbar horizontal-topbar">
+  <div class="container">
+
+    <!-- Mobile Menu -->
+    <button mat-icon-button (click)="toggleMobileNav.emit()" class="d-block d-lg-none">
+      <i-tabler name="menu-2" class="icon-20 d-flex"></i-tabler>
+    </button>
+    <!-- --------------------------------------------------------------- -->
+
+    <app-branding class="flex-grow-1"></app-branding>
+
+    @if (authenticated$ | async) {
+      @if (logoutUrl$ | async; as logoutUrl) {
+        <div class="nav-item d-none d-sm-flex">
+          <a mat-flat-button [href]="logoutUrl + '&returnUrl=/landing'" color="primary" class="nav-link" (click)="onSignoutClick()">
+            Signout
+          </a>
+        </div>
+      }
+    }
+  </div>
+</mat-toolbar>

@@ -1,0 +1,35 @@
+@if (downloading) {
+  <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+}
+<mat-card>
+  <mat-card-actions>
+    <ng-container *ngTemplateOutlet="downloadButton"></ng-container>
+  </mat-card-actions>
+  <mat-card-content>
+    <div #scriptViewerEl></div>
+  </mat-card-content>
+  <mat-card-actions align="end">
+    <ng-container *ngTemplateOutlet="downloadButton"></ng-container>
+  </mat-card-actions>
+</mat-card>
+
+<ng-template #downloadButton>
+  <div style="padding: 8px">
+    <button
+      mat-flat-button
+      color="primary"
+      [disabled]="downloading"
+      (click)="onDownloadPrescriptionClick()"
+      >
+        @if (!downloading) {
+          Download Prescription
+        }
+        @else {
+          <div class="d-flex">
+            <mat-spinner [diameter]="20" color="accent" class="m-r-10"></mat-spinner>
+            Downloading Prescription
+          </div>
+        }
+    </button>
+  </div>
+</ng-template>

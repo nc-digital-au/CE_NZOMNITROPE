@@ -1,0 +1,9 @@
+@use "/src/assets/scss/variables";
+
+.headers {
+  color: variables.$white;
+}
+
+.register-form {
+  max-width: 1000px;
+}
