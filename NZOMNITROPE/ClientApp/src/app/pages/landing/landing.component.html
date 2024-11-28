@@ -1,43 +1,45 @@
 <div class="blank-layout-container justify-content-center">
-  <div class="position-relative row w-100 h-100">
-    <div class="col-lg-7 col-xl-8 bg-gredient p-0">
-      <div class="left-panel p-24 h-100">
-        <div class="row justify-content-center w-100">
-          <div class="col-lg-9 max-width-form text-center">
-            <h4 class="f-w-700 f-s-24 m-0 m-b-30" style="line-height: 1.5em;">Boehringer Ingelheim Medicines Request Program</h4>
-            <span class="f-s-14 d-block mat-body-1 m-t-8">This site is intended for Australian healthcare professionals and not for the public.</span>
-
-            <div class="m-t-30 m-b-30 landing-actions">
-              <a mat-flat-button color="primary" class="m-b-6" href="/bff/login">
-                Login
-              </a>
-              <div class="or-border d-flex align-items-center justify-content-center w-100">
-                &nbsp;
-                or
-                &nbsp;
-              </div>
-              <button mat-flat-button color="accent" class="m-t-6"
-                [routerLink]="[routeLinks.authentication.prescriber.register]">
-                Register
-              </button>
-            </div>
-
-            <span class="d-block f-w-500 d-block m-t-24">
-              Forgot password?
-              <a [routerLink]="[routeLinks.authentication.account.forgotPassword]" class="text-decoration-none text-primary f-w-500 f-s-14">
-                Click here
-              </a>
-            </span>
-          </div>
+  <div class="main-panel">
+    <h1 class="omni-logo">
+      Welcome to
+      <span class="omni-pal">
+        <span class="omni red">Omni</span>
+        <span class="pal blue">Pal</span>
+      </span>
+      Patient Support Program
+    </h1>        
+    <div class="grid-container">
+      <div class="grid-box">
+        <p>If you are returning, please re-enter your details to login.</p>
+        <a mat-flat-button color="primary" href="/bff/login">LOGIN</a>
+        <div class="forgot-password">
+          <span>Forgot your password?</span>
+          <a [routerLink]="[routeLinks.authentication.account.forgotPassword]" class="text-decoration-none text-primary f-w-500 f-s-14">
+            Click here
+          </a>
         </div>
-
       </div>
-    </div>
-    <div class="col-lg-5 col-xl-4 p-0 d-lg-block d-none">
-      <div class="p-32 d-flex align-items-start align-items-lg-center justify-content-center h-100">
-        <div class="right-panel align-items-center justify-content-center img-height d-flex">
-          <img src="/assets/images/svgs/Boehringer_Standalone_Lung_RGB_Accent-Green.svg" alt="login" />
-        </div>
+      <div class="grid-box">
+        <p>
+          This site is intended for an audience in New Zealand. Access to this site is subject to the following 
+          <!-- <app-leaving-site [linkUrl]="contactValues.TERMS_OF_USE" linkLocation="Terms of Use"></app-leaving-site> -->
+          <a [href]="contactValues.TERMS_OF_USE" target="_blank" rel="noopener noreferrer">Terms of Use</a>, and by registering for access to this site, 
+          you agree to be bound by its 
+          <!-- <app-leaving-site [linkUrl]="contactValues.TERMS_OF_USE" linkLocation="Terms of Use"></app-leaving-site> -->
+          <a [href]="contactValues.TERMS_OF_USE" target="_blank" rel="noopener noreferrer">Terms of Use</a>.
+        </p>               
+      </div>
+      <div class="grid-box">
+        <p>
+          If you have any questions about the Program or need help registering, please contact the Program Administrator on <strong>{{ contactValues.PROGRAM_PHONE }}</strong>.
+        </p>        
+      </div>
+      <div class="grid-box">
+        <p>If you are new to the OmniPal Program Website, please register.</p>
+        <button mat-flat-button color="accent" class="m-t-6"
+          [routerLink]="[routeLinks.authentication.prescriber.register]">
+          REGISTER
+        </button>
       </div>
     </div>
   </div>

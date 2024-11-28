@@ -1,10 +1,16 @@
 export const CONTACT_VALUES = {
+    PROGRAM_PHONE: '0800 666 369',
+    MEDICAL_ENQUIRY_EMAIL: 'adverse.event.nz@sandoz.com',
+    MEDICAL_ENQUIRY_PHONE: '0800 726 369',
+    PRODUCT_COMPLAINT_EMAIL: 'sdz.technicalcomplaint@sandoz.com',
     SUPPORT_EMAIL: 'admin@boehringer-ingelheim-medicines-request.com.au',
     SUPPORT_PHONE:'1800 271 014',
     BOEHRINGER_CONTACT: '1800 271 014',
     PI_LINK: 'https://www.boehringer-ingelheim.com/au',
     CMI_LINK: 'https://www.boehringer-ingelheim.com/au',
-    BI_PRIVACY_POLICY_LINK: 'https://www.boehringer-ingelheim.com/au/data-privacy'
+    BI_PRIVACY_POLICY_LINK: 'https://www.boehringer-ingelheim.com/au/data-privacy',
+    TERMS_OF_USE: 'https://www.sandoz.com.au/terms-use-and-conditions/',
+    PRIVACY_POLICY: 'https://www.sandoz.com.au/Website-privacy-policy/',
 }
 
 export const UI_DEFAULTS = {

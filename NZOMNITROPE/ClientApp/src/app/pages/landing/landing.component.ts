@@ -2,6 +2,8 @@ import { ViewportScroller } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CoreService } from 'src/app/services/core.service';
 import { routeLinks } from 'src/app/utils/routes';
+import { CONTACT_VALUES } from 'src/app/utils/constants';
+import { LeavingSite, LeavingSiteComponent } from 'src/app/components/leaving-site/leaving-site.component';
 
 interface apps {
   id: number;
@@ -41,22 +43,23 @@ interface features {
 @Component({
   selector: 'app-landing',
   // standalone: true,
-  // imports: [],
+  // imports: [
+  // ],
   templateUrl: './landing.component.html',
-  styleUrl: './landing.component.scss'
+  styleUrls: ['./landing.component.scss']
 })
 export class LandingComponent {
-    @Input() showToggle = true;
-    @Output() toggleMobileNav = new EventEmitter<void>();
-    @Output() toggleMobileFilterNav = new EventEmitter<void>();
-    @Output() toggleCollapsed = new EventEmitter<void>();
-  
-    options = this.settings.getOptions();
-    routeLinks = routeLinks;
-  
-    constructor(
-      private settings: CoreService,
-      private scroller: ViewportScroller
-    ) {}
-  
+  @Input() showToggle = true;
+  @Output() toggleMobileNav = new EventEmitter<void>();
+  @Output() toggleMobileFilterNav = new EventEmitter<void>();
+  @Output() toggleCollapsed = new EventEmitter<void>();
+
+  options = this.settings.getOptions();
+  routeLinks = routeLinks;
+  contactValues = CONTACT_VALUES; 
+
+  constructor(
+    private settings: CoreService,
+    private scroller: ViewportScroller
+  ) {}
 }

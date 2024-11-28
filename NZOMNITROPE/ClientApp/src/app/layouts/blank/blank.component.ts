@@ -3,18 +3,65 @@ import { CoreService } from 'src/app/services/core.service';
 import { AppSettings } from 'src/app/app.config';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { CONTACT_VALUES } from 'src/app/utils/constants';
+import { LeavingSite, LeavingSiteComponent } from 'src/app/components/leaving-site/leaving-site.component';
+import { TermsOfUseComponent } from 'src/app/components/terms-of-use/terms-of-use.component';
+import { HeaderComponent } from '../full/vertical/header/header.component';
+import { MatSidenav } from '@angular/material/sidenav';
+import { AppHorizontalHeaderComponent } from '../full/horizontal/header/header.component';
+import { ContactUsComponent } from 'src/app/components/contact-us/contact-us.component';
 
 @Component({
   selector: 'app-blank',
   standalone: true,
-  imports: [RouterModule, CommonModule],
+  imports: [
+    RouterModule, 
+    CommonModule,
+    LeavingSiteComponent,
+    HeaderComponent,
+    AppHorizontalHeaderComponent,
+  ],
   templateUrl: './blank.component.html',
   styleUrls: [],
 })
+
 export class BlankComponent {
   private htmlElement!: HTMLHtmlElement;
 
+  contactValue = CONTACT_VALUES; 
+  options = this.settings.getOptions();
+  dialog: any;
+  isContentWidthFixed: boolean;
+  isCollapsedWidthFixed: boolean;
+  isOver: any;
+
+  public sidenav: MatSidenav;
+
   constructor(private settings: CoreService) {
     this.htmlElement = document.querySelector('html')!;
+  }
+
+  openContactUs(){
+    this.dialog.open(ContactUsComponent);
+  }
+
+  toggleCollapsed() {
+    this.isContentWidthFixed = false;
+    this.options.sidenavCollapsed = !this.options.sidenavCollapsed;
+    this.resetCollapsedState();
+  }
+
+  resetCollapsedState(timer = 400) {
+    setTimeout(() => this.settings.setOptions(this.options), timer);
+  }
+
+  onSidenavClosedStart() {
+    this.isContentWidthFixed = false;
+  }
+
+  onSidenavOpenedChange(isOpened: boolean) {
+    this.isCollapsedWidthFixed = !this.isOver;
+    this.options.sidenavOpened = isOpened;
+    this.settings.setOptions(this.options);
   }
 }

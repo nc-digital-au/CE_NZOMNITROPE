@@ -10,7 +10,7 @@ body {
   font-size: 14px;
   line-height: 1.334rem;
   margin: 0;
-  background-color: $theme-green-one;
+  background-color: $white;
 
   h1, h2, h3 {
     font-family: $font-family-head;
@@ -112,7 +112,7 @@ a.themed-link{
 }
 
 footer{
-  background-color: $theme-green-one;
+  background-color: $white;
   color: $white;
   padding-top: 25px;
   padding-bottom: 25px;
@@ -239,19 +239,6 @@ footer{
     min-width: 150px;
     font-size: 16px;
     padding: 24px;
-    
-    &.block-button-icon-open{
-      background-image: url('../images/svgs/arrow-diagonal-up.svg');
-      background-repeat: no-repeat;
-      background-position: right top;
-      background-size: 30px;
-    } 
-    &.block-button-icon-download{
-      background-image: url('../images/svgs/arrow-down-bottom.svg');
-      background-repeat: no-repeat;
-      background-position: right top;
-      background-size: 30px;
-    } 
     &.accent{
       border: 1px solid $theme-accent-one;
       background-color: $theme-accent-one;
@@ -435,11 +422,28 @@ tr.expanded-row{
   li{
     a{
        color: $theme-accent-one;
-       text-decoration: underline;
        cursor: pointer;
        &:hover{
         color: $theme-accent-four;
        }
     }
   }
+}
+
+.omni-logo {
+  font-weight: bold;
+  line-height: 1.5;
+}
+
+.omni-pal {
+  margin: 0 1px;
+  display: inline-block; 
+}
+
+.omni {
+  color: #C81023;
+}
+
+.pal {
+  color: #003366;
 }

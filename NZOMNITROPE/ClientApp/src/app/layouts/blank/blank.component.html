@@ -1,5 +1,47 @@
 <!-- ============================================================== -->
-<!-- Only router without any element -->
+<!-- Header Element -->
 <!-- ============================================================== -->
-<router-outlet></router-outlet>
-
+@if(!options.horizontal) {
+    <app-header
+      [showToggle]="!isOver"
+      (toggleCollapsed)="toggleCollapsed()"
+      (toggleMobileNav)="sidenav.toggle()"
+    ></app-header>
+  } @else {
+    <app-horizontal-header
+      (toggleMobileNav)="sidenav.toggle()"
+    ></app-horizontal-header>
+  }
+  
+  <!-- ============================================================== -->
+  <!-- Router Outlet -->
+  <!-- ============================================================== -->
+  <router-outlet></router-outlet>
+  
+  <!-- ============================================================== -->
+  <!-- Footer Element -->
+  <!-- ============================================================== -->
+  <footer>
+    <div class="footer-centered" [ngClass]="{ maxWidth: options.boxed }">
+      <div class="row">
+        <div class="col-sm-12">
+          <ul id="footer-menu">
+            <li>
+              <app-leaving-site [linkUrl]="contactValue.TERMS_OF_USE" linkLocation="Terms of Use"></app-leaving-site>
+            </li>
+            <li>
+              <a (click)="openContactUs()">Contact Us</a>
+            </li>
+            <li>
+              <app-leaving-site [linkUrl]="contactValue.PRIVACY_POLICY" linkLocation="Privacy Policy"></app-leaving-site>
+            </li>
+          </ul>
+          <p>
+            Sandoz Pty Ltd, Office 1.02, Level 1, 12 Madden Street, Auckland Central, Auckland 1010, New Zealand. 
+            Telephone: <strong>{{ contactValue.MEDICAL_ENQUIRY_PHONE }}</strong>. MLR-0007-NZ December 2024.
+          </p>
+        </div>
+      </div>
+    </div>
+  </footer>
+  

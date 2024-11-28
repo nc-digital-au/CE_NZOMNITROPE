@@ -5,10 +5,16 @@
     <h2 mat-dialog-title>Contact Us</h2>
     <mat-dialog-content>
         <p>
-            For questions regarding the Boehringer Ingelheim Medicines Request Program please contact the Program Administrator at <a href="mailto:{{contactValues.SUPPORT_EMAIL}}">{{contactValues.SUPPORT_EMAIL}}</a> or on {{contactValues.SUPPORT_PHONE}}. 
+            For questions regarding the  OmniPal Program, please contact the Program Administrator at <strong>{{ contactValues.PROGRAM_PHONE }}</strong>.
+        </p>
+        <p>
+            If you have a medical enquiry or to report an adverse event, please contact Medical Information at 
+            <a href="mailto:{{ contactValues.MEDICAL_ENQUIRY_EMAIL }}">{{ contactValues.MEDICAL_ENQUIRY_EMAIL }}</a> 
+            or call <strong>{{ contactValues.MEDICAL_ENQUIRY_PHONE }}</strong>.
+        </p>
+        <p>
+            If you have a product complaint, please contact Quality Assurance at 
+            <a href="mailto:{{ contactValues.PRODUCT_COMPLAINT_EMAIL }}">{{ contactValues.PRODUCT_COMPLAINT_EMAIL }}</a>.
         </p>
     </mat-dialog-content>
 </div>
-
-
-

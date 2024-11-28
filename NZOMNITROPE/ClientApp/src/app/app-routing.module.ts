@@ -37,8 +37,8 @@ const routes: Routes = [
   {
     path: '',
     component: FullComponent,
-    canActivate: [authenticatedGuard],
-    canActivateChild: [authenticatedGuard],
+    canActivate: [unauthenticatedGuard],
+    canActivateChild: [unauthenticatedGuard],
     children: [
       {
         path: routeNames.home,

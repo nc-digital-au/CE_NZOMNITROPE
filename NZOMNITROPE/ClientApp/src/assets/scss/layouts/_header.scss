@@ -1,5 +1,5 @@
 html .topbar {
-  background-color: $theme-green-one;
+  background-color: $white;
   position: sticky;
   top: 0;
   z-index: 2;
@@ -37,11 +37,6 @@ html .topbar {
 
 .object-cover {
   object-fit: cover;
-}
-
-.branding {
-  // padding: 20px;
-  // width: $sidenav-desktop;
 }
 
 .sidebarNav-mini {
