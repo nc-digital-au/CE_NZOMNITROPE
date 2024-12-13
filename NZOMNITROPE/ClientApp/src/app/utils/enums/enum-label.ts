@@ -29,6 +29,7 @@ export const TitleLabel: { [key in Title]: string } = {
   [Title.Mr]: "Mr",
   [Title.Mrs]: "Mrs",
   [Title.Ms]: "Ms",
+  [Title.Miss]: "Miss",
   [Title.Prof]: "Prof",
   [Title.Unknown]: "Uknown",
   [Title.Mx]: "Mx",

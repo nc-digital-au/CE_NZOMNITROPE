@@ -5,6 +5,7 @@ import { FullComponent } from './layouts/full/full.component';
 import { unauthenticatedGuard } from './guards/unauthenticated.guard';
 import { authenticatedGuard } from './guards/authenticated.guard';
 import { routeLinks, routeNames } from './utils/routes';
+import { PatientsRegisterComponent } from './pages/patients-register/patients-register.component';
 
 const routes: Routes = [
   {
@@ -31,6 +32,10 @@ const routes: Routes = [
           import('./pages/landing/landing.module').then(
             (m) => m.LandingModule
           ),
+      },
+      {
+        path: 'patients/register',
+        component: PatientsRegisterComponent
       },
     ],
   },

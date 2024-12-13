@@ -1,0 +1,19 @@
+@use "./../../../assets/scss/variables";
+
+.headers {
+  color: variables.$white;
+}
+
+.register-form {
+  max-width: 1000px;
+}
+
+.red-background {
+  background-color: #051D19;
+  width: 100%;
+  height: 100%;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center; 
+}

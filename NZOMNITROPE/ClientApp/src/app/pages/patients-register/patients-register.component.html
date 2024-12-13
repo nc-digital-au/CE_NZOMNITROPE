@@ -1,0 +1,50 @@
+<!-- <div class="headers">
+    <h1 class="text-center">Welcome to the Boehringer Ingelheim Medicines Request. </h1>
+    <h2 class="text-center">To complete your registration please complete the required details below.</h2>
+  </div> -->
+  
+  <div class="d-flex align-items-center justify-content-center">
+    <div class="red-background">
+    <mat-card class="cardWithShadow theme-card register-form">
+      <mat-card-content>
+        <mat-stepper #stepper [linear]="true" [orientation]="(stepperOrientation$ | async)!">
+  
+          <mat-step [stepControl]="registerForm">
+            <ng-template matStepLabel>Register form</ng-template>
+                <p>Welcome to OmniPal Patient Support Program.<br><br>
+                If you are new to the OmniPal Program website, please register. If you are returning, please enter your details to login.<br><br>
+                If you have any questions about the Program or need help registering, please contact the Program Administrator on 0800 726 369<br><br>
+                This site is intended for an audience in New Zealand.
+                Access to this site is subject to the following <a href="#">Terms of Use</a> and by registering for access to this site, you agree to be bound by its <a href="#">Terms of Use</a>.</p>
+            <app-register-form></app-register-form>
+                <div class="d-flex align-items-center justify-content-between">
+                <button mat-flat-button color="accent" matStepperPrevious>Back</button>
+                <button mat-flat-button color="primary" type="submit" matStepperNext>Next</button>
+            </div>
+            </mat-step>
+  
+          <mat-step [stepControl]="profileForm">
+            <ng-template matStepLabel>Patient details</ng-template>
+            <app-patient-details></app-patient-details>
+            <app-address title="Patient registration form"
+                         searchHint="Enter your clinic/practice name to search"
+                         [hiddenFields]="['mobile']">
+              <div class="d-flex align-items-center justify-content-between">
+                <button mat-flat-button color="accent" matStepperPrevious>Back</button>
+                <button mat-flat-button color="primary" matStepperNext>Next</button>
+              </div>
+            </app-address>
+          </mat-step>
+          <mat-step [stepControl]="confirmationForm">
+            <ng-template matStepLabel>Confirmation of registration</ng-template>
+            <app-register-confirmation></app-register-confirmation>
+            <div class="d-flex align-items-center justify-content-between">
+                <button mat-flat-button color="accent" matStepperPrevious>Back</button>
+                <button mat-flat-button color="primary" type="submit" (click)="onRegisterClick()">Register</button>
+            </div>
+          </mat-step>
+        </mat-stepper>
+      </mat-card-content>
+    </mat-card>
+</div>
+  </div>
