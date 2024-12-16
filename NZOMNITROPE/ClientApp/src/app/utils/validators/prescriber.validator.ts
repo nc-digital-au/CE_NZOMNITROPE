@@ -45,8 +45,35 @@ export class PrescriberValidator {
             )
           );
       }
-
       return of(null);
     };
   }
+
+  static nihNumberFormat(control: AbstractControl): ValidationErrors {
+    if (control.value) {
+      const format = /^[A-Z]{3}\d{4}$/;
+      return !format.test(control.value) ? { custom: 'format is invalid' } : null;
+    }
+    return null;
+  }
+
+  static passwordValidator(control: AbstractControl): ValidationErrors | null {
+    if (control.value) {
+      const passwordFormat = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=]).{8,}$/;
+      return !passwordFormat.test(control.value) ? { custom: 'must be at least 8 characters, with uppercase, lowercase, number, and symbol' } : null;
+    }
+    return null;
+  }
+  
+  static matchPasswords(control: AbstractControl): ValidationErrors | null {
+    if (control.value && control.root) {
+      const password = control.root.get('password');
+      if (password && control.value !== password.value) {
+        return { custom: 'must match to the password' };
+      }
+    }
+    return null;
+  }
 }
+
+

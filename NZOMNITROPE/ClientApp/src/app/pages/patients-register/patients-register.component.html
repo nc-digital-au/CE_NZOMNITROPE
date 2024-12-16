@@ -4,7 +4,7 @@
   </div> -->
   
   <div class="d-flex align-items-center justify-content-center">
-    <div class="red-background">
+    <div class="green-background">
     <mat-card class="cardWithShadow theme-card register-form">
       <mat-card-content>
         <mat-stepper #stepper [linear]="true" [orientation]="(stepperOrientation$ | async)!">
@@ -16,16 +16,16 @@
                 If you have any questions about the Program or need help registering, please contact the Program Administrator on 0800 726 369<br><br>
                 This site is intended for an audience in New Zealand.
                 Access to this site is subject to the following <a href="#">Terms of Use</a> and by registering for access to this site, you agree to be bound by its <a href="#">Terms of Use</a>.</p>
-            <app-register-form></app-register-form>
+            <app-register-form (formCreated)="onFormCreated($event, 'register')"></app-register-form>
                 <div class="d-flex align-items-center justify-content-between">
                 <button mat-flat-button color="accent" matStepperPrevious>Back</button>
                 <button mat-flat-button color="primary" type="submit" matStepperNext>Next</button>
             </div>
             </mat-step>
   
-          <mat-step [stepControl]="profileForm">
+          <mat-step [stepControl]="patientInfoForm">
             <ng-template matStepLabel>Patient details</ng-template>
-            <app-patient-details></app-patient-details>
+            <app-patient-details (formCreated)="onFormCreated($event, 'patient')"></app-patient-details>
             <app-address title="Patient registration form"
                          searchHint="Enter your clinic/practice name to search"
                          [hiddenFields]="['mobile']">
@@ -33,18 +33,17 @@
                 <button mat-flat-button color="accent" matStepperPrevious>Back</button>
                 <button mat-flat-button color="primary" matStepperNext>Next</button>
               </div>
-            </app-address>
+            </app-address>                                           
           </mat-step>
           <mat-step [stepControl]="confirmationForm">
-            <ng-template matStepLabel>Confirmation of registration</ng-template>
+            <ng-template matStepLabel>Confirmation of registration</ng-template>                
             <app-register-confirmation></app-register-confirmation>
             <div class="d-flex align-items-center justify-content-between">
                 <button mat-flat-button color="accent" matStepperPrevious>Back</button>
-                <button mat-flat-button color="primary" type="submit" (click)="onRegisterClick()">Register</button>
+                <button mat-flat-button color="primary" type="submit" (click)="onFormSubmit()">Register</button>
             </div>
           </mat-step>
         </mat-stepper>
       </mat-card-content>
     </mat-card>
 </div>
-  </div>

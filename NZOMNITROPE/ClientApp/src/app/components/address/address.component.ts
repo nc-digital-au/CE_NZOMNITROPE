@@ -13,6 +13,7 @@ import { AddressState } from 'src/app/services/service-proxies/service-proxies';
 import { UI_DEFAULTS } from 'src/app/utils/constants';
 import { Loader } from '@googlemaps/js-api-loader';
 import { environment } from 'src/environments/environment';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-address',
@@ -24,6 +25,7 @@ import { environment } from 'src/environments/environment';
     MatInput,
     MatHint,
     NgxGpAutocompleteModule,
+    CommonModule
   ],
   providers:[
     {

@@ -1,5 +1,6 @@
+import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Output } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule } from '@angular/forms';
 import { DynamicFormComponent } from 'src/app/components/dynamic-form/dynamic-form.component';
 import { DynamicForm } from 'src/app/components/dynamic-form/models/dynamic-form.model';
 import { CheckboxFormInputElement } from 'src/app/components/dynamic-form/models/form-elements/checkbox-form-input-element.model';
@@ -11,18 +12,22 @@ import { UI_DEFAULTS } from 'src/app/utils/constants';
 @Component({
   selector: 'app-register-form',
   standalone: true,
-  imports: [DynamicFormComponent],
+  imports: [
+    DynamicFormComponent,
+    CommonModule,
+    FormsModule],
   templateUrl: './register-form.component.html',
   styleUrl: './register-form.component.scss'
 })
 
 export class RegisterFormComponent {
-@Output()
-  formCreated = new EventEmitter<FormGroup>();
-  
-  formDefinition: DynamicForm;
+  @Output()
+    formCreated = new EventEmitter<FormGroup>();
+    formDefinition: DynamicForm;
 
-  constructor() {
+
+  constructor(
+    private fb: FormBuilder,){
     this.buildForm();
   }
 
@@ -30,7 +35,7 @@ export class RegisterFormComponent {
     this.formCreated.emit(form);
   }
 
-  private buildForm(): void {
+  buildForm(): void {
 
     this.formDefinition = new DynamicForm([
       new GroupFormElement({
@@ -40,7 +45,8 @@ export class RegisterFormComponent {
             label: 'Barcode - last 4-digits',
             validation: {
             required: true,
-            maxLength: UI_DEFAULTS.TEXT_INPUT_LIMIT,
+            minLength: 4,
+            maxLength: 4,
           },
         }),
         undefined,

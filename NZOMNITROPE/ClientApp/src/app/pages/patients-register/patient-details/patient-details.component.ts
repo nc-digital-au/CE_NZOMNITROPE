@@ -46,17 +46,9 @@ export class PatientDetailsComponent {
 
   onFormCreated(form: FormGroup): void {
     this.formCreated.emit(form);
-  }
+  }  
 
-    static nihNumberFormat(control: AbstractControl): ValidationErrors {
-      if (control.value) {
-        const format = /^[A-Z]{3}\d{4}$/;
-        return !format.test(control.value) ? { custom: 'format is invalid' } : null;
-      }
   
-      return null;
-    }
-
   private buildForm(): void {
       const titleOptions = DynamicFormHelper.enumToSelectOptions(PrescriberTitle, TitleLabel);
   
@@ -109,11 +101,12 @@ export class PatientDetailsComponent {
             new TextFormInputElement({
               name: 'nih',
               label: 'National Health Index Number (NIH)',
+              hint: 'NIH must be ABC1234',
               validation: {
                 required: true,
                 maxLength: 13,
                 custom: [
-                  PrescriberValidator.ahpraNumberFormat,
+                  PrescriberValidator.nihNumberFormat,
                 ],
               },
             }),
@@ -136,9 +129,13 @@ export class PatientDetailsComponent {
               label: 'Email',
               validation: {
                 required: true,
-                email: true,
+                minLength: 8,
               },
             }),
+          ],
+        }),
+        new GroupFormElement({
+          children: [
             new TextFormInputElement({
               name: 'password',
               label: 'Password',
@@ -146,6 +143,25 @@ export class PatientDetailsComponent {
                 required: true,
                 password: true,
                 minLength: 8,
+                custom: [
+                  PrescriberValidator.passwordValidator,
+                ],
+              },
+            }),
+          ],
+        }),
+        new GroupFormElement({
+          children: [
+            new TextFormInputElement({
+              name: 'confirmPassword',
+              label: 'Confirm Password',
+              validation: {
+                required: true,
+                password: true,
+                minLength: 8,
+                custom: [
+                  PrescriberValidator.matchPasswords,
+                ],
               },
             }),
           ],
