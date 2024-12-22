@@ -1,0 +1,46 @@
+  <mat-card-header>
+    <mat-card-title>
+      Welcome to the OmniPal®, the Omnitrope® Patient Support Program.
+    </mat-card-title>
+  </mat-card-header>
+
+  <mat-card-content>
+    <p>
+      You have been directed here because you have been prescribed somatropin by your healthcare professional.
+      To complete your enrolment, you will be required to provide some information so that you can access the services
+      you require.
+    </p>
+    <p>
+      <strong>*Please note:</strong> You will need to collect your prescription before you can register.
+    </p>
+    <form [formGroup]="welcomeForm" (ngSubmit)="onSubmit()" class="form-container">
+      <div class="form-row">
+        <!-- Barcode Input -->
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>Barcode – Last 4 Digits*</mat-label>
+          <input
+            matInput
+            type="text"
+            placeholder="Enter last 4 digits"
+            formControlName="barcode"
+          />
+          <mat-error *ngIf="welcomeForm.get('barcode')?.hasError('required')">
+            Barcode is required.
+          </mat-error>
+          <mat-error *ngIf="welcomeForm.get('barcode')?.hasError('pattern')">
+            Enter exactly 4 digits.
+          </mat-error>
+        </mat-form-field>
+      </div>
+    
+      <div class="form-row">
+        <!-- Consent Checkbox -->
+        <mat-checkbox formControlName="consent">
+          I confirm that I have been prescribed Omnitrope® (somatropin).
+        </mat-checkbox>
+        <mat-error *ngIf="welcomeForm.get('consent')?.hasError('requiredTrue')">
+          You must confirm your consent to proceed.
+        </mat-error>
+      </div>
+    </form>    
+</mat-card-content>

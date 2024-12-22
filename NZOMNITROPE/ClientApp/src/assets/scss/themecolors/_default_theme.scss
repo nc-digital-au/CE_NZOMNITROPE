@@ -3,10 +3,10 @@
 $font-family-text: 'ForwardText', sans-serif;
 $font-family-head: 'ForwardHead', sans-serif;
 
-$theme-accent-one: #00E47C;
-$theme-accent-two: #00B663;
-$theme-accent-three: #66EFB0;
-$theme-accent-four: #CCFAE5;
+$theme-accent-one: #00c0f3; 
+$theme-accent-two: #006bb1; 
+$theme-accent-three: #5bb2d9; 
+$theme-accent-four: #a8d6ef;
 
 $theme-gray-one: #FAF9F8;
 $theme-gray-two: #F6F5F3;
@@ -17,10 +17,10 @@ $theme-gray-six: #898885;
 $theme-gray-seven: #5C5B59;
 $theme-gray-eight: #2E2D2C;
 
-$theme-green-one: #08312A;
-$theme-green-two: #051D19;
-$theme-green-three: #6B8375;
-$theme-green-four: #B6CDBF;
+$theme-blue-one: #08312A;
+$theme-blue-two: #051D19;
+$theme-blue-three: #6B8375;
+$theme-blue-four: #B6CDBF;
 
 $theme-success-one: #1EAD1B;
 $theme-success-two: #0C490C;
@@ -54,8 +54,8 @@ $mat-primary: (
 );
 $mat-secondary: (
   100: white,
-  500: $theme-green-one,
-  700: $theme-green-two,
+  500: $theme-blue-one,
+  700: $theme-blue-two,
   contrast: (
     100: white,
     500: white,

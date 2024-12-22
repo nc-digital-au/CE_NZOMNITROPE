@@ -59,40 +59,44 @@ export class TermsFormComponent implements AfterViewInit {
         label: 'Agree to terms',
       }),
       new CheckboxFormInputElement({
-        name: 'programTerms',
-        label: 'I have read and agree to the <a id="terms-of-use" class="terms-of-use" href="#terms-of-use">Program Terms of Use</a>.',
-        errorLabel: 'Program Terms of Use acceptance',
+        name: 'receiveConset',
+        label: 'You are receiving Omnitrope® (somatropin) treatment in New Zealand.',
+        errorLabel: 'Receive Policy acceptance',
         validation: {
           required: true,
         },
       }),
       new CheckboxFormInputElement({
-        name: 'privacyConsent',
-        label: 'As a healthcare professional participating in this activity sponsored by Boehringer Ingelheim Pty Ltd, I have read and understood the <a class="privacy-policy" href="https://www.boehringer-ingelheim.com/au/data-privacy">privacy policy</a> and I agree with it.',
+        name: 'withdrawConset',
+        label: 'You understand that you may withdraw from the program at any time. ',
+        errorLabel: 'Withdraw Policy acceptance',
+        validation: {
+          required: true,
+        },
+      }),
+      new CheckboxFormInputElement({
+        name: 'informationConsent',
+        label: 'You understand that to manage the program, your personal information will be accessed by the Program Administrator who will collect and store your information in accordance with the <a class="privacy-policy" href="#privacy-policy">privacy policy</a>.',
         errorLabel: 'Privacy Policy acceptance',
         validation: {
           required: true,
         },
       }),
       new CheckboxFormInputElement({
-        name: 'adverseEventContactConsent',
-        label: 'I agree that my participation indicates my consent for Boehringer Ingelheim patient safety department to contact me for further information regarding any adverse event identified as part of this activity.',
-        errorLabel: 'Contact acceptance',
+        name: 'privacyConsent',
+        label: 'You have read, understand and agree to the <a class="privacy-policy" href="#privacy-policy">privacy policy</a>.',
+        errorLabel: 'Privacy Policy acceptance',
         validation: {
           required: true,
         },
       }),
       new CheckboxFormInputElement({
         name: 'contactConsent',
-        label: 'I consent to the Program Administrator providing information to Boehringer Ingelheim through this Program.',
-        errorLabel: 'Information sharing acceptance',
+        label: 'You consent to the Program Administrator contacting you with program reminders via email, or phone or SMS .',
+        errorLabel: 'Contact Consent acceptance',
         validation: {
           required: true,
         },
-      }),
-      new CheckboxFormInputElement({
-        name: 'marketingCommunicationConsent',
-        label: 'I consent to receiving marketing communications from Boehringer Ingelheim (optional).',
       }),
     ]);
   }

@@ -14,6 +14,7 @@ export const routeNames = {
   dashboard: 'dashboard',
   enrol: 'enrol',
   reapprove: 'reapprove',
+  order: 'order',
 };
 
 export const routeLinks = {

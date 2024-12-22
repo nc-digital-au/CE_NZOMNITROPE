@@ -4,6 +4,8 @@ import { EnrolPatientComponent } from './enrol-patient/enrol-patient.component';
 import { NgModule } from '@angular/core';
 import { routeNames } from 'src/app/utils/routes';
 import { ReapprovePatientComponent } from './reapprove-patient/reapprove-patient.component';
+import { OrderFormComponent } from './order-surepal-device/order-form/order-form.component';
+import { OrderSurepalDeviceComponent } from './order-surepal-device/order-surepal-device.component';
 
 @NgModule({
   imports: [
@@ -27,6 +29,17 @@ import { ReapprovePatientComponent } from './reapprove-patient/reapprove-patient
           urls: [
             { title: 'My patients', url: '/patients/enrol' },
             { title: 'Enrol patient' }
+          ]
+        }
+      },
+      {
+        path: routeNames.order,
+        component: OrderSurepalDeviceComponent,
+        data: {
+          title: 'Order Form',
+          urls: [
+            { title: 'My patients', url: '/patients/order' },
+            { title: 'Order Form' }
           ]
         }
       },

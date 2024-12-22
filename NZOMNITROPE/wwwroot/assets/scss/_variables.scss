@@ -1,0 +1,127 @@
+@font-face {
+    font-family: 'ForwardText';
+    src: url('../fonts/BoehringerForwardText.ttf') format("ttf");
+    src: url('../fonts/BoehringerForwardText.woff') format("woff");
+    src: url('../fonts/BoehringerForwardText.woff2') format("woff2");
+    font-display: block;
+  }
+  @font-face {
+    font-family: 'ForwardHead';
+    src: url('../fonts/BoehringerForwardHead.ttf') format("ttf");
+    src: url('../fonts/BoehringerForwardHead.woff') format("woff");
+    src: url('../fonts/BoehringerForwardHead.woff2') format("woff2");
+    font-display: block;
+  }  
+// font
+$font-family-text: 'ForwardText', sans-serif;
+$font-family-head: 'ForwardHead', sans-serif;
+
+// ======================================================
+// Branding guideline colors
+// ======================================================
+$theme-accent-one: #00c0f3; 
+$theme-accent-two: #006bb1; 
+$theme-accent-three: #5bb2d9; 
+$theme-accent-four: #a8d6ef;
+
+$theme-gray-one: #FAF9F8;
+$theme-gray-two: #F6F5F3;
+$theme-gray-three: #EFEEEB;
+$theme-gray-four: #E5E3DE;
+$theme-gray-five: #B7B6B2;
+$theme-gray-six: #898885;
+$theme-gray-seven: #5C5B59;
+$theme-gray-eight: #2E2D2C;
+
+$theme-blue-one: #0A2742;
+$theme-blue-two: #031525;
+$theme-blue-three: #567A91;
+$theme-blue-four: #A2C4D5;
+
+$theme-success-one: #1EAD1B;
+$theme-success-two: #0C490C;
+$theme-success-three: #CDEDCC;
+
+$theme-error-one: #F62B2B;
+$theme-error-two: #6D1313;
+$theme-error-three:#FDD3D3;
+
+$theme-info-one: #0075FF;
+$theme-info-two: #003471;
+$theme-info-three: #C6E0FF;
+
+$theme-warning-one: #FF8413;
+$theme-warning-two: #893406;
+$theme-warning-three: #FEEDD2;
+
+$theme-web-black: #191919;
+$theme-yellow-dark: #E18600;
+$theme-yellow-yellow: #FFE667;
+$theme-yellow-light: #FBF9AA;
+
+//secondary colors - blue
+$theme-blue-light: #D2F2F7;
+$theme-blue-blue: #A3E5EE;
+$theme-blue-medium: #6AD2E2;
+$theme-blue-dark: #076D7E;
+
+// light color variable
+$sidebarbg: white;
+$background: #eef5f9;
+$cardbg: white;
+$toolbar: white;
+$cardshadow: 0px 5px 20px rgba(0,0,0,.05);
+$hoverBgColor: #f6f9fc;
+
+// Dark color variable
+$darksidebarbg: #2a3447;
+$darkbackground: #2a3447;
+$darkcardbg: #2a3447;
+$darktoolbar: #2a3447;
+$darkcardshadow: rgba(145, 158, 171, 0.3) 0px 0px 2px 0px, rgba(145, 158, 171, 0.02) 0px 12px 24px -4px;
+$darkborderColor: #333f55;
+$darkformborderColor: #465670;
+$darkhoverbgcolor: #333f55;
+$darkthemelightprimary: #253662;
+$darkthemelightaccent: #1C455D;
+$darkthemelightwarning: #4D3A2A;
+$darkthemelighterror: #4B313D;
+$darkthemelightsuccess: #1B3C48;
+
+// Sidenav
+$sidenav-desktop: 270px !default;
+$sidenav-mini: 80px !default;
+$header-height: 100px !default;
+
+
+//BorderColor
+//$borderColor: #e5eaef;
+$borderColor:$theme-web-black;
+$borderformColor: #dfe5ef;
+
+// custom
+$primary: $theme-blue-one;
+$accent: $theme-accent-one;
+$warning: $theme-warning-two;
+$error: $theme-error-one;
+$success: $theme-success-one;
+$white: #ffffff;
+
+$light: #f2f6fa;
+
+$gray-100:  #7c8fac;
+$gray-50: #e2e2e2;
+
+$light-primary: $theme-info-three;
+$light-accent: $theme-accent-three;
+$light-warning: $theme-warning-three;
+$light-error: $theme-error-three;
+$light-success: $theme-success-three;
+
+// layout
+$boxedWidth: 1200px;
+
+$border-radius: 0.125rem;
+
+// text color
+$textPrimary: $theme-web-black;

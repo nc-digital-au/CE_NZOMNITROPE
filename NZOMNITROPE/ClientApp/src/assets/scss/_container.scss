@@ -168,7 +168,7 @@ footer{
     min-height: 300px;
   }
   .block-green-one{
-    background-color: $theme-green-two;
+    background-color: $theme-blue-two;
     color: $theme-accent-one;
     p{
       color: $white;
@@ -177,7 +177,7 @@ footer{
 
   .block-gray-warm{
     background-color: $theme-gray-four;
-    color: $theme-green-two;
+    color: $theme-blue-two;
   }
 
   .block-blue-light{
@@ -279,9 +279,9 @@ footer{
   border: solid 1px $theme-gray-six;
   .program-header{
     padding: 16px;
-    background-color: $theme-green-one;
+    background-color: $theme-blue-one;
     color: $theme-accent-one;
-    border: 1px solid $theme-green-one;
+    border: 1px solid $theme-blue-one;
   }
   label{
     display: inline-block;
@@ -296,7 +296,7 @@ footer{
       }
   }
   #scriptFooter{
-    background-color: $theme-green-one;
+    background-color: $theme-blue-one;
     color:white;
     padding: 48px;
     text-align: center;
@@ -314,7 +314,7 @@ footer{
 
 .mat-mdc-card.dark-green-card{
   border: 1px solid;
-  border-color: $theme-green-three;
+  border-color: $theme-blue-three;
   padding-top: 16px;
 }
 ///// table /////
@@ -446,4 +446,25 @@ tr.expanded-row{
 
 .pal {
   color: #003366;
+}
+
+.full-width {
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+.half-width {
+  width: 50%;
+  margin-bottom: 16px;
+}
+
+.form-row {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.button-container {
+  display: flex;
+  justify-content: flex-end;
 }

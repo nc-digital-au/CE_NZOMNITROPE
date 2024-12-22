@@ -1,0 +1,39 @@
+<form [formGroup]="orderForm" (ngSubmit)="onSubmit()" class="form-container">
+  <!-- Consumables Kit -->
+  <div class="form-row">
+    <h5 class="mat-subtitle-2">Consumables Kit</h5>
+    <mat-radio-group formControlName="consumablesKit" class="radio-group">
+      <mat-radio-button value="4mmNeedleKit" class="radio-option">
+        SKU 4mm Needle Kit – Contains 300 x 4mm needles, 400 x alcohol wipes, 3 x sharps containers
+      </mat-radio-button>
+      <mat-radio-button value="5mmNeedleKit" class="radio-option">
+        SKU 5mm Needle Kit – Contains 300 x 5mm needles, 400 x alcohol wipes, 3 x sharps containers
+      </mat-radio-button>
+      <mat-radio-button value="8mmNeedleKit" class="radio-option">
+        SKU 8mm Needle Kit – Contains 300 x 8mm needles, 400 x alcohol wipes, 3 x sharps containers
+      </mat-radio-button>
+    </mat-radio-group>
+    <mat-error *ngIf="orderForm.get('consumablesKit')?.hasError('required')">
+      Please select a Consumables Kit.
+    </mat-error>
+  </div>
+
+  <!-- Pen Replacement -->
+  <div class="form-row">
+    <h5 class="mat-subtitle-2">Pen Replacement</h5>
+    <mat-radio-group formControlName="penReplacement" class="radio-group">
+      <mat-radio-button value="5mgPen" class="radio-option">
+        SKU 5mg Pen – Contains 1 x 5mg SurePal® Pen (white)
+      </mat-radio-button>
+      <mat-radio-button value="10mgPen" class="radio-option">
+        SKU 10mg Pen – Contains 1 x 10mg SurePal® Pen (green)
+      </mat-radio-button>
+      <mat-radio-button value="15mgPen" class="radio-option">
+        SKU 15mg Pen – Contains 1 x 15mg SurePal® Pen (blue)
+      </mat-radio-button>
+    </mat-radio-group>
+    <mat-error *ngIf="orderForm.get('penReplacement')?.hasError('required')">
+      Please select a Pen Replacement option.
+    </mat-error>
+  </div>
+</form>

@@ -1,27 +1,23 @@
-<div class="headers">
-  <h1 class="text-center">Welcome to the Boehringer Ingelheim Medicines Request. </h1>
-  <h2 class="text-center">To complete your registration please complete the required details below.</h2>
-</div>
-
 <div class="d-flex align-items-center justify-content-center">
   <mat-card class="cardWithShadow theme-card register-form">
     <mat-card-content>
-      <mat-stepper #stepper [linear]="true" [orientation]="(stepperOrientation$ | async)!">
-        <mat-step [stepControl]="profileForm">
-          <ng-template matStepLabel>Profile</ng-template>
-          <app-profile-form (formCreated)="profileForm = $event">
+      <mat-stepper #stepper [linear]="false" [orientation]="(stepperOrientation$ | async)!">
+        <mat-step [stepControl]="welcomeForm">
+          <ng-template matStepLabel>Welcome</ng-template>
+          <app-welcome-form (formCreated)="welcomeForm = $event">
             <div class="d-flex align-items-center justify-content-between">
               <button mat-flat-button color="accent" [routerLink]="[routeLinks.landing]" type="button">Cancel</button>
               <button mat-flat-button color="primary" type="submit" matStepperNext>Next</button>
             </div>
-          </app-profile-form>
+          </app-welcome-form>
         </mat-step>
 
-        <mat-step [stepControl]="contactForm">
-          <ng-template matStepLabel>Contact</ng-template>
-          <app-address (formCreated)="contactForm = $event" title="Contact information"
-            searchHint="Enter your clinic/practice name to search"
-            [hiddenFields]="['unitNumber', 'city', 'streetAddress', 'mobile']">
+        <mat-step [stepControl]="patientForm">
+          <ng-template matStepLabel>Patient Details</ng-template>
+          <app-patient-form></app-patient-form>
+          <app-address (formCreated)="patientForm = $event" title="Delivery Address"
+            searchHint="Enter your delivery address to search"
+            [hiddenFields]="['unitNumber', 'city', 'streetAddress', 'mobile','search']">
             <div class="d-flex align-items-center justify-content-between">
               <button mat-flat-button color="accent" matStepperPrevious>Back</button>
               <button mat-flat-button color="primary" type="submit" matStepperNext>Next</button>
@@ -36,43 +32,37 @@
               <button mat-flat-button color="accent" matStepperPrevious>Back</button>
               <button mat-flat-button color="primary" type="submit" (click)="onRegisterClick()">Register</button>
             </div>
-          </app-terms-form>
-        </mat-step>
 
-        <mat-step>
-          <ng-template matStepLabel>Submit</ng-template>
-          <div class="p-16 bg-light-secondary rounded m-y-20">
-            <h5 class="mat-subtitle-2 text-secondary d-flex align-items-center f-w-600">
-              Registration Submission
+            <ng-template matStepLabel>Submit</ng-template>
+            <div class="p-16 bg-light-secondary rounded m-y-20">
+              <h5 class="mat-subtitle-2 text-secondary d-flex align-items-center f-w-600">
+                Registration Submission
+                @if (registrationSuccess) {
+                Successful
+                }
+                @else {
+                Failed
+                }
+              </h5>
+            </div>
+            <app-inline-alert [success]="registrationSuccess">
               @if (registrationSuccess) {
-              Successful
+              Your registration form has been successfully submitted. You will receive an email when your account has been
+              verified.
               }
               @else {
-              Failed
+              Registration failed. Please check the following fields and then try to submit again.
+  
+              @if (registrationProblem && registrationProblem.errors) {
+              <ul>
+                @for (problem of registrationProblem.errors; track problem.propertyName) {
+                <li>{{ problem.message }}</li>
+                }
+              </ul>
               }
-            </h5>
-          </div>
-          <app-inline-alert [success]="registrationSuccess">
-            @if (registrationSuccess) {
-            Your registration form has been successfully submitted. You will receive an email when your account has been
-            verified.
-            }
-            @else {
-            Registration failed. Please check the following fields and then try to submit again.
-
-            @if (registrationProblem && registrationProblem.errors) {
-            <ul>
-              @for (problem of registrationProblem.errors; track problem.propertyName) {
-              <li>{{ problem.message }}</li>
               }
-            </ul>
-            }
-            }
-          </app-inline-alert>
-
-          <div class="text-right">
-            <button mat-flat-button color="primary" [routerLink]="[routeLinks.landing]" matStepperNext>Finish</button>
-          </div>
+            </app-inline-alert>
+          </app-terms-form>
         </mat-step>
       </mat-stepper>
     </mat-card-content>
