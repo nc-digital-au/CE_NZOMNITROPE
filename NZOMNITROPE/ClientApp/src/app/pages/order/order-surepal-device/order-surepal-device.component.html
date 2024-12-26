@@ -28,7 +28,7 @@
                 <button mat-stroked-button color="accent" [routerLink]="[routeLinks.patients.dashboard]" type="button">Cancel</button>
                 <button mat-flat-button color="accent" class="m-l-10" matStepperPrevious>Back</button>
               </div>
-              <button mat-flat-button color="primary" type="submit" matStepperNext>Next</button>
+              <button mat-flat-button color="primary" type="submit" (click)="onFormSubmit()">Submit</button>
             </div>
         </mat-step>
 

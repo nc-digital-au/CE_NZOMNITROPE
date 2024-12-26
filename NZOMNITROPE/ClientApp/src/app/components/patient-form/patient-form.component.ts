@@ -6,7 +6,7 @@ import { GroupFormElement } from 'src/app/components/dynamic-form/models/form-el
 import { SelectFormInputElement } from 'src/app/components/dynamic-form/models/form-elements/select-form-input-element.model';
 import { TextFormInputElement } from 'src/app/components/dynamic-form/models/form-elements/text-form-input-element.model';
 import { TitleFormElement } from 'src/app/components/dynamic-form/models/form-elements/title-form-element.model';
-import { PrescriberValidator } from 'src/app/utils/validators/prescriber.validator';
+import { DateFormInputElement } from '../dynamic-form/models/form-elements/date-form-input-element.model';
 
 @Component({
   selector: 'app-patient-form',
@@ -86,6 +86,13 @@ export class PatientFormComponent implements OnInit {
         validation: {
           required: true,
           // pattern: /^\d{10}$/, // Example: 10-digit number
+        },
+      }),
+      new DateFormInputElement({
+        name: 'dateOfBirth',
+        label: 'Date Of Birth',
+        validation: {
+          required: true,
         },
       }),
     ]);

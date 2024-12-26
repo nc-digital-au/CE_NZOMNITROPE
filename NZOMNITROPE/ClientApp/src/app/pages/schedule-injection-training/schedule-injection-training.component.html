@@ -1,1 +1,55 @@
-<p>schedule-injection-training works!</p>
+<h1>Schedule an Injection Training Session Form </h1>
+<div *ngIf="!enrolmentSuccess">
+  <p>*Indicates mandatory field</p>
+  <div *ngIf="submitting">
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+  </div>
+  <mat-card class="cardWithShadow theme-card">
+    <mat-card-content class="b-t-1">
+      <mat-stepper #stepper [orientation]="(stepperOrientation | async)!" [linear]="false">
+        <mat-step [stepControl]="patientForm">
+          <ng-template matStepLabel>Patient Details</ng-template>
+          <app-patient-form (formCreated)="patientForm = $event"></app-patient-form>
+          <app-address 
+            title="Please provide a physical address for the delivery of your SurePal® Pen or consumables kit. You can choose to have your delivery sent to your home, work/office or local community pharmacy for collection."
+            [establishmentOnly]="false" 
+            [hiddenFields]="['name', 'phone', 'mobile']">
+          </app-address>
+          <div class="d-flex align-items-center justify-content-between">
+            <button mat-stroked-button color="accent" [routerLink]="[]" type="button">Cancel</button>
+            <button mat-flat-button color="primary" type="submit" (click)="onPatientFormNext()">Next</button>
+          </div>
+        </mat-step>
+
+        <mat-step [stepControl]="injectionForm">
+            <ng-template matStepLabel>Injection Training Session</ng-template>
+            <app-injection-training-session (formCreated)="injectionForm = $event"></app-injection-training-session>
+            <p>NOTE : Please ensure that you have received your SurePal® device prior to the training session.  </p>
+            <div class="d-flex align-items-center justify-content-between">
+              <button mat-stroked-button color="accent" [routerLink]="[]" type="button">Cancel</button>
+              <button mat-flat-button color="primary" type="submit" (click)="onFormSubmit()">Submit Training Request</button>
+            </div>
+          </mat-step>
+      </mat-stepper>
+    </mat-card-content>
+  </mat-card>
+</div>
+<div *ngIf="enrolmentSuccess">
+  <mat-card class="cardWithShadow theme-card">
+    <mat-card-content class="b-t-1">
+      <h4 class="mat-subtitle-2 d-flex align-items-center f-w-600">
+        Request Submitted       
+    </h4>
+      <div class="p-16 bg-light-info rounded m-y-20 text-info">
+        <div class="icon-block">
+          <svg-icon src="assets/images/svgs/information-mark-circle.svg" svgClass="icon-block-image"></svg-icon>
+          <div class="icon-block-content" style="max-width: 100%;">
+            Thank you, your injection training request has been submitted.  The Program Administrator will contact you to confirm the date and time for your training session.  
+            Should you have any queries, please contact the Program Administrator on 0800 666 369.  
+          </div>
+        </div>
+      </div>
+      <mat-divider></mat-divider>
+    </mat-card-content>
+  </mat-card>
+</div>

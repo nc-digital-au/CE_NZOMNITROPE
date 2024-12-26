@@ -5,6 +5,11 @@ export const navItems: NavItem[] = [
     navCap: 'Home',
   },
   {
+    displayName: 'Home',
+    iconName: 'home',
+    route: 'home',
+  },
+  {
     displayName: 'Order Omnitrope Device and Consumables',
     route: 'order',
   },

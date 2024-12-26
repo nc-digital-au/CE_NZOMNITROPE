@@ -15,8 +15,8 @@ import { RepeatOption } from 'src/app/utils/enums/ofev-data';
 import { routeLinks } from 'src/app/utils/routes';
 import { Router, RouterLink } from '@angular/router';
 import { AuthenticationService } from 'src/app/services/authentication.service';
-import { PatientFormComponent } from './patient-form/patient-form.component';
 import { OrderFormComponent } from './order-form/order-form.component';
+import { PatientFormComponent } from 'src/app/components/patient-form/patient-form.component';
 
 @Component({
   selector: 'app-order-surepal-device',
