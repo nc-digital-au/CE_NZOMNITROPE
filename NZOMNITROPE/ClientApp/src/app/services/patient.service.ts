@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Discontinuation, MyPatient, Patient, TreatmentEvent } from '../pages/patient/patient.model';
+import { Discontinuation, MyPatient, Patient, TreatmentEvent } from '../pages/order/order.model';
 import { AddressState, AddressType, Dosage, Gender, PatientStatus, RepeatOptionLabel, Title, TreatmentEventType } from '../utils/enums/ofev-data';
 import { HttpClient } from '@angular/common/http';
 

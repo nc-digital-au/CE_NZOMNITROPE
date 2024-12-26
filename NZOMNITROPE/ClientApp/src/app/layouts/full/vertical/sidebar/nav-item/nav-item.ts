@@ -1,4 +1,5 @@
 export interface NavItem {
+    target?: string;
     displayName?: string;
     disabled?: boolean;
     external?: boolean;

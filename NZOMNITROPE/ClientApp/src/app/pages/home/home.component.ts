@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { EligibilityCriteriaDialogComponent } from '../patient/eligibility-criteria/eligibility-criteria-dialog/eligibility-criteria-dialog.component';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { HttpClient } from '@angular/common/http';
 import { PatientService } from 'src/app/services/patient.service';
@@ -19,9 +18,5 @@ export class HomeComponent {
     private auth: AuthenticationService,
     private patientSvc: PatientService
   ){}
-
-  openEligibilityCriteria(){
-    this.dialog.open(EligibilityCriteriaDialogComponent);
-  }
 
 }

@@ -5,68 +5,46 @@ export const navItems: NavItem[] = [
     navCap: 'Home',
   },
   {
-    displayName: 'Home',
-    iconName: 'home',
-    route: 'home',
+    displayName: 'Order Omnitrope Device and Consumables',
+    route: 'order',
   },
   {
-    displayName: 'Program information',
-    iconName: 'heartbeat',
-    route: 'program',
+    displayName: 'Schedule Injection Training',
+    route: 'schedule',
+    ddType: '',
+  },
+  {
+    displayName: 'Resources',
+    route: 'resources',
     ddType: '',
     children: [
       {
-        displayName: 'About',
+        displayName: 'How to Inject Video',
         iconName: '',
-        route: 'program/about',
+        route: 'resources/how-to-inject',
       },
       {
-        displayName: 'Program Resources',
-        iconName: '',
-        route: 'program/resources',
-      },
-      {
-        displayName: 'FAQs',
-        iconName: '',
-        route: 'program/faqs',
-      }
-    ],
-  },
-  {
-    displayName: 'My patients',
-    iconName: 'user-heart',
-    route: 'patients',
-    ddType: '',
-    children: [
-      {
-        displayName: 'Patient dashboard',
-        iconName: '',
-        route: 'patients/dashboard',
-      },
-      {
-        displayName: 'Enrol patient',
-        iconName: '',
-        route: 'patients/enrol',
-      }
-    ],
-  },
-  {
-    displayName: 'About OFEV',
-    iconName: '',
-    route: 'ofev',
-    ddType: '',
-    children: [
-      {
-        displayName: 'Product information',
+        displayName: 'PDF Guide 1',
         iconName: '',
         route: 'https://rss.medsinfo.com.au/by/pi.cfm?product=bypofevc',
-        external: true,
+        target: '_blank',
       },
       {
-        displayName: 'Consumer information',
+        displayName: 'PDF Guide 2',
         iconName: '',
-        route: 'https://rss.medsinfo.com.au/by/cmi.cfm?product=bycofevc',
-        external: true,
+        route: 'https://rss.medsinfo.com.au/by/pi.cfm?product=bypofevc',
+        target: '_blank',
+      },
+      {
+        displayName: 'PDF Guide 3',
+        iconName: '',
+        route: 'https://rss.medsinfo.com.au/by/pi.cfm?product=bypofevc',
+        target: '_blank',
+      },
+      {
+        displayName: 'Omnitrope CMI',
+        iconName: '',
+        route: 'resources/faqs',
       }
     ],
   },

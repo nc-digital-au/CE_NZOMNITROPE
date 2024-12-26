@@ -7,7 +7,6 @@ import { FormsModule } from '@angular/forms';
 import { HomeComponent } from './home/home.component';
 import { HttpClientModule } from '@angular/common/http';
 import { AngularSvgIconModule } from 'angular-svg-icon';
-import { EligibilityCriteriaDialogComponent } from './patient/eligibility-criteria/eligibility-criteria-dialog/eligibility-criteria-dialog.component';
 
 @NgModule({
   declarations: [HomeComponent],
@@ -18,7 +17,6 @@ import { EligibilityCriteriaDialogComponent } from './patient/eligibility-criter
     RouterModule.forChild(PagesRoutes),
     HttpClientModule,
     AngularSvgIconModule.forRoot(),
-    EligibilityCriteriaDialogComponent,
     RouterLink
   ],
 })

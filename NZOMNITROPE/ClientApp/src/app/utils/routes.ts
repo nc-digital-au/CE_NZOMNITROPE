@@ -15,6 +15,8 @@ export const routeNames = {
   enrol: 'enrol',
   reapprove: 'reapprove',
   order: 'order',
+  resources: 'resources',
+  schedule: 'schedule',
 };
 
 export const routeLinks = {

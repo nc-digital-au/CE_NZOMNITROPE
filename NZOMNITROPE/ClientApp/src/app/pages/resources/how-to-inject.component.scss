@@ -1,0 +1,22 @@
+.how-to-inject-section {
+    max-width: 1200px;
+    margin: 0 auto;
+    text-align: center;
+    background-color: #ffffff;
+  }
+  
+  .video-placeholder {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 300px;
+    overflow: hidden;
+  }
+  
+  .video-placeholder video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 8px;
+  }
+  

@@ -5,6 +5,9 @@ import { FullComponent } from './layouts/full/full.component';
 import { unauthenticatedGuard } from './guards/unauthenticated.guard';
 import { authenticatedGuard } from './guards/authenticated.guard';
 import { routeLinks, routeNames } from './utils/routes';
+import { OrderFormComponent } from './pages/order/order-surepal-device/order-form/order-form.component';
+import { OrderSurepalDeviceComponent } from './pages/order/order-surepal-device/order-surepal-device.component';
+import { ScheduleInjectionTrainingComponent } from './pages/schedule-injection-training/schedule-injection-training.component';
 
 const routes: Routes = [
   {
@@ -46,14 +49,17 @@ const routes: Routes = [
           import('./pages/pages.module').then((m) => m.PagesModule),
       },
       {
-        path: routeNames.program,
+        path: routeNames.resources,
         loadChildren: () =>
-          import('./pages/program/program.module').then((m) => m.ProgramModule),
+          import('./pages/resources/resources.module').then((m) => m.ResourcesModule),
       },
       {
-        path: routeNames.patients,
-        loadChildren: () =>
-          import('./pages/patient/patient-routing.module').then((m) => m.PatientRoutingModule),
+        path: routeNames.order,
+        component: OrderSurepalDeviceComponent,
+      },
+      {
+        path: routeNames.schedule,
+        component: ScheduleInjectionTrainingComponent,
       },
     ],
   },

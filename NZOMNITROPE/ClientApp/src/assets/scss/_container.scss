@@ -468,3 +468,44 @@ tr.expanded-row{
   display: flex;
   justify-content: flex-end;
 }
+
+/* Split Section */
+.split-section {
+  display: flex;
+  width: 100%;
+  height: 150px;
+}
+
+.split-section-left {
+  flex: 1;
+  background-color: $theme-accent-one;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.split-section-right {
+  flex: 1;
+  background-color: $theme-accent-two; 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.action-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+.information-button {
+  font-size: 14px;
+  font-weight: 500;
+  padding: 10px 20px;
+  color: $theme-accent-one;
+  border: 1px solid #007bff;
+  border-radius: 4px;
+  background-color: #ffffff; 
+}

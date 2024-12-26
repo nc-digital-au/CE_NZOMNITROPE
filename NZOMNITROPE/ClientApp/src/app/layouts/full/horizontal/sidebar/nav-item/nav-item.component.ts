@@ -15,7 +15,7 @@ import { LeavingSiteDialog } from 'src/app/components/leaving-site/leaving-site.
 @Component({
   selector: 'app-horizontal-nav-item',
   standalone: true,
-  imports:[MaterialModule, TablerIconsModule, CommonModule],
+  imports: [MaterialModule, TablerIconsModule, CommonModule],
   templateUrl: './nav-item.component.html',
 })
 export class AppHorizontalNavItemComponent implements OnInit {
@@ -25,7 +25,7 @@ export class AppHorizontalNavItemComponent implements OnInit {
   constructor(
     public navService: NavService,
     public router: Router,
-    private _dialog: MatDialog,
+    private _dialog: MatDialog
   ) {
     if (this.depth === undefined) {
       this.depth = 0;
@@ -33,17 +33,20 @@ export class AppHorizontalNavItemComponent implements OnInit {
   }
 
   ngOnInit() {}
+
   onItemSelected(item: NavItem) {
     if (!item.external) {
       if (!item.children || !item.children.length) {
         this.router.navigate([item.route]);
       }
+    } else if (item.target === '_blank') {
+      window.open(item.route, '_blank');
     } else {
       this._dialog.open(LeavingSiteDialog, {
         data: {
           url: item.route,
-        }
-      })
+        },
+      });
     }
   }
 }
