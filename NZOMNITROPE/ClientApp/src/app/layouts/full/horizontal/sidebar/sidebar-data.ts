@@ -10,7 +10,7 @@ export const navItems: NavItem[] = [
     route: 'home',
   },
   {
-    displayName: 'Order Omnitrope Device and Consumables',
+    displayName: 'Order Device and Consumables',
     route: 'order',
   },
   {
