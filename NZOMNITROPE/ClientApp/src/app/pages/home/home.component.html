@@ -1,28 +1,20 @@
-<h1>Welcome to OmniPal® Patient Support Program.</h1>
-
-<!-- Device and Consumables Section -->
+<h1 class="card-title">Welcome to OmniPal® Patient Support Program.</h1>
 <section id="device-consumables-section" class="split-section">
-  <!-- Left Section -->
-  <div class="split-section-left">
-    <button mat-button id="order-device-button" class="primary-button">
-      Order SurePal® Device and Consumables
-    </button>
+  <div class="split-section-left" (click)="onOrderDeviceClick()">
+    Order SurePal® Device and Consumables
   </div>
-
-  <!-- Right Section -->
-  <div class="split-section-right">
-    <button mat-button id="schedule-training-button" class="primary-button">
-      Schedule an Injection Training Session
-    </button>
+  <div class="split-section-right" (click)="onScheduleTrainingClick()">
+    Schedule an Injection Training Session
   </div>
 </section>
 
-<!-- Action Buttons Section -->
-<h1>Information for Patients</h1>
-  <div class="action-buttons">
-    <button mat-button class="information-button">Watch: How to Inject Video</button>
-    <button mat-button class="information-button">PDF Guide 1</button>
-    <button mat-button class="information-button">PDF Guide 2</button>
-    <button mat-button class="information-button">PDF Guide 3</button>
-    <button mat-button class="information-button">Consumer Medicine Information</button>
+<h1 class="card-title">Information for Patients</h1>
+<div class="action-card">
+  <div class="button-group">
+    <button class="information-button">Watch: How to Inject Video</button>
+    <button class="information-button">PDF Guide 1</button>
+    <button class="information-button">PDF Guide 2</button>
+    <button class="information-button">PDF Guide 3</button>
+    <button class="information-button">Consumer Medicine Information</button>
   </div>
+</div>
