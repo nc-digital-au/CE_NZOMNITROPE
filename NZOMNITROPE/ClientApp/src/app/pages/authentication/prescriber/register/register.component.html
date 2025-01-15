@@ -5,11 +5,11 @@
         <mat-step [stepControl]="welcomeForm">
           <ng-template matStepLabel>Welcome</ng-template>
           <app-welcome-form (formCreated)="welcomeForm = $event">
-            <div class="d-flex align-items-center justify-content-between">
-              <button mat-flat-button color="accent" [routerLink]="[routeLinks.landing]" type="button">Cancel</button>
-              <button mat-flat-button color="primary" type="submit" matStepperNext>Next</button>
-            </div>
           </app-welcome-form>
+          <div class="d-flex align-items-center justify-content-between">
+            <button mat-stroked-button color="accent" [routerLink]="[routeLinks.landing]" type="button">Cancel</button>
+            <button mat-flat-button color="primary" type="submit" matStepperNext>Next</button>
+          </div>
         </mat-step>
 
         <mat-step [stepControl]="patientForm">
@@ -18,18 +18,24 @@
           <app-address (formCreated)="patientForm = $event" title="Delivery Address"
             searchHint="Enter your delivery address to search"
             [hiddenFields]="['unitNumber', 'city', 'streetAddress', 'mobile','search']">
-            <div class="d-flex align-items-center justify-content-between">
-              <button mat-flat-button color="accent" matStepperPrevious>Back</button>
-              <button mat-flat-button color="primary" type="submit" matStepperNext>Next</button>
-            </div>
           </app-address>
+          <div class="d-flex align-items-center justify-content-between">
+            <div>
+              <button mat-stroked-button color="accent" [routerLink]="[routeLinks.landing]" type="button">Cancel</button>
+              <button mat-flat-button color="accent" class="m-l-10" matStepperPrevious>Back</button>
+            </div>
+            <button mat-flat-button color="primary" type="submit">Next</button>
+          </div>
         </mat-step>
 
         <mat-step [stepControl]="termsForm">
           <ng-template matStepLabel>Terms</ng-template>
           <app-terms-form (formCreated)="termsForm = $event">
             <div class="d-flex align-items-center justify-content-between">
-              <button mat-flat-button color="accent" matStepperPrevious>Back</button>
+              <div>
+                <button mat-stroked-button color="accent" [routerLink]="[routeLinks.landing]" type="button">Cancel</button>
+                <button mat-flat-button color="accent" class="m-l-10" matStepperPrevious>Back</button>
+              </div>
               <button mat-flat-button color="primary" type="submit" (click)="onRegisterClick()">Register</button>
             </div>
 

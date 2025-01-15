@@ -1,28 +1,26 @@
 @font-face {
-    font-family: 'ForwardText';
-    src: url('../fonts/BoehringerForwardText.ttf') format("ttf");
-    src: url('../fonts/BoehringerForwardText.woff') format("woff");
-    src: url('../fonts/BoehringerForwardText.woff2') format("woff2");
-    font-display: block;
-  }
-  @font-face {
-    font-family: 'ForwardHead';
-    src: url('../fonts/BoehringerForwardHead.ttf') format("ttf");
-    src: url('../fonts/BoehringerForwardHead.woff') format("woff");
-    src: url('../fonts/BoehringerForwardHead.woff2') format("woff2");
-    font-display: block;
-  }  
+  font-family: 'Jost';
+  src: url('../fonts/Jost-Black.ttf') format("ttf");
+  font-display: block;
+}
+@font-face {
+  font-family: 'Jost';
+  src: url('../fonts/Jost-Black.ttf') format("ttf");
+  font-display: block;
+}  
 // font
-$font-family-text: 'ForwardText', sans-serif;
-$font-family-head: 'ForwardHead', sans-serif;
+$font-family-text: 'Jost', serif;
+$font-family-head: 'Jost', serif;
+
 
 // ======================================================
 // Branding guideline colors
 // ======================================================
-$theme-accent-one: #00c0f3;
-$theme-accent-two: #006bb1;
-$theme-accent-three: #5bb2d9;
-$theme-accent-four: #a8d6ef;
+$theme-accent-one: #0661AB;
+$theme-accent-two: #01206A;
+$theme-accent-three: #00c0f3;
+$theme-accent-four: #5bb2d9;
+$theme-accent-five: #a8d6ef;
 
 $theme-gray-one: #FAF9F8;
 $theme-gray-two: #F6F5F3;

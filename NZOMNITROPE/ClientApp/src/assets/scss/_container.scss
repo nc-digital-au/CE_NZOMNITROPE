@@ -113,7 +113,7 @@ a.themed-link{
 
 footer{
   background-color: $white;
-  color: $white;
+  color: $theme-accent-two;
   padding-top: 25px;
   padding-bottom: 25px;
   margin-top: 100px;
@@ -128,17 +128,17 @@ footer{
       li{
         display: inline-block;
         margin-right: 16px;
-        color: $white;
+        color: $theme-accent-two;
       }
     }
   }
   a{
     font-weight: 800;
     cursor: pointer;
-    color: $white;
+    color: $theme-accent-two;
     text-decoration: none;
     &:hover{
-      color: $theme-accent-one;
+      color: $theme-accent-two;
     }
 
   }
@@ -421,10 +421,10 @@ tr.expanded-row{
 #footer-menu{
   li{
     a{
-       color: $theme-accent-one;
-       cursor: pointer;
+      color: $theme-accent-two;
+      cursor: pointer;
        &:hover{
-        color: $theme-accent-four;
+        font-weight: bold;
        }
     }
   }

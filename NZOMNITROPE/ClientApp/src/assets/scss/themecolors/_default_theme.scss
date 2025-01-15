@@ -44,18 +44,18 @@ $theme-yellow-yellow: #FFE667;
 
 $mat-primary: (
   100: white,
-  500: $theme-accent-one,
+  500: $theme-accent-two,
   700: $theme-accent-two,
   contrast: (
     100: white,
-    500: $theme-web-black,
-    700: $theme-web-black,
+    500: white,
+    700: white,
   ),
 );
 $mat-secondary: (
   100: white,
-  500: $theme-blue-one,
-  700: $theme-blue-two,
+  500: $theme-accent-one,
+  700: $theme-accent-one,
   contrast: (
     100: white,
     500: white,
