@@ -164,6 +164,24 @@ footer {
   }
 }
 
+.footer-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.footer-content p {
+  flex: 1; 
+  margin: 0;
+}
+
+.footer-logo {
+  max-width: 150px; 
+  max-height: 100px;
+  margin-left: 20px;
+}
+
 // layout
 .grid-container{
   display: flex;
