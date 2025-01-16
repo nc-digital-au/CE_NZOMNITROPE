@@ -36,7 +36,7 @@
       <div class="form-row">
         <!-- Consent Checkbox -->
         <mat-checkbox formControlName="consent">
-          I confirm that I have been prescribed Omnitrope® (somatropin).
+          I confirm that I have been prescribed Omnitrope® (somatropin).*
         </mat-checkbox>
         <mat-error *ngIf="welcomeForm.get('consent')?.hasError('requiredTrue')">
           You must confirm your consent to proceed.

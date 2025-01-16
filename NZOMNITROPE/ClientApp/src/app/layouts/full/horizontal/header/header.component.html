@@ -9,6 +9,12 @@
 
     <app-branding class="flex-grow-1"></app-branding>
 
+    <img 
+    src="../../../../../assets/images/logos/OmnitropeSurePalLogo.png" 
+    alt="OmniPal" 
+    class="logo" 
+  />
+  
     @if (authenticated$ | async) {
       @if (logoutUrl$ | async; as logoutUrl) {
         <div class="nav-item d-none d-sm-flex">

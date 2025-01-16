@@ -7,6 +7,7 @@ import { SelectFormInputElement } from 'src/app/components/dynamic-form/models/f
 import { TextFormInputElement } from 'src/app/components/dynamic-form/models/form-elements/text-form-input-element.model';
 import { TitleFormElement } from 'src/app/components/dynamic-form/models/form-elements/title-form-element.model';
 import { PrescriberValidator } from 'src/app/utils/validators/prescriber.validator';
+import { CheckboxFormInputElement } from 'src/app/components/dynamic-form/models/form-elements/checkbox-form-input-element.model';
 
 @Component({
   selector: 'app-patient-form',
@@ -119,6 +120,17 @@ export class PatientFormComponent implements OnInit {
           ],
         },
       }),
+      new SelectFormInputElement({
+        name: 'deliveryOption',
+        label: 'Delivery Option',
+        options: [
+          { value: 'home', label: 'Delivery to Home' },
+          { value: 'pharmacy', label: 'Delivery to Pharmacy' },
+        ],
+        validation: {
+          required: true,
+        },
+      }),      
     ]);
   }
 }

@@ -75,7 +75,7 @@ export class AddressComponent implements OnInit {
     this.addressFormDefinition = new DynamicForm([
       new TextFormInputElement({
         name: 'name',
-        label: 'Clinic/Practice name',
+        label: 'Pharmacist name',
         hidden: this.hiddenFields.includes('name'),
         validation: {
           required: !this.hiddenFields.includes('name'),

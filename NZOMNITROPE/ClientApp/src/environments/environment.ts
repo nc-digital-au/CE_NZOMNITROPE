@@ -6,7 +6,7 @@ export const environment = {
   production: false,
   programId: 'be2e7704-2ca2-4209-b304-1a31efd16077',
   // googleApiKey: 'AIzaSyABT1mFCXB5TEm4_aPRvwLj4ZRFMgWAltk',
-  googleApiKey: 'AIzaSyAFRqUp_Gp3o2q_UMMTHH2k0UNbOYqf3Ag',
+  googleApiKey: 'AIzaSyCU-xrj6qLt4JijYTt9GPy8JJ1IyTTVpAY'
 };
 
 /*

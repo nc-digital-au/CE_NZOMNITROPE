@@ -1,31 +1,5 @@
-<form [formGroup]="orderForm" (ngSubmit)="onSubmit()" class="form-container">
-  <!-- Consumables Kit -->
-  <div class="form-row">
-    <h5 class="mat-subtitle-2">Needle Kit Options</h5>
-    <mat-radio-group formControlName="needleKit" class="radio-group">
-      <div *ngFor="let kit of needleKitOptions" class="radio-row">
-        <mat-radio-button [value]="kit.value" class="radio-option">
-          {{ kit.label }}
-        </mat-radio-button>
-      </div>
-    </mat-radio-group>
-    <mat-error *ngIf="orderForm.get('needleKit')?.hasError('required')">
-      Please select a Needle Kit option.
-    </mat-error>
-  </div>  
-
-  <!-- Pen Replacement -->
-  <div class="form-row">
-    <h5 class="mat-subtitle-2">Pen Replacement</h5>
-    <mat-radio-group formControlName="penReplacement" class="radio-group">
-      <div *ngFor="let pen of penReplacementOptions" class="radio-row">
-        <mat-radio-button [value]="pen.value" class="radio-option">
-          {{ pen.label }}
-        </mat-radio-button>
-      </div>
-    </mat-radio-group>
-    <mat-error *ngIf="orderForm.get('penReplacement')?.hasError('required')">
-      Please select a Pen Replacement option.
-    </mat-error>
-  </div>  
-</form>
+<app-dynamic-form
+  [formDefinition]="formDefinition"
+  (formCreated)="onFormCreated($event)"
+  (submit)="onSubmitForm()">
+</app-dynamic-form>

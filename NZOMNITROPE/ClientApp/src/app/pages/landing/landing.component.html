@@ -9,12 +9,12 @@
       Patient Support Program
     </h1>        
     <div class="grid-container">
-      <div class="grid-box">
+      <div class="grid-box first-box">
         <p>If you are returning, please re-enter your details to login.</p>
-        <a mat-flat-button color="primary" href="/bff/login">LOGIN</a>
+        <a mat-flat-button class="login-button" href="/bff/login">LOGIN</a>
         <div class="forgot-password">
           <span>Forgot your password?</span>
-          <a [routerLink]="[routeLinks.authentication.account.forgotPassword]" class="text-decoration-none text-primary f-w-500 f-s-14">
+          <a [routerLink]="[routeLinks.authentication.account.forgotPassword]" class="text-decoration-none f-w-500 f-s-14">
             Click here
           </a>
         </div>
@@ -31,15 +31,14 @@
       </div>
       <div class="grid-box">
         <p>
-          If you have any questions about the Program or need help registering, please contact the Program Administrator on <strong>{{ contactValues.PROGRAM_PHONE }}</strong>.
+          If you have any questions about the Program or need help registering, please contact the Program Administrator on {{ contactValues.PROGRAM_PHONE }}.
         </p>        
       </div>
-      <div class="grid-box">
+      <div class="grid-box last-box">
         <p>If you are new to the OmniPal Program Website, please register.</p>
-        <button mat-flat-button color="primary-button" class="m-t-6"
-          [routerLink]="[routeLinks.authentication.prescriber.register]">
+        <button mat-flat-button class="register-button m-t-6" [routerLink]="[routeLinks.authentication.prescriber.register]">
           REGISTER
-        </button>
+        </button>        
       </div>
     </div>
   </div>

@@ -53,4 +53,9 @@ export const navItems: NavItem[] = [
       }
     ],
   },
+  {
+    displayName: 'Logout',
+    route: '',
+    ddType: '',
+  },
 ];

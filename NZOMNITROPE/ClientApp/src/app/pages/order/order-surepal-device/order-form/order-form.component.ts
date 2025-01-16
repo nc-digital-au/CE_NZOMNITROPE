@@ -1,7 +1,11 @@
-import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Component, EventEmitter } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MaterialModule } from 'src/app/material.module';
+import { DynamicFormComponent } from 'src/app/components/dynamic-form/dynamic-form.component';
+import { DynamicForm } from 'src/app/components/dynamic-form/models/dynamic-form.model';
+import { RadioFormInputElement } from 'src/app/components/dynamic-form/models/form-elements/radio-form-input-element.model';
+import { TitleFormElement } from 'src/app/components/dynamic-form/models/form-elements/title-form-element.model';
 
 export enum NeedleKit {
   FourMmNeedleKit = '4mmNeedleKit',
@@ -32,35 +36,59 @@ export const PenReplacementLabels: { [key in PenReplacement]: string } = {
   standalone: true,
   imports: [
     CommonModule,
-    ReactiveFormsModule,
-    MaterialModule
+    MaterialModule,
+    DynamicFormComponent,
   ],
   templateUrl: './order-form.component.html',
-  styleUrls: ['./order-form.component.scss']
+  styleUrls: ['./order-form.component.scss'],
 })
 export class OrderFormComponent {
-  orderForm: FormGroup;
-  needleKitOptions = Object.keys(NeedleKit).map(key => ({
-    value: NeedleKit[key as keyof typeof NeedleKit],
-    label: NeedleKitLabels[NeedleKit[key as keyof typeof NeedleKit]],
-  }));
-  penReplacementOptions = Object.keys(PenReplacement).map(key => ({
-    value: PenReplacement[key as keyof typeof PenReplacement],
-    label: PenReplacementLabels[PenReplacement[key as keyof typeof PenReplacement]],
-  }));
+  formDefinition: DynamicForm;
 
-  constructor(private fb: FormBuilder) {
-    this.orderForm = this.fb.group({
-      consumablesKit: ['', Validators.required], 
-      penReplacement: ['', Validators.required] 
-    });
+  constructor() {
+    this.buildForm();
   }
 
-  onSubmit(): void {
-    if (this.orderForm.valid) {
-      console.log('Form Submitted:', this.orderForm.value);
-    } else {
-      console.error('Form is invalid');
-    }
+  private buildForm(): void {
+    this.formDefinition = new DynamicForm([
+      new TitleFormElement({
+        label: 'Needle Kit Options',
+      }),
+      new RadioFormInputElement({
+        name: 'needleKit',
+        label: 'Select a Needle Kit Option:',
+        options: Object.keys(NeedleKit).map(key => ({
+          value: NeedleKit[key as keyof typeof NeedleKit],
+          label: NeedleKitLabels[NeedleKit[key as keyof typeof NeedleKit]],
+        })),
+        validation: {
+          required: true,
+        },
+        errorLabel: 'Needle Kit',
+      }),
+      new TitleFormElement({
+        label: 'Pen Replacement',
+      }),
+      new RadioFormInputElement({
+        name: 'penReplacement',
+        label: 'Select a Pen Replacement Option:',
+        options: Object.keys(PenReplacement).map(key => ({
+          value: PenReplacement[key as keyof typeof PenReplacement],
+          label: PenReplacementLabels[PenReplacement[key as keyof typeof PenReplacement]],
+        })),
+        validation: {
+          required: true,
+        },
+        errorLabel: 'Pen Replacement',
+      }),
+    ]);
+  }
+
+  onFormCreated(form: FormGroup): void {
+    console.log('Form Created:', form);
+  }
+
+  onSubmitForm(): void {
+    
   }
 }
