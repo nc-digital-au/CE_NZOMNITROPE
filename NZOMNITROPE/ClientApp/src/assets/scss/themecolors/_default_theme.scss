@@ -146,11 +146,11 @@ $darkbluetheme: mat.define-dark-theme(
 .horizontal-navbar .parentBox.pactive > a,
 .horizontal-navbar .parentBox.pactive > a:hover,
 .horizontal-navbar .parentBox.pactive:hover > a {
-  background-color: mat.get-color-from-palette($theme-primary, 500) !important;
+  background-color: #E9F4FE !important;
 }
 
 .activeMenu {
-  background-color: mat.get-color-from-palette($theme-primary, 500) !important;
+  background-color: #E9F4FE !important;
 }
 
 outline button border

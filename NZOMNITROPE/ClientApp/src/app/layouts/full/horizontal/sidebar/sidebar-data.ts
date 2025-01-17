@@ -10,11 +10,13 @@ export const navItems: NavItem[] = [
     route: 'home',
   },
   {
-    displayName: 'Order Device and Consumables',
+    displayName: 'Order SurePal Device',
+    displayNameLine2: '& Consumables',
     route: 'order',
   },
   {
-    displayName: 'Schedule Injection Training',
+    displayName: 'Schedule Injection',
+    displayNameLine2: 'Training',
     route: 'schedule',
     ddType: '',
   },

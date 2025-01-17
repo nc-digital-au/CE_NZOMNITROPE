@@ -1,7 +1,7 @@
 
 @if(!item.navCap) {
 <a
-  class="cursor-pointer menuLink"
+  class="cursor-pointer menuLink block-menu-item"
   (click)="onItemSelected(item)"
   [ngClass]="{
     activeMenu: item.route ? router.isActive(item.route, true) : false
@@ -9,6 +9,10 @@
 >
   <!-- <i-tabler class="routeIcon icon-18" name="{{ item.iconName }}"></i-tabler> -->
   {{ item.displayName }}
+  @if(item.displayNameLine2){
+    <br/>
+    {{ item.displayNameLine2? item.displayNameLine2 : '' }}
+  }
   @if(item.children && item.children.length) {
   <span class="down-icon d-flex m-l-auto">
     <mat-icon> expand_more </mat-icon>

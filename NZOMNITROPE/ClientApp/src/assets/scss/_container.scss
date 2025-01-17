@@ -283,12 +283,14 @@ footer {
       }
     }
   }
+  
 }
 
 .cancel-button {
   color: #C81023 !important;
   border: 2px solid #C81023 !important; 
 }
+
 
 #eligibility{
   display: flex;
@@ -578,4 +580,11 @@ tr.expanded-row{
 
 .information-button:focus {
   outline: 2px solid #003f7f;
+}
+
+// header menu style
+a.block-menu-item{
+  min-width: 150px;
+  border-right: solid 1px $theme-gray-six;
+  border-radius: 0 !important;
 }

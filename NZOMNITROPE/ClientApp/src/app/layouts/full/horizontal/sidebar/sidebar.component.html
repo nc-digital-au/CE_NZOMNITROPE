@@ -1,13 +1,9 @@
 @if(mobileQuery.matches) {
 <div class="horizontal-sidebar p-y-8 b-b-1">
   <div class="container">
-    <!-- <div class="program-logo"><img
-      src="./assets/images/logos/OFEV_Logo_RGB.svg"
-      alt="OFEV program logo"
-    /></div> -->
     <div class="program-logo-menu">
       <div>
-        <div class="horizontal-navbar hstack align-items-center">
+        <div class="horizontal-navbar hstack" style="text-align: center;">
           @for(item of navItems; track item) {
           <app-horizontal-nav-item
             [item]="item"
