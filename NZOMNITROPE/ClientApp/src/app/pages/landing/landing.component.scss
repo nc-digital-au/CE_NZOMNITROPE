@@ -29,14 +29,14 @@
   }
 
   .grid-box {
-    border: 1px solid #ccc;
+    border: 1px solid #fff;
     padding: 1.5rem;
     text-align: center;
     background-color: #fff;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    height: 200px;
+    min-height: 250px;
   }
 
   .grid-container > .grid-box:not(:nth-child(2n)) {
@@ -72,8 +72,10 @@
     text-align: center;
     text-transform: uppercase;
     padding: 10px 20px;
-    border-radius: 4px;
-  
+    border-radius: 5px;
+    min-height: 50px;
+    margin-left: 50px;
+    margin-right: 50px;
     &:hover {
       background-color: darken(#0661AB, 10%);
       border-color: darken(#ffffff, 10%);
@@ -91,7 +93,11 @@
     text-align: center;
     text-transform: uppercase;
     padding: 10px 20px;
-    border-radius: 4px;
+    border-radius: 5px;
+    min-height: 50px;
+    margin-left: 50px;
+    margin-right: 50px;
+    margin-bottom: 50px;
   
     &:hover {
       background-color: darken($theme-accent-one, 10%);
