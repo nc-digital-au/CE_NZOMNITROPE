@@ -1,0 +1,12 @@
+.mat-radio-group {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  gap: 12px !important;
+}
+
+.mat-radio-button {
+  display: block !important;
+  width: 100% !important;
+  text-align: left !important;
+}

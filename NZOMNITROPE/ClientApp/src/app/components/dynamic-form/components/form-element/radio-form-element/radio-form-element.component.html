@@ -1,7 +1,9 @@
 <div [formGroup]="form" class="m-b-10">
   <mat-radio-group [formControlName]="radioFormElement.name">
     @for (option of radioFormElement.options; track option.value) {
-      <mat-radio-button [value]="option.value">{{ option.label }}</mat-radio-button>
+      <div class="radio-wrapper">
+        <mat-radio-button [value]="option.value">{{ option.label }}</mat-radio-button>
+      </div>
     }
   </mat-radio-group>
   <mat-error>
