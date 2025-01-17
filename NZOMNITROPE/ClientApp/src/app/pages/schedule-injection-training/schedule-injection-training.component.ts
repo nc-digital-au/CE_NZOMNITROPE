@@ -7,6 +7,7 @@ import { RouterLink } from '@angular/router';
 import { SvgIconComponent } from 'angular-svg-icon';
 import { AddressComponent } from 'src/app/components/address/address.component';
 import { PatientFormComponent } from 'src/app/components/patient-form/patient-form.component';
+import { routeLinks } from 'src/app/utils/routes';
 
 @Component({
   selector: 'app-schedule-injection-training',
@@ -19,11 +20,11 @@ import { PatientFormComponent } from 'src/app/components/patient-form/patient-fo
     RouterLink,
     SvgIconComponent,
     AddressComponent,
-    PatientFormComponent,
     ReactiveFormsModule,
   ],
 })
 export class ScheduleInjectionTrainingComponent {
+  routeLinks = routeLinks;
   submitting = false;
   enrolmentSuccess = false;
   injectionTrainingForm: FormGroup;

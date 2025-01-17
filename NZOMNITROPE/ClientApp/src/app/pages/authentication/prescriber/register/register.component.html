@@ -7,7 +7,7 @@
           <app-welcome-form (formCreated)="welcomeForm = $event">
           </app-welcome-form>
           <div class="d-flex align-items-center justify-content-between">
-            <button mat-stroked-button color="accent" [routerLink]="[routeLinks.landing]" type="button">Cancel</button>
+            <button mat-stroked-button class="cancel-button" [routerLink]="[routeLinks.landing]" type="button">Cancel</button>
             <button mat-flat-button color="primary" type="submit" matStepperNext>Next</button>
           </div>
         </mat-step>
@@ -21,7 +21,7 @@
           </app-address>
           <div class="d-flex align-items-center justify-content-between">
             <div>
-              <button mat-stroked-button color="accent" [routerLink]="[routeLinks.landing]" type="button">Cancel</button>
+              <button mat-stroked-button class="cancel-button" [routerLink]="[routeLinks.landing]" type="button">Cancel</button>
               <button mat-flat-button color="accent" class="m-l-10" matStepperPrevious>Back</button>
             </div>
             <button mat-flat-button color="primary" type="submit">Next</button>
@@ -33,7 +33,7 @@
           <app-terms-form (formCreated)="termsForm = $event">
             <div class="d-flex align-items-center justify-content-between">
               <div>
-                <button mat-stroked-button color="accent" [routerLink]="[routeLinks.landing]" type="button">Cancel</button>
+                <button mat-stroked-button class="cancel-button" [routerLink]="[routeLinks.landing]" type="button">Cancel</button>
                 <button mat-flat-button color="accent" class="m-l-10" matStepperPrevious>Back</button>
               </div>
               <button mat-flat-button color="primary" type="submit" (click)="onRegisterClick()">Register</button>

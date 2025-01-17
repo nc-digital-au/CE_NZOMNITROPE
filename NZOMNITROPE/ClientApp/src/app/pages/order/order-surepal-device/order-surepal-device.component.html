@@ -14,7 +14,7 @@
           <app-address title="Please provide a physical address for the delivery of your SurePal® Pen or consumables kit. You can choose to have your delivery sent to your home, work/office or local community pharmacy for collection."
           [establishmentOnly]="false" [hiddenFields]="['name', 'phone', 'mobile']">
             <div class="d-flex align-items-center justify-content-between">
-              <button mat-stroked-button color="accent" [routerLink]="[routeLinks.patients.dashboard]" type="button">Cancel</button>
+              <button mat-stroked-button class="cancel-button" [routerLink]="[routeLinks.patients.dashboard]" type="button">Cancel</button>
               <button mat-flat-button color="primary" type="submit" (click)="onPatientFormNext()">Next</button>
             </div>
         </app-address>
@@ -25,7 +25,7 @@
         <app-order-form></app-order-form>
             <div class="d-flex align-items-center justify-content-between">
               <div>
-                <button mat-stroked-button color="accent" [routerLink]="[routeLinks.patients.dashboard]" type="button">Cancel</button>
+                <button mat-stroked-button class="cancel-button" [routerLink]="[routeLinks.patients.dashboard]" type="button">Cancel</button>
                 <button mat-flat-button color="accent" class="m-l-10" matStepperPrevious>Back</button>
               </div>
               <button mat-flat-button color="primary" type="submit" (click)="onFormSubmit()">Submit</button>
