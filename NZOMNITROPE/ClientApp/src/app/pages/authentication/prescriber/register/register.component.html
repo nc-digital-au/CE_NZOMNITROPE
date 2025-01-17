@@ -15,9 +15,35 @@
         <mat-step [stepControl]="patientForm">
           <ng-template matStepLabel>Patient Details</ng-template>
           <app-patient-form></app-patient-form>
+          <div class="d-flex align-items-center justify-content-between">
+            <div>
+              <button mat-stroked-button class="cancel-button" [routerLink]="[routeLinks.landing]" type="button">Cancel</button>
+              <button mat-flat-button color="accent" class="m-l-10" matStepperPrevious>Back</button>
+            </div>
+            <button mat-flat-button color="primary" type="submit">Next</button>
+          </div>
+        </mat-step>
+
+        <mat-step [stepControl]="guardianForm">
+          <ng-template matStepLabel>Guardian Details</ng-template>
+          <app-guardian-form></app-guardian-form>
+          <div class="d-flex align-items-center justify-content-between">
+            <div>
+              <button mat-stroked-button class="cancel-button" [routerLink]="[routeLinks.landing]" type="button">Cancel</button>
+              <button mat-flat-button color="accent" class="m-l-10" matStepperPrevious>Back</button>
+            </div>
+            <button mat-flat-button color="primary" type="submit">Next</button>
+          </div>
+        </mat-step>
+
+        <mat-step [stepControl]="addressForm">
+          <ng-template matStepLabel>Delivery</ng-template>
+          <app-person-collecting-form></app-person-collecting-form>
           <app-address (formCreated)="patientForm = $event" title="Delivery Address"
             searchHint="Enter your delivery address to search"
-            [hiddenFields]="['unitNumber', 'city', 'streetAddress', 'mobile','search']">
+            [hiddenFields]="[ 'mobile','search', 'name']"
+            [establishmentOnly]="false"
+            >
           </app-address>
           <div class="d-flex align-items-center justify-content-between">
             <div>
@@ -51,10 +77,9 @@
                 }
               </h5>
             </div>
-            <app-inline-alert [success]="registrationSuccess">
+            <app-inline-alert>
               @if (registrationSuccess) {
-              Your registration form has been successfully submitted. You will receive an email when your account has been
-              verified.
+                Thank you for registering, your account is now active. If you have not received your confirmation email, please check your spam/junk email folder or contact the Program Administrator on 0800 666 369.
               }
               @else {
               Registration failed. Please check the following fields and then try to submit again.

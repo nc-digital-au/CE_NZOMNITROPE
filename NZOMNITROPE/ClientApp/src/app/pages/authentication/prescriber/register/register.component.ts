@@ -15,6 +15,8 @@ import { AddressDto, ClinicDto, RegisterPrescriberDto, RegistrationMethod, Regis
 import { InlineAlertComponent } from 'src/app/components/inline-alert/inline-alert.component';
 import { ValidationProblemDetail } from 'src/app/interceptors/error.interceptor';
 import { PatientFormComponent } from './patient-form/patient-form.component';
+import { GuardianFormComponent } from './guardian-form/guardian-form.component';
+import { PersonCollectingFormComponent } from './person-collecting-form/person-collecting-form.component';
 
 @Component({
   selector: 'app-register',
@@ -35,6 +37,8 @@ import { PatientFormComponent } from './patient-form/patient-form.component';
     AddressComponent,
     InlineAlertComponent,
     PatientFormComponent,
+    GuardianFormComponent,
+    PersonCollectingFormComponent
   ],
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss',
@@ -54,6 +58,9 @@ export class RegisterComponent {
 
   welcomeForm = this._fb.group({});
   patientForm = this._fb.group({});
+  guardianForm = this._fb.group({});
+  collectingForm = this._fb.group({});
+  addressForm = this._fb.group({});
   termsForm = this._fb.group({});
 
   registrationSuccess: boolean;

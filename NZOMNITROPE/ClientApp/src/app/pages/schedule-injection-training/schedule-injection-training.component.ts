@@ -8,6 +8,7 @@ import { SvgIconComponent } from 'angular-svg-icon';
 import { AddressComponent } from 'src/app/components/address/address.component';
 import { PatientFormComponent } from 'src/app/components/patient-form/patient-form.component';
 import { routeLinks } from 'src/app/utils/routes';
+import { GuardianFormComponent } from 'src/app/components/guardian-form/guardian-form.component';
 
 @Component({
   selector: 'app-schedule-injection-training',
@@ -19,8 +20,9 @@ import { routeLinks } from 'src/app/utils/routes';
     MaterialModule,
     RouterLink,
     SvgIconComponent,
-    AddressComponent,
     ReactiveFormsModule,
+    GuardianFormComponent,
+    PatientFormComponent
   ],
 })
 export class ScheduleInjectionTrainingComponent {

@@ -9,15 +9,11 @@
     <mat-card class="cardWithShadow theme-card">
       <mat-card-content class="b-t-1">
         <!-- Patient Details Section -->
-        <h2>Patient Details</h2>
         <div formGroupName="patientDetails">
-          <app-address 
-            title="Please provide a physical address for the delivery of your SurePal® Pen or consumables kit. You can choose to have your delivery sent to your home, work/office, or local community pharmacy for collection."
-            [establishmentOnly]="false" 
-            [hiddenFields]="['name', 'phone', 'mobile']">
-          </app-address>
+          <app-patient-form></app-patient-form>
         </div>
 
+        <app-guardian-form></app-guardian-form>
 
         <h2>Injection Training Session</h2>
         <div formGroupName="injectionSession">
