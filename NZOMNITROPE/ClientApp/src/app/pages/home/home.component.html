@@ -1,33 +1,41 @@
 <section class="grid-container">
   <!-- Welcome Section -->
-  <div class="grid-item welcome-box">
-    <h2>Welcome to OmniPal® Patient Support Program</h2>
-  </div>
+  <div class="welcome-container">
+    <h1 class="welcome-text">
+      Welcome to
+      <span class="omni-pal">
+        <span class="omni red">Omni</span>
+        <span class="pal blue">Pal</span>
+      </span>
+      Patient Support Program
+    </h1>
+  </div>  
 
   <!-- Device and Training Section -->
   <div class="grid-item action-buttons">
-    <button class="primary-button" (click)="onOrderDeviceClick()">
+    <button class="custom-button" (click)="onOrderDeviceClick()">
       Order SurePal® Device and Consumables
     </button>
-    <button class="primary-button" (click)="onScheduleTrainingClick()">
+    <button class="custom-button" (click)="onScheduleTrainingClick()">
       Schedule an Injection Training Session
     </button>
   </div>
 
-  <!-- Video Section -->
-  <div class="grid-item video-box">
-    <h3>Watch: How to Inject Video</h3>
-    <button class="primary-button">Play Video</button>
-  </div>
+<!-- Video Section -->
+<div class="grid-item video-box">
+  <h1>Watch: How to Inject Video</h1>
+  <button class="primary-button">
+    <mat-icon>play_arrow</mat-icon>
+  </button>
+</div>
 
-  <!-- Resources Section -->
-  <div class="grid-item resources-box">
-    <h3>Resources</h3>
-    <ul>
-      <li>PDF Guide 1</li>
-      <li>PDF Guide 2</li>
-      <li>PDF Guide 3</li>
-      <li>Consumer Medicine Information</li>
-    </ul>
-  </div>
+<!-- Resources Section -->
+<div class="grid-item resources-box">
+  <ul class="resource-list">
+    <li class="resource-item">PDF Guide 1</li>
+    <li class="resource-item">PDF Guide 2</li>
+    <li class="resource-item">PDF Guide 3</li>
+    <li class="resource-item">Consumer Medicine Information</li>
+  </ul>
+</div>
 </section>
