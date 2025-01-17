@@ -29,6 +29,33 @@
   color: white;
 }
 
+.welcome-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #fff;
+}
+
+.welcome-text {
+  font-size: 40px;
+  font-weight: bold;
+  line-height: 1.2;
+  text-align: left;
+}
+
+.omni-pal {
+  display: inline-block;
+  margin-top: 0.5rem;
+}
+
+.omni {
+  color: #C81023;
+}
+
+.pal {
+  color: #003366;
+}
+
 .primary-button {
   display: flex;
   align-items: center;
