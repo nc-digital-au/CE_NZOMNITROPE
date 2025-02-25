@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { PatientService } from 'src/app/services/patient.service';
+import { CONTACT_VALUES } from 'src/app/utils/constants';
 
 @Component({
   selector: 'app-home',
@@ -19,12 +20,13 @@ export class HomeComponent {
     private patientSvc: PatientService,
     
   ){}
+  CONTACT_VALUES = CONTACT_VALUES;
 
   onOrderDeviceClick(): void {
-    this.router.navigate(['/order-device']); // Replace with the actual route
+    this.router.navigate(['/order-device']);
   }
 
   onScheduleTrainingClick(): void {
-    this.router.navigate(['/schedule-training']); // Replace with the actual route
+    this.router.navigate(['/schedule-training']);
   }
 }

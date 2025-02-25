@@ -1,6 +1,6 @@
 export const CONTACT_VALUES = {
-    PROGRAM_PHONE: '0800 666 369',
-    MEDICAL_ENQUIRY_EMAIL: 'adverse.event.nz@sandoz.com',
+    PROGRAM_PHONE: '0800 666 487',
+    MEDICAL_ENQUIRY_EMAIL: 'mi.new_zealand@sandoz.com',
     MEDICAL_ENQUIRY_PHONE: '0800 726 369',
     PRODUCT_COMPLAINT_EMAIL: 'sdz.technicalcomplaint@sandoz.com',
     SUPPORT_EMAIL: '',

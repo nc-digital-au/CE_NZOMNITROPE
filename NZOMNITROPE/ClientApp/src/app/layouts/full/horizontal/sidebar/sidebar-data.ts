@@ -51,7 +51,8 @@ export const navItems: NavItem[] = [
       {
         displayName: 'Omnitrope CMI',
         iconName: '',
-        route: 'resources/faqs',
+        route: 'https://www.medsafe.govt.nz/Consumers/CMI/o/omnitrope.pdf',
+        target: '_blank',
       }
     ],
   },

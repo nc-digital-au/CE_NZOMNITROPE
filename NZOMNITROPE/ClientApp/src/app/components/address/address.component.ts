@@ -117,9 +117,10 @@ export class AddressComponent implements OnInit {
           new SelectFormInputElement({
             name: 'state',
             label: 'State',
+            hidden: true,
             options: stateOptions,
             validation: {
-              required: true,
+              required: !this.hiddenFields.includes('state'),
             },
           }),
           new TextFormInputElement({

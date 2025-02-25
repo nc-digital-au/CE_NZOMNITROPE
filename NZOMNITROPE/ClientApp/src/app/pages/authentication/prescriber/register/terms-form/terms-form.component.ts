@@ -76,7 +76,7 @@ export class TermsFormComponent implements AfterViewInit {
       }),
       new CheckboxFormInputElement({
         name: 'informationConsent',
-        label: 'You understand that to manage the program, your personal information will be accessed by the Program Administrator who will collect and store your information in accordance with the <a class="privacy-policy" href="#privacy-policy">privacy policy</a>.',
+        label: 'You understand that to manage the program, your personal information will be accessed by the Program Administrators who will collect and store your information in accordance with the <a class="privacy-policy" href="#privacy-policy">privacy policy</a>.',
         errorLabel: 'Privacy Policy acceptance',
         validation: {
           required: true,

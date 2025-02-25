@@ -50,7 +50,7 @@ export class PatientFormComponent implements OnInit {
             label: 'Title',
             options: titleOptions,
             validation: {
-              required: true,
+              required: false,
             },
           }),
           undefined,
@@ -93,6 +93,13 @@ export class PatientFormComponent implements OnInit {
         label: 'Date Of Birth',
         validation: {
           required: true,
+        },
+      }),
+      new TextFormInputElement({
+        name: 'nhiNumber',
+        label: 'NHI Number (if known)',
+        validation: {
+          required: false,
         },
       }),
     ]);

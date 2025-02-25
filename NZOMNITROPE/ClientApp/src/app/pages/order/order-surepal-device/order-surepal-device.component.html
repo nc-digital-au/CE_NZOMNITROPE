@@ -1,4 +1,4 @@
-<h1>Order SurePal® Device and Consumables Form</h1>
+<h1>Order SurePal<sup>®</sup> Device and Consumables Form</h1>
 <div *ngIf="!enrolmentSuccess">
   <p>*Indicates mandatory field</p>
   @if (submitting) {
@@ -12,7 +12,7 @@
           <ng-template matStepLabel>Patient Details</ng-template>
           <app-patient-form (formCreated)="patientForm = $event"></app-patient-form>
           <app-address title="Please provide a physical address for the delivery of your SurePal® Pen or consumables kit. You can choose to have your delivery sent to your home, work/office or local community pharmacy for collection."
-          [establishmentOnly]="false" [hiddenFields]="['name', 'phone', 'mobile']">
+          [establishmentOnly]="false" [hiddenFields]="['name', 'phone', 'mobile', 'state']">
             <div class="d-flex align-items-center justify-content-between">
               <button mat-stroked-button class="cancel-button" [routerLink]="[routeLinks.patients.dashboard]" type="button">Cancel</button>
               <button mat-flat-button color="primary" type="submit" (click)="onPatientFormNext()">Next</button>
@@ -47,7 +47,7 @@
           <svg-icon src="assets/images/svgs/information-mark-circle.svg" svgClass="icon-block-image"></svg-icon>
           <div class="icon-block-content" style="max-width: 100%;">
             Thank you, your order has been placed and will be delivered within 10 working days. Please note that if you have nominated to have your order delivered to your local community pharmacy, you will need to collect your order directly from there.
-            Should you have any queries please contact the Program Administrator on 0800 666 369.            
+            Should you have any queries please contact the Program Administrator on 0800 666 487.            
         </div>
         </div>
       </div>
