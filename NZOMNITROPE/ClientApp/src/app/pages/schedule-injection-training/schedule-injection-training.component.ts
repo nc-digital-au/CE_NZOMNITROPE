@@ -5,7 +5,6 @@ import { CommonModule } from '@angular/common';
 import { MaterialModule } from 'src/app/material.module';
 import { RouterLink } from '@angular/router';
 import { SvgIconComponent } from 'angular-svg-icon';
-import { AddressComponent } from 'src/app/components/address/address.component';
 import { PatientFormComponent } from 'src/app/components/patient-form/patient-form.component';
 import { routeLinks } from 'src/app/utils/routes';
 import { GuardianFormComponent } from 'src/app/components/guardian-form/guardian-form.component';

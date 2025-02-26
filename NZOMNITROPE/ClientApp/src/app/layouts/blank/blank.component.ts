@@ -1,15 +1,14 @@
 import { Component } from '@angular/core';
 import { CoreService } from 'src/app/services/core.service';
-import { AppSettings } from 'src/app/app.config';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { CONTACT_VALUES } from 'src/app/utils/constants';
-import { LeavingSite, LeavingSiteComponent } from 'src/app/components/leaving-site/leaving-site.component';
-import { TermsOfUseComponent } from 'src/app/components/terms-of-use/terms-of-use.component';
+import { LeavingSiteComponent } from 'src/app/components/leaving-site/leaving-site.component';
 import { HeaderComponent } from '../full/vertical/header/header.component';
 import { MatSidenav } from '@angular/material/sidenav';
 import { AppHorizontalHeaderComponent } from '../full/horizontal/header/header.component';
 import { ContactUsComponent } from 'src/app/components/contact-us/contact-us.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-blank',
@@ -30,14 +29,17 @@ export class BlankComponent {
 
   contactValue = CONTACT_VALUES; 
   options = this.settings.getOptions();
-  dialog: any;
   isContentWidthFixed: boolean;
   isCollapsedWidthFixed: boolean;
   isOver: any;
 
   public sidenav: MatSidenav;
 
-  constructor(private settings: CoreService) {
+  constructor(
+    private settings: CoreService,
+    private dialog: MatDialog,
+    
+  ) {
     this.htmlElement = document.querySelector('html')!;
   }
 

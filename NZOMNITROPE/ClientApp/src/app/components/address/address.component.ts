@@ -123,6 +123,10 @@ export class AddressComponent implements OnInit {
               required: !this.hiddenFields.includes('state'),
             },
           }),
+        ],
+      }),
+      new GroupFormElement({
+        children: [
           new TextFormInputElement({
             name: 'postcode',
             label: 'Post code',
@@ -132,10 +136,6 @@ export class AddressComponent implements OnInit {
               numbersOnly: true,
             },
           }),
-        ],
-      }),
-      new GroupFormElement({
-        children: [
           new TextFormInputElement({
             name: 'phone',
             label: 'Phone number',
@@ -145,15 +145,15 @@ export class AddressComponent implements OnInit {
               required: !this.hiddenFields.includes('phone'),
             },
           }),
-          new TextFormInputElement({
-            name: 'mobile',
-            label: 'Mobile number',
-            hidden: this.hiddenFields.includes('mobile'),
-            validation: {
-              mobile: true,
-              required: !this.hiddenFields.includes('mobile'),
-            },
-          }),
+          // new TextFormInputElement({
+          //   name: 'mobile',
+          //   label: 'Mobile number',
+          //   hidden: this.hiddenFields.includes('mobile'),
+          //   validation: {
+          //     mobile: true,
+          //     required: !this.hiddenFields.includes('mobile'),
+          //   },
+          // }),
         ],
       }),
     ]);
