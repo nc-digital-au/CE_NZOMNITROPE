@@ -32,30 +32,9 @@ export class PatientFormComponent implements OnInit {
   }
 
   private buildForm(): void {
-    const titleOptions = [
-      { label: 'Mr.', value: 'Mr' },
-      { label: 'Mrs.', value: 'Mrs' },
-      { label: 'Ms.', value: 'Ms' },
-      { label: 'Miss.', value: 'Miss' },
-      { label: 'Mx.', value: 'Mx' },
-    ];
-
     this.patientFormDefinition = new DynamicForm([
       new TitleFormElement({
         label: 'Patient Details',
-      }),
-      new GroupFormElement({
-        children: [
-          new SelectFormInputElement({
-            name: 'title',
-            label: 'Title',
-            options: titleOptions,
-            validation: {
-              required: false,
-            },
-          }),
-          undefined,
-        ],
       }),
       new TextFormInputElement({
         name: 'firstName',

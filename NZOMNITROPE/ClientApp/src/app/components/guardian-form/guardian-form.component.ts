@@ -31,7 +31,7 @@ export class GuardianFormComponent {
   private buildForm(): void {
     this.guardianFormDefinition = new DynamicForm([
       new TitleFormElement({
-        label: 'Guardian/Carer Details',
+        label: 'Guardian/Carer Details (if different from patient details)',
       }),
       new TextFormInputElement({
         name: 'guardianFirstName',
