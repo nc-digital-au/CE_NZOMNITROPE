@@ -144,6 +144,62 @@ export class AccountServiceProxy {
      * @param body (optional) 
      * @return Success
      */
+    resetPasswordWithoutAhpra(body?: ResetPasswordWithoutAhpraDto | undefined): Observable<BooleanApiResponse> {
+        let url_ = this.baseUrl + "/api/account/password-main/reset";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json-patch+json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processResetPasswordWithoutAhpra(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processResetPasswordWithoutAhpra(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<BooleanApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<BooleanApiResponse>;
+        }));
+    }
+
+    protected processResetPasswordWithoutAhpra(response: HttpResponseBase): Observable<BooleanApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = BooleanApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
     validateToken(body?: string | undefined): Observable<BooleanApiResponse> {
         let url_ = this.baseUrl + "/api/account/token/validate";
         url_ = url_.replace(/[?&]$/, "");
@@ -186,6 +242,530 @@ export class AccountServiceProxy {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
             result200 = BooleanApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    validateEmailToken(body?: ValidateEmailDto | undefined): Observable<BooleanApiResponse> {
+        let url_ = this.baseUrl + "/api/account/email/validate";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json-patch+json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processValidateEmailToken(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processValidateEmailToken(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<BooleanApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<BooleanApiResponse>;
+        }));
+    }
+
+    protected processValidateEmailToken(response: HttpResponseBase): Observable<BooleanApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = BooleanApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    verifyEmail(body?: CreateOtpDto | undefined): Observable<StringApiResponse> {
+        let url_ = this.baseUrl + "/api/account/email/verify";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json-patch+json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processVerifyEmail(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processVerifyEmail(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<StringApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<StringApiResponse>;
+        }));
+    }
+
+    protected processVerifyEmail(response: HttpResponseBase): Observable<StringApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = StringApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    verifyPspMaterialsPasscode(patientId: string, body?: GetPspMaterialsAccessDto | undefined): Observable<GetPspMaterialsAccessResponseApiResponse> {
+        let url_ = this.baseUrl + "/api/account/psp-materials/{patientId}";
+        if (patientId === undefined || patientId === null)
+            throw new Error("The parameter 'patientId' must be defined.");
+        url_ = url_.replace("{patientId}", encodeURIComponent("" + patientId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json-patch+json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processVerifyPspMaterialsPasscode(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processVerifyPspMaterialsPasscode(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<GetPspMaterialsAccessResponseApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<GetPspMaterialsAccessResponseApiResponse>;
+        }));
+    }
+
+    protected processVerifyPspMaterialsPasscode(response: HttpResponseBase): Observable<GetPspMaterialsAccessResponseApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = GetPspMaterialsAccessResponseApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @return Success
+     */
+    getAccessInvitation(invitationId: string): Observable<GetAccessInvitationResponseApiResponse> {
+        let url_ = this.baseUrl + "/api/account/invitation/{invitationId}";
+        if (invitationId === undefined || invitationId === null)
+            throw new Error("The parameter 'invitationId' must be defined.");
+        url_ = url_.replace("{invitationId}", encodeURIComponent("" + invitationId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetAccessInvitation(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetAccessInvitation(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<GetAccessInvitationResponseApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<GetAccessInvitationResponseApiResponse>;
+        }));
+    }
+
+    protected processGetAccessInvitation(response: HttpResponseBase): Observable<GetAccessInvitationResponseApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = GetAccessInvitationResponseApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+}
+
+@Injectable({
+    providedIn: 'root'
+})
+export class ContactServiceProxy {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl ?? "";
+    }
+
+    /**
+     * @param communicatedWith 1 = Patient (Patient)
+
+    2 = Prescriber (Prescriber)
+
+    3 = Pharmacist (Pharmacist)
+
+    4 = Pharmacy (Pharmacy)
+
+    5 = Staff (InstitutionStaff)
+
+    6 = Distribution (Distributor)
+
+    7 = Hcp (Healthcare professional)
+
+    8 = Carer (Carer)
+
+    9 = Other (Other)
+     * @return Success
+     */
+    getAllContactHistory(communicatedWith: CommunicatedWith, communicatedWithId: string): Observable<GetContactListForAdminResponseIEnumerableApiResponse> {
+        let url_ = this.baseUrl + "/api/admin/contact/{communicatedWith}/{communicatedWithId}";
+        if (communicatedWith === undefined || communicatedWith === null)
+            throw new Error("The parameter 'communicatedWith' must be defined.");
+        url_ = url_.replace("{communicatedWith}", encodeURIComponent("" + communicatedWith));
+        if (communicatedWithId === undefined || communicatedWithId === null)
+            throw new Error("The parameter 'communicatedWithId' must be defined.");
+        url_ = url_.replace("{communicatedWithId}", encodeURIComponent("" + communicatedWithId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetAllContactHistory(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetAllContactHistory(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<GetContactListForAdminResponseIEnumerableApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<GetContactListForAdminResponseIEnumerableApiResponse>;
+        }));
+    }
+
+    protected processGetAllContactHistory(response: HttpResponseBase): Observable<GetContactListForAdminResponseIEnumerableApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = GetContactListForAdminResponseIEnumerableApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    createEntityContact(body?: CreateAdminContactLogDto | undefined): Observable<GuidApiResponse> {
+        let url_ = this.baseUrl + "/api/admin/contact/create/entity";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json-patch+json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processCreateEntityContact(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processCreateEntityContact(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<GuidApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<GuidApiResponse>;
+        }));
+    }
+
+    protected processCreateEntityContact(response: HttpResponseBase): Observable<GuidApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = GuidApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param communicatedWith 1 = Patient (Patient)
+
+    2 = Prescriber (Prescriber)
+
+    3 = Pharmacist (Pharmacist)
+
+    4 = Pharmacy (Pharmacy)
+
+    5 = Staff (InstitutionStaff)
+
+    6 = Distribution (Distributor)
+
+    7 = Hcp (Healthcare professional)
+
+    8 = Carer (Carer)
+
+    9 = Other (Other)
+     * @param searchFilter (optional) 
+     * @param sortField (optional) 
+     * @param sortDescending (optional) 
+     * @param skipCount (optional) 
+     * @param maxResultCount (optional) 
+     * @return Success
+     */
+    searchContactLogs(communicatedWith: CommunicatedWith, communicatedWithId: string, searchFilter?: string | undefined, sortField?: string | undefined, sortDescending?: boolean | undefined, skipCount?: number | undefined, maxResultCount?: number | undefined): Observable<SearchContactsResponsePagedResultDtoApiResponse> {
+        let url_ = this.baseUrl + "/api/admin/contact/search/{communicatedWith}/{communicatedWithId}?";
+        if (communicatedWith === undefined || communicatedWith === null)
+            throw new Error("The parameter 'communicatedWith' must be defined.");
+        url_ = url_.replace("{communicatedWith}", encodeURIComponent("" + communicatedWith));
+        if (communicatedWithId === undefined || communicatedWithId === null)
+            throw new Error("The parameter 'communicatedWithId' must be defined.");
+        url_ = url_.replace("{communicatedWithId}", encodeURIComponent("" + communicatedWithId));
+        if (searchFilter === null)
+            throw new Error("The parameter 'searchFilter' cannot be null.");
+        else if (searchFilter !== undefined)
+            url_ += "SearchFilter=" + encodeURIComponent("" + searchFilter) + "&";
+        if (sortField === null)
+            throw new Error("The parameter 'sortField' cannot be null.");
+        else if (sortField !== undefined)
+            url_ += "SortField=" + encodeURIComponent("" + sortField) + "&";
+        if (sortDescending === null)
+            throw new Error("The parameter 'sortDescending' cannot be null.");
+        else if (sortDescending !== undefined)
+            url_ += "SortDescending=" + encodeURIComponent("" + sortDescending) + "&";
+        if (skipCount === null)
+            throw new Error("The parameter 'skipCount' cannot be null.");
+        else if (skipCount !== undefined)
+            url_ += "SkipCount=" + encodeURIComponent("" + skipCount) + "&";
+        if (maxResultCount === null)
+            throw new Error("The parameter 'maxResultCount' cannot be null.");
+        else if (maxResultCount !== undefined)
+            url_ += "MaxResultCount=" + encodeURIComponent("" + maxResultCount) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processSearchContactLogs(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processSearchContactLogs(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<SearchContactsResponsePagedResultDtoApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<SearchContactsResponsePagedResultDtoApiResponse>;
+        }));
+    }
+
+    protected processSearchContactLogs(response: HttpResponseBase): Observable<SearchContactsResponsePagedResultDtoApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = SearchContactsResponsePagedResultDtoApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    sendSms(body?: SendSmsDto | undefined): Observable<GuidApiResponse> {
+        let url_ = this.baseUrl + "/api/admin/contact/send/sms";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json-patch+json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processSendSms(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processSendSms(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<GuidApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<GuidApiResponse>;
+        }));
+    }
+
+    protected processSendSms(response: HttpResponseBase): Observable<GuidApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = GuidApiResponse.fromJS(resultData200);
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -260,6 +840,475 @@ export class DocumentServiceProxy {
                 fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
             }
             return _observableOf({ fileName: fileName, data: responseBlob as any, status: status, headers: _headers });
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+}
+
+@Injectable({
+    providedIn: 'root'
+})
+export class InstitutionServiceProxy {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl ?? "";
+    }
+
+    /**
+     * @param searchFilter (optional) 
+     * @param sortField (optional) 
+     * @param sortDescending (optional) 
+     * @param skipCount (optional) 
+     * @param maxResultCount (optional) 
+     * @return Success
+     */
+    getPagedPharmacies(searchFilter?: string | undefined, sortField?: string | undefined, sortDescending?: boolean | undefined, skipCount?: number | undefined, maxResultCount?: number | undefined): Observable<GetPagedPharmacyListResponsePagedResultDtoApiResponse> {
+        let url_ = this.baseUrl + "/api/admin/institution/paged-pharmacies?";
+        if (searchFilter === null)
+            throw new Error("The parameter 'searchFilter' cannot be null.");
+        else if (searchFilter !== undefined)
+            url_ += "SearchFilter=" + encodeURIComponent("" + searchFilter) + "&";
+        if (sortField === null)
+            throw new Error("The parameter 'sortField' cannot be null.");
+        else if (sortField !== undefined)
+            url_ += "SortField=" + encodeURIComponent("" + sortField) + "&";
+        if (sortDescending === null)
+            throw new Error("The parameter 'sortDescending' cannot be null.");
+        else if (sortDescending !== undefined)
+            url_ += "SortDescending=" + encodeURIComponent("" + sortDescending) + "&";
+        if (skipCount === null)
+            throw new Error("The parameter 'skipCount' cannot be null.");
+        else if (skipCount !== undefined)
+            url_ += "SkipCount=" + encodeURIComponent("" + skipCount) + "&";
+        if (maxResultCount === null)
+            throw new Error("The parameter 'maxResultCount' cannot be null.");
+        else if (maxResultCount !== undefined)
+            url_ += "MaxResultCount=" + encodeURIComponent("" + maxResultCount) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetPagedPharmacies(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetPagedPharmacies(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<GetPagedPharmacyListResponsePagedResultDtoApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<GetPagedPharmacyListResponsePagedResultDtoApiResponse>;
+        }));
+    }
+
+    protected processGetPagedPharmacies(response: HttpResponseBase): Observable<GetPagedPharmacyListResponsePagedResultDtoApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = GetPagedPharmacyListResponsePagedResultDtoApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param searchFilter (optional) 
+     * @param sortField (optional) 
+     * @param sortDescending (optional) 
+     * @param skipCount (optional) 
+     * @param maxResultCount (optional) 
+     * @return Success
+     */
+    getPagedClinics(searchFilter?: string | undefined, sortField?: string | undefined, sortDescending?: boolean | undefined, skipCount?: number | undefined, maxResultCount?: number | undefined): Observable<GetPagedClinicListResponsePagedResultDtoApiResponse> {
+        let url_ = this.baseUrl + "/api/admin/institution/paged-clinics?";
+        if (searchFilter === null)
+            throw new Error("The parameter 'searchFilter' cannot be null.");
+        else if (searchFilter !== undefined)
+            url_ += "SearchFilter=" + encodeURIComponent("" + searchFilter) + "&";
+        if (sortField === null)
+            throw new Error("The parameter 'sortField' cannot be null.");
+        else if (sortField !== undefined)
+            url_ += "SortField=" + encodeURIComponent("" + sortField) + "&";
+        if (sortDescending === null)
+            throw new Error("The parameter 'sortDescending' cannot be null.");
+        else if (sortDescending !== undefined)
+            url_ += "SortDescending=" + encodeURIComponent("" + sortDescending) + "&";
+        if (skipCount === null)
+            throw new Error("The parameter 'skipCount' cannot be null.");
+        else if (skipCount !== undefined)
+            url_ += "SkipCount=" + encodeURIComponent("" + skipCount) + "&";
+        if (maxResultCount === null)
+            throw new Error("The parameter 'maxResultCount' cannot be null.");
+        else if (maxResultCount !== undefined)
+            url_ += "MaxResultCount=" + encodeURIComponent("" + maxResultCount) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetPagedClinics(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetPagedClinics(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<GetPagedClinicListResponsePagedResultDtoApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<GetPagedClinicListResponsePagedResultDtoApiResponse>;
+        }));
+    }
+
+    protected processGetPagedClinics(response: HttpResponseBase): Observable<GetPagedClinicListResponsePagedResultDtoApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = GetPagedClinicListResponsePagedResultDtoApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    updatePharmacy(body?: UpdatePharmacyDto | undefined): Observable<BooleanApiResponse> {
+        let url_ = this.baseUrl + "/api/admin/institution/update-pharmacy";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json-patch+json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processUpdatePharmacy(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processUpdatePharmacy(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<BooleanApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<BooleanApiResponse>;
+        }));
+    }
+
+    protected processUpdatePharmacy(response: HttpResponseBase): Observable<BooleanApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = BooleanApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    updateClinic(body?: UpdateClinicDto | undefined): Observable<BooleanApiResponse> {
+        let url_ = this.baseUrl + "/api/admin/institution/update-clinic";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json-patch+json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processUpdateClinic(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processUpdateClinic(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<BooleanApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<BooleanApiResponse>;
+        }));
+    }
+
+    protected processUpdateClinic(response: HttpResponseBase): Observable<BooleanApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = BooleanApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    approvePharmacyAccount(body?: ApprovePharmacyAccountDto | undefined): Observable<BooleanApiResponse> {
+        let url_ = this.baseUrl + "/api/admin/institution/approve-pharmacy-account";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json-patch+json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processApprovePharmacyAccount(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processApprovePharmacyAccount(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<BooleanApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<BooleanApiResponse>;
+        }));
+    }
+
+    protected processApprovePharmacyAccount(response: HttpResponseBase): Observable<BooleanApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = BooleanApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+}
+
+@Injectable({
+    providedIn: 'root'
+})
+export class MedicationServiceProxy {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl ?? "";
+    }
+
+    /**
+     * @return Success
+     */
+    getMedications(): Observable<GetProgramMedicationInformationResponseIEnumerableApiResponse> {
+        let url_ = this.baseUrl + "/api/admin/medication/information";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetMedications(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetMedications(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<GetProgramMedicationInformationResponseIEnumerableApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<GetProgramMedicationInformationResponseIEnumerableApiResponse>;
+        }));
+    }
+
+    protected processGetMedications(response: HttpResponseBase): Observable<GetProgramMedicationInformationResponseIEnumerableApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = GetProgramMedicationInformationResponseIEnumerableApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+}
+
+@Injectable({
+    providedIn: 'root'
+})
+export class OrderServiceProxy {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl ?? "";
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    requestPrintedMaterials(body?: ConsumableOrderDto | undefined): Observable<GuidApiResponse> {
+        let url_ = this.baseUrl + "/api/order/request-printed-materials";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json-patch+json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processRequestPrintedMaterials(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processRequestPrintedMaterials(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<GuidApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<GuidApiResponse>;
+        }));
+    }
+
+    protected processRequestPrintedMaterials(response: HttpResponseBase): Observable<GuidApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = GuidApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
         } else if (status !== 200 && status !== 204) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -390,6 +1439,118 @@ export class PatientServiceProxy {
     }
 
     /**
+     * @param body (optional) 
+     * @return Success
+     */
+    registerPapWithPharmacy(body?: RegisterPapPatientWithPharmacyDto | undefined): Observable<GuidApiResponse> {
+        let url_ = this.baseUrl + "/api/patient/register-pap-with-pharmacy";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json-patch+json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processRegisterPapWithPharmacy(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processRegisterPapWithPharmacy(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<GuidApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<GuidApiResponse>;
+        }));
+    }
+
+    protected processRegisterPapWithPharmacy(response: HttpResponseBase): Observable<GuidApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = GuidApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    registerWithCategory(body?: RegisterPatientWithCategoryDto | undefined): Observable<GuidApiResponse> {
+        let url_ = this.baseUrl + "/api/patient/registerPatientWithCategory";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json-patch+json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processRegisterWithCategory(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processRegisterWithCategory(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<GuidApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<GuidApiResponse>;
+        }));
+    }
+
+    protected processRegisterWithCategory(response: HttpResponseBase): Observable<GuidApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = GuidApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
      * @return Success
      */
     getPatient(patientId: string): Observable<GetPatientResponseApiResponse> {
@@ -444,10 +1605,259 @@ export class PatientServiceProxy {
     }
 
     /**
+     * @param body (optional) 
      * @return Success
      */
-    getAll(): Observable<GetPatientsResponseIEnumerableApiResponse> {
-        let url_ = this.baseUrl + "/api/admin/patient";
+    findPatientByPrescriberAndNameDob(body?: GetPatientByPrescriberNameAndDobDto | undefined): Observable<GetPatientByPrescriberNameAndDobResponseApiResponse> {
+        let url_ = this.baseUrl + "/api/patient/find-by-prescriber-namedob";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json-patch+json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processFindPatientByPrescriberAndNameDob(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processFindPatientByPrescriberAndNameDob(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<GetPatientByPrescriberNameAndDobResponseApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<GetPatientByPrescriberNameAndDobResponseApiResponse>;
+        }));
+    }
+
+    protected processFindPatientByPrescriberAndNameDob(response: HttpResponseBase): Observable<GetPatientByPrescriberNameAndDobResponseApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = GetPatientByPrescriberNameAndDobResponseApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    getPatientByNameDob(body?: GetPatientByNameAndDobDto | undefined): Observable<GetPatientDetailsByNameDateOfBirthResponseApiResponse> {
+        let url_ = this.baseUrl + "/api/patient/get-by-namedob";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json-patch+json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetPatientByNameDob(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetPatientByNameDob(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<GetPatientDetailsByNameDateOfBirthResponseApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<GetPatientDetailsByNameDateOfBirthResponseApiResponse>;
+        }));
+    }
+
+    protected processGetPatientByNameDob(response: HttpResponseBase): Observable<GetPatientDetailsByNameDateOfBirthResponseApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = GetPatientDetailsByNameDateOfBirthResponseApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    findPatientByNameDob(body?: GetPatientByNameAndDobDto | undefined): Observable<GetPatientByNameAndDobResponseApiResponse> {
+        let url_ = this.baseUrl + "/api/patient/find-by-namedob";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json-patch+json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processFindPatientByNameDob(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processFindPatientByNameDob(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<GetPatientByNameAndDobResponseApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<GetPatientByNameAndDobResponseApiResponse>;
+        }));
+    }
+
+    protected processFindPatientByNameDob(response: HttpResponseBase): Observable<GetPatientByNameAndDobResponseApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = GetPatientByNameAndDobResponseApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    findTreatmentByNameDob(body?: GetPatientTreatmentByNameDateOfBirthDto | undefined): Observable<GetPatientTreatmentByNameDateOfBirthResponseIEnumerableApiResponse> {
+        let url_ = this.baseUrl + "/api/patient/search-treatment-namedob";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json-patch+json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processFindTreatmentByNameDob(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processFindTreatmentByNameDob(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<GetPatientTreatmentByNameDateOfBirthResponseIEnumerableApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<GetPatientTreatmentByNameDateOfBirthResponseIEnumerableApiResponse>;
+        }));
+    }
+
+    protected processFindTreatmentByNameDob(response: HttpResponseBase): Observable<GetPatientTreatmentByNameDateOfBirthResponseIEnumerableApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = GetPatientTreatmentByNameDateOfBirthResponseIEnumerableApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param searchFilter (optional) 
+     * @param sortField (optional) 
+     * @param sortDescending (optional) 
+     * @param skipCount (optional) 
+     * @param maxResultCount (optional) 
+     * @return Success
+     */
+    getPagedPatientList(searchFilter?: string | undefined, sortField?: string | undefined, sortDescending?: boolean | undefined, skipCount?: number | undefined, maxResultCount?: number | undefined): Observable<GetTreatmentSummaryListResponsePagedResultDtoApiResponse> {
+        let url_ = this.baseUrl + "/api/patient/paged-patients?";
+        if (searchFilter === null)
+            throw new Error("The parameter 'searchFilter' cannot be null.");
+        else if (searchFilter !== undefined)
+            url_ += "SearchFilter=" + encodeURIComponent("" + searchFilter) + "&";
+        if (sortField === null)
+            throw new Error("The parameter 'sortField' cannot be null.");
+        else if (sortField !== undefined)
+            url_ += "SortField=" + encodeURIComponent("" + sortField) + "&";
+        if (sortDescending === null)
+            throw new Error("The parameter 'sortDescending' cannot be null.");
+        else if (sortDescending !== undefined)
+            url_ += "SortDescending=" + encodeURIComponent("" + sortDescending) + "&";
+        if (skipCount === null)
+            throw new Error("The parameter 'skipCount' cannot be null.");
+        else if (skipCount !== undefined)
+            url_ += "SkipCount=" + encodeURIComponent("" + skipCount) + "&";
+        if (maxResultCount === null)
+            throw new Error("The parameter 'maxResultCount' cannot be null.");
+        else if (maxResultCount !== undefined)
+            url_ += "MaxResultCount=" + encodeURIComponent("" + maxResultCount) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -459,20 +1869,20 @@ export class PatientServiceProxy {
         };
 
         return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processGetAll(response_);
+            return this.processGetPagedPatientList(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processGetAll(response_ as any);
+                    return this.processGetPagedPatientList(response_ as any);
                 } catch (e) {
-                    return _observableThrow(e) as any as Observable<GetPatientsResponseIEnumerableApiResponse>;
+                    return _observableThrow(e) as any as Observable<GetTreatmentSummaryListResponsePagedResultDtoApiResponse>;
                 }
             } else
-                return _observableThrow(response_) as any as Observable<GetPatientsResponseIEnumerableApiResponse>;
+                return _observableThrow(response_) as any as Observable<GetTreatmentSummaryListResponsePagedResultDtoApiResponse>;
         }));
     }
 
-    protected processGetAll(response: HttpResponseBase): Observable<GetPatientsResponseIEnumerableApiResponse> {
+    protected processGetPagedPatientList(response: HttpResponseBase): Observable<GetTreatmentSummaryListResponsePagedResultDtoApiResponse> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -483,7 +1893,625 @@ export class PatientServiceProxy {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = GetPatientsResponseIEnumerableApiResponse.fromJS(resultData200);
+            result200 = GetTreatmentSummaryListResponsePagedResultDtoApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param searchFilter (optional) 
+     * @param sortField (optional) 
+     * @param sortDescending (optional) 
+     * @param skipCount (optional) 
+     * @param maxResultCount (optional) 
+     * @return Success
+     */
+    getPagedPreenrolmentList(searchFilter?: string | undefined, sortField?: string | undefined, sortDescending?: boolean | undefined, skipCount?: number | undefined, maxResultCount?: number | undefined): Observable<GetPreenrolmentListResponsePagedResultDtoApiResponse> {
+        let url_ = this.baseUrl + "/api/patient/paged-preenrolments?";
+        if (searchFilter === null)
+            throw new Error("The parameter 'searchFilter' cannot be null.");
+        else if (searchFilter !== undefined)
+            url_ += "SearchFilter=" + encodeURIComponent("" + searchFilter) + "&";
+        if (sortField === null)
+            throw new Error("The parameter 'sortField' cannot be null.");
+        else if (sortField !== undefined)
+            url_ += "SortField=" + encodeURIComponent("" + sortField) + "&";
+        if (sortDescending === null)
+            throw new Error("The parameter 'sortDescending' cannot be null.");
+        else if (sortDescending !== undefined)
+            url_ += "SortDescending=" + encodeURIComponent("" + sortDescending) + "&";
+        if (skipCount === null)
+            throw new Error("The parameter 'skipCount' cannot be null.");
+        else if (skipCount !== undefined)
+            url_ += "SkipCount=" + encodeURIComponent("" + skipCount) + "&";
+        if (maxResultCount === null)
+            throw new Error("The parameter 'maxResultCount' cannot be null.");
+        else if (maxResultCount !== undefined)
+            url_ += "MaxResultCount=" + encodeURIComponent("" + maxResultCount) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetPagedPreenrolmentList(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetPagedPreenrolmentList(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<GetPreenrolmentListResponsePagedResultDtoApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<GetPreenrolmentListResponsePagedResultDtoApiResponse>;
+        }));
+    }
+
+    protected processGetPagedPreenrolmentList(response: HttpResponseBase): Observable<GetPreenrolmentListResponsePagedResultDtoApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = GetPreenrolmentListResponsePagedResultDtoApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param searchFilter (optional) 
+     * @param sortField (optional) 
+     * @param sortDescending (optional) 
+     * @param skipCount (optional) 
+     * @param maxResultCount (optional) 
+     * @return Success
+     */
+    getPagedPendingPreenrolmentList(searchFilter?: string | undefined, sortField?: string | undefined, sortDescending?: boolean | undefined, skipCount?: number | undefined, maxResultCount?: number | undefined): Observable<GetPreenrolmentListResponsePagedResultDtoApiResponse> {
+        let url_ = this.baseUrl + "/api/patient/paged-pending-preenrolments?";
+        if (searchFilter === null)
+            throw new Error("The parameter 'searchFilter' cannot be null.");
+        else if (searchFilter !== undefined)
+            url_ += "SearchFilter=" + encodeURIComponent("" + searchFilter) + "&";
+        if (sortField === null)
+            throw new Error("The parameter 'sortField' cannot be null.");
+        else if (sortField !== undefined)
+            url_ += "SortField=" + encodeURIComponent("" + sortField) + "&";
+        if (sortDescending === null)
+            throw new Error("The parameter 'sortDescending' cannot be null.");
+        else if (sortDescending !== undefined)
+            url_ += "SortDescending=" + encodeURIComponent("" + sortDescending) + "&";
+        if (skipCount === null)
+            throw new Error("The parameter 'skipCount' cannot be null.");
+        else if (skipCount !== undefined)
+            url_ += "SkipCount=" + encodeURIComponent("" + skipCount) + "&";
+        if (maxResultCount === null)
+            throw new Error("The parameter 'maxResultCount' cannot be null.");
+        else if (maxResultCount !== undefined)
+            url_ += "MaxResultCount=" + encodeURIComponent("" + maxResultCount) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetPagedPendingPreenrolmentList(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetPagedPendingPreenrolmentList(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<GetPreenrolmentListResponsePagedResultDtoApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<GetPreenrolmentListResponsePagedResultDtoApiResponse>;
+        }));
+    }
+
+    protected processGetPagedPendingPreenrolmentList(response: HttpResponseBase): Observable<GetPreenrolmentListResponsePagedResultDtoApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = GetPreenrolmentListResponsePagedResultDtoApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    cancelPreenrolment(body?: CancelPatientPreEnrolmentDto | undefined): Observable<BooleanApiResponse> {
+        let url_ = this.baseUrl + "/api/patient/cancel-preenrolment";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json-patch+json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processCancelPreenrolment(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processCancelPreenrolment(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<BooleanApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<BooleanApiResponse>;
+        }));
+    }
+
+    protected processCancelPreenrolment(response: HttpResponseBase): Observable<BooleanApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = BooleanApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @return Success
+     */
+    getPendingPreenrolmentCount(): Observable<Int32ApiResponse> {
+        let url_ = this.baseUrl + "/api/patient/pending-preenrolment-count";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetPendingPreenrolmentCount(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetPendingPreenrolmentCount(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<Int32ApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<Int32ApiResponse>;
+        }));
+    }
+
+    protected processGetPendingPreenrolmentCount(response: HttpResponseBase): Observable<Int32ApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = Int32ApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @return Success
+     */
+    getPatientPreEnrolmentInformation(preEnrolmentId: string): Observable<GetPatientPreEnrolmentInformationResponseApiResponse> {
+        let url_ = this.baseUrl + "/api/patient/preenrolment/{preEnrolmentId}";
+        if (preEnrolmentId === undefined || preEnrolmentId === null)
+            throw new Error("The parameter 'preEnrolmentId' must be defined.");
+        url_ = url_.replace("{preEnrolmentId}", encodeURIComponent("" + preEnrolmentId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetPatientPreEnrolmentInformation(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetPatientPreEnrolmentInformation(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<GetPatientPreEnrolmentInformationResponseApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<GetPatientPreEnrolmentInformationResponseApiResponse>;
+        }));
+    }
+
+    protected processGetPatientPreEnrolmentInformation(response: HttpResponseBase): Observable<GetPatientPreEnrolmentInformationResponseApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = GetPatientPreEnrolmentInformationResponseApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    completePatientPreEnrolment(body?: CompletePreEnrolmentDto | undefined): Observable<GuidApiResponse> {
+        let url_ = this.baseUrl + "/api/patient/complete-preenrolment";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json-patch+json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processCompletePatientPreEnrolment(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processCompletePatientPreEnrolment(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<GuidApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<GuidApiResponse>;
+        }));
+    }
+
+    protected processCompletePatientPreEnrolment(response: HttpResponseBase): Observable<GuidApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = GuidApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @return Success
+     */
+    checkNameAndDobAvailability(firstname: string, lastname: string, day: number, month: number, year: number): Observable<BooleanApiResponse> {
+        let url_ = this.baseUrl + "/api/patient/fname/{firstname}/lname/{lastname}/day/{day}/month/{month}/year/{year}";
+        if (firstname === undefined || firstname === null)
+            throw new Error("The parameter 'firstname' must be defined.");
+        url_ = url_.replace("{firstname}", encodeURIComponent("" + firstname));
+        if (lastname === undefined || lastname === null)
+            throw new Error("The parameter 'lastname' must be defined.");
+        url_ = url_.replace("{lastname}", encodeURIComponent("" + lastname));
+        if (day === undefined || day === null)
+            throw new Error("The parameter 'day' must be defined.");
+        url_ = url_.replace("{day}", encodeURIComponent("" + day));
+        if (month === undefined || month === null)
+            throw new Error("The parameter 'month' must be defined.");
+        url_ = url_.replace("{month}", encodeURIComponent("" + month));
+        if (year === undefined || year === null)
+            throw new Error("The parameter 'year' must be defined.");
+        url_ = url_.replace("{year}", encodeURIComponent("" + year));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processCheckNameAndDobAvailability(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processCheckNameAndDobAvailability(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<BooleanApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<BooleanApiResponse>;
+        }));
+    }
+
+    protected processCheckNameAndDobAvailability(response: HttpResponseBase): Observable<BooleanApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = BooleanApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param searchFilter (optional) 
+     * @param sortField (optional) 
+     * @param sortDescending (optional) 
+     * @param skipCount (optional) 
+     * @param maxResultCount (optional) 
+     * @return Success
+     */
+    getPaged(searchFilter?: string | undefined, sortField?: string | undefined, sortDescending?: boolean | undefined, skipCount?: number | undefined, maxResultCount?: number | undefined): Observable<GetPatientListResponsePagedResultDtoApiResponse> {
+        let url_ = this.baseUrl + "/api/admin/patient/paged?";
+        if (searchFilter === null)
+            throw new Error("The parameter 'searchFilter' cannot be null.");
+        else if (searchFilter !== undefined)
+            url_ += "SearchFilter=" + encodeURIComponent("" + searchFilter) + "&";
+        if (sortField === null)
+            throw new Error("The parameter 'sortField' cannot be null.");
+        else if (sortField !== undefined)
+            url_ += "SortField=" + encodeURIComponent("" + sortField) + "&";
+        if (sortDescending === null)
+            throw new Error("The parameter 'sortDescending' cannot be null.");
+        else if (sortDescending !== undefined)
+            url_ += "SortDescending=" + encodeURIComponent("" + sortDescending) + "&";
+        if (skipCount === null)
+            throw new Error("The parameter 'skipCount' cannot be null.");
+        else if (skipCount !== undefined)
+            url_ += "SkipCount=" + encodeURIComponent("" + skipCount) + "&";
+        if (maxResultCount === null)
+            throw new Error("The parameter 'maxResultCount' cannot be null.");
+        else if (maxResultCount !== undefined)
+            url_ += "MaxResultCount=" + encodeURIComponent("" + maxResultCount) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetPaged(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetPaged(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<GetPatientListResponsePagedResultDtoApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<GetPatientListResponsePagedResultDtoApiResponse>;
+        }));
+    }
+
+    protected processGetPaged(response: HttpResponseBase): Observable<GetPatientListResponsePagedResultDtoApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = GetPatientListResponsePagedResultDtoApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @return Success
+     */
+    getEnrolmentConfiguration(): Observable<GetPatientProgramRegistrationConfigurationSettiingsResponseApiResponse> {
+        let url_ = this.baseUrl + "/api/admin/patient/enrol/config";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetEnrolmentConfiguration(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetEnrolmentConfiguration(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<GetPatientProgramRegistrationConfigurationSettiingsResponseApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<GetPatientProgramRegistrationConfigurationSettiingsResponseApiResponse>;
+        }));
+    }
+
+    protected processGetEnrolmentConfiguration(response: HttpResponseBase): Observable<GetPatientProgramRegistrationConfigurationSettiingsResponseApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = GetPatientProgramRegistrationConfigurationSettiingsResponseApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    enrolByAdmin(body?: RegisterPatientByAdminDto | undefined): Observable<GuidApiResponse> {
+        let url_ = this.baseUrl + "/api/admin/patient/enrol";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json-patch+json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processEnrolByAdmin(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processEnrolByAdmin(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<GuidApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<GuidApiResponse>;
+        }));
+    }
+
+    protected processEnrolByAdmin(response: HttpResponseBase): Observable<GuidApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = GuidApiResponse.fromJS(resultData200);
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -549,6 +2577,1009 @@ export class PatientServiceProxy {
         }
         return _observableOf(null as any);
     }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    updatePatientAddresss(body?: UpdatePatientAddressDto | undefined): Observable<BooleanApiResponse> {
+        let url_ = this.baseUrl + "/api/admin/patient/Address";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json-patch+json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processUpdatePatientAddresss(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processUpdatePatientAddresss(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<BooleanApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<BooleanApiResponse>;
+        }));
+    }
+
+    protected processUpdatePatientAddresss(response: HttpResponseBase): Observable<BooleanApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = BooleanApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    createPatientContactLog(id: string, body?: CreatePatientContactLogDto | undefined): Observable<GuidApiResponse> {
+        let url_ = this.baseUrl + "/api/admin/patient/{id}/contact/log";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json-patch+json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processCreatePatientContactLog(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processCreatePatientContactLog(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<GuidApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<GuidApiResponse>;
+        }));
+    }
+
+    protected processCreatePatientContactLog(response: HttpResponseBase): Observable<GuidApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = GuidApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @return Success
+     */
+    getPatientRegistrationProfile(id: string): Observable<GetPatientProgramRegistrationProfileResponseApiResponse> {
+        let url_ = this.baseUrl + "/api/admin/patient/{id}/registration/profile";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetPatientRegistrationProfile(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetPatientRegistrationProfile(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<GetPatientProgramRegistrationProfileResponseApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<GetPatientProgramRegistrationProfileResponseApiResponse>;
+        }));
+    }
+
+    protected processGetPatientRegistrationProfile(response: HttpResponseBase): Observable<GetPatientProgramRegistrationProfileResponseApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = GetPatientProgramRegistrationProfileResponseApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    updatePatientRegistration(id: string, body?: UpdatePatientProgramRegistrationDto | undefined): Observable<BooleanApiResponse> {
+        let url_ = this.baseUrl + "/api/admin/patient/{id}/registration/update";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json-patch+json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processUpdatePatientRegistration(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processUpdatePatientRegistration(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<BooleanApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<BooleanApiResponse>;
+        }));
+    }
+
+    protected processUpdatePatientRegistration(response: HttpResponseBase): Observable<BooleanApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = BooleanApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    createPatientContact(id: string, body?: CreatePatientContactLogDto | undefined): Observable<GuidApiResponse> {
+        let url_ = this.baseUrl + "/api/admin/patient/{id}/contact/create";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json-patch+json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processCreatePatientContact(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processCreatePatientContact(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<GuidApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<GuidApiResponse>;
+        }));
+    }
+
+    protected processCreatePatientContact(response: HttpResponseBase): Observable<GuidApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = GuidApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+}
+
+@Injectable({
+    providedIn: 'root'
+})
+export class PharmacistServiceProxy {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl ?? "";
+    }
+
+    /**
+     * @return Success
+     */
+    getPharmacies(): Observable<GetPharmaciesResponseIEnumerableApiResponse> {
+        let url_ = this.baseUrl + "/api/pharmacist/pharmacies";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetPharmacies(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetPharmacies(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<GetPharmaciesResponseIEnumerableApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<GetPharmaciesResponseIEnumerableApiResponse>;
+        }));
+    }
+
+    protected processGetPharmacies(response: HttpResponseBase): Observable<GetPharmaciesResponseIEnumerableApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = GetPharmaciesResponseIEnumerableApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @return Success
+     */
+    getAllPharmacies(): Observable<GetAllPharmaciesResponseIEnumerableApiResponse> {
+        let url_ = this.baseUrl + "/api/pharmacist/pharmacies-dashboard";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetAllPharmacies(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetAllPharmacies(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<GetAllPharmaciesResponseIEnumerableApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<GetAllPharmaciesResponseIEnumerableApiResponse>;
+        }));
+    }
+
+    protected processGetAllPharmacies(response: HttpResponseBase): Observable<GetAllPharmaciesResponseIEnumerableApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = GetAllPharmaciesResponseIEnumerableApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param searchFilter (optional) 
+     * @param sortField (optional) 
+     * @param sortDescending (optional) 
+     * @param skipCount (optional) 
+     * @param maxResultCount (optional) 
+     * @return Success
+     */
+    getPagedDispensingVerificationList(searchFilter?: string | undefined, sortField?: string | undefined, sortDescending?: boolean | undefined, skipCount?: number | undefined, maxResultCount?: number | undefined): Observable<GetDispensingVerificationListResponsePagedResultDtoApiResponse> {
+        let url_ = this.baseUrl + "/api/pharmacist/paged-dispesing-verification?";
+        if (searchFilter === null)
+            throw new Error("The parameter 'searchFilter' cannot be null.");
+        else if (searchFilter !== undefined)
+            url_ += "SearchFilter=" + encodeURIComponent("" + searchFilter) + "&";
+        if (sortField === null)
+            throw new Error("The parameter 'sortField' cannot be null.");
+        else if (sortField !== undefined)
+            url_ += "SortField=" + encodeURIComponent("" + sortField) + "&";
+        if (sortDescending === null)
+            throw new Error("The parameter 'sortDescending' cannot be null.");
+        else if (sortDescending !== undefined)
+            url_ += "SortDescending=" + encodeURIComponent("" + sortDescending) + "&";
+        if (skipCount === null)
+            throw new Error("The parameter 'skipCount' cannot be null.");
+        else if (skipCount !== undefined)
+            url_ += "SkipCount=" + encodeURIComponent("" + skipCount) + "&";
+        if (maxResultCount === null)
+            throw new Error("The parameter 'maxResultCount' cannot be null.");
+        else if (maxResultCount !== undefined)
+            url_ += "MaxResultCount=" + encodeURIComponent("" + maxResultCount) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetPagedDispensingVerificationList(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetPagedDispensingVerificationList(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<GetDispensingVerificationListResponsePagedResultDtoApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<GetDispensingVerificationListResponsePagedResultDtoApiResponse>;
+        }));
+    }
+
+    protected processGetPagedDispensingVerificationList(response: HttpResponseBase): Observable<GetDispensingVerificationListResponsePagedResultDtoApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = GetDispensingVerificationListResponsePagedResultDtoApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @return Success
+     */
+    getPharmacistProgramInvite(inviteId: string): Observable<PharmacistProgramInviteResponseApiResponse> {
+        let url_ = this.baseUrl + "/api/pharmacist/pharmacist-invite/{inviteId}";
+        if (inviteId === undefined || inviteId === null)
+            throw new Error("The parameter 'inviteId' must be defined.");
+        url_ = url_.replace("{inviteId}", encodeURIComponent("" + inviteId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetPharmacistProgramInvite(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetPharmacistProgramInvite(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<PharmacistProgramInviteResponseApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<PharmacistProgramInviteResponseApiResponse>;
+        }));
+    }
+
+    protected processGetPharmacistProgramInvite(response: HttpResponseBase): Observable<PharmacistProgramInviteResponseApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = PharmacistProgramInviteResponseApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    invitePharmacist(body?: InvitePharmacistToRegisterDto | undefined): Observable<GuidApiResponse> {
+        let url_ = this.baseUrl + "/api/pharmacist/invite";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json-patch+json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processInvitePharmacist(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processInvitePharmacist(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<GuidApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<GuidApiResponse>;
+        }));
+    }
+
+    protected processInvitePharmacist(response: HttpResponseBase): Observable<GuidApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = GuidApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    addPharmacyToPharmacist(body?: AddNewPharmacyToPharmacistDto | undefined): Observable<GuidApiResponse> {
+        let url_ = this.baseUrl + "/api/pharmacist/pharmacy-add";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json-patch+json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processAddPharmacyToPharmacist(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processAddPharmacyToPharmacist(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<GuidApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<GuidApiResponse>;
+        }));
+    }
+
+    protected processAddPharmacyToPharmacist(response: HttpResponseBase): Observable<GuidApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = GuidApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @return Success
+     */
+    getPharmacistContactInformation(): Observable<GetPharmacistContactInformationResponseApiResponse> {
+        let url_ = this.baseUrl + "/api/pharmacist/contact-information";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetPharmacistContactInformation(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetPharmacistContactInformation(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<GetPharmacistContactInformationResponseApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<GetPharmacistContactInformationResponseApiResponse>;
+        }));
+    }
+
+    protected processGetPharmacistContactInformation(response: HttpResponseBase): Observable<GetPharmacistContactInformationResponseApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = GetPharmacistContactInformationResponseApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @return Success
+     */
+    getPharmacyProgramAccounts(): Observable<GetPharmacyProgramAccountForPharmacistListResponseIEnumerableApiResponse> {
+        let url_ = this.baseUrl + "/api/pharmacist/pharmacy-program-accounts";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetPharmacyProgramAccounts(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetPharmacyProgramAccounts(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<GetPharmacyProgramAccountForPharmacistListResponseIEnumerableApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<GetPharmacyProgramAccountForPharmacistListResponseIEnumerableApiResponse>;
+        }));
+    }
+
+    protected processGetPharmacyProgramAccounts(response: HttpResponseBase): Observable<GetPharmacyProgramAccountForPharmacistListResponseIEnumerableApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = GetPharmacyProgramAccountForPharmacistListResponseIEnumerableApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    approvePharmacist(body?: ApprovePharmacistDto | undefined): Observable<BooleanApiResponse> {
+        let url_ = this.baseUrl + "/api/admin/pharmacist/approve-pharmacist";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json-patch+json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processApprovePharmacist(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processApprovePharmacist(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<BooleanApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<BooleanApiResponse>;
+        }));
+    }
+
+    protected processApprovePharmacist(response: HttpResponseBase): Observable<BooleanApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = BooleanApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param searchFilter (optional) 
+     * @param sortField (optional) 
+     * @param sortDescending (optional) 
+     * @param skipCount (optional) 
+     * @param maxResultCount (optional) 
+     * @return Success
+     */
+    getPharmacistAdminList(searchFilter?: string | undefined, sortField?: string | undefined, sortDescending?: boolean | undefined, skipCount?: number | undefined, maxResultCount?: number | undefined): Observable<GetPharmacistAdminListResponsePagedResultDtoApiResponse> {
+        let url_ = this.baseUrl + "/api/admin/pharmacist/admin-list?";
+        if (searchFilter === null)
+            throw new Error("The parameter 'searchFilter' cannot be null.");
+        else if (searchFilter !== undefined)
+            url_ += "SearchFilter=" + encodeURIComponent("" + searchFilter) + "&";
+        if (sortField === null)
+            throw new Error("The parameter 'sortField' cannot be null.");
+        else if (sortField !== undefined)
+            url_ += "SortField=" + encodeURIComponent("" + sortField) + "&";
+        if (sortDescending === null)
+            throw new Error("The parameter 'sortDescending' cannot be null.");
+        else if (sortDescending !== undefined)
+            url_ += "SortDescending=" + encodeURIComponent("" + sortDescending) + "&";
+        if (skipCount === null)
+            throw new Error("The parameter 'skipCount' cannot be null.");
+        else if (skipCount !== undefined)
+            url_ += "SkipCount=" + encodeURIComponent("" + skipCount) + "&";
+        if (maxResultCount === null)
+            throw new Error("The parameter 'maxResultCount' cannot be null.");
+        else if (maxResultCount !== undefined)
+            url_ += "MaxResultCount=" + encodeURIComponent("" + maxResultCount) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetPharmacistAdminList(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetPharmacistAdminList(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<GetPharmacistAdminListResponsePagedResultDtoApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<GetPharmacistAdminListResponsePagedResultDtoApiResponse>;
+        }));
+    }
+
+    protected processGetPharmacistAdminList(response: HttpResponseBase): Observable<GetPharmacistAdminListResponsePagedResultDtoApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = GetPharmacistAdminListResponsePagedResultDtoApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @return Success
+     */
+    getPharmaciesWithAccountForPharmacist(pharmacistId: string): Observable<GetPharmacyWithAccountsForPharmacistListResponseIEnumerableApiResponse> {
+        let url_ = this.baseUrl + "/api/admin/pharmacist/pharmacy-list/{pharmacistId}";
+        if (pharmacistId === undefined || pharmacistId === null)
+            throw new Error("The parameter 'pharmacistId' must be defined.");
+        url_ = url_.replace("{pharmacistId}", encodeURIComponent("" + pharmacistId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetPharmaciesWithAccountForPharmacist(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetPharmaciesWithAccountForPharmacist(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<GetPharmacyWithAccountsForPharmacistListResponseIEnumerableApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<GetPharmacyWithAccountsForPharmacistListResponseIEnumerableApiResponse>;
+        }));
+    }
+
+    protected processGetPharmaciesWithAccountForPharmacist(response: HttpResponseBase): Observable<GetPharmacyWithAccountsForPharmacistListResponseIEnumerableApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = GetPharmacyWithAccountsForPharmacistListResponseIEnumerableApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+}
+
+@Injectable({
+    providedIn: 'root'
+})
+export class PortalProgramServiceProxy {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl ?? "";
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    create(body?: CreateProgramDto | undefined): Observable<GuidApiResponse> {
+        let url_ = this.baseUrl + "/api/admin/portal/create";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json-patch+json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processCreate(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processCreate(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<GuidApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<GuidApiResponse>;
+        }));
+    }
+
+    protected processCreate(response: HttpResponseBase): Observable<GuidApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = GuidApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
 }
 
 @Injectable({
@@ -597,6 +3628,173 @@ export class PrescriberServiceProxy {
     }
 
     protected processAvailability(response: HttpResponseBase): Observable<BooleanApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = BooleanApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @return Success
+     */
+    getClinicsForPrescriber(prescriberId: string): Observable<GetPrescriberClinicResponseIEnumerableApiResponse> {
+        let url_ = this.baseUrl + "/api/prescriber/prescriber-clinics/{prescriberId}/clinics";
+        if (prescriberId === undefined || prescriberId === null)
+            throw new Error("The parameter 'prescriberId' must be defined.");
+        url_ = url_.replace("{prescriberId}", encodeURIComponent("" + prescriberId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetClinicsForPrescriber(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetClinicsForPrescriber(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<GetPrescriberClinicResponseIEnumerableApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<GetPrescriberClinicResponseIEnumerableApiResponse>;
+        }));
+    }
+
+    protected processGetClinicsForPrescriber(response: HttpResponseBase): Observable<GetPrescriberClinicResponseIEnumerableApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = GetPrescriberClinicResponseIEnumerableApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @return Success
+     */
+    getPrescriberContactInformation(prescriberId: string): Observable<GetPrescriberContactInformationResponseApiResponse> {
+        let url_ = this.baseUrl + "/api/prescriber/prescriber-contact/{prescriberId}/info";
+        if (prescriberId === undefined || prescriberId === null)
+            throw new Error("The parameter 'prescriberId' must be defined.");
+        url_ = url_.replace("{prescriberId}", encodeURIComponent("" + prescriberId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetPrescriberContactInformation(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetPrescriberContactInformation(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<GetPrescriberContactInformationResponseApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<GetPrescriberContactInformationResponseApiResponse>;
+        }));
+    }
+
+    protected processGetPrescriberContactInformation(response: HttpResponseBase): Observable<GetPrescriberContactInformationResponseApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = GetPrescriberContactInformationResponseApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    addNewClinicToPrescriber(prescriberId: string, body?: AddNewClinicToPrescriberDto | undefined): Observable<BooleanApiResponse> {
+        let url_ = this.baseUrl + "/api/prescriber/prescriber-clinic/{prescriberId}/add";
+        if (prescriberId === undefined || prescriberId === null)
+            throw new Error("The parameter 'prescriberId' must be defined.");
+        url_ = url_.replace("{prescriberId}", encodeURIComponent("" + prescriberId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json-patch+json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processAddNewClinicToPrescriber(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processAddNewClinicToPrescriber(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<BooleanApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<BooleanApiResponse>;
+        }));
+    }
+
+    protected processAddNewClinicToPrescriber(response: HttpResponseBase): Observable<BooleanApiResponse> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -726,6 +3924,82 @@ export class PrescriberServiceProxy {
     }
 
     /**
+     * @param searchFilter (optional) 
+     * @param sortField (optional) 
+     * @param sortDescending (optional) 
+     * @param skipCount (optional) 
+     * @param maxResultCount (optional) 
+     * @return Success
+     */
+    getPrescriberAdminList(searchFilter?: string | undefined, sortField?: string | undefined, sortDescending?: boolean | undefined, skipCount?: number | undefined, maxResultCount?: number | undefined): Observable<GetPrescriberAdminListResponsePagedResultDtoApiResponse> {
+        let url_ = this.baseUrl + "/api/admin/prescriber/all?";
+        if (searchFilter === null)
+            throw new Error("The parameter 'searchFilter' cannot be null.");
+        else if (searchFilter !== undefined)
+            url_ += "SearchFilter=" + encodeURIComponent("" + searchFilter) + "&";
+        if (sortField === null)
+            throw new Error("The parameter 'sortField' cannot be null.");
+        else if (sortField !== undefined)
+            url_ += "SortField=" + encodeURIComponent("" + sortField) + "&";
+        if (sortDescending === null)
+            throw new Error("The parameter 'sortDescending' cannot be null.");
+        else if (sortDescending !== undefined)
+            url_ += "SortDescending=" + encodeURIComponent("" + sortDescending) + "&";
+        if (skipCount === null)
+            throw new Error("The parameter 'skipCount' cannot be null.");
+        else if (skipCount !== undefined)
+            url_ += "SkipCount=" + encodeURIComponent("" + skipCount) + "&";
+        if (maxResultCount === null)
+            throw new Error("The parameter 'maxResultCount' cannot be null.");
+        else if (maxResultCount !== undefined)
+            url_ += "MaxResultCount=" + encodeURIComponent("" + maxResultCount) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetPrescriberAdminList(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetPrescriberAdminList(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<GetPrescriberAdminListResponsePagedResultDtoApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<GetPrescriberAdminListResponsePagedResultDtoApiResponse>;
+        }));
+    }
+
+    protected processGetPrescriberAdminList(response: HttpResponseBase): Observable<GetPrescriberAdminListResponsePagedResultDtoApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = GetPrescriberAdminListResponsePagedResultDtoApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
      * @param filter (optional) 
      * @return Success
      */
@@ -782,6 +4056,62 @@ export class PrescriberServiceProxy {
     }
 
     /**
+     * @param body (optional) 
+     * @return Success
+     */
+    register(body?: RegisterPrescriberByAdminDto | undefined): Observable<GuidApiResponse> {
+        let url_ = this.baseUrl + "/api/admin/prescriber/register";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json-patch+json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processRegister(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processRegister(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<GuidApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<GuidApiResponse>;
+        }));
+    }
+
+    protected processRegister(response: HttpResponseBase): Observable<GuidApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = GuidApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
      * @return Success
      */
     remind(): Observable<BooleanApiResponse> {
@@ -811,6 +4141,252 @@ export class PrescriberServiceProxy {
     }
 
     protected processRemind(response: HttpResponseBase): Observable<BooleanApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = BooleanApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @return Success
+     */
+    getPrescriberProfile(id: string): Observable<GetPrescriberProfileResponseApiResponse> {
+        let url_ = this.baseUrl + "/api/admin/prescriber/{id}/profile";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetPrescriberProfile(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetPrescriberProfile(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<GetPrescriberProfileResponseApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<GetPrescriberProfileResponseApiResponse>;
+        }));
+    }
+
+    protected processGetPrescriberProfile(response: HttpResponseBase): Observable<GetPrescriberProfileResponseApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = GetPrescriberProfileResponseApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @return Success
+     */
+    getProfileClinics(id: string): Observable<GetClinicsForPrescriberResponseIEnumerableApiResponse> {
+        let url_ = this.baseUrl + "/api/admin/prescriber/{id}/clinics";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetProfileClinics(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetProfileClinics(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<GetClinicsForPrescriberResponseIEnumerableApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<GetClinicsForPrescriberResponseIEnumerableApiResponse>;
+        }));
+    }
+
+    protected processGetProfileClinics(response: HttpResponseBase): Observable<GetClinicsForPrescriberResponseIEnumerableApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = GetClinicsForPrescriberResponseIEnumerableApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param searchFilter (optional) 
+     * @param sortField (optional) 
+     * @param sortDescending (optional) 
+     * @param skipCount (optional) 
+     * @param maxResultCount (optional) 
+     * @return Success
+     */
+    getPagedPatientsByPrescriber(id: string, searchFilter?: string | undefined, sortField?: string | undefined, sortDescending?: boolean | undefined, skipCount?: number | undefined, maxResultCount?: number | undefined): Observable<GetPagedPatientsByPrescriberResponsePagedResultDtoApiResponse> {
+        let url_ = this.baseUrl + "/api/admin/prescriber/{id}/paged-patients-prescriber?";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        if (searchFilter === null)
+            throw new Error("The parameter 'searchFilter' cannot be null.");
+        else if (searchFilter !== undefined)
+            url_ += "SearchFilter=" + encodeURIComponent("" + searchFilter) + "&";
+        if (sortField === null)
+            throw new Error("The parameter 'sortField' cannot be null.");
+        else if (sortField !== undefined)
+            url_ += "SortField=" + encodeURIComponent("" + sortField) + "&";
+        if (sortDescending === null)
+            throw new Error("The parameter 'sortDescending' cannot be null.");
+        else if (sortDescending !== undefined)
+            url_ += "SortDescending=" + encodeURIComponent("" + sortDescending) + "&";
+        if (skipCount === null)
+            throw new Error("The parameter 'skipCount' cannot be null.");
+        else if (skipCount !== undefined)
+            url_ += "SkipCount=" + encodeURIComponent("" + skipCount) + "&";
+        if (maxResultCount === null)
+            throw new Error("The parameter 'maxResultCount' cannot be null.");
+        else if (maxResultCount !== undefined)
+            url_ += "MaxResultCount=" + encodeURIComponent("" + maxResultCount) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetPagedPatientsByPrescriber(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetPagedPatientsByPrescriber(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<GetPagedPatientsByPrescriberResponsePagedResultDtoApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<GetPagedPatientsByPrescriberResponsePagedResultDtoApiResponse>;
+        }));
+    }
+
+    protected processGetPagedPatientsByPrescriber(response: HttpResponseBase): Observable<GetPagedPatientsByPrescriberResponsePagedResultDtoApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = GetPagedPatientsByPrescriberResponsePagedResultDtoApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    updatePrescriberProfile(id: string, body?: UpdatePrescriberProfileDto | undefined): Observable<BooleanApiResponse> {
+        let url_ = this.baseUrl + "/api/admin/prescriber/{id}/update-profile";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json-patch+json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processUpdatePrescriberProfile(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processUpdatePrescriberProfile(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<BooleanApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<BooleanApiResponse>;
+        }));
+    }
+
+    protected processUpdatePrescriberProfile(response: HttpResponseBase): Observable<BooleanApiResponse> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -899,6 +4475,356 @@ export class PrescriptionServiceProxy {
         }
         return _observableOf(null as any);
     }
+
+    /**
+     * @return Success
+     */
+    getLatestAkScript(treatmentId: string): Observable<StringApiResponse> {
+        let url_ = this.baseUrl + "/api/prescription/latest-ak/{treatmentId}";
+        if (treatmentId === undefined || treatmentId === null)
+            throw new Error("The parameter 'treatmentId' must be defined.");
+        url_ = url_.replace("{treatmentId}", encodeURIComponent("" + treatmentId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetLatestAkScript(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetLatestAkScript(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<StringApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<StringApiResponse>;
+        }));
+    }
+
+    protected processGetLatestAkScript(response: HttpResponseBase): Observable<StringApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = StringApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @return Success
+     */
+    getLastDispenseVerification(treatmentId: string): Observable<GetLastDispenseVerificationRecordForPatientResponseApiResponse> {
+        let url_ = this.baseUrl + "/api/prescription/latest/verification/{treatmentId}";
+        if (treatmentId === undefined || treatmentId === null)
+            throw new Error("The parameter 'treatmentId' must be defined.");
+        url_ = url_.replace("{treatmentId}", encodeURIComponent("" + treatmentId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetLastDispenseVerification(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetLastDispenseVerification(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<GetLastDispenseVerificationRecordForPatientResponseApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<GetLastDispenseVerificationRecordForPatientResponseApiResponse>;
+        }));
+    }
+
+    protected processGetLastDispenseVerification(response: HttpResponseBase): Observable<GetLastDispenseVerificationRecordForPatientResponseApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = GetLastDispenseVerificationRecordForPatientResponseApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    submitDispenseVerification(body?: CreateDispenseVerificationRecordDto | undefined): Observable<CreateDispenseVerificationRecordCommandResultApiResponse> {
+        let url_ = this.baseUrl + "/api/prescription/submit-verification";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json-patch+json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processSubmitDispenseVerification(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processSubmitDispenseVerification(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<CreateDispenseVerificationRecordCommandResultApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<CreateDispenseVerificationRecordCommandResultApiResponse>;
+        }));
+    }
+
+    protected processSubmitDispenseVerification(response: HttpResponseBase): Observable<CreateDispenseVerificationRecordCommandResultApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = CreateDispenseVerificationRecordCommandResultApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param searchFilter (optional) 
+     * @param sortField (optional) 
+     * @param sortDescending (optional) 
+     * @param skipCount (optional) 
+     * @param maxResultCount (optional) 
+     * @return Success
+     */
+    getDispensingVerificationList(searchFilter?: string | undefined, sortField?: string | undefined, sortDescending?: boolean | undefined, skipCount?: number | undefined, maxResultCount?: number | undefined): Observable<GetDispensingVerificationListResponsePagedResultDtoApiResponse> {
+        let url_ = this.baseUrl + "/api/admin/prescription/dispensing-verifications?";
+        if (searchFilter === null)
+            throw new Error("The parameter 'searchFilter' cannot be null.");
+        else if (searchFilter !== undefined)
+            url_ += "SearchFilter=" + encodeURIComponent("" + searchFilter) + "&";
+        if (sortField === null)
+            throw new Error("The parameter 'sortField' cannot be null.");
+        else if (sortField !== undefined)
+            url_ += "SortField=" + encodeURIComponent("" + sortField) + "&";
+        if (sortDescending === null)
+            throw new Error("The parameter 'sortDescending' cannot be null.");
+        else if (sortDescending !== undefined)
+            url_ += "SortDescending=" + encodeURIComponent("" + sortDescending) + "&";
+        if (skipCount === null)
+            throw new Error("The parameter 'skipCount' cannot be null.");
+        else if (skipCount !== undefined)
+            url_ += "SkipCount=" + encodeURIComponent("" + skipCount) + "&";
+        if (maxResultCount === null)
+            throw new Error("The parameter 'maxResultCount' cannot be null.");
+        else if (maxResultCount !== undefined)
+            url_ += "MaxResultCount=" + encodeURIComponent("" + maxResultCount) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetDispensingVerificationList(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetDispensingVerificationList(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<GetDispensingVerificationListResponsePagedResultDtoApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<GetDispensingVerificationListResponsePagedResultDtoApiResponse>;
+        }));
+    }
+
+    protected processGetDispensingVerificationList(response: HttpResponseBase): Observable<GetDispensingVerificationListResponsePagedResultDtoApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = GetDispensingVerificationListResponsePagedResultDtoApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @return Success
+     */
+    getDispenseVerificationDetailsForEditing(id: string): Observable<GetDispenseVerificationDetailsForEditingResponseApiResponse> {
+        let url_ = this.baseUrl + "/api/admin/prescription/dispense-verification/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetDispenseVerificationDetailsForEditing(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetDispenseVerificationDetailsForEditing(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<GetDispenseVerificationDetailsForEditingResponseApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<GetDispenseVerificationDetailsForEditingResponseApiResponse>;
+        }));
+    }
+
+    protected processGetDispenseVerificationDetailsForEditing(response: HttpResponseBase): Observable<GetDispenseVerificationDetailsForEditingResponseApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = GetDispenseVerificationDetailsForEditingResponseApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    cancelDispenseVerificationRecord(body?: CancelDispenseVerificationRecordDto | undefined): Observable<BooleanApiResponse> {
+        let url_ = this.baseUrl + "/api/admin/prescription/dispense-verification/cancel";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json-patch+json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processCancelDispenseVerificationRecord(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processCancelDispenseVerificationRecord(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<BooleanApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<BooleanApiResponse>;
+        }));
+    }
+
+    protected processCancelDispenseVerificationRecord(response: HttpResponseBase): Observable<BooleanApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = BooleanApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
 }
 
 @Injectable({
@@ -915,11 +4841,280 @@ export class ProgramServiceProxy {
     }
 
     /**
+     * @return Success
+     */
+    getEligibilityCriterias(): Observable<GetPatientEligibilityCriteriaResponseIEnumerableApiResponse> {
+        let url_ = this.baseUrl + "/api/program/eligibility/criterias";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetEligibilityCriterias(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetEligibilityCriterias(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<GetPatientEligibilityCriteriaResponseIEnumerableApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<GetPatientEligibilityCriteriaResponseIEnumerableApiResponse>;
+        }));
+    }
+
+    protected processGetEligibilityCriterias(response: HttpResponseBase): Observable<GetPatientEligibilityCriteriaResponseIEnumerableApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = GetPatientEligibilityCriteriaResponseIEnumerableApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @return Success
+     */
+    getDiscontinueReasons(): Observable<GetDiscontinueReasonsResponseIEnumerableApiResponse> {
+        let url_ = this.baseUrl + "/api/program/discontinue/reasons";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetDiscontinueReasons(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetDiscontinueReasons(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<GetDiscontinueReasonsResponseIEnumerableApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<GetDiscontinueReasonsResponseIEnumerableApiResponse>;
+        }));
+    }
+
+    protected processGetDiscontinueReasons(response: HttpResponseBase): Observable<GetDiscontinueReasonsResponseIEnumerableApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = GetDiscontinueReasonsResponseIEnumerableApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @return Success
+     */
+    getRegistrationStatus(): Observable<GetRegistrationStatusRepsonseApiResponse> {
+        let url_ = this.baseUrl + "/api/program/get-status";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetRegistrationStatus(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetRegistrationStatus(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<GetRegistrationStatusRepsonseApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<GetRegistrationStatusRepsonseApiResponse>;
+        }));
+    }
+
+    protected processGetRegistrationStatus(response: HttpResponseBase): Observable<GetRegistrationStatusRepsonseApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = GetRegistrationStatusRepsonseApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @return Success
+     */
+    getIsAcknowledgementRequired(): Observable<BooleanApiResponse> {
+        let url_ = this.baseUrl + "/api/program/get-is-acknowledgement-required";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetIsAcknowledgementRequired(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetIsAcknowledgementRequired(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<BooleanApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<BooleanApiResponse>;
+        }));
+    }
+
+    protected processGetIsAcknowledgementRequired(response: HttpResponseBase): Observable<BooleanApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = BooleanApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @return Success
+     */
+    completeAcknowledgement(): Observable<RegistrationStatusApiResponse> {
+        let url_ = this.baseUrl + "/api/program/registration/completeAcknowledgement";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processCompleteAcknowledgement(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processCompleteAcknowledgement(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<RegistrationStatusApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<RegistrationStatusApiResponse>;
+        }));
+    }
+
+    protected processCompleteAcknowledgement(response: HttpResponseBase): Observable<RegistrationStatusApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = RegistrationStatusApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+}
+
+@Injectable({
+    providedIn: 'root'
+})
+export class ProgramAdministratorServiceProxy {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl ?? "";
+    }
+
+    /**
      * @param body (optional) 
      * @return Success
      */
-    create(body?: CreateProgramDto | undefined): Observable<GuidApiResponse> {
-        let url_ = this.baseUrl + "/api/program/create";
+    inviteProgramAdministrator(body?: AccessInvitationFromPrescriberDto | undefined): Observable<GuidApiResponse> {
+        let url_ = this.baseUrl + "/api/program-administrator/invite";
         url_ = url_.replace(/[?&]$/, "");
 
         const content_ = JSON.stringify(body);
@@ -935,11 +5130,11 @@ export class ProgramServiceProxy {
         };
 
         return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processCreate(response_);
+            return this.processInviteProgramAdministrator(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processCreate(response_ as any);
+                    return this.processInviteProgramAdministrator(response_ as any);
                 } catch (e) {
                     return _observableThrow(e) as any as Observable<GuidApiResponse>;
                 }
@@ -948,7 +5143,7 @@ export class ProgramServiceProxy {
         }));
     }
 
-    protected processCreate(response: HttpResponseBase): Observable<GuidApiResponse> {
+    protected processInviteProgramAdministrator(response: HttpResponseBase): Observable<GuidApiResponse> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -960,6 +5155,452 @@ export class ProgramServiceProxy {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
             result200 = GuidApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    preEnrolPatientForPrescriber(body?: PreEnrolPatientForPrescriberDto | undefined): Observable<GuidApiResponse> {
+        let url_ = this.baseUrl + "/api/program-administrator/pre-enrol-patient";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json-patch+json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processPreEnrolPatientForPrescriber(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processPreEnrolPatientForPrescriber(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<GuidApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<GuidApiResponse>;
+        }));
+    }
+
+    protected processPreEnrolPatientForPrescriber(response: HttpResponseBase): Observable<GuidApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = GuidApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @return Success
+     */
+    getPrescribersForProgramAdministrator(): Observable<GetPrescriberForProgAdminResponseIEnumerableApiResponse> {
+        let url_ = this.baseUrl + "/api/program-administrator/prescribers";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetPrescribersForProgramAdministrator(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetPrescribersForProgramAdministrator(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<GetPrescriberForProgAdminResponseIEnumerableApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<GetPrescriberForProgAdminResponseIEnumerableApiResponse>;
+        }));
+    }
+
+    protected processGetPrescribersForProgramAdministrator(response: HttpResponseBase): Observable<GetPrescriberForProgAdminResponseIEnumerableApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = GetPrescriberForProgAdminResponseIEnumerableApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @return Success
+     */
+    getClinicsForProgramAdministrator(): Observable<GetClinicsForProgramAdminResponseIEnumerableApiResponse> {
+        let url_ = this.baseUrl + "/api/program-administrator/clinics";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetClinicsForProgramAdministrator(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetClinicsForProgramAdministrator(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<GetClinicsForProgramAdminResponseIEnumerableApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<GetClinicsForProgramAdminResponseIEnumerableApiResponse>;
+        }));
+    }
+
+    protected processGetClinicsForProgramAdministrator(response: HttpResponseBase): Observable<GetClinicsForProgramAdminResponseIEnumerableApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = GetClinicsForProgramAdminResponseIEnumerableApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @return Success
+     */
+    getPrescriberClinicsForProgramAdministrator(prescriberId: string): Observable<GetPrescriberClinicForProgrAdminResponseIEnumerableApiResponse> {
+        let url_ = this.baseUrl + "/api/program-administrator/prescriber-clinics/{prescriberId}";
+        if (prescriberId === undefined || prescriberId === null)
+            throw new Error("The parameter 'prescriberId' must be defined.");
+        url_ = url_.replace("{prescriberId}", encodeURIComponent("" + prescriberId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetPrescriberClinicsForProgramAdministrator(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetPrescriberClinicsForProgramAdministrator(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<GetPrescriberClinicForProgrAdminResponseIEnumerableApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<GetPrescriberClinicForProgrAdminResponseIEnumerableApiResponse>;
+        }));
+    }
+
+    protected processGetPrescriberClinicsForProgramAdministrator(response: HttpResponseBase): Observable<GetPrescriberClinicForProgrAdminResponseIEnumerableApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = GetPrescriberClinicForProgrAdminResponseIEnumerableApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param searchFilter (optional) 
+     * @param sortField (optional) 
+     * @param sortDescending (optional) 
+     * @param skipCount (optional) 
+     * @param maxResultCount (optional) 
+     * @return Success
+     */
+    getPagedPatientListForProgramAdministrator(searchFilter?: string | undefined, sortField?: string | undefined, sortDescending?: boolean | undefined, skipCount?: number | undefined, maxResultCount?: number | undefined): Observable<GetTreatmentSummaryListResponsePagedResultDtoApiResponse> {
+        let url_ = this.baseUrl + "/api/program-administrator/paged-clinic-patients?";
+        if (searchFilter === null)
+            throw new Error("The parameter 'searchFilter' cannot be null.");
+        else if (searchFilter !== undefined)
+            url_ += "SearchFilter=" + encodeURIComponent("" + searchFilter) + "&";
+        if (sortField === null)
+            throw new Error("The parameter 'sortField' cannot be null.");
+        else if (sortField !== undefined)
+            url_ += "SortField=" + encodeURIComponent("" + sortField) + "&";
+        if (sortDescending === null)
+            throw new Error("The parameter 'sortDescending' cannot be null.");
+        else if (sortDescending !== undefined)
+            url_ += "SortDescending=" + encodeURIComponent("" + sortDescending) + "&";
+        if (skipCount === null)
+            throw new Error("The parameter 'skipCount' cannot be null.");
+        else if (skipCount !== undefined)
+            url_ += "SkipCount=" + encodeURIComponent("" + skipCount) + "&";
+        if (maxResultCount === null)
+            throw new Error("The parameter 'maxResultCount' cannot be null.");
+        else if (maxResultCount !== undefined)
+            url_ += "MaxResultCount=" + encodeURIComponent("" + maxResultCount) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetPagedPatientListForProgramAdministrator(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetPagedPatientListForProgramAdministrator(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<GetTreatmentSummaryListResponsePagedResultDtoApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<GetTreatmentSummaryListResponsePagedResultDtoApiResponse>;
+        }));
+    }
+
+    protected processGetPagedPatientListForProgramAdministrator(response: HttpResponseBase): Observable<GetTreatmentSummaryListResponsePagedResultDtoApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = GetTreatmentSummaryListResponsePagedResultDtoApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @return Success
+     */
+    getProgramAdminContactInformation(): Observable<GetProgramAdminContactInformationResponseApiResponse> {
+        let url_ = this.baseUrl + "/api/program-administrator/contact-information";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetProgramAdminContactInformation(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetProgramAdminContactInformation(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<GetProgramAdminContactInformationResponseApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<GetProgramAdminContactInformationResponseApiResponse>;
+        }));
+    }
+
+    protected processGetProgramAdminContactInformation(response: HttpResponseBase): Observable<GetProgramAdminContactInformationResponseApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = GetProgramAdminContactInformationResponseApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @return Success
+     */
+    getProgramAdminListForPrescriber(): Observable<GetProgramAdminForPrescriberResponseIEnumerableApiResponse> {
+        let url_ = this.baseUrl + "/api/program-administrator/progam-admin-list-for-prescriber";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetProgramAdminListForPrescriber(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetProgramAdminListForPrescriber(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<GetProgramAdminForPrescriberResponseIEnumerableApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<GetProgramAdminForPrescriberResponseIEnumerableApiResponse>;
+        }));
+    }
+
+    protected processGetProgramAdminListForPrescriber(response: HttpResponseBase): Observable<GetProgramAdminForPrescriberResponseIEnumerableApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = GetProgramAdminForPrescriberResponseIEnumerableApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    revokeProgramAdminAccess(body?: RevokeProgramAdminAccessDto | undefined): Observable<BooleanApiResponse> {
+        let url_ = this.baseUrl + "/api/program-administrator/revoke-access";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json-patch+json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processRevokeProgramAdminAccess(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processRevokeProgramAdminAccess(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<BooleanApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<BooleanApiResponse>;
+        }));
+    }
+
+    protected processRevokeProgramAdminAccess(response: HttpResponseBase): Observable<BooleanApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = BooleanApiResponse.fromJS(resultData200);
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -1097,6 +5738,188 @@ export class RegistrationServiceProxy {
     }
 
     /**
+     * @param body (optional) 
+     * @return Success
+     */
+    pharmacist(body?: RegisterPharmacistDto | undefined): Observable<GuidApiResponse> {
+        let url_ = this.baseUrl + "/api/register/pharmacist";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json-patch+json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processPharmacist(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processPharmacist(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<GuidApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<GuidApiResponse>;
+        }));
+    }
+
+    protected processPharmacist(response: HttpResponseBase): Observable<GuidApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = GuidApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    completeInvitation(body?: RegisterProgramAdministratorFromInviteDto | undefined): Observable<GuidApiResponse> {
+        let url_ = this.baseUrl + "/api/register/complete-invitation";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json-patch+json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processCompleteInvitation(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processCompleteInvitation(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<GuidApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<GuidApiResponse>;
+        }));
+    }
+
+    protected processCompleteInvitation(response: HttpResponseBase): Observable<GuidApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = GuidApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param registrationType 1 = Admin (Administration)
+
+    2 = Prescriber (Prescriber)
+
+    3 = Pharmacist (Pharmacist)
+
+    4 = Patient (Patient)
+
+    5 = Hcp (HCP)
+
+    6 = Vendor (Vendor)
+
+    7 = ProgramAdmin (Program admin)
+     * @return Success
+     */
+    checkAhpraNumberUsed(ahpraNumber: string, registrationType: RegistrationType): Observable<BooleanApiResponse> {
+        let url_ = this.baseUrl + "/api/register/ahpra-number/{ahpraNumber}/{registrationType}";
+        if (ahpraNumber === undefined || ahpraNumber === null)
+            throw new Error("The parameter 'ahpraNumber' must be defined.");
+        url_ = url_.replace("{ahpraNumber}", encodeURIComponent("" + ahpraNumber));
+        if (registrationType === undefined || registrationType === null)
+            throw new Error("The parameter 'registrationType' must be defined.");
+        url_ = url_.replace("{registrationType}", encodeURIComponent("" + registrationType));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processCheckAhpraNumberUsed(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processCheckAhpraNumberUsed(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<BooleanApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<BooleanApiResponse>;
+        }));
+    }
+
+    protected processCheckAhpraNumberUsed(response: HttpResponseBase): Observable<BooleanApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = BooleanApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
      * @return Success
      */
     checkAhpraNumberAvailability(ahpraNumber: string): Observable<BooleanApiResponse> {
@@ -1208,6 +6031,57 @@ export class RegistrationServiceProxy {
         }
         return _observableOf(null as any);
     }
+
+    /**
+     * @return Success
+     */
+    createUsers(): Observable<BooleanApiResponse> {
+        let url_ = this.baseUrl + "/api/register/create-users";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processCreateUsers(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processCreateUsers(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<BooleanApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<BooleanApiResponse>;
+        }));
+    }
+
+    protected processCreateUsers(response: HttpResponseBase): Observable<BooleanApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = BooleanApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
 }
 
 @Injectable({
@@ -1273,6 +6147,285 @@ export class TenantProgramServiceProxy {
         }
         return _observableOf(null as any);
     }
+
+    /**
+     * @return Success
+     */
+    getTenants(): Observable<TenantIEnumerableApiResponse> {
+        let url_ = this.baseUrl + "/api/admin/tenant-program/tenants";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetTenants(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetTenants(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<TenantIEnumerableApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<TenantIEnumerableApiResponse>;
+        }));
+    }
+
+    protected processGetTenants(response: HttpResponseBase): Observable<TenantIEnumerableApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = TenantIEnumerableApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @return Success
+     */
+    triggerForgotPassword(email: string, userId: string): Observable<BooleanApiResponse> {
+        let url_ = this.baseUrl + "/api/admin/tenant-program/password/forgot/{email}/{userId}";
+        if (email === undefined || email === null)
+            throw new Error("The parameter 'email' must be defined.");
+        url_ = url_.replace("{email}", encodeURIComponent("" + email));
+        if (userId === undefined || userId === null)
+            throw new Error("The parameter 'userId' must be defined.");
+        url_ = url_.replace("{userId}", encodeURIComponent("" + userId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processTriggerForgotPassword(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processTriggerForgotPassword(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<BooleanApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<BooleanApiResponse>;
+        }));
+    }
+
+    protected processTriggerForgotPassword(response: HttpResponseBase): Observable<BooleanApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = BooleanApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    approvePrescriberHotfix(body?: ApprovePrescriberDto | undefined): Observable<BooleanApiResponse> {
+        let url_ = this.baseUrl + "/api/admin/tenant-program/approve-prescriber-hotfix";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json-patch+json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processApprovePrescriberHotfix(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processApprovePrescriberHotfix(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<BooleanApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<BooleanApiResponse>;
+        }));
+    }
+
+    protected processApprovePrescriberHotfix(response: HttpResponseBase): Observable<BooleanApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = BooleanApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    approvePharmacistHotfix(body?: ApprovePharmacistDto | undefined): Observable<BooleanApiResponse> {
+        let url_ = this.baseUrl + "/api/admin/tenant-program/approve-pharmacist-hotfix";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json-patch+json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processApprovePharmacistHotfix(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processApprovePharmacistHotfix(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<BooleanApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<BooleanApiResponse>;
+        }));
+    }
+
+    protected processApprovePharmacistHotfix(response: HttpResponseBase): Observable<BooleanApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = BooleanApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    registerWithCategoryHotfix(prescriberId: string, body?: RegisterPatientWithCategoryDto | undefined): Observable<GuidApiResponse> {
+        let url_ = this.baseUrl + "/api/admin/tenant-program/registerPatientWithCategory/{prescriberId}";
+        if (prescriberId === undefined || prescriberId === null)
+            throw new Error("The parameter 'prescriberId' must be defined.");
+        url_ = url_.replace("{prescriberId}", encodeURIComponent("" + prescriberId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json-patch+json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processRegisterWithCategoryHotfix(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processRegisterWithCategoryHotfix(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<GuidApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<GuidApiResponse>;
+        }));
+    }
+
+    protected processRegisterWithCategoryHotfix(response: HttpResponseBase): Observable<GuidApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = GuidApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
 }
 
 @Injectable({
@@ -1326,6 +6479,65 @@ export class TreatmentServiceProxy {
     }
 
     protected processResupply(response: HttpResponseBase): Observable<GuidApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = GuidApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    continuePatientWithAdverseEvent(patientId: string, body?: ContinuePatientWithAdverseEventReportDto | undefined): Observable<GuidApiResponse> {
+        let url_ = this.baseUrl + "/api/patient/{patientId}/treatment/continue-with-adverse-event";
+        if (patientId === undefined || patientId === null)
+            throw new Error("The parameter 'patientId' must be defined.");
+        url_ = url_.replace("{patientId}", encodeURIComponent("" + patientId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json-patch+json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processContinuePatientWithAdverseEvent(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processContinuePatientWithAdverseEvent(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<GuidApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<GuidApiResponse>;
+        }));
+    }
+
+    protected processContinuePatientWithAdverseEvent(response: HttpResponseBase): Observable<GuidApiResponse> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -1466,9 +6678,68 @@ export class TreatmentServiceProxy {
     }
 
     /**
+     * @param body (optional) 
      * @return Success
      */
-    getTreatmentHistory(patientId: string): Observable<GetPatientEventListResponseIEnumerableApiResponse> {
+    discontinuePatientWithAdverseEvent(patientId: string, body?: DiscontinueWithAdverseEventForPatientDto | undefined): Observable<BooleanApiResponse> {
+        let url_ = this.baseUrl + "/api/patient/{patientId}/treatment/discontinue-with-adverse-event";
+        if (patientId === undefined || patientId === null)
+            throw new Error("The parameter 'patientId' must be defined.");
+        url_ = url_.replace("{patientId}", encodeURIComponent("" + patientId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json-patch+json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processDiscontinuePatientWithAdverseEvent(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processDiscontinuePatientWithAdverseEvent(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<BooleanApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<BooleanApiResponse>;
+        }));
+    }
+
+    protected processDiscontinuePatientWithAdverseEvent(response: HttpResponseBase): Observable<BooleanApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = BooleanApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @return Success
+     */
+    getTreatmentHistory(patientId: string): Observable<GetTreatmentActivitiesResponseIEnumerableApiResponse> {
         let url_ = this.baseUrl + "/api/patient/{patientId}/treatment/history";
         if (patientId === undefined || patientId === null)
             throw new Error("The parameter 'patientId' must be defined.");
@@ -1490,14 +6761,14 @@ export class TreatmentServiceProxy {
                 try {
                     return this.processGetTreatmentHistory(response_ as any);
                 } catch (e) {
-                    return _observableThrow(e) as any as Observable<GetPatientEventListResponseIEnumerableApiResponse>;
+                    return _observableThrow(e) as any as Observable<GetTreatmentActivitiesResponseIEnumerableApiResponse>;
                 }
             } else
-                return _observableThrow(response_) as any as Observable<GetPatientEventListResponseIEnumerableApiResponse>;
+                return _observableThrow(response_) as any as Observable<GetTreatmentActivitiesResponseIEnumerableApiResponse>;
         }));
     }
 
-    protected processGetTreatmentHistory(response: HttpResponseBase): Observable<GetPatientEventListResponseIEnumerableApiResponse> {
+    protected processGetTreatmentHistory(response: HttpResponseBase): Observable<GetTreatmentActivitiesResponseIEnumerableApiResponse> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -1508,7 +6779,174 @@ export class TreatmentServiceProxy {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = GetPatientEventListResponseIEnumerableApiResponse.fromJS(resultData200);
+            result200 = GetTreatmentActivitiesResponseIEnumerableApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @return Success
+     */
+    getPrescriptionHistory(patientId: string): Observable<GetTreatmentActivitiesResponseIEnumerableApiResponse> {
+        let url_ = this.baseUrl + "/api/patient/{patientId}/treatment/history-prescriptions";
+        if (patientId === undefined || patientId === null)
+            throw new Error("The parameter 'patientId' must be defined.");
+        url_ = url_.replace("{patientId}", encodeURIComponent("" + patientId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetPrescriptionHistory(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetPrescriptionHistory(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<GetTreatmentActivitiesResponseIEnumerableApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<GetTreatmentActivitiesResponseIEnumerableApiResponse>;
+        }));
+    }
+
+    protected processGetPrescriptionHistory(response: HttpResponseBase): Observable<GetTreatmentActivitiesResponseIEnumerableApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = GetTreatmentActivitiesResponseIEnumerableApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    updateTreatmentProfile(patientId: string, body?: UpdatePatientDto | undefined): Observable<BooleanApiResponse> {
+        let url_ = this.baseUrl + "/api/patient/{patientId}/treatment/update-profile";
+        if (patientId === undefined || patientId === null)
+            throw new Error("The parameter 'patientId' must be defined.");
+        url_ = url_.replace("{patientId}", encodeURIComponent("" + patientId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json-patch+json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processUpdateTreatmentProfile(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processUpdateTreatmentProfile(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<BooleanApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<BooleanApiResponse>;
+        }));
+    }
+
+    protected processUpdateTreatmentProfile(response: HttpResponseBase): Observable<BooleanApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = BooleanApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @return Success
+     */
+    getTreatmentProfileWithCategory(patientId: string): Observable<GetPatientTreatmentCategoryProfileResponseApiResponse> {
+        let url_ = this.baseUrl + "/api/patient/{patientId}/treatment/profile-with-category";
+        if (patientId === undefined || patientId === null)
+            throw new Error("The parameter 'patientId' must be defined.");
+        url_ = url_.replace("{patientId}", encodeURIComponent("" + patientId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetTreatmentProfileWithCategory(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetTreatmentProfileWithCategory(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<GetPatientTreatmentCategoryProfileResponseApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<GetPatientTreatmentCategoryProfileResponseApiResponse>;
+        }));
+    }
+
+    protected processGetTreatmentProfileWithCategory(response: HttpResponseBase): Observable<GetPatientTreatmentCategoryProfileResponseApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = GetPatientTreatmentCategoryProfileResponseApiResponse.fromJS(resultData200);
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -1563,6 +7001,114 @@ export class TreatmentServiceProxy {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
             result200 = GetPatientTreatmentProfileForAdminResponseApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @return Success
+     */
+    getTransferRequest(patientId: string): Observable<GetNominatedPrescriberInformationResponseApiResponse> {
+        let url_ = this.baseUrl + "/api/admin/patient/{patientId}/treatment/transfer/request";
+        if (patientId === undefined || patientId === null)
+            throw new Error("The parameter 'patientId' must be defined.");
+        url_ = url_.replace("{patientId}", encodeURIComponent("" + patientId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetTransferRequest(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetTransferRequest(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<GetNominatedPrescriberInformationResponseApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<GetNominatedPrescriberInformationResponseApiResponse>;
+        }));
+    }
+
+    protected processGetTransferRequest(response: HttpResponseBase): Observable<GetNominatedPrescriberInformationResponseApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = GetNominatedPrescriberInformationResponseApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @return Success
+     */
+    getRestartTreatmentValidation(patientId: string): Observable<GetRestartTreatmentValidationInformationResponseApiResponse> {
+        let url_ = this.baseUrl + "/api/admin/patient/{patientId}/treatment/restart/validation";
+        if (patientId === undefined || patientId === null)
+            throw new Error("The parameter 'patientId' must be defined.");
+        url_ = url_.replace("{patientId}", encodeURIComponent("" + patientId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetRestartTreatmentValidation(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetRestartTreatmentValidation(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<GetRestartTreatmentValidationInformationResponseApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<GetRestartTreatmentValidationInformationResponseApiResponse>;
+        }));
+    }
+
+    protected processGetRestartTreatmentValidation(response: HttpResponseBase): Observable<GetRestartTreatmentValidationInformationResponseApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = GetRestartTreatmentValidationInformationResponseApiResponse.fromJS(resultData200);
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -1631,6 +7177,546 @@ export class TreatmentServiceProxy {
         }
         return _observableOf(null as any);
     }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    discontinuePatient(patientId: string, body?: DiscontinuePatientTreatmentByAdminDto | undefined): Observable<BooleanApiResponse> {
+        let url_ = this.baseUrl + "/api/admin/patient/{patientId}/treatment/discontinue";
+        if (patientId === undefined || patientId === null)
+            throw new Error("The parameter 'patientId' must be defined.");
+        url_ = url_.replace("{patientId}", encodeURIComponent("" + patientId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json-patch+json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processDiscontinuePatient(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processDiscontinuePatient(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<BooleanApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<BooleanApiResponse>;
+        }));
+    }
+
+    protected processDiscontinuePatient(response: HttpResponseBase): Observable<BooleanApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = BooleanApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    continuePatient(patientId: string, body?: ContinuePatientTreatmentByAdminDto | undefined): Observable<BooleanApiResponse> {
+        let url_ = this.baseUrl + "/api/admin/patient/{patientId}/treatment/continue";
+        if (patientId === undefined || patientId === null)
+            throw new Error("The parameter 'patientId' must be defined.");
+        url_ = url_.replace("{patientId}", encodeURIComponent("" + patientId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json-patch+json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processContinuePatient(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processContinuePatient(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<BooleanApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<BooleanApiResponse>;
+        }));
+    }
+
+    protected processContinuePatient(response: HttpResponseBase): Observable<BooleanApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = BooleanApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    restartPatientTreatment(patientId: string, body?: RestartTreatmentByAdminDto | undefined): Observable<BooleanApiResponse> {
+        let url_ = this.baseUrl + "/api/admin/patient/{patientId}/treatment/restart";
+        if (patientId === undefined || patientId === null)
+            throw new Error("The parameter 'patientId' must be defined.");
+        url_ = url_.replace("{patientId}", encodeURIComponent("" + patientId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json-patch+json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processRestartPatientTreatment(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processRestartPatientTreatment(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<BooleanApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<BooleanApiResponse>;
+        }));
+    }
+
+    protected processRestartPatientTreatment(response: HttpResponseBase): Observable<BooleanApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = BooleanApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    updateDeliveryAddresss(patientId: string, body?: UpdateDeliveryAddressDto | undefined): Observable<BooleanApiResponse> {
+        let url_ = this.baseUrl + "/api/admin/patient/{patientId}/treatment/DeliveryAddress";
+        if (patientId === undefined || patientId === null)
+            throw new Error("The parameter 'patientId' must be defined.");
+        url_ = url_.replace("{patientId}", encodeURIComponent("" + patientId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json-patch+json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processUpdateDeliveryAddresss(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processUpdateDeliveryAddresss(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<BooleanApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<BooleanApiResponse>;
+        }));
+    }
+
+    protected processUpdateDeliveryAddresss(response: HttpResponseBase): Observable<BooleanApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = BooleanApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+}
+
+export class AccessInvitationFromPrescriberDto implements IAccessInvitationFromPrescriberDto {
+    title: Title;
+    firstName: string | undefined;
+    lastName: string | undefined;
+    userRole: UserRole;
+    acknowledgementOfContactPermission: boolean;
+    email: string | undefined;
+    phone: string | undefined;
+    mobile: string | undefined;
+    prescriberId: string;
+    clinics: string[] | undefined;
+
+    constructor(data?: IAccessInvitationFromPrescriberDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.title = _data["title"];
+            this.firstName = _data["firstName"];
+            this.lastName = _data["lastName"];
+            this.userRole = _data["userRole"];
+            this.acknowledgementOfContactPermission = _data["acknowledgementOfContactPermission"];
+            this.email = _data["email"];
+            this.phone = _data["phone"];
+            this.mobile = _data["mobile"];
+            this.prescriberId = _data["prescriberId"];
+            if (Array.isArray(_data["clinics"])) {
+                this.clinics = [];
+                for (let item of _data["clinics"])
+                    this.clinics.push(item);
+            }
+        }
+    }
+
+    static fromJS(data: any): AccessInvitationFromPrescriberDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new AccessInvitationFromPrescriberDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["title"] = this.title;
+        data["firstName"] = this.firstName;
+        data["lastName"] = this.lastName;
+        data["userRole"] = this.userRole;
+        data["acknowledgementOfContactPermission"] = this.acknowledgementOfContactPermission;
+        data["email"] = this.email;
+        data["phone"] = this.phone;
+        data["mobile"] = this.mobile;
+        data["prescriberId"] = this.prescriberId;
+        if (Array.isArray(this.clinics)) {
+            data["clinics"] = [];
+            for (let item of this.clinics)
+                data["clinics"].push(item);
+        }
+        return data;
+    }
+
+    clone(): AccessInvitationFromPrescriberDto {
+        const json = this.toJSON();
+        let result = new AccessInvitationFromPrescriberDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IAccessInvitationFromPrescriberDto {
+    title: Title;
+    firstName: string | undefined;
+    lastName: string | undefined;
+    userRole: UserRole;
+    acknowledgementOfContactPermission: boolean;
+    email: string | undefined;
+    phone: string | undefined;
+    mobile: string | undefined;
+    prescriberId: string;
+    clinics: string[] | undefined;
+}
+
+export class AddNewClinicToPrescriberDto implements IAddNewClinicToPrescriberDto {
+    prescriberId: string;
+    clinicName: string | undefined;
+    streetAddress: string | undefined;
+    city: string | undefined;
+    state: AddressState;
+    postCode: string | undefined;
+    unitNumber: string | undefined;
+    phoneNumber: string | undefined;
+    notificationEmail: string | undefined;
+
+    constructor(data?: IAddNewClinicToPrescriberDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.prescriberId = _data["prescriberId"];
+            this.clinicName = _data["clinicName"];
+            this.streetAddress = _data["streetAddress"];
+            this.city = _data["city"];
+            this.state = _data["state"];
+            this.postCode = _data["postCode"];
+            this.unitNumber = _data["unitNumber"];
+            this.phoneNumber = _data["phoneNumber"];
+            this.notificationEmail = _data["notificationEmail"];
+        }
+    }
+
+    static fromJS(data: any): AddNewClinicToPrescriberDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new AddNewClinicToPrescriberDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["prescriberId"] = this.prescriberId;
+        data["clinicName"] = this.clinicName;
+        data["streetAddress"] = this.streetAddress;
+        data["city"] = this.city;
+        data["state"] = this.state;
+        data["postCode"] = this.postCode;
+        data["unitNumber"] = this.unitNumber;
+        data["phoneNumber"] = this.phoneNumber;
+        data["notificationEmail"] = this.notificationEmail;
+        return data;
+    }
+
+    clone(): AddNewClinicToPrescriberDto {
+        const json = this.toJSON();
+        let result = new AddNewClinicToPrescriberDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IAddNewClinicToPrescriberDto {
+    prescriberId: string;
+    clinicName: string | undefined;
+    streetAddress: string | undefined;
+    city: string | undefined;
+    state: AddressState;
+    postCode: string | undefined;
+    unitNumber: string | undefined;
+    phoneNumber: string | undefined;
+    notificationEmail: string | undefined;
+}
+
+export class AddNewPharmacyToPharmacistDto implements IAddNewPharmacyToPharmacistDto {
+    pharmacyName: string | undefined;
+    streetAddress: string | undefined;
+    city: string | undefined;
+    state: AddressState;
+    postCode: string | undefined;
+    unitNumber: string | undefined;
+    phoneNumber: string | undefined;
+    accountType: PharmacyAccountType;
+    referenceAccountNumber: string | undefined;
+    notificationEmail: string | undefined;
+
+    constructor(data?: IAddNewPharmacyToPharmacistDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.pharmacyName = _data["pharmacyName"];
+            this.streetAddress = _data["streetAddress"];
+            this.city = _data["city"];
+            this.state = _data["state"];
+            this.postCode = _data["postCode"];
+            this.unitNumber = _data["unitNumber"];
+            this.phoneNumber = _data["phoneNumber"];
+            this.accountType = _data["accountType"];
+            this.referenceAccountNumber = _data["referenceAccountNumber"];
+            this.notificationEmail = _data["notificationEmail"];
+        }
+    }
+
+    static fromJS(data: any): AddNewPharmacyToPharmacistDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new AddNewPharmacyToPharmacistDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["pharmacyName"] = this.pharmacyName;
+        data["streetAddress"] = this.streetAddress;
+        data["city"] = this.city;
+        data["state"] = this.state;
+        data["postCode"] = this.postCode;
+        data["unitNumber"] = this.unitNumber;
+        data["phoneNumber"] = this.phoneNumber;
+        data["accountType"] = this.accountType;
+        data["referenceAccountNumber"] = this.referenceAccountNumber;
+        data["notificationEmail"] = this.notificationEmail;
+        return data;
+    }
+
+    clone(): AddNewPharmacyToPharmacistDto {
+        const json = this.toJSON();
+        let result = new AddNewPharmacyToPharmacistDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IAddNewPharmacyToPharmacistDto {
+    pharmacyName: string | undefined;
+    streetAddress: string | undefined;
+    city: string | undefined;
+    state: AddressState;
+    postCode: string | undefined;
+    unitNumber: string | undefined;
+    phoneNumber: string | undefined;
+    accountType: PharmacyAccountType;
+    referenceAccountNumber: string | undefined;
+    notificationEmail: string | undefined;
+}
+
+export class Address implements IAddress {
+    readonly unitNumber: string | undefined;
+    readonly addressLine1: string | undefined;
+    readonly addressLine2: string | undefined;
+    readonly city: string | undefined;
+    state: AddressState;
+    readonly postcode: string | undefined;
+
+    constructor(data?: IAddress) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            (<any>this).unitNumber = _data["unitNumber"];
+            (<any>this).addressLine1 = _data["addressLine1"];
+            (<any>this).addressLine2 = _data["addressLine2"];
+            (<any>this).city = _data["city"];
+            this.state = _data["state"];
+            (<any>this).postcode = _data["postcode"];
+        }
+    }
+
+    static fromJS(data: any): Address {
+        data = typeof data === 'object' ? data : {};
+        let result = new Address();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["unitNumber"] = this.unitNumber;
+        data["addressLine1"] = this.addressLine1;
+        data["addressLine2"] = this.addressLine2;
+        data["city"] = this.city;
+        data["state"] = this.state;
+        data["postcode"] = this.postcode;
+        return data;
+    }
+
+    clone(): Address {
+        const json = this.toJSON();
+        let result = new Address();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IAddress {
+    unitNumber: string | undefined;
+    addressLine1: string | undefined;
+    addressLine2: string | undefined;
+    city: string | undefined;
+    state: AddressState;
+    postcode: string | undefined;
 }
 
 export class AddressDto implements IAddressDto {
@@ -1709,6 +7795,147 @@ export enum AddressState {
     NA = 9,
 }
 
+export class AhpraNumber implements IAhpraNumber {
+    readonly value: string | undefined;
+
+    constructor(data?: IAhpraNumber) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            (<any>this).value = _data["value"];
+        }
+    }
+
+    static fromJS(data: any): AhpraNumber {
+        data = typeof data === 'object' ? data : {};
+        let result = new AhpraNumber();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["value"] = this.value;
+        return data;
+    }
+
+    clone(): AhpraNumber {
+        const json = this.toJSON();
+        let result = new AhpraNumber();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IAhpraNumber {
+    value: string | undefined;
+}
+
+export class ApprovePharmacistDto implements IApprovePharmacistDto {
+    pharmacistId: string;
+
+    constructor(data?: IApprovePharmacistDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.pharmacistId = _data["pharmacistId"];
+        }
+    }
+
+    static fromJS(data: any): ApprovePharmacistDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new ApprovePharmacistDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["pharmacistId"] = this.pharmacistId;
+        return data;
+    }
+
+    clone(): ApprovePharmacistDto {
+        const json = this.toJSON();
+        let result = new ApprovePharmacistDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IApprovePharmacistDto {
+    pharmacistId: string;
+}
+
+export class ApprovePharmacyAccountDto implements IApprovePharmacyAccountDto {
+    consentObtained: boolean | undefined;
+    consentObtainedFrom: string | undefined;
+    consentedDate: DateOnly;
+    consentObtainedFromName: string | undefined;
+
+    constructor(data?: IApprovePharmacyAccountDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.consentObtained = _data["consentObtained"];
+            this.consentObtainedFrom = _data["consentObtainedFrom"];
+            this.consentedDate = _data["consentedDate"] ? DateOnly.fromJS(_data["consentedDate"]) : <any>undefined;
+            this.consentObtainedFromName = _data["consentObtainedFromName"];
+        }
+    }
+
+    static fromJS(data: any): ApprovePharmacyAccountDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new ApprovePharmacyAccountDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["consentObtained"] = this.consentObtained;
+        data["consentObtainedFrom"] = this.consentObtainedFrom;
+        data["consentedDate"] = this.consentedDate ? this.consentedDate.toJSON() : <any>undefined;
+        data["consentObtainedFromName"] = this.consentObtainedFromName;
+        return data;
+    }
+
+    clone(): ApprovePharmacyAccountDto {
+        const json = this.toJSON();
+        let result = new ApprovePharmacyAccountDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IApprovePharmacyAccountDto {
+    consentObtained: boolean | undefined;
+    consentObtainedFrom: string | undefined;
+    consentedDate: DateOnly;
+    consentObtainedFromName: string | undefined;
+}
+
 export class ApprovePrescriberDto implements IApprovePrescriberDto {
     prescriberId: string;
 
@@ -1750,6 +7977,57 @@ export class ApprovePrescriberDto implements IApprovePrescriberDto {
 
 export interface IApprovePrescriberDto {
     prescriberId: string;
+}
+
+export class BankAccount implements IBankAccount {
+    readonly accountName: string | undefined;
+    readonly bsbNumber: string | undefined;
+    readonly accountNumber: string | undefined;
+
+    constructor(data?: IBankAccount) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            (<any>this).accountName = _data["accountName"];
+            (<any>this).bsbNumber = _data["bsbNumber"];
+            (<any>this).accountNumber = _data["accountNumber"];
+        }
+    }
+
+    static fromJS(data: any): BankAccount {
+        data = typeof data === 'object' ? data : {};
+        let result = new BankAccount();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["accountName"] = this.accountName;
+        data["bsbNumber"] = this.bsbNumber;
+        data["accountNumber"] = this.accountNumber;
+        return data;
+    }
+
+    clone(): BankAccount {
+        const json = this.toJSON();
+        let result = new BankAccount();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IBankAccount {
+    accountName: string | undefined;
+    bsbNumber: string | undefined;
+    accountNumber: string | undefined;
 }
 
 export class BooleanApiResponse implements IBooleanApiResponse {
@@ -1803,13 +8081,245 @@ export interface IBooleanApiResponse {
     problemDetails: ProblemDetails;
 }
 
+export class CancelDispenseVerificationRecordDto implements ICancelDispenseVerificationRecordDto {
+    id: string;
+    cancellationRequestedBy: string | undefined;
+    cancellationReason: string | undefined;
+    cancelledOnUtc: Date;
+    cancelledById: string;
+
+    constructor(data?: ICancelDispenseVerificationRecordDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.cancellationRequestedBy = _data["cancellationRequestedBy"];
+            this.cancellationReason = _data["cancellationReason"];
+            this.cancelledOnUtc = _data["cancelledOnUtc"] ? new Date(_data["cancelledOnUtc"].toString()) : <any>undefined;
+            this.cancelledById = _data["cancelledById"];
+        }
+    }
+
+    static fromJS(data: any): CancelDispenseVerificationRecordDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new CancelDispenseVerificationRecordDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["cancellationRequestedBy"] = this.cancellationRequestedBy;
+        data["cancellationReason"] = this.cancellationReason;
+        data["cancelledOnUtc"] = this.cancelledOnUtc ? this.cancelledOnUtc.toISOString() : <any>undefined;
+        data["cancelledById"] = this.cancelledById;
+        return data;
+    }
+
+    clone(): CancelDispenseVerificationRecordDto {
+        const json = this.toJSON();
+        let result = new CancelDispenseVerificationRecordDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface ICancelDispenseVerificationRecordDto {
+    id: string;
+    cancellationRequestedBy: string | undefined;
+    cancellationReason: string | undefined;
+    cancelledOnUtc: Date;
+    cancelledById: string;
+}
+
+export class CancelPatientPreEnrolmentDto implements ICancelPatientPreEnrolmentDto {
+    preEnrolmentId: string;
+    isCancelledByAdmin: boolean;
+
+    constructor(data?: ICancelPatientPreEnrolmentDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.preEnrolmentId = _data["preEnrolmentId"];
+            this.isCancelledByAdmin = _data["isCancelledByAdmin"];
+        }
+    }
+
+    static fromJS(data: any): CancelPatientPreEnrolmentDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new CancelPatientPreEnrolmentDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["preEnrolmentId"] = this.preEnrolmentId;
+        data["isCancelledByAdmin"] = this.isCancelledByAdmin;
+        return data;
+    }
+
+    clone(): CancelPatientPreEnrolmentDto {
+        const json = this.toJSON();
+        let result = new CancelPatientPreEnrolmentDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface ICancelPatientPreEnrolmentDto {
+    preEnrolmentId: string;
+    isCancelledByAdmin: boolean;
+}
+
+export class Clinic implements IClinic {
+    id: string;
+    readonly isDeleted: boolean;
+    readonly deletedOnUtc: Date | undefined;
+    readonly deletedBy: string | undefined;
+    deletedReason: DeletedReason;
+    readonly name: string | undefined;
+    businessAddress: Address;
+    postalAddress: Address;
+    deliveryAddress: Address;
+    coordinate: Coordinate;
+    phone: PhoneNumber;
+    email: EmailAddress;
+    reportingState: AddressState;
+    readonly businessNumber: string | undefined;
+    readonly adminNotes: string | undefined;
+    readonly createdOnUtc: Date;
+    readonly createdBy: string | undefined;
+    readonly lastModifiedOnUtc: Date | undefined;
+    readonly modifiedBy: string | undefined;
+    readonly prescriptions: Prescription[] | undefined;
+
+    constructor(data?: IClinic) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            (<any>this).isDeleted = _data["isDeleted"];
+            (<any>this).deletedOnUtc = _data["deletedOnUtc"] ? new Date(_data["deletedOnUtc"].toString()) : <any>undefined;
+            (<any>this).deletedBy = _data["deletedBy"];
+            this.deletedReason = _data["deletedReason"];
+            (<any>this).name = _data["name"];
+            this.businessAddress = _data["businessAddress"] ? Address.fromJS(_data["businessAddress"]) : <any>undefined;
+            this.postalAddress = _data["postalAddress"] ? Address.fromJS(_data["postalAddress"]) : <any>undefined;
+            this.deliveryAddress = _data["deliveryAddress"] ? Address.fromJS(_data["deliveryAddress"]) : <any>undefined;
+            this.coordinate = _data["coordinate"] ? Coordinate.fromJS(_data["coordinate"]) : <any>undefined;
+            this.phone = _data["phone"] ? PhoneNumber.fromJS(_data["phone"]) : <any>undefined;
+            this.email = _data["email"] ? EmailAddress.fromJS(_data["email"]) : <any>undefined;
+            this.reportingState = _data["reportingState"];
+            (<any>this).businessNumber = _data["businessNumber"];
+            (<any>this).adminNotes = _data["adminNotes"];
+            (<any>this).createdOnUtc = _data["createdOnUtc"] ? new Date(_data["createdOnUtc"].toString()) : <any>undefined;
+            (<any>this).createdBy = _data["createdBy"];
+            (<any>this).lastModifiedOnUtc = _data["lastModifiedOnUtc"] ? new Date(_data["lastModifiedOnUtc"].toString()) : <any>undefined;
+            (<any>this).modifiedBy = _data["modifiedBy"];
+            if (Array.isArray(_data["prescriptions"])) {
+                (<any>this).prescriptions = [];
+                for (let item of _data["prescriptions"])
+                    (<any>this).prescriptions.push(Prescription.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): Clinic {
+        data = typeof data === 'object' ? data : {};
+        let result = new Clinic();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["isDeleted"] = this.isDeleted;
+        data["deletedOnUtc"] = this.deletedOnUtc ? this.deletedOnUtc.toISOString() : <any>undefined;
+        data["deletedBy"] = this.deletedBy;
+        data["deletedReason"] = this.deletedReason;
+        data["name"] = this.name;
+        data["businessAddress"] = this.businessAddress ? this.businessAddress.toJSON() : <any>undefined;
+        data["postalAddress"] = this.postalAddress ? this.postalAddress.toJSON() : <any>undefined;
+        data["deliveryAddress"] = this.deliveryAddress ? this.deliveryAddress.toJSON() : <any>undefined;
+        data["coordinate"] = this.coordinate ? this.coordinate.toJSON() : <any>undefined;
+        data["phone"] = this.phone ? this.phone.toJSON() : <any>undefined;
+        data["email"] = this.email ? this.email.toJSON() : <any>undefined;
+        data["reportingState"] = this.reportingState;
+        data["businessNumber"] = this.businessNumber;
+        data["adminNotes"] = this.adminNotes;
+        data["createdOnUtc"] = this.createdOnUtc ? this.createdOnUtc.toISOString() : <any>undefined;
+        data["createdBy"] = this.createdBy;
+        data["lastModifiedOnUtc"] = this.lastModifiedOnUtc ? this.lastModifiedOnUtc.toISOString() : <any>undefined;
+        data["modifiedBy"] = this.modifiedBy;
+        if (Array.isArray(this.prescriptions)) {
+            data["prescriptions"] = [];
+            for (let item of this.prescriptions)
+                data["prescriptions"].push(item.toJSON());
+        }
+        return data;
+    }
+
+    clone(): Clinic {
+        const json = this.toJSON();
+        let result = new Clinic();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IClinic {
+    id: string;
+    isDeleted: boolean;
+    deletedOnUtc: Date | undefined;
+    deletedBy: string | undefined;
+    deletedReason: DeletedReason;
+    name: string | undefined;
+    businessAddress: Address;
+    postalAddress: Address;
+    deliveryAddress: Address;
+    coordinate: Coordinate;
+    phone: PhoneNumber;
+    email: EmailAddress;
+    reportingState: AddressState;
+    businessNumber: string | undefined;
+    adminNotes: string | undefined;
+    createdOnUtc: Date;
+    createdBy: string | undefined;
+    lastModifiedOnUtc: Date | undefined;
+    modifiedBy: string | undefined;
+    prescriptions: Prescription[] | undefined;
+}
+
 export class ClinicDto implements IClinicDto {
     name: string | undefined;
     address: AddressDto;
     latitude: number | undefined;
     longitude: number | undefined;
     phone: string | undefined;
-    fax: string | undefined;
     email: string | undefined;
     id: string | undefined;
 
@@ -1829,7 +8339,6 @@ export class ClinicDto implements IClinicDto {
             this.latitude = _data["latitude"];
             this.longitude = _data["longitude"];
             this.phone = _data["phone"];
-            this.fax = _data["fax"];
             this.email = _data["email"];
             this.id = _data["id"];
         }
@@ -1849,7 +8358,6 @@ export class ClinicDto implements IClinicDto {
         data["latitude"] = this.latitude;
         data["longitude"] = this.longitude;
         data["phone"] = this.phone;
-        data["fax"] = this.fax;
         data["email"] = this.email;
         data["id"] = this.id;
         return data;
@@ -1869,14 +8377,28 @@ export interface IClinicDto {
     latitude: number | undefined;
     longitude: number | undefined;
     phone: string | undefined;
-    fax: string | undefined;
     email: string | undefined;
     id: string | undefined;
+}
+
+/** 1 = Patient (Patient) 2 = Prescriber (Prescriber) 3 = Pharmacist (Pharmacist) 4 = Pharmacy (Pharmacy) 5 = Staff (InstitutionStaff) 6 = Distribution (Distributor) 7 = Hcp (Healthcare professional) 8 = Carer (Carer) 9 = Other (Other) */
+export enum CommunicatedWith {
+    Patient = 1,
+    Prescriber = 2,
+    Pharmacist = 3,
+    Pharmacy = 4,
+    Staff = 5,
+    Distribution = 6,
+    Hcp = 7,
+    Carer = 8,
+    Other = 9,
 }
 
 export class CompletePatientTranferDto implements ICompletePatientTranferDto {
     prescriberId: string | undefined;
     isTransferCancelled: boolean;
+    isTransferRejected: boolean;
+    isTransferActioned: boolean;
 
     constructor(data?: ICompletePatientTranferDto) {
         if (data) {
@@ -1891,6 +8413,8 @@ export class CompletePatientTranferDto implements ICompletePatientTranferDto {
         if (_data) {
             this.prescriberId = _data["prescriberId"];
             this.isTransferCancelled = _data["isTransferCancelled"];
+            this.isTransferRejected = _data["isTransferRejected"];
+            this.isTransferActioned = _data["isTransferActioned"];
         }
     }
 
@@ -1905,6 +8429,8 @@ export class CompletePatientTranferDto implements ICompletePatientTranferDto {
         data = typeof data === 'object' ? data : {};
         data["prescriberId"] = this.prescriberId;
         data["isTransferCancelled"] = this.isTransferCancelled;
+        data["isTransferRejected"] = this.isTransferRejected;
+        data["isTransferActioned"] = this.isTransferActioned;
         return data;
     }
 
@@ -1919,6 +8445,575 @@ export class CompletePatientTranferDto implements ICompletePatientTranferDto {
 export interface ICompletePatientTranferDto {
     prescriberId: string | undefined;
     isTransferCancelled: boolean;
+    isTransferRejected: boolean;
+    isTransferActioned: boolean;
+}
+
+export class CompletePreEnrolmentDto implements ICompletePreEnrolmentDto {
+    preEnrolmentId: string | undefined;
+    supportProgramAccessRequested: boolean | undefined;
+    patientEmail: string | undefined;
+    pharmacyId: string | undefined;
+    clinicId: string | undefined;
+    treatmentCategory: TreatmentCategory;
+    medicationId: number;
+
+    constructor(data?: ICompletePreEnrolmentDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.preEnrolmentId = _data["preEnrolmentId"];
+            this.supportProgramAccessRequested = _data["supportProgramAccessRequested"];
+            this.patientEmail = _data["patientEmail"];
+            this.pharmacyId = _data["pharmacyId"];
+            this.clinicId = _data["clinicId"];
+            this.treatmentCategory = _data["treatmentCategory"];
+            this.medicationId = _data["medicationId"];
+        }
+    }
+
+    static fromJS(data: any): CompletePreEnrolmentDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new CompletePreEnrolmentDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["preEnrolmentId"] = this.preEnrolmentId;
+        data["supportProgramAccessRequested"] = this.supportProgramAccessRequested;
+        data["patientEmail"] = this.patientEmail;
+        data["pharmacyId"] = this.pharmacyId;
+        data["clinicId"] = this.clinicId;
+        data["treatmentCategory"] = this.treatmentCategory;
+        data["medicationId"] = this.medicationId;
+        return data;
+    }
+
+    clone(): CompletePreEnrolmentDto {
+        const json = this.toJSON();
+        let result = new CompletePreEnrolmentDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface ICompletePreEnrolmentDto {
+    preEnrolmentId: string | undefined;
+    supportProgramAccessRequested: boolean | undefined;
+    patientEmail: string | undefined;
+    pharmacyId: string | undefined;
+    clinicId: string | undefined;
+    treatmentCategory: TreatmentCategory;
+    medicationId: number;
+}
+
+export class ConsumableOrderDto implements IConsumableOrderDto {
+    adminNotificationEmail: string | undefined;
+    deliveryInstitutionName: string | undefined;
+    deliveryUnitNumber: string | undefined;
+    deliveryStreetAddress: string | undefined;
+    deliveryCity: string | undefined;
+    deliveryState: AddressState;
+    deliveryPostCode: string | undefined;
+    deliverTo: string | undefined;
+    customerId: string;
+    customerType: CustomerType;
+    consumableOrderItems: ConsumableOrderItemDto[] | undefined;
+
+    constructor(data?: IConsumableOrderDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.adminNotificationEmail = _data["adminNotificationEmail"];
+            this.deliveryInstitutionName = _data["deliveryInstitutionName"];
+            this.deliveryUnitNumber = _data["deliveryUnitNumber"];
+            this.deliveryStreetAddress = _data["deliveryStreetAddress"];
+            this.deliveryCity = _data["deliveryCity"];
+            this.deliveryState = _data["deliveryState"];
+            this.deliveryPostCode = _data["deliveryPostCode"];
+            this.deliverTo = _data["deliverTo"];
+            this.customerId = _data["customerId"];
+            this.customerType = _data["customerType"];
+            if (Array.isArray(_data["consumableOrderItems"])) {
+                this.consumableOrderItems = [];
+                for (let item of _data["consumableOrderItems"])
+                    this.consumableOrderItems.push(ConsumableOrderItemDto.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): ConsumableOrderDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new ConsumableOrderDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["adminNotificationEmail"] = this.adminNotificationEmail;
+        data["deliveryInstitutionName"] = this.deliveryInstitutionName;
+        data["deliveryUnitNumber"] = this.deliveryUnitNumber;
+        data["deliveryStreetAddress"] = this.deliveryStreetAddress;
+        data["deliveryCity"] = this.deliveryCity;
+        data["deliveryState"] = this.deliveryState;
+        data["deliveryPostCode"] = this.deliveryPostCode;
+        data["deliverTo"] = this.deliverTo;
+        data["customerId"] = this.customerId;
+        data["customerType"] = this.customerType;
+        if (Array.isArray(this.consumableOrderItems)) {
+            data["consumableOrderItems"] = [];
+            for (let item of this.consumableOrderItems)
+                data["consumableOrderItems"].push(item.toJSON());
+        }
+        return data;
+    }
+
+    clone(): ConsumableOrderDto {
+        const json = this.toJSON();
+        let result = new ConsumableOrderDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IConsumableOrderDto {
+    adminNotificationEmail: string | undefined;
+    deliveryInstitutionName: string | undefined;
+    deliveryUnitNumber: string | undefined;
+    deliveryStreetAddress: string | undefined;
+    deliveryCity: string | undefined;
+    deliveryState: AddressState;
+    deliveryPostCode: string | undefined;
+    deliverTo: string | undefined;
+    customerId: string;
+    customerType: CustomerType;
+    consumableOrderItems: ConsumableOrderItemDto[] | undefined;
+}
+
+export class ConsumableOrderItemDto implements IConsumableOrderItemDto {
+    productId: string | undefined;
+    sku: string | undefined;
+    quantity: number;
+
+    constructor(data?: IConsumableOrderItemDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.productId = _data["productId"];
+            this.sku = _data["sku"];
+            this.quantity = _data["quantity"];
+        }
+    }
+
+    static fromJS(data: any): ConsumableOrderItemDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new ConsumableOrderItemDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["productId"] = this.productId;
+        data["sku"] = this.sku;
+        data["quantity"] = this.quantity;
+        return data;
+    }
+
+    clone(): ConsumableOrderItemDto {
+        const json = this.toJSON();
+        let result = new ConsumableOrderItemDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IConsumableOrderItemDto {
+    productId: string | undefined;
+    sku: string | undefined;
+    quantity: number;
+}
+
+/** 1 = PhoneCall (Phone call) 2 = WebCall (Web call) 3 = Email (Email) 4 = Message (Message) 5 = SmsText (SMS text) 6 = PostedMail (Posted mail) 7 = WebForm (Web form) */
+export enum ContactMethod {
+    PhoneCall = 1,
+    WebCall = 2,
+    Email = 3,
+    Message = 4,
+    SmsText = 5,
+    PostedMail = 6,
+    WebForm = 7,
+}
+
+/** 1 = Outbound (Outbound) 2 = Inbound (Inbound) 3 = SystemOutbound (System outbound) */
+export enum ContactType {
+    Outbound = 1,
+    Inbound = 2,
+    SystemOutbound = 3,
+}
+
+export class ContinuePatientTreatmentByAdminDto implements IContinuePatientTreatmentByAdminDto {
+    continuedOn: Date;
+    continuationProvidedByMethod: ContactMethod;
+    dosageId: number;
+    requiresAdverseEventReport: boolean;
+    eligibilityCriteriaOptions: number[] | undefined;
+    repeats: number;
+    prescriptionInstructions: string | undefined;
+
+    constructor(data?: IContinuePatientTreatmentByAdminDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.continuedOn = _data["continuedOn"] ? new Date(_data["continuedOn"].toString()) : <any>undefined;
+            this.continuationProvidedByMethod = _data["continuationProvidedByMethod"];
+            this.dosageId = _data["dosageId"];
+            this.requiresAdverseEventReport = _data["requiresAdverseEventReport"];
+            if (Array.isArray(_data["eligibilityCriteriaOptions"])) {
+                this.eligibilityCriteriaOptions = [];
+                for (let item of _data["eligibilityCriteriaOptions"])
+                    this.eligibilityCriteriaOptions.push(item);
+            }
+            this.repeats = _data["repeats"];
+            this.prescriptionInstructions = _data["prescriptionInstructions"];
+        }
+    }
+
+    static fromJS(data: any): ContinuePatientTreatmentByAdminDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new ContinuePatientTreatmentByAdminDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["continuedOn"] = this.continuedOn ? this.continuedOn.toISOString() : <any>undefined;
+        data["continuationProvidedByMethod"] = this.continuationProvidedByMethod;
+        data["dosageId"] = this.dosageId;
+        data["requiresAdverseEventReport"] = this.requiresAdverseEventReport;
+        if (Array.isArray(this.eligibilityCriteriaOptions)) {
+            data["eligibilityCriteriaOptions"] = [];
+            for (let item of this.eligibilityCriteriaOptions)
+                data["eligibilityCriteriaOptions"].push(item);
+        }
+        data["repeats"] = this.repeats;
+        data["prescriptionInstructions"] = this.prescriptionInstructions;
+        return data;
+    }
+
+    clone(): ContinuePatientTreatmentByAdminDto {
+        const json = this.toJSON();
+        let result = new ContinuePatientTreatmentByAdminDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IContinuePatientTreatmentByAdminDto {
+    continuedOn: Date;
+    continuationProvidedByMethod: ContactMethod;
+    dosageId: number;
+    requiresAdverseEventReport: boolean;
+    eligibilityCriteriaOptions: number[] | undefined;
+    repeats: number;
+    prescriptionInstructions: string | undefined;
+}
+
+export class ContinuePatientWithAdverseEventReportDto implements IContinuePatientWithAdverseEventReportDto {
+    prescriberId: string;
+    patientId: string;
+    eligibilityCriteriaOptions: number[] | undefined;
+    patientPhone: string | undefined;
+    patientMobile: string | undefined;
+    dosageId: number;
+    repeats: number;
+    additionalInstructions: string | undefined;
+    adverseEventDesciption: string | undefined;
+    doseModified: boolean | undefined;
+    pharmacyId: string | undefined;
+    pharmacyName: string | undefined;
+    pharmacyUnitNumber: string | undefined;
+    pharmacyStreetAddress: string | undefined;
+    pharmacyCity: string | undefined;
+    pharmacyState: AddressState;
+    pharmacyPostcode: string | undefined;
+    pharmacyPhone: string | undefined;
+    entryDay: number | undefined;
+    entryMonth: number | undefined;
+    entryYear: number | undefined;
+
+    constructor(data?: IContinuePatientWithAdverseEventReportDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.prescriberId = _data["prescriberId"];
+            this.patientId = _data["patientId"];
+            if (Array.isArray(_data["eligibilityCriteriaOptions"])) {
+                this.eligibilityCriteriaOptions = [];
+                for (let item of _data["eligibilityCriteriaOptions"])
+                    this.eligibilityCriteriaOptions.push(item);
+            }
+            this.patientPhone = _data["patientPhone"];
+            this.patientMobile = _data["patientMobile"];
+            this.dosageId = _data["dosageId"];
+            this.repeats = _data["repeats"];
+            this.additionalInstructions = _data["additionalInstructions"];
+            this.adverseEventDesciption = _data["adverseEventDesciption"];
+            this.doseModified = _data["doseModified"];
+            this.pharmacyId = _data["pharmacyId"];
+            this.pharmacyName = _data["pharmacyName"];
+            this.pharmacyUnitNumber = _data["pharmacyUnitNumber"];
+            this.pharmacyStreetAddress = _data["pharmacyStreetAddress"];
+            this.pharmacyCity = _data["pharmacyCity"];
+            this.pharmacyState = _data["pharmacyState"];
+            this.pharmacyPostcode = _data["pharmacyPostcode"];
+            this.pharmacyPhone = _data["pharmacyPhone"];
+            this.entryDay = _data["entryDay"];
+            this.entryMonth = _data["entryMonth"];
+            this.entryYear = _data["entryYear"];
+        }
+    }
+
+    static fromJS(data: any): ContinuePatientWithAdverseEventReportDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new ContinuePatientWithAdverseEventReportDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["prescriberId"] = this.prescriberId;
+        data["patientId"] = this.patientId;
+        if (Array.isArray(this.eligibilityCriteriaOptions)) {
+            data["eligibilityCriteriaOptions"] = [];
+            for (let item of this.eligibilityCriteriaOptions)
+                data["eligibilityCriteriaOptions"].push(item);
+        }
+        data["patientPhone"] = this.patientPhone;
+        data["patientMobile"] = this.patientMobile;
+        data["dosageId"] = this.dosageId;
+        data["repeats"] = this.repeats;
+        data["additionalInstructions"] = this.additionalInstructions;
+        data["adverseEventDesciption"] = this.adverseEventDesciption;
+        data["doseModified"] = this.doseModified;
+        data["pharmacyId"] = this.pharmacyId;
+        data["pharmacyName"] = this.pharmacyName;
+        data["pharmacyUnitNumber"] = this.pharmacyUnitNumber;
+        data["pharmacyStreetAddress"] = this.pharmacyStreetAddress;
+        data["pharmacyCity"] = this.pharmacyCity;
+        data["pharmacyState"] = this.pharmacyState;
+        data["pharmacyPostcode"] = this.pharmacyPostcode;
+        data["pharmacyPhone"] = this.pharmacyPhone;
+        data["entryDay"] = this.entryDay;
+        data["entryMonth"] = this.entryMonth;
+        data["entryYear"] = this.entryYear;
+        return data;
+    }
+
+    clone(): ContinuePatientWithAdverseEventReportDto {
+        const json = this.toJSON();
+        let result = new ContinuePatientWithAdverseEventReportDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IContinuePatientWithAdverseEventReportDto {
+    prescriberId: string;
+    patientId: string;
+    eligibilityCriteriaOptions: number[] | undefined;
+    patientPhone: string | undefined;
+    patientMobile: string | undefined;
+    dosageId: number;
+    repeats: number;
+    additionalInstructions: string | undefined;
+    adverseEventDesciption: string | undefined;
+    doseModified: boolean | undefined;
+    pharmacyId: string | undefined;
+    pharmacyName: string | undefined;
+    pharmacyUnitNumber: string | undefined;
+    pharmacyStreetAddress: string | undefined;
+    pharmacyCity: string | undefined;
+    pharmacyState: AddressState;
+    pharmacyPostcode: string | undefined;
+    pharmacyPhone: string | undefined;
+    entryDay: number | undefined;
+    entryMonth: number | undefined;
+    entryYear: number | undefined;
+}
+
+export class Coordinate implements ICoordinate {
+    readonly longitude: number;
+    readonly latitude: number;
+
+    constructor(data?: ICoordinate) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            (<any>this).longitude = _data["longitude"];
+            (<any>this).latitude = _data["latitude"];
+        }
+    }
+
+    static fromJS(data: any): Coordinate {
+        data = typeof data === 'object' ? data : {};
+        let result = new Coordinate();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["longitude"] = this.longitude;
+        data["latitude"] = this.latitude;
+        return data;
+    }
+
+    clone(): Coordinate {
+        const json = this.toJSON();
+        let result = new Coordinate();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface ICoordinate {
+    longitude: number;
+    latitude: number;
+}
+
+export class CreateAdminContactLogDto implements ICreateAdminContactLogDto {
+    communicatedWithId: string | undefined;
+    communicatedWith: CommunicatedWith;
+    communicatedWithName: string | undefined;
+    contactType: ContactType;
+    contactMethod: ContactMethod;
+    phoneNumberContacted: string | undefined;
+    mobileNumberContacted: string | undefined;
+    emailAddressContacted: string | undefined;
+    contactDate: Date;
+    contactSubject: string | undefined;
+    contactNote: string | undefined;
+    requiresAdverseEventReport: boolean;
+
+    constructor(data?: ICreateAdminContactLogDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.communicatedWithId = _data["communicatedWithId"];
+            this.communicatedWith = _data["communicatedWith"];
+            this.communicatedWithName = _data["communicatedWithName"];
+            this.contactType = _data["contactType"];
+            this.contactMethod = _data["contactMethod"];
+            this.phoneNumberContacted = _data["phoneNumberContacted"];
+            this.mobileNumberContacted = _data["mobileNumberContacted"];
+            this.emailAddressContacted = _data["emailAddressContacted"];
+            this.contactDate = _data["contactDate"] ? new Date(_data["contactDate"].toString()) : <any>undefined;
+            this.contactSubject = _data["contactSubject"];
+            this.contactNote = _data["contactNote"];
+            this.requiresAdverseEventReport = _data["requiresAdverseEventReport"];
+        }
+    }
+
+    static fromJS(data: any): CreateAdminContactLogDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new CreateAdminContactLogDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["communicatedWithId"] = this.communicatedWithId;
+        data["communicatedWith"] = this.communicatedWith;
+        data["communicatedWithName"] = this.communicatedWithName;
+        data["contactType"] = this.contactType;
+        data["contactMethod"] = this.contactMethod;
+        data["phoneNumberContacted"] = this.phoneNumberContacted;
+        data["mobileNumberContacted"] = this.mobileNumberContacted;
+        data["emailAddressContacted"] = this.emailAddressContacted;
+        data["contactDate"] = this.contactDate ? this.contactDate.toISOString() : <any>undefined;
+        data["contactSubject"] = this.contactSubject;
+        data["contactNote"] = this.contactNote;
+        data["requiresAdverseEventReport"] = this.requiresAdverseEventReport;
+        return data;
+    }
+
+    clone(): CreateAdminContactLogDto {
+        const json = this.toJSON();
+        let result = new CreateAdminContactLogDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface ICreateAdminContactLogDto {
+    communicatedWithId: string | undefined;
+    communicatedWith: CommunicatedWith;
+    communicatedWithName: string | undefined;
+    contactType: ContactType;
+    contactMethod: ContactMethod;
+    phoneNumberContacted: string | undefined;
+    mobileNumberContacted: string | undefined;
+    emailAddressContacted: string | undefined;
+    contactDate: Date;
+    contactSubject: string | undefined;
+    contactNote: string | undefined;
+    requiresAdverseEventReport: boolean;
 }
 
 export class CreateAdminUserDto implements ICreateAdminUserDto {
@@ -1992,6 +9087,301 @@ export interface ICreateAdminUserDto {
     mobile: string | undefined;
 }
 
+export class CreateDispenseVerificationRecordCommandResult implements ICreateDispenseVerificationRecordCommandResult {
+    dispenseVerificationId: string;
+    verficicationCode: string | undefined;
+
+    constructor(data?: ICreateDispenseVerificationRecordCommandResult) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.dispenseVerificationId = _data["dispenseVerificationId"];
+            this.verficicationCode = _data["verficicationCode"];
+        }
+    }
+
+    static fromJS(data: any): CreateDispenseVerificationRecordCommandResult {
+        data = typeof data === 'object' ? data : {};
+        let result = new CreateDispenseVerificationRecordCommandResult();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["dispenseVerificationId"] = this.dispenseVerificationId;
+        data["verficicationCode"] = this.verficicationCode;
+        return data;
+    }
+
+    clone(): CreateDispenseVerificationRecordCommandResult {
+        const json = this.toJSON();
+        let result = new CreateDispenseVerificationRecordCommandResult();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface ICreateDispenseVerificationRecordCommandResult {
+    dispenseVerificationId: string;
+    verficicationCode: string | undefined;
+}
+
+export class CreateDispenseVerificationRecordCommandResultApiResponse implements ICreateDispenseVerificationRecordCommandResultApiResponse {
+    isSuccess: boolean;
+    resultObject: CreateDispenseVerificationRecordCommandResult;
+    problemDetails: ProblemDetails;
+
+    constructor(data?: ICreateDispenseVerificationRecordCommandResultApiResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.isSuccess = _data["isSuccess"];
+            this.resultObject = _data["resultObject"] ? CreateDispenseVerificationRecordCommandResult.fromJS(_data["resultObject"]) : <any>undefined;
+            this.problemDetails = _data["problemDetails"] ? ProblemDetails.fromJS(_data["problemDetails"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): CreateDispenseVerificationRecordCommandResultApiResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new CreateDispenseVerificationRecordCommandResultApiResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["isSuccess"] = this.isSuccess;
+        data["resultObject"] = this.resultObject ? this.resultObject.toJSON() : <any>undefined;
+        data["problemDetails"] = this.problemDetails ? this.problemDetails.toJSON() : <any>undefined;
+        return data;
+    }
+
+    clone(): CreateDispenseVerificationRecordCommandResultApiResponse {
+        const json = this.toJSON();
+        let result = new CreateDispenseVerificationRecordCommandResultApiResponse();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface ICreateDispenseVerificationRecordCommandResultApiResponse {
+    isSuccess: boolean;
+    resultObject: CreateDispenseVerificationRecordCommandResult;
+    problemDetails: ProblemDetails;
+}
+
+export class CreateDispenseVerificationRecordDto implements ICreateDispenseVerificationRecordDto {
+    registrationId: string;
+    pharmacyId: string | undefined;
+    prescriberId: string;
+    patientId: string;
+    riskAssessmentRequired: boolean;
+    dosageId: number | undefined;
+    packSize: number | undefined;
+    riskAssessmentCarriedOut: boolean | undefined;
+    riskAssessmentOutcome: RiskAssessmentOutcome;
+
+    constructor(data?: ICreateDispenseVerificationRecordDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.registrationId = _data["registrationId"];
+            this.pharmacyId = _data["pharmacyId"];
+            this.prescriberId = _data["prescriberId"];
+            this.patientId = _data["patientId"];
+            this.riskAssessmentRequired = _data["riskAssessmentRequired"];
+            this.dosageId = _data["dosageId"];
+            this.packSize = _data["packSize"];
+            this.riskAssessmentCarriedOut = _data["riskAssessmentCarriedOut"];
+            this.riskAssessmentOutcome = _data["riskAssessmentOutcome"];
+        }
+    }
+
+    static fromJS(data: any): CreateDispenseVerificationRecordDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new CreateDispenseVerificationRecordDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["registrationId"] = this.registrationId;
+        data["pharmacyId"] = this.pharmacyId;
+        data["prescriberId"] = this.prescriberId;
+        data["patientId"] = this.patientId;
+        data["riskAssessmentRequired"] = this.riskAssessmentRequired;
+        data["dosageId"] = this.dosageId;
+        data["packSize"] = this.packSize;
+        data["riskAssessmentCarriedOut"] = this.riskAssessmentCarriedOut;
+        data["riskAssessmentOutcome"] = this.riskAssessmentOutcome;
+        return data;
+    }
+
+    clone(): CreateDispenseVerificationRecordDto {
+        const json = this.toJSON();
+        let result = new CreateDispenseVerificationRecordDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface ICreateDispenseVerificationRecordDto {
+    registrationId: string;
+    pharmacyId: string | undefined;
+    prescriberId: string;
+    patientId: string;
+    riskAssessmentRequired: boolean;
+    dosageId: number | undefined;
+    packSize: number | undefined;
+    riskAssessmentCarriedOut: boolean | undefined;
+    riskAssessmentOutcome: RiskAssessmentOutcome;
+}
+
+export class CreateOtpDto implements ICreateOtpDto {
+    email: string | undefined;
+
+    constructor(data?: ICreateOtpDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.email = _data["email"];
+        }
+    }
+
+    static fromJS(data: any): CreateOtpDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new CreateOtpDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["email"] = this.email;
+        return data;
+    }
+
+    clone(): CreateOtpDto {
+        const json = this.toJSON();
+        let result = new CreateOtpDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface ICreateOtpDto {
+    email: string | undefined;
+}
+
+export class CreatePatientContactLogDto implements ICreatePatientContactLogDto {
+    contactType: ContactType;
+    contactMethod: ContactMethod;
+    phoneNumberContacted: string | undefined;
+    mobileNumberContacted: string | undefined;
+    emailAddressContacted: string | undefined;
+    contactDate: DateOnly;
+    contactedBy: string | undefined;
+    contactSubject: string | undefined;
+    contactNote: string | undefined;
+    requiresAdverseEventReport: boolean;
+
+    constructor(data?: ICreatePatientContactLogDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.contactType = _data["contactType"];
+            this.contactMethod = _data["contactMethod"];
+            this.phoneNumberContacted = _data["phoneNumberContacted"];
+            this.mobileNumberContacted = _data["mobileNumberContacted"];
+            this.emailAddressContacted = _data["emailAddressContacted"];
+            this.contactDate = _data["contactDate"] ? DateOnly.fromJS(_data["contactDate"]) : <any>undefined;
+            this.contactedBy = _data["contactedBy"];
+            this.contactSubject = _data["contactSubject"];
+            this.contactNote = _data["contactNote"];
+            this.requiresAdverseEventReport = _data["requiresAdverseEventReport"];
+        }
+    }
+
+    static fromJS(data: any): CreatePatientContactLogDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new CreatePatientContactLogDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["contactType"] = this.contactType;
+        data["contactMethod"] = this.contactMethod;
+        data["phoneNumberContacted"] = this.phoneNumberContacted;
+        data["mobileNumberContacted"] = this.mobileNumberContacted;
+        data["emailAddressContacted"] = this.emailAddressContacted;
+        data["contactDate"] = this.contactDate ? this.contactDate.toJSON() : <any>undefined;
+        data["contactedBy"] = this.contactedBy;
+        data["contactSubject"] = this.contactSubject;
+        data["contactNote"] = this.contactNote;
+        data["requiresAdverseEventReport"] = this.requiresAdverseEventReport;
+        return data;
+    }
+
+    clone(): CreatePatientContactLogDto {
+        const json = this.toJSON();
+        let result = new CreatePatientContactLogDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface ICreatePatientContactLogDto {
+    contactType: ContactType;
+    contactMethod: ContactMethod;
+    phoneNumberContacted: string | undefined;
+    mobileNumberContacted: string | undefined;
+    emailAddressContacted: string | undefined;
+    contactDate: DateOnly;
+    contactedBy: string | undefined;
+    contactSubject: string | undefined;
+    contactNote: string | undefined;
+    requiresAdverseEventReport: boolean;
+}
+
 export class CreateProgramDto implements ICreateProgramDto {
     programName: string | undefined;
     programOwner: string | undefined;
@@ -2051,6 +9441,211 @@ export interface ICreateProgramDto {
     startDate: Date | undefined;
 }
 
+/** 1 = Pharmacist (Pharmacist) 2 = Pharmacy (Pharmacy) 3 = Patient (Patient) 4 = Prescriber (Prescriber) 5 = ProgramAdministrator (Program Administrator) */
+export enum CustomerType {
+    Pharmacist = 1,
+    Pharmacy = 2,
+    Patient = 3,
+    Prescriber = 4,
+    ProgramAdministrator = 5,
+}
+
+export class DateOfBirth implements IDateOfBirth {
+    readonly day: number;
+    readonly month: number;
+    readonly year: number;
+    readonly birthDate: Date;
+    readonly age: number;
+
+    constructor(data?: IDateOfBirth) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            (<any>this).day = _data["day"];
+            (<any>this).month = _data["month"];
+            (<any>this).year = _data["year"];
+            (<any>this).birthDate = _data["birthDate"] ? new Date(_data["birthDate"].toString()) : <any>undefined;
+            (<any>this).age = _data["age"];
+        }
+    }
+
+    static fromJS(data: any): DateOfBirth {
+        data = typeof data === 'object' ? data : {};
+        let result = new DateOfBirth();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["day"] = this.day;
+        data["month"] = this.month;
+        data["year"] = this.year;
+        data["birthDate"] = this.birthDate ? this.birthDate.toISOString() : <any>undefined;
+        data["age"] = this.age;
+        return data;
+    }
+
+    clone(): DateOfBirth {
+        const json = this.toJSON();
+        let result = new DateOfBirth();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IDateOfBirth {
+    day: number;
+    month: number;
+    year: number;
+    birthDate: Date;
+    age: number;
+}
+
+export class DateOnly implements IDateOnly {
+    year: number;
+    month: number;
+    day: number;
+    dayOfWeek: DayOfWeek;
+    readonly dayOfYear: number;
+    readonly dayNumber: number;
+
+    constructor(data?: IDateOnly) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.year = _data["year"];
+            this.month = _data["month"];
+            this.day = _data["day"];
+            this.dayOfWeek = _data["dayOfWeek"];
+            (<any>this).dayOfYear = _data["dayOfYear"];
+            (<any>this).dayNumber = _data["dayNumber"];
+        }
+    }
+
+    static fromJS(data: any): DateOnly {
+        data = typeof data === 'object' ? data : {};
+        let result = new DateOnly();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["year"] = this.year;
+        data["month"] = this.month;
+        data["day"] = this.day;
+        data["dayOfWeek"] = this.dayOfWeek;
+        data["dayOfYear"] = this.dayOfYear;
+        data["dayNumber"] = this.dayNumber;
+        return data;
+    }
+
+    clone(): DateOnly {
+        const json = this.toJSON();
+        let result = new DateOnly();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IDateOnly {
+    year: number;
+    month: number;
+    day: number;
+    dayOfWeek: DayOfWeek;
+    dayOfYear: number;
+    dayNumber: number;
+}
+
+/** 0 = Sunday 1 = Monday 2 = Tuesday 3 = Wednesday 4 = Thursday 5 = Friday 6 = Saturday */
+export enum DayOfWeek {
+    Sunday = 0,
+    Monday = 1,
+    Tuesday = 2,
+    Wednesday = 3,
+    Thursday = 4,
+    Friday = 5,
+    Saturday = 6,
+}
+
+/** 1 = RemovalRequested (Removal requested) 2 = RecordDuplicated (Record duplicated) 3 = EnteredInError (Entered in error) 4 = Archived (Archived) */
+export enum DeletedReason {
+    RemovalRequested = 1,
+    RecordDuplicated = 2,
+    EnteredInError = 3,
+    Archived = 4,
+}
+
+export class DiscontinuePatientTreatmentByAdminDto implements IDiscontinuePatientTreatmentByAdminDto {
+    discontinueReasonId: number | undefined;
+    requiresAdverseEventReport: boolean;
+    discontinuedOn: Date;
+    discontinuationProvidedByMethod: ContactMethod;
+
+    constructor(data?: IDiscontinuePatientTreatmentByAdminDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.discontinueReasonId = _data["discontinueReasonId"];
+            this.requiresAdverseEventReport = _data["requiresAdverseEventReport"];
+            this.discontinuedOn = _data["discontinuedOn"] ? new Date(_data["discontinuedOn"].toString()) : <any>undefined;
+            this.discontinuationProvidedByMethod = _data["discontinuationProvidedByMethod"];
+        }
+    }
+
+    static fromJS(data: any): DiscontinuePatientTreatmentByAdminDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new DiscontinuePatientTreatmentByAdminDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["discontinueReasonId"] = this.discontinueReasonId;
+        data["requiresAdverseEventReport"] = this.requiresAdverseEventReport;
+        data["discontinuedOn"] = this.discontinuedOn ? this.discontinuedOn.toISOString() : <any>undefined;
+        data["discontinuationProvidedByMethod"] = this.discontinuationProvidedByMethod;
+        return data;
+    }
+
+    clone(): DiscontinuePatientTreatmentByAdminDto {
+        const json = this.toJSON();
+        let result = new DiscontinuePatientTreatmentByAdminDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IDiscontinuePatientTreatmentByAdminDto {
+    discontinueReasonId: number | undefined;
+    requiresAdverseEventReport: boolean;
+    discontinuedOn: Date;
+    discontinuationProvidedByMethod: ContactMethod;
+}
+
 export class DiscontinueTreatmentForPatientDto implements IDiscontinueTreatmentForPatientDto {
     patientId: string;
     programId: string;
@@ -2104,6 +9699,591 @@ export interface IDiscontinueTreatmentForPatientDto {
     programId: string;
     currentUserId: string;
     discontinueReasonId: number | undefined;
+}
+
+export class DiscontinueWithAdverseEventForPatientDto implements IDiscontinueWithAdverseEventForPatientDto {
+    patientId: string;
+    reasonForDiscontiuation: string | undefined;
+    adverseEventDescription: string | undefined;
+    entryDay: number | undefined;
+    entryMonth: number | undefined;
+    entryYear: number | undefined;
+
+    constructor(data?: IDiscontinueWithAdverseEventForPatientDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.patientId = _data["patientId"];
+            this.reasonForDiscontiuation = _data["reasonForDiscontiuation"];
+            this.adverseEventDescription = _data["adverseEventDescription"];
+            this.entryDay = _data["entryDay"];
+            this.entryMonth = _data["entryMonth"];
+            this.entryYear = _data["entryYear"];
+        }
+    }
+
+    static fromJS(data: any): DiscontinueWithAdverseEventForPatientDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new DiscontinueWithAdverseEventForPatientDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["patientId"] = this.patientId;
+        data["reasonForDiscontiuation"] = this.reasonForDiscontiuation;
+        data["adverseEventDescription"] = this.adverseEventDescription;
+        data["entryDay"] = this.entryDay;
+        data["entryMonth"] = this.entryMonth;
+        data["entryYear"] = this.entryYear;
+        return data;
+    }
+
+    clone(): DiscontinueWithAdverseEventForPatientDto {
+        const json = this.toJSON();
+        let result = new DiscontinueWithAdverseEventForPatientDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IDiscontinueWithAdverseEventForPatientDto {
+    patientId: string;
+    reasonForDiscontiuation: string | undefined;
+    adverseEventDescription: string | undefined;
+    entryDay: number | undefined;
+    entryMonth: number | undefined;
+    entryYear: number | undefined;
+}
+
+export class DispensingRecord implements IDispensingRecord {
+    id: string;
+    readonly isDeleted: boolean;
+    readonly deletedOnUtc: Date | undefined;
+    readonly deletedBy: string | undefined;
+    deletedReason: DeletedReason;
+    readonly portalProgramId: string;
+    prescription: Prescription;
+    prescriptionId: string;
+    patient: Patient;
+    readonly patientId: string;
+    pharmacy: Pharmacy;
+    pharmacyId: string;
+    pharmacyAddress: string | undefined;
+    pharmacist: Pharmacist;
+    pharmacistId: string | undefined;
+    pharmacistName: string | undefined;
+    dosageDescription: string | undefined;
+    dispensedOn: Date | undefined;
+    viewedDate: Date | undefined;
+    reviewStatus: ReviewStatus;
+    readonly createdOnUtc: Date;
+    readonly createdBy: string | undefined;
+    readonly lastModifiedOnUtc: Date | undefined;
+    readonly modifiedBy: string | undefined;
+
+    constructor(data?: IDispensingRecord) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            (<any>this).isDeleted = _data["isDeleted"];
+            (<any>this).deletedOnUtc = _data["deletedOnUtc"] ? new Date(_data["deletedOnUtc"].toString()) : <any>undefined;
+            (<any>this).deletedBy = _data["deletedBy"];
+            this.deletedReason = _data["deletedReason"];
+            (<any>this).portalProgramId = _data["portalProgramId"];
+            this.prescription = _data["prescription"] ? Prescription.fromJS(_data["prescription"]) : <any>undefined;
+            this.prescriptionId = _data["prescriptionId"];
+            this.patient = _data["patient"] ? Patient.fromJS(_data["patient"]) : <any>undefined;
+            (<any>this).patientId = _data["patientId"];
+            this.pharmacy = _data["pharmacy"] ? Pharmacy.fromJS(_data["pharmacy"]) : <any>undefined;
+            this.pharmacyId = _data["pharmacyId"];
+            this.pharmacyAddress = _data["pharmacyAddress"];
+            this.pharmacist = _data["pharmacist"] ? Pharmacist.fromJS(_data["pharmacist"]) : <any>undefined;
+            this.pharmacistId = _data["pharmacistId"];
+            this.pharmacistName = _data["pharmacistName"];
+            this.dosageDescription = _data["dosageDescription"];
+            this.dispensedOn = _data["dispensedOn"] ? new Date(_data["dispensedOn"].toString()) : <any>undefined;
+            this.viewedDate = _data["viewedDate"] ? new Date(_data["viewedDate"].toString()) : <any>undefined;
+            this.reviewStatus = _data["reviewStatus"];
+            (<any>this).createdOnUtc = _data["createdOnUtc"] ? new Date(_data["createdOnUtc"].toString()) : <any>undefined;
+            (<any>this).createdBy = _data["createdBy"];
+            (<any>this).lastModifiedOnUtc = _data["lastModifiedOnUtc"] ? new Date(_data["lastModifiedOnUtc"].toString()) : <any>undefined;
+            (<any>this).modifiedBy = _data["modifiedBy"];
+        }
+    }
+
+    static fromJS(data: any): DispensingRecord {
+        data = typeof data === 'object' ? data : {};
+        let result = new DispensingRecord();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["isDeleted"] = this.isDeleted;
+        data["deletedOnUtc"] = this.deletedOnUtc ? this.deletedOnUtc.toISOString() : <any>undefined;
+        data["deletedBy"] = this.deletedBy;
+        data["deletedReason"] = this.deletedReason;
+        data["portalProgramId"] = this.portalProgramId;
+        data["prescription"] = this.prescription ? this.prescription.toJSON() : <any>undefined;
+        data["prescriptionId"] = this.prescriptionId;
+        data["patient"] = this.patient ? this.patient.toJSON() : <any>undefined;
+        data["patientId"] = this.patientId;
+        data["pharmacy"] = this.pharmacy ? this.pharmacy.toJSON() : <any>undefined;
+        data["pharmacyId"] = this.pharmacyId;
+        data["pharmacyAddress"] = this.pharmacyAddress;
+        data["pharmacist"] = this.pharmacist ? this.pharmacist.toJSON() : <any>undefined;
+        data["pharmacistId"] = this.pharmacistId;
+        data["pharmacistName"] = this.pharmacistName;
+        data["dosageDescription"] = this.dosageDescription;
+        data["dispensedOn"] = this.dispensedOn ? this.dispensedOn.toISOString() : <any>undefined;
+        data["viewedDate"] = this.viewedDate ? this.viewedDate.toISOString() : <any>undefined;
+        data["reviewStatus"] = this.reviewStatus;
+        data["createdOnUtc"] = this.createdOnUtc ? this.createdOnUtc.toISOString() : <any>undefined;
+        data["createdBy"] = this.createdBy;
+        data["lastModifiedOnUtc"] = this.lastModifiedOnUtc ? this.lastModifiedOnUtc.toISOString() : <any>undefined;
+        data["modifiedBy"] = this.modifiedBy;
+        return data;
+    }
+
+    clone(): DispensingRecord {
+        const json = this.toJSON();
+        let result = new DispensingRecord();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IDispensingRecord {
+    id: string;
+    isDeleted: boolean;
+    deletedOnUtc: Date | undefined;
+    deletedBy: string | undefined;
+    deletedReason: DeletedReason;
+    portalProgramId: string;
+    prescription: Prescription;
+    prescriptionId: string;
+    patient: Patient;
+    patientId: string;
+    pharmacy: Pharmacy;
+    pharmacyId: string;
+    pharmacyAddress: string | undefined;
+    pharmacist: Pharmacist;
+    pharmacistId: string | undefined;
+    pharmacistName: string | undefined;
+    dosageDescription: string | undefined;
+    dispensedOn: Date | undefined;
+    viewedDate: Date | undefined;
+    reviewStatus: ReviewStatus;
+    createdOnUtc: Date;
+    createdBy: string | undefined;
+    lastModifiedOnUtc: Date | undefined;
+    modifiedBy: string | undefined;
+}
+
+export class DispensingVerificationRecord implements IDispensingVerificationRecord {
+    id: string;
+    readonly isDeleted: boolean;
+    readonly deletedOnUtc: Date | undefined;
+    readonly deletedBy: string | undefined;
+    deletedReason: DeletedReason;
+    readonly domainEvents: DomainEventBase[] | undefined;
+    readonly portalProgramId: string;
+    dispensedOn: Date;
+    treatmentProfile: TreatmentProfile;
+    treatmentProfileId: string;
+    pharmacy: Pharmacy;
+    pharmacyId: string | undefined;
+    pharmacyAccountNumber: string | undefined;
+    pharmacist: Pharmacist;
+    pharmacistId: string;
+    prescriber: Prescriber;
+    prescriberId: string | undefined;
+    medication: Medication;
+    medicationId: number;
+    dosage: Dosage;
+    readonly dosageId: number | undefined;
+    readonly packSize: number | undefined;
+    treatmentCategory: TreatmentCategory;
+    readonly riskAssessmentCarriedOut: boolean | undefined;
+    readonly treatmentRisk: string | undefined;
+    readonly verificationNumber: string | undefined;
+    riskAssessmentOutcome: RiskAssessmentOutcome;
+    readonly viewedDate: Date | undefined;
+    readonly createdOnUtc: Date;
+    readonly createdBy: string | undefined;
+    readonly lastModifiedOnUtc: Date | undefined;
+    readonly modifiedBy: string | undefined;
+    readonly isCancelled: boolean | undefined;
+    readonly cancelledOnUtc: Date | undefined;
+    readonly cancelledBy: string | undefined;
+    readonly cancellationRequestedBy: string | undefined;
+    readonly cancelledReason: string | undefined;
+
+    constructor(data?: IDispensingVerificationRecord) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            (<any>this).isDeleted = _data["isDeleted"];
+            (<any>this).deletedOnUtc = _data["deletedOnUtc"] ? new Date(_data["deletedOnUtc"].toString()) : <any>undefined;
+            (<any>this).deletedBy = _data["deletedBy"];
+            this.deletedReason = _data["deletedReason"];
+            if (Array.isArray(_data["domainEvents"])) {
+                (<any>this).domainEvents = [];
+                for (let item of _data["domainEvents"])
+                    (<any>this).domainEvents.push(DomainEventBase.fromJS(item));
+            }
+            (<any>this).portalProgramId = _data["portalProgramId"];
+            this.dispensedOn = _data["dispensedOn"] ? new Date(_data["dispensedOn"].toString()) : <any>undefined;
+            this.treatmentProfile = _data["treatmentProfile"] ? TreatmentProfile.fromJS(_data["treatmentProfile"]) : <any>undefined;
+            this.treatmentProfileId = _data["treatmentProfileId"];
+            this.pharmacy = _data["pharmacy"] ? Pharmacy.fromJS(_data["pharmacy"]) : <any>undefined;
+            this.pharmacyId = _data["pharmacyId"];
+            this.pharmacyAccountNumber = _data["pharmacyAccountNumber"];
+            this.pharmacist = _data["pharmacist"] ? Pharmacist.fromJS(_data["pharmacist"]) : <any>undefined;
+            this.pharmacistId = _data["pharmacistId"];
+            this.prescriber = _data["prescriber"] ? Prescriber.fromJS(_data["prescriber"]) : <any>undefined;
+            this.prescriberId = _data["prescriberId"];
+            this.medication = _data["medication"] ? Medication.fromJS(_data["medication"]) : <any>undefined;
+            this.medicationId = _data["medicationId"];
+            this.dosage = _data["dosage"] ? Dosage.fromJS(_data["dosage"]) : <any>undefined;
+            (<any>this).dosageId = _data["dosageId"];
+            (<any>this).packSize = _data["packSize"];
+            this.treatmentCategory = _data["treatmentCategory"];
+            (<any>this).riskAssessmentCarriedOut = _data["riskAssessmentCarriedOut"];
+            (<any>this).treatmentRisk = _data["treatmentRisk"];
+            (<any>this).verificationNumber = _data["verificationNumber"];
+            this.riskAssessmentOutcome = _data["riskAssessmentOutcome"];
+            (<any>this).viewedDate = _data["viewedDate"] ? new Date(_data["viewedDate"].toString()) : <any>undefined;
+            (<any>this).createdOnUtc = _data["createdOnUtc"] ? new Date(_data["createdOnUtc"].toString()) : <any>undefined;
+            (<any>this).createdBy = _data["createdBy"];
+            (<any>this).lastModifiedOnUtc = _data["lastModifiedOnUtc"] ? new Date(_data["lastModifiedOnUtc"].toString()) : <any>undefined;
+            (<any>this).modifiedBy = _data["modifiedBy"];
+            (<any>this).isCancelled = _data["isCancelled"];
+            (<any>this).cancelledOnUtc = _data["cancelledOnUtc"] ? new Date(_data["cancelledOnUtc"].toString()) : <any>undefined;
+            (<any>this).cancelledBy = _data["cancelledBy"];
+            (<any>this).cancellationRequestedBy = _data["cancellationRequestedBy"];
+            (<any>this).cancelledReason = _data["cancelledReason"];
+        }
+    }
+
+    static fromJS(data: any): DispensingVerificationRecord {
+        data = typeof data === 'object' ? data : {};
+        let result = new DispensingVerificationRecord();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["isDeleted"] = this.isDeleted;
+        data["deletedOnUtc"] = this.deletedOnUtc ? this.deletedOnUtc.toISOString() : <any>undefined;
+        data["deletedBy"] = this.deletedBy;
+        data["deletedReason"] = this.deletedReason;
+        if (Array.isArray(this.domainEvents)) {
+            data["domainEvents"] = [];
+            for (let item of this.domainEvents)
+                data["domainEvents"].push(item.toJSON());
+        }
+        data["portalProgramId"] = this.portalProgramId;
+        data["dispensedOn"] = this.dispensedOn ? this.dispensedOn.toISOString() : <any>undefined;
+        data["treatmentProfile"] = this.treatmentProfile ? this.treatmentProfile.toJSON() : <any>undefined;
+        data["treatmentProfileId"] = this.treatmentProfileId;
+        data["pharmacy"] = this.pharmacy ? this.pharmacy.toJSON() : <any>undefined;
+        data["pharmacyId"] = this.pharmacyId;
+        data["pharmacyAccountNumber"] = this.pharmacyAccountNumber;
+        data["pharmacist"] = this.pharmacist ? this.pharmacist.toJSON() : <any>undefined;
+        data["pharmacistId"] = this.pharmacistId;
+        data["prescriber"] = this.prescriber ? this.prescriber.toJSON() : <any>undefined;
+        data["prescriberId"] = this.prescriberId;
+        data["medication"] = this.medication ? this.medication.toJSON() : <any>undefined;
+        data["medicationId"] = this.medicationId;
+        data["dosage"] = this.dosage ? this.dosage.toJSON() : <any>undefined;
+        data["dosageId"] = this.dosageId;
+        data["packSize"] = this.packSize;
+        data["treatmentCategory"] = this.treatmentCategory;
+        data["riskAssessmentCarriedOut"] = this.riskAssessmentCarriedOut;
+        data["treatmentRisk"] = this.treatmentRisk;
+        data["verificationNumber"] = this.verificationNumber;
+        data["riskAssessmentOutcome"] = this.riskAssessmentOutcome;
+        data["viewedDate"] = this.viewedDate ? this.viewedDate.toISOString() : <any>undefined;
+        data["createdOnUtc"] = this.createdOnUtc ? this.createdOnUtc.toISOString() : <any>undefined;
+        data["createdBy"] = this.createdBy;
+        data["lastModifiedOnUtc"] = this.lastModifiedOnUtc ? this.lastModifiedOnUtc.toISOString() : <any>undefined;
+        data["modifiedBy"] = this.modifiedBy;
+        data["isCancelled"] = this.isCancelled;
+        data["cancelledOnUtc"] = this.cancelledOnUtc ? this.cancelledOnUtc.toISOString() : <any>undefined;
+        data["cancelledBy"] = this.cancelledBy;
+        data["cancellationRequestedBy"] = this.cancellationRequestedBy;
+        data["cancelledReason"] = this.cancelledReason;
+        return data;
+    }
+
+    clone(): DispensingVerificationRecord {
+        const json = this.toJSON();
+        let result = new DispensingVerificationRecord();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IDispensingVerificationRecord {
+    id: string;
+    isDeleted: boolean;
+    deletedOnUtc: Date | undefined;
+    deletedBy: string | undefined;
+    deletedReason: DeletedReason;
+    domainEvents: DomainEventBase[] | undefined;
+    portalProgramId: string;
+    dispensedOn: Date;
+    treatmentProfile: TreatmentProfile;
+    treatmentProfileId: string;
+    pharmacy: Pharmacy;
+    pharmacyId: string | undefined;
+    pharmacyAccountNumber: string | undefined;
+    pharmacist: Pharmacist;
+    pharmacistId: string;
+    prescriber: Prescriber;
+    prescriberId: string | undefined;
+    medication: Medication;
+    medicationId: number;
+    dosage: Dosage;
+    dosageId: number | undefined;
+    packSize: number | undefined;
+    treatmentCategory: TreatmentCategory;
+    riskAssessmentCarriedOut: boolean | undefined;
+    treatmentRisk: string | undefined;
+    verificationNumber: string | undefined;
+    riskAssessmentOutcome: RiskAssessmentOutcome;
+    viewedDate: Date | undefined;
+    createdOnUtc: Date;
+    createdBy: string | undefined;
+    lastModifiedOnUtc: Date | undefined;
+    modifiedBy: string | undefined;
+    isCancelled: boolean | undefined;
+    cancelledOnUtc: Date | undefined;
+    cancelledBy: string | undefined;
+    cancellationRequestedBy: string | undefined;
+    cancelledReason: string | undefined;
+}
+
+export class DomainEventBase implements IDomainEventBase {
+    readonly dateOccurredOnUtc: Date;
+    readonly programId: string;
+    readonly actionedBy: string | undefined;
+
+    constructor(data?: IDomainEventBase) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            (<any>this).dateOccurredOnUtc = _data["dateOccurredOnUtc"] ? new Date(_data["dateOccurredOnUtc"].toString()) : <any>undefined;
+            (<any>this).programId = _data["programId"];
+            (<any>this).actionedBy = _data["actionedBy"];
+        }
+    }
+
+    static fromJS(data: any): DomainEventBase {
+        data = typeof data === 'object' ? data : {};
+        let result = new DomainEventBase();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["dateOccurredOnUtc"] = this.dateOccurredOnUtc ? this.dateOccurredOnUtc.toISOString() : <any>undefined;
+        data["programId"] = this.programId;
+        data["actionedBy"] = this.actionedBy;
+        return data;
+    }
+
+    clone(): DomainEventBase {
+        const json = this.toJSON();
+        let result = new DomainEventBase();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IDomainEventBase {
+    dateOccurredOnUtc: Date;
+    programId: string;
+    actionedBy: string | undefined;
+}
+
+export class Dosage implements IDosage {
+    id: number;
+    readonly isDeleted: boolean;
+    readonly deletedOnUtc: Date | undefined;
+    readonly deletedBy: string | undefined;
+    deletedReason: DeletedReason;
+    readonly portalProgramId: string;
+    medication: Medication;
+    readonly medicationId: number | undefined;
+    strength: string | undefined;
+    supplyDuration: number;
+    durationType: DurationType;
+    readonly indication: string | undefined;
+    readonly dosageDescription: string | undefined;
+
+    constructor(data?: IDosage) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            (<any>this).isDeleted = _data["isDeleted"];
+            (<any>this).deletedOnUtc = _data["deletedOnUtc"] ? new Date(_data["deletedOnUtc"].toString()) : <any>undefined;
+            (<any>this).deletedBy = _data["deletedBy"];
+            this.deletedReason = _data["deletedReason"];
+            (<any>this).portalProgramId = _data["portalProgramId"];
+            this.medication = _data["medication"] ? Medication.fromJS(_data["medication"]) : <any>undefined;
+            (<any>this).medicationId = _data["medicationId"];
+            this.strength = _data["strength"];
+            this.supplyDuration = _data["supplyDuration"];
+            this.durationType = _data["durationType"];
+            (<any>this).indication = _data["indication"];
+            (<any>this).dosageDescription = _data["dosageDescription"];
+        }
+    }
+
+    static fromJS(data: any): Dosage {
+        data = typeof data === 'object' ? data : {};
+        let result = new Dosage();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["isDeleted"] = this.isDeleted;
+        data["deletedOnUtc"] = this.deletedOnUtc ? this.deletedOnUtc.toISOString() : <any>undefined;
+        data["deletedBy"] = this.deletedBy;
+        data["deletedReason"] = this.deletedReason;
+        data["portalProgramId"] = this.portalProgramId;
+        data["medication"] = this.medication ? this.medication.toJSON() : <any>undefined;
+        data["medicationId"] = this.medicationId;
+        data["strength"] = this.strength;
+        data["supplyDuration"] = this.supplyDuration;
+        data["durationType"] = this.durationType;
+        data["indication"] = this.indication;
+        data["dosageDescription"] = this.dosageDescription;
+        return data;
+    }
+
+    clone(): Dosage {
+        const json = this.toJSON();
+        let result = new Dosage();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IDosage {
+    id: number;
+    isDeleted: boolean;
+    deletedOnUtc: Date | undefined;
+    deletedBy: string | undefined;
+    deletedReason: DeletedReason;
+    portalProgramId: string;
+    medication: Medication;
+    medicationId: number | undefined;
+    strength: string | undefined;
+    supplyDuration: number;
+    durationType: DurationType;
+    indication: string | undefined;
+    dosageDescription: string | undefined;
+}
+
+/** 1 = Days (Days) 2 = Weeks (Weeks) 3 = Months (Months) */
+export enum DurationType {
+    Days = 1,
+    Weeks = 2,
+    Months = 3,
+}
+
+export class EmailAddress implements IEmailAddress {
+    readonly value: string | undefined;
+
+    constructor(data?: IEmailAddress) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            (<any>this).value = _data["value"];
+        }
+    }
+
+    static fromJS(data: any): EmailAddress {
+        data = typeof data === 'object' ? data : {};
+        let result = new EmailAddress();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["value"] = this.value;
+        return data;
+    }
+
+    clone(): EmailAddress {
+        const json = this.toJSON();
+        let result = new EmailAddress();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IEmailAddress {
+    value: string | undefined;
 }
 
 export class ForgotPasswordDto implements IForgotPasswordDto {
@@ -2162,11 +10342,11 @@ export enum Gender {
     NotSpecified = 9,
 }
 
-export class GetPatientEventListResponse implements IGetPatientEventListResponse {
-    eventDate: Date;
-    description: string | undefined;
+export class GetAccessInvitationResponse implements IGetAccessInvitationResponse {
+    invitationId: string;
+    email: string | undefined;
 
-    constructor(data?: IGetPatientEventListResponse) {
+    constructor(data?: IGetAccessInvitationResponse) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -2177,44 +10357,182 @@ export class GetPatientEventListResponse implements IGetPatientEventListResponse
 
     init(_data?: any) {
         if (_data) {
-            this.eventDate = _data["eventDate"] ? new Date(_data["eventDate"].toString()) : <any>undefined;
-            this.description = _data["description"];
+            this.invitationId = _data["invitationId"];
+            this.email = _data["email"];
         }
     }
 
-    static fromJS(data: any): GetPatientEventListResponse {
+    static fromJS(data: any): GetAccessInvitationResponse {
         data = typeof data === 'object' ? data : {};
-        let result = new GetPatientEventListResponse();
+        let result = new GetAccessInvitationResponse();
         result.init(data);
         return result;
     }
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["eventDate"] = this.eventDate ? this.eventDate.toISOString() : <any>undefined;
-        data["description"] = this.description;
+        data["invitationId"] = this.invitationId;
+        data["email"] = this.email;
         return data;
     }
 
-    clone(): GetPatientEventListResponse {
+    clone(): GetAccessInvitationResponse {
         const json = this.toJSON();
-        let result = new GetPatientEventListResponse();
+        let result = new GetAccessInvitationResponse();
         result.init(json);
         return result;
     }
 }
 
-export interface IGetPatientEventListResponse {
-    eventDate: Date;
-    description: string | undefined;
+export interface IGetAccessInvitationResponse {
+    invitationId: string;
+    email: string | undefined;
 }
 
-export class GetPatientEventListResponseIEnumerableApiResponse implements IGetPatientEventListResponseIEnumerableApiResponse {
+export class GetAccessInvitationResponseApiResponse implements IGetAccessInvitationResponseApiResponse {
     isSuccess: boolean;
-    readonly resultObject: GetPatientEventListResponse[] | undefined;
+    resultObject: GetAccessInvitationResponse;
     problemDetails: ProblemDetails;
 
-    constructor(data?: IGetPatientEventListResponseIEnumerableApiResponse) {
+    constructor(data?: IGetAccessInvitationResponseApiResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.isSuccess = _data["isSuccess"];
+            this.resultObject = _data["resultObject"] ? GetAccessInvitationResponse.fromJS(_data["resultObject"]) : <any>undefined;
+            this.problemDetails = _data["problemDetails"] ? ProblemDetails.fromJS(_data["problemDetails"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): GetAccessInvitationResponseApiResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetAccessInvitationResponseApiResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["isSuccess"] = this.isSuccess;
+        data["resultObject"] = this.resultObject ? this.resultObject.toJSON() : <any>undefined;
+        data["problemDetails"] = this.problemDetails ? this.problemDetails.toJSON() : <any>undefined;
+        return data;
+    }
+
+    clone(): GetAccessInvitationResponseApiResponse {
+        const json = this.toJSON();
+        let result = new GetAccessInvitationResponseApiResponse();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetAccessInvitationResponseApiResponse {
+    isSuccess: boolean;
+    resultObject: GetAccessInvitationResponse;
+    problemDetails: ProblemDetails;
+}
+
+export class GetAllPharmaciesResponse implements IGetAllPharmaciesResponse {
+    id: string;
+    name: string | undefined;
+    unitNumber: string | undefined;
+    streetAddress: string | undefined;
+    city: string | undefined;
+    state: AddressState;
+    postCode: string | undefined;
+    phone: string | undefined;
+    email: string | undefined;
+    accountReferenceNumber: string | undefined;
+    pharmacyAccountType: PharmacyAccountType;
+    programAccountApproved: boolean;
+
+    constructor(data?: IGetAllPharmaciesResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.name = _data["name"];
+            this.unitNumber = _data["unitNumber"];
+            this.streetAddress = _data["streetAddress"];
+            this.city = _data["city"];
+            this.state = _data["state"];
+            this.postCode = _data["postCode"];
+            this.phone = _data["phone"];
+            this.email = _data["email"];
+            this.accountReferenceNumber = _data["accountReferenceNumber"];
+            this.pharmacyAccountType = _data["pharmacyAccountType"];
+            this.programAccountApproved = _data["programAccountApproved"];
+        }
+    }
+
+    static fromJS(data: any): GetAllPharmaciesResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetAllPharmaciesResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["name"] = this.name;
+        data["unitNumber"] = this.unitNumber;
+        data["streetAddress"] = this.streetAddress;
+        data["city"] = this.city;
+        data["state"] = this.state;
+        data["postCode"] = this.postCode;
+        data["phone"] = this.phone;
+        data["email"] = this.email;
+        data["accountReferenceNumber"] = this.accountReferenceNumber;
+        data["pharmacyAccountType"] = this.pharmacyAccountType;
+        data["programAccountApproved"] = this.programAccountApproved;
+        return data;
+    }
+
+    clone(): GetAllPharmaciesResponse {
+        const json = this.toJSON();
+        let result = new GetAllPharmaciesResponse();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetAllPharmaciesResponse {
+    id: string;
+    name: string | undefined;
+    unitNumber: string | undefined;
+    streetAddress: string | undefined;
+    city: string | undefined;
+    state: AddressState;
+    postCode: string | undefined;
+    phone: string | undefined;
+    email: string | undefined;
+    accountReferenceNumber: string | undefined;
+    pharmacyAccountType: PharmacyAccountType;
+    programAccountApproved: boolean;
+}
+
+export class GetAllPharmaciesResponseIEnumerableApiResponse implements IGetAllPharmaciesResponseIEnumerableApiResponse {
+    isSuccess: boolean;
+    readonly resultObject: GetAllPharmaciesResponse[] | undefined;
+    problemDetails: ProblemDetails;
+
+    constructor(data?: IGetAllPharmaciesResponseIEnumerableApiResponse) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -2229,15 +10547,15 @@ export class GetPatientEventListResponseIEnumerableApiResponse implements IGetPa
             if (Array.isArray(_data["resultObject"])) {
                 (<any>this).resultObject = [];
                 for (let item of _data["resultObject"])
-                    (<any>this).resultObject.push(GetPatientEventListResponse.fromJS(item));
+                    (<any>this).resultObject.push(GetAllPharmaciesResponse.fromJS(item));
             }
             this.problemDetails = _data["problemDetails"] ? ProblemDetails.fromJS(_data["problemDetails"]) : <any>undefined;
         }
     }
 
-    static fromJS(data: any): GetPatientEventListResponseIEnumerableApiResponse {
+    static fromJS(data: any): GetAllPharmaciesResponseIEnumerableApiResponse {
         data = typeof data === 'object' ? data : {};
-        let result = new GetPatientEventListResponseIEnumerableApiResponse();
+        let result = new GetAllPharmaciesResponseIEnumerableApiResponse();
         result.init(data);
         return result;
     }
@@ -2254,17 +10572,3204 @@ export class GetPatientEventListResponseIEnumerableApiResponse implements IGetPa
         return data;
     }
 
-    clone(): GetPatientEventListResponseIEnumerableApiResponse {
+    clone(): GetAllPharmaciesResponseIEnumerableApiResponse {
         const json = this.toJSON();
-        let result = new GetPatientEventListResponseIEnumerableApiResponse();
+        let result = new GetAllPharmaciesResponseIEnumerableApiResponse();
         result.init(json);
         return result;
     }
 }
 
-export interface IGetPatientEventListResponseIEnumerableApiResponse {
+export interface IGetAllPharmaciesResponseIEnumerableApiResponse {
     isSuccess: boolean;
-    resultObject: GetPatientEventListResponse[] | undefined;
+    resultObject: GetAllPharmaciesResponse[] | undefined;
+    problemDetails: ProblemDetails;
+}
+
+export class GetClinicsForPrescriberResponse implements IGetClinicsForPrescriberResponse {
+    clinicId: string;
+    clinicName: string | undefined;
+    unitNumber: string | undefined;
+    streetAddress: string | undefined;
+    city: string | undefined;
+    state: AddressState;
+    postcode: string | undefined;
+    notificationEmail: string | undefined;
+    phone: string | undefined;
+
+    constructor(data?: IGetClinicsForPrescriberResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.clinicId = _data["clinicId"];
+            this.clinicName = _data["clinicName"];
+            this.unitNumber = _data["unitNumber"];
+            this.streetAddress = _data["streetAddress"];
+            this.city = _data["city"];
+            this.state = _data["state"];
+            this.postcode = _data["postcode"];
+            this.notificationEmail = _data["notificationEmail"];
+            this.phone = _data["phone"];
+        }
+    }
+
+    static fromJS(data: any): GetClinicsForPrescriberResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetClinicsForPrescriberResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["clinicId"] = this.clinicId;
+        data["clinicName"] = this.clinicName;
+        data["unitNumber"] = this.unitNumber;
+        data["streetAddress"] = this.streetAddress;
+        data["city"] = this.city;
+        data["state"] = this.state;
+        data["postcode"] = this.postcode;
+        data["notificationEmail"] = this.notificationEmail;
+        data["phone"] = this.phone;
+        return data;
+    }
+
+    clone(): GetClinicsForPrescriberResponse {
+        const json = this.toJSON();
+        let result = new GetClinicsForPrescriberResponse();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetClinicsForPrescriberResponse {
+    clinicId: string;
+    clinicName: string | undefined;
+    unitNumber: string | undefined;
+    streetAddress: string | undefined;
+    city: string | undefined;
+    state: AddressState;
+    postcode: string | undefined;
+    notificationEmail: string | undefined;
+    phone: string | undefined;
+}
+
+export class GetClinicsForPrescriberResponseIEnumerableApiResponse implements IGetClinicsForPrescriberResponseIEnumerableApiResponse {
+    isSuccess: boolean;
+    readonly resultObject: GetClinicsForPrescriberResponse[] | undefined;
+    problemDetails: ProblemDetails;
+
+    constructor(data?: IGetClinicsForPrescriberResponseIEnumerableApiResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.isSuccess = _data["isSuccess"];
+            if (Array.isArray(_data["resultObject"])) {
+                (<any>this).resultObject = [];
+                for (let item of _data["resultObject"])
+                    (<any>this).resultObject.push(GetClinicsForPrescriberResponse.fromJS(item));
+            }
+            this.problemDetails = _data["problemDetails"] ? ProblemDetails.fromJS(_data["problemDetails"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): GetClinicsForPrescriberResponseIEnumerableApiResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetClinicsForPrescriberResponseIEnumerableApiResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["isSuccess"] = this.isSuccess;
+        if (Array.isArray(this.resultObject)) {
+            data["resultObject"] = [];
+            for (let item of this.resultObject)
+                data["resultObject"].push(item.toJSON());
+        }
+        data["problemDetails"] = this.problemDetails ? this.problemDetails.toJSON() : <any>undefined;
+        return data;
+    }
+
+    clone(): GetClinicsForPrescriberResponseIEnumerableApiResponse {
+        const json = this.toJSON();
+        let result = new GetClinicsForPrescriberResponseIEnumerableApiResponse();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetClinicsForPrescriberResponseIEnumerableApiResponse {
+    isSuccess: boolean;
+    resultObject: GetClinicsForPrescriberResponse[] | undefined;
+    problemDetails: ProblemDetails;
+}
+
+export class GetClinicsForProgramAdminResponse implements IGetClinicsForProgramAdminResponse {
+    id: string;
+    name: string | undefined;
+    unitNumber: string | undefined;
+    streetAddress: string | undefined;
+    city: string | undefined;
+    state: AddressState;
+    postCode: string | undefined;
+    phone: string | undefined;
+    email: string | undefined;
+
+    constructor(data?: IGetClinicsForProgramAdminResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.name = _data["name"];
+            this.unitNumber = _data["unitNumber"];
+            this.streetAddress = _data["streetAddress"];
+            this.city = _data["city"];
+            this.state = _data["state"];
+            this.postCode = _data["postCode"];
+            this.phone = _data["phone"];
+            this.email = _data["email"];
+        }
+    }
+
+    static fromJS(data: any): GetClinicsForProgramAdminResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetClinicsForProgramAdminResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["name"] = this.name;
+        data["unitNumber"] = this.unitNumber;
+        data["streetAddress"] = this.streetAddress;
+        data["city"] = this.city;
+        data["state"] = this.state;
+        data["postCode"] = this.postCode;
+        data["phone"] = this.phone;
+        data["email"] = this.email;
+        return data;
+    }
+
+    clone(): GetClinicsForProgramAdminResponse {
+        const json = this.toJSON();
+        let result = new GetClinicsForProgramAdminResponse();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetClinicsForProgramAdminResponse {
+    id: string;
+    name: string | undefined;
+    unitNumber: string | undefined;
+    streetAddress: string | undefined;
+    city: string | undefined;
+    state: AddressState;
+    postCode: string | undefined;
+    phone: string | undefined;
+    email: string | undefined;
+}
+
+export class GetClinicsForProgramAdminResponseIEnumerableApiResponse implements IGetClinicsForProgramAdminResponseIEnumerableApiResponse {
+    isSuccess: boolean;
+    readonly resultObject: GetClinicsForProgramAdminResponse[] | undefined;
+    problemDetails: ProblemDetails;
+
+    constructor(data?: IGetClinicsForProgramAdminResponseIEnumerableApiResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.isSuccess = _data["isSuccess"];
+            if (Array.isArray(_data["resultObject"])) {
+                (<any>this).resultObject = [];
+                for (let item of _data["resultObject"])
+                    (<any>this).resultObject.push(GetClinicsForProgramAdminResponse.fromJS(item));
+            }
+            this.problemDetails = _data["problemDetails"] ? ProblemDetails.fromJS(_data["problemDetails"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): GetClinicsForProgramAdminResponseIEnumerableApiResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetClinicsForProgramAdminResponseIEnumerableApiResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["isSuccess"] = this.isSuccess;
+        if (Array.isArray(this.resultObject)) {
+            data["resultObject"] = [];
+            for (let item of this.resultObject)
+                data["resultObject"].push(item.toJSON());
+        }
+        data["problemDetails"] = this.problemDetails ? this.problemDetails.toJSON() : <any>undefined;
+        return data;
+    }
+
+    clone(): GetClinicsForProgramAdminResponseIEnumerableApiResponse {
+        const json = this.toJSON();
+        let result = new GetClinicsForProgramAdminResponseIEnumerableApiResponse();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetClinicsForProgramAdminResponseIEnumerableApiResponse {
+    isSuccess: boolean;
+    resultObject: GetClinicsForProgramAdminResponse[] | undefined;
+    problemDetails: ProblemDetails;
+}
+
+export class GetContactListForAdminResponse implements IGetContactListForAdminResponse {
+    id: string;
+    type: ContactType;
+    date: Date;
+    subject: string | undefined;
+    senderName: string | undefined;
+    note: string | undefined;
+    enteredByName: string | undefined;
+    adverseEventReported: boolean;
+    adverseEventReconciled: boolean;
+
+    constructor(data?: IGetContactListForAdminResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.type = _data["type"];
+            this.date = _data["date"] ? new Date(_data["date"].toString()) : <any>undefined;
+            this.subject = _data["subject"];
+            this.senderName = _data["senderName"];
+            this.note = _data["note"];
+            this.enteredByName = _data["enteredByName"];
+            this.adverseEventReported = _data["adverseEventReported"];
+            this.adverseEventReconciled = _data["adverseEventReconciled"];
+        }
+    }
+
+    static fromJS(data: any): GetContactListForAdminResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetContactListForAdminResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["type"] = this.type;
+        data["date"] = this.date ? this.date.toISOString() : <any>undefined;
+        data["subject"] = this.subject;
+        data["senderName"] = this.senderName;
+        data["note"] = this.note;
+        data["enteredByName"] = this.enteredByName;
+        data["adverseEventReported"] = this.adverseEventReported;
+        data["adverseEventReconciled"] = this.adverseEventReconciled;
+        return data;
+    }
+
+    clone(): GetContactListForAdminResponse {
+        const json = this.toJSON();
+        let result = new GetContactListForAdminResponse();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetContactListForAdminResponse {
+    id: string;
+    type: ContactType;
+    date: Date;
+    subject: string | undefined;
+    senderName: string | undefined;
+    note: string | undefined;
+    enteredByName: string | undefined;
+    adverseEventReported: boolean;
+    adverseEventReconciled: boolean;
+}
+
+export class GetContactListForAdminResponseIEnumerableApiResponse implements IGetContactListForAdminResponseIEnumerableApiResponse {
+    isSuccess: boolean;
+    readonly resultObject: GetContactListForAdminResponse[] | undefined;
+    problemDetails: ProblemDetails;
+
+    constructor(data?: IGetContactListForAdminResponseIEnumerableApiResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.isSuccess = _data["isSuccess"];
+            if (Array.isArray(_data["resultObject"])) {
+                (<any>this).resultObject = [];
+                for (let item of _data["resultObject"])
+                    (<any>this).resultObject.push(GetContactListForAdminResponse.fromJS(item));
+            }
+            this.problemDetails = _data["problemDetails"] ? ProblemDetails.fromJS(_data["problemDetails"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): GetContactListForAdminResponseIEnumerableApiResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetContactListForAdminResponseIEnumerableApiResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["isSuccess"] = this.isSuccess;
+        if (Array.isArray(this.resultObject)) {
+            data["resultObject"] = [];
+            for (let item of this.resultObject)
+                data["resultObject"].push(item.toJSON());
+        }
+        data["problemDetails"] = this.problemDetails ? this.problemDetails.toJSON() : <any>undefined;
+        return data;
+    }
+
+    clone(): GetContactListForAdminResponseIEnumerableApiResponse {
+        const json = this.toJSON();
+        let result = new GetContactListForAdminResponseIEnumerableApiResponse();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetContactListForAdminResponseIEnumerableApiResponse {
+    isSuccess: boolean;
+    resultObject: GetContactListForAdminResponse[] | undefined;
+    problemDetails: ProblemDetails;
+}
+
+export class GetDiscontinueReasonsResponse implements IGetDiscontinueReasonsResponse {
+    id: number;
+    description: string | undefined;
+
+    constructor(data?: IGetDiscontinueReasonsResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.description = _data["description"];
+        }
+    }
+
+    static fromJS(data: any): GetDiscontinueReasonsResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetDiscontinueReasonsResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["description"] = this.description;
+        return data;
+    }
+
+    clone(): GetDiscontinueReasonsResponse {
+        const json = this.toJSON();
+        let result = new GetDiscontinueReasonsResponse();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetDiscontinueReasonsResponse {
+    id: number;
+    description: string | undefined;
+}
+
+export class GetDiscontinueReasonsResponseIEnumerableApiResponse implements IGetDiscontinueReasonsResponseIEnumerableApiResponse {
+    isSuccess: boolean;
+    readonly resultObject: GetDiscontinueReasonsResponse[] | undefined;
+    problemDetails: ProblemDetails;
+
+    constructor(data?: IGetDiscontinueReasonsResponseIEnumerableApiResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.isSuccess = _data["isSuccess"];
+            if (Array.isArray(_data["resultObject"])) {
+                (<any>this).resultObject = [];
+                for (let item of _data["resultObject"])
+                    (<any>this).resultObject.push(GetDiscontinueReasonsResponse.fromJS(item));
+            }
+            this.problemDetails = _data["problemDetails"] ? ProblemDetails.fromJS(_data["problemDetails"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): GetDiscontinueReasonsResponseIEnumerableApiResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetDiscontinueReasonsResponseIEnumerableApiResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["isSuccess"] = this.isSuccess;
+        if (Array.isArray(this.resultObject)) {
+            data["resultObject"] = [];
+            for (let item of this.resultObject)
+                data["resultObject"].push(item.toJSON());
+        }
+        data["problemDetails"] = this.problemDetails ? this.problemDetails.toJSON() : <any>undefined;
+        return data;
+    }
+
+    clone(): GetDiscontinueReasonsResponseIEnumerableApiResponse {
+        const json = this.toJSON();
+        let result = new GetDiscontinueReasonsResponseIEnumerableApiResponse();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetDiscontinueReasonsResponseIEnumerableApiResponse {
+    isSuccess: boolean;
+    resultObject: GetDiscontinueReasonsResponse[] | undefined;
+    problemDetails: ProblemDetails;
+}
+
+export class GetDispenseVerificationDetailsForEditingResponse implements IGetDispenseVerificationDetailsForEditingResponse {
+    id: string;
+    dispensedOn: Date;
+    patientFullName: string | undefined;
+    patientDateOfBirth: Date | undefined;
+    prescriberId: string;
+    prescriberName: string | undefined;
+    pharmacy: Pharmacy;
+    pharmacyId: string | undefined;
+    pharmacyName: string | undefined;
+    pharmacyAccountNumber: string | undefined;
+    pharmacistId: string;
+    pharmacistName: string | undefined;
+    pharmacistAhpraNumber: string | undefined;
+    medicationId: number;
+    medicationName: string | undefined;
+    dosageId: number | undefined;
+    dosageDescription: string | undefined;
+    packSize: number | undefined;
+    treatmentCategory: TreatmentCategory;
+    treatmentCategoryDescription: string | undefined;
+    riskAssessmentCarriedOut: boolean | undefined;
+    verificationNumber: string | undefined;
+    riskAssessmentOutcome: RiskAssessmentOutcome;
+    riskAssessmentOutcomeDescription: string | undefined;
+    isCancelled: boolean | undefined;
+    cancelledOnUtc: Date | undefined;
+    cancelledBy: string | undefined;
+    cancellationRequestedBy: string | undefined;
+
+    constructor(data?: IGetDispenseVerificationDetailsForEditingResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.dispensedOn = _data["dispensedOn"] ? new Date(_data["dispensedOn"].toString()) : <any>undefined;
+            this.patientFullName = _data["patientFullName"];
+            this.patientDateOfBirth = _data["patientDateOfBirth"] ? new Date(_data["patientDateOfBirth"].toString()) : <any>undefined;
+            this.prescriberId = _data["prescriberId"];
+            this.prescriberName = _data["prescriberName"];
+            this.pharmacy = _data["pharmacy"] ? Pharmacy.fromJS(_data["pharmacy"]) : <any>undefined;
+            this.pharmacyId = _data["pharmacyId"];
+            this.pharmacyName = _data["pharmacyName"];
+            this.pharmacyAccountNumber = _data["pharmacyAccountNumber"];
+            this.pharmacistId = _data["pharmacistId"];
+            this.pharmacistName = _data["pharmacistName"];
+            this.pharmacistAhpraNumber = _data["pharmacistAhpraNumber"];
+            this.medicationId = _data["medicationId"];
+            this.medicationName = _data["medicationName"];
+            this.dosageId = _data["dosageId"];
+            this.dosageDescription = _data["dosageDescription"];
+            this.packSize = _data["packSize"];
+            this.treatmentCategory = _data["treatmentCategory"];
+            this.treatmentCategoryDescription = _data["treatmentCategoryDescription"];
+            this.riskAssessmentCarriedOut = _data["riskAssessmentCarriedOut"];
+            this.verificationNumber = _data["verificationNumber"];
+            this.riskAssessmentOutcome = _data["riskAssessmentOutcome"];
+            this.riskAssessmentOutcomeDescription = _data["riskAssessmentOutcomeDescription"];
+            this.isCancelled = _data["isCancelled"];
+            this.cancelledOnUtc = _data["cancelledOnUtc"] ? new Date(_data["cancelledOnUtc"].toString()) : <any>undefined;
+            this.cancelledBy = _data["cancelledBy"];
+            this.cancellationRequestedBy = _data["cancellationRequestedBy"];
+        }
+    }
+
+    static fromJS(data: any): GetDispenseVerificationDetailsForEditingResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetDispenseVerificationDetailsForEditingResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["dispensedOn"] = this.dispensedOn ? this.dispensedOn.toISOString() : <any>undefined;
+        data["patientFullName"] = this.patientFullName;
+        data["patientDateOfBirth"] = this.patientDateOfBirth ? this.patientDateOfBirth.toISOString() : <any>undefined;
+        data["prescriberId"] = this.prescriberId;
+        data["prescriberName"] = this.prescriberName;
+        data["pharmacy"] = this.pharmacy ? this.pharmacy.toJSON() : <any>undefined;
+        data["pharmacyId"] = this.pharmacyId;
+        data["pharmacyName"] = this.pharmacyName;
+        data["pharmacyAccountNumber"] = this.pharmacyAccountNumber;
+        data["pharmacistId"] = this.pharmacistId;
+        data["pharmacistName"] = this.pharmacistName;
+        data["pharmacistAhpraNumber"] = this.pharmacistAhpraNumber;
+        data["medicationId"] = this.medicationId;
+        data["medicationName"] = this.medicationName;
+        data["dosageId"] = this.dosageId;
+        data["dosageDescription"] = this.dosageDescription;
+        data["packSize"] = this.packSize;
+        data["treatmentCategory"] = this.treatmentCategory;
+        data["treatmentCategoryDescription"] = this.treatmentCategoryDescription;
+        data["riskAssessmentCarriedOut"] = this.riskAssessmentCarriedOut;
+        data["verificationNumber"] = this.verificationNumber;
+        data["riskAssessmentOutcome"] = this.riskAssessmentOutcome;
+        data["riskAssessmentOutcomeDescription"] = this.riskAssessmentOutcomeDescription;
+        data["isCancelled"] = this.isCancelled;
+        data["cancelledOnUtc"] = this.cancelledOnUtc ? this.cancelledOnUtc.toISOString() : <any>undefined;
+        data["cancelledBy"] = this.cancelledBy;
+        data["cancellationRequestedBy"] = this.cancellationRequestedBy;
+        return data;
+    }
+
+    clone(): GetDispenseVerificationDetailsForEditingResponse {
+        const json = this.toJSON();
+        let result = new GetDispenseVerificationDetailsForEditingResponse();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetDispenseVerificationDetailsForEditingResponse {
+    id: string;
+    dispensedOn: Date;
+    patientFullName: string | undefined;
+    patientDateOfBirth: Date | undefined;
+    prescriberId: string;
+    prescriberName: string | undefined;
+    pharmacy: Pharmacy;
+    pharmacyId: string | undefined;
+    pharmacyName: string | undefined;
+    pharmacyAccountNumber: string | undefined;
+    pharmacistId: string;
+    pharmacistName: string | undefined;
+    pharmacistAhpraNumber: string | undefined;
+    medicationId: number;
+    medicationName: string | undefined;
+    dosageId: number | undefined;
+    dosageDescription: string | undefined;
+    packSize: number | undefined;
+    treatmentCategory: TreatmentCategory;
+    treatmentCategoryDescription: string | undefined;
+    riskAssessmentCarriedOut: boolean | undefined;
+    verificationNumber: string | undefined;
+    riskAssessmentOutcome: RiskAssessmentOutcome;
+    riskAssessmentOutcomeDescription: string | undefined;
+    isCancelled: boolean | undefined;
+    cancelledOnUtc: Date | undefined;
+    cancelledBy: string | undefined;
+    cancellationRequestedBy: string | undefined;
+}
+
+export class GetDispenseVerificationDetailsForEditingResponseApiResponse implements IGetDispenseVerificationDetailsForEditingResponseApiResponse {
+    isSuccess: boolean;
+    resultObject: GetDispenseVerificationDetailsForEditingResponse;
+    problemDetails: ProblemDetails;
+
+    constructor(data?: IGetDispenseVerificationDetailsForEditingResponseApiResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.isSuccess = _data["isSuccess"];
+            this.resultObject = _data["resultObject"] ? GetDispenseVerificationDetailsForEditingResponse.fromJS(_data["resultObject"]) : <any>undefined;
+            this.problemDetails = _data["problemDetails"] ? ProblemDetails.fromJS(_data["problemDetails"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): GetDispenseVerificationDetailsForEditingResponseApiResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetDispenseVerificationDetailsForEditingResponseApiResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["isSuccess"] = this.isSuccess;
+        data["resultObject"] = this.resultObject ? this.resultObject.toJSON() : <any>undefined;
+        data["problemDetails"] = this.problemDetails ? this.problemDetails.toJSON() : <any>undefined;
+        return data;
+    }
+
+    clone(): GetDispenseVerificationDetailsForEditingResponseApiResponse {
+        const json = this.toJSON();
+        let result = new GetDispenseVerificationDetailsForEditingResponseApiResponse();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetDispenseVerificationDetailsForEditingResponseApiResponse {
+    isSuccess: boolean;
+    resultObject: GetDispenseVerificationDetailsForEditingResponse;
+    problemDetails: ProblemDetails;
+}
+
+export class GetDispensingVerificationListResponse implements IGetDispensingVerificationListResponse {
+    id: string;
+    createdOnUtc: Date;
+    pharmacistId: string | undefined;
+    pharmacistTitle: Title;
+    pharmacistFirstName: string | undefined;
+    pharmacistLastName: string | undefined;
+    pharmacistAhpra: string | undefined;
+    dispensedMedicationId: number | undefined;
+    dispsensedMedication: string | undefined;
+    dispensedDosageId: number | undefined;
+    dispensedStrength: string | undefined;
+    dispensedQty: number | undefined;
+    dispensedOn: Date | undefined;
+    pharmacyId: string | undefined;
+    pharmacyName: string | undefined;
+    pharmacyAddressUnitNumber: string | undefined;
+    pharmacyStreetAddress: string | undefined;
+    pharmacyAddressLine2: string | undefined;
+    pharmacyAddressCity: string | undefined;
+    pharmacyAddressPostcode: string | undefined;
+    pharmacyAddressState: AddressState;
+    pharmacyAccountRefNumber: string | undefined;
+    pharmacyAccountType: PharmacyAccountType;
+    verificationNumber: string | undefined;
+    riskAssessmentCarriedOut: boolean | undefined;
+    riskAssessmentOutcome: RiskAssessmentOutcome;
+    portalProgramId: string | undefined;
+    treatmentRisk: string | undefined;
+    treatmentProfileId: string | undefined;
+    treatmentCategory: TreatmentCategory;
+    patientId: string | undefined;
+    patientTitle: Title;
+    patientFirstName: string | undefined;
+    patientLastName: string | undefined;
+    patientMiddleName: string | undefined;
+    patientFullName: string | undefined;
+    dateOfBirth: Date | undefined;
+    birthDay: number | undefined;
+    birthMonth: number | undefined;
+    birthYear: number | undefined;
+    patientUnitNumber: string | undefined;
+    patientStreetAddress: string | undefined;
+    patientAddressLine2: string | undefined;
+    patientAddressCity: string | undefined;
+    patientAddressPostcode: string | undefined;
+    patientAddressState: AddressState;
+    prescriberId: string | undefined;
+    prescriberNumber: string | undefined;
+    prescriberAhpra: string | undefined;
+    prescriberTitle: Title;
+    prescriberFirstName: string | undefined;
+    prescriberLastName: string | undefined;
+    prescriberEmail: string | undefined;
+    clinicId: string | undefined;
+    clinicName: string | undefined;
+    clinicUnitNumber: string | undefined;
+    clinicStreetAddress: string | undefined;
+    clinicStreetAddressLine2: string | undefined;
+    clinicCity: string | undefined;
+    clinicPostcode: string | undefined;
+    clinicState: AddressState;
+
+    constructor(data?: IGetDispensingVerificationListResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.createdOnUtc = _data["createdOnUtc"] ? new Date(_data["createdOnUtc"].toString()) : <any>undefined;
+            this.pharmacistId = _data["pharmacistId"];
+            this.pharmacistTitle = _data["pharmacistTitle"];
+            this.pharmacistFirstName = _data["pharmacistFirstName"];
+            this.pharmacistLastName = _data["pharmacistLastName"];
+            this.pharmacistAhpra = _data["pharmacistAhpra"];
+            this.dispensedMedicationId = _data["dispensedMedicationId"];
+            this.dispsensedMedication = _data["dispsensedMedication"];
+            this.dispensedDosageId = _data["dispensedDosageId"];
+            this.dispensedStrength = _data["dispensedStrength"];
+            this.dispensedQty = _data["dispensedQty"];
+            this.dispensedOn = _data["dispensedOn"] ? new Date(_data["dispensedOn"].toString()) : <any>undefined;
+            this.pharmacyId = _data["pharmacyId"];
+            this.pharmacyName = _data["pharmacyName"];
+            this.pharmacyAddressUnitNumber = _data["pharmacyAddressUnitNumber"];
+            this.pharmacyStreetAddress = _data["pharmacyStreetAddress"];
+            this.pharmacyAddressLine2 = _data["pharmacyAddressLine2"];
+            this.pharmacyAddressCity = _data["pharmacyAddressCity"];
+            this.pharmacyAddressPostcode = _data["pharmacyAddressPostcode"];
+            this.pharmacyAddressState = _data["pharmacyAddressState"];
+            this.pharmacyAccountRefNumber = _data["pharmacyAccountRefNumber"];
+            this.pharmacyAccountType = _data["pharmacyAccountType"];
+            this.verificationNumber = _data["verificationNumber"];
+            this.riskAssessmentCarriedOut = _data["riskAssessmentCarriedOut"];
+            this.riskAssessmentOutcome = _data["riskAssessmentOutcome"];
+            this.portalProgramId = _data["portalProgramId"];
+            this.treatmentRisk = _data["treatmentRisk"];
+            this.treatmentProfileId = _data["treatmentProfileId"];
+            this.treatmentCategory = _data["treatmentCategory"];
+            this.patientId = _data["patientId"];
+            this.patientTitle = _data["patientTitle"];
+            this.patientFirstName = _data["patientFirstName"];
+            this.patientLastName = _data["patientLastName"];
+            this.patientMiddleName = _data["patientMiddleName"];
+            this.patientFullName = _data["patientFullName"];
+            this.dateOfBirth = _data["dateOfBirth"] ? new Date(_data["dateOfBirth"].toString()) : <any>undefined;
+            this.birthDay = _data["birthDay"];
+            this.birthMonth = _data["birthMonth"];
+            this.birthYear = _data["birthYear"];
+            this.patientUnitNumber = _data["patientUnitNumber"];
+            this.patientStreetAddress = _data["patientStreetAddress"];
+            this.patientAddressLine2 = _data["patientAddressLine2"];
+            this.patientAddressCity = _data["patientAddressCity"];
+            this.patientAddressPostcode = _data["patientAddressPostcode"];
+            this.patientAddressState = _data["patientAddressState"];
+            this.prescriberId = _data["prescriberId"];
+            this.prescriberNumber = _data["prescriberNumber"];
+            this.prescriberAhpra = _data["prescriberAhpra"];
+            this.prescriberTitle = _data["prescriberTitle"];
+            this.prescriberFirstName = _data["prescriberFirstName"];
+            this.prescriberLastName = _data["prescriberLastName"];
+            this.prescriberEmail = _data["prescriberEmail"];
+            this.clinicId = _data["clinicId"];
+            this.clinicName = _data["clinicName"];
+            this.clinicUnitNumber = _data["clinicUnitNumber"];
+            this.clinicStreetAddress = _data["clinicStreetAddress"];
+            this.clinicStreetAddressLine2 = _data["clinicStreetAddressLine2"];
+            this.clinicCity = _data["clinicCity"];
+            this.clinicPostcode = _data["clinicPostcode"];
+            this.clinicState = _data["clinicState"];
+        }
+    }
+
+    static fromJS(data: any): GetDispensingVerificationListResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetDispensingVerificationListResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["createdOnUtc"] = this.createdOnUtc ? this.createdOnUtc.toISOString() : <any>undefined;
+        data["pharmacistId"] = this.pharmacistId;
+        data["pharmacistTitle"] = this.pharmacistTitle;
+        data["pharmacistFirstName"] = this.pharmacistFirstName;
+        data["pharmacistLastName"] = this.pharmacistLastName;
+        data["pharmacistAhpra"] = this.pharmacistAhpra;
+        data["dispensedMedicationId"] = this.dispensedMedicationId;
+        data["dispsensedMedication"] = this.dispsensedMedication;
+        data["dispensedDosageId"] = this.dispensedDosageId;
+        data["dispensedStrength"] = this.dispensedStrength;
+        data["dispensedQty"] = this.dispensedQty;
+        data["dispensedOn"] = this.dispensedOn ? this.dispensedOn.toISOString() : <any>undefined;
+        data["pharmacyId"] = this.pharmacyId;
+        data["pharmacyName"] = this.pharmacyName;
+        data["pharmacyAddressUnitNumber"] = this.pharmacyAddressUnitNumber;
+        data["pharmacyStreetAddress"] = this.pharmacyStreetAddress;
+        data["pharmacyAddressLine2"] = this.pharmacyAddressLine2;
+        data["pharmacyAddressCity"] = this.pharmacyAddressCity;
+        data["pharmacyAddressPostcode"] = this.pharmacyAddressPostcode;
+        data["pharmacyAddressState"] = this.pharmacyAddressState;
+        data["pharmacyAccountRefNumber"] = this.pharmacyAccountRefNumber;
+        data["pharmacyAccountType"] = this.pharmacyAccountType;
+        data["verificationNumber"] = this.verificationNumber;
+        data["riskAssessmentCarriedOut"] = this.riskAssessmentCarriedOut;
+        data["riskAssessmentOutcome"] = this.riskAssessmentOutcome;
+        data["portalProgramId"] = this.portalProgramId;
+        data["treatmentRisk"] = this.treatmentRisk;
+        data["treatmentProfileId"] = this.treatmentProfileId;
+        data["treatmentCategory"] = this.treatmentCategory;
+        data["patientId"] = this.patientId;
+        data["patientTitle"] = this.patientTitle;
+        data["patientFirstName"] = this.patientFirstName;
+        data["patientLastName"] = this.patientLastName;
+        data["patientMiddleName"] = this.patientMiddleName;
+        data["patientFullName"] = this.patientFullName;
+        data["dateOfBirth"] = this.dateOfBirth ? this.dateOfBirth.toISOString() : <any>undefined;
+        data["birthDay"] = this.birthDay;
+        data["birthMonth"] = this.birthMonth;
+        data["birthYear"] = this.birthYear;
+        data["patientUnitNumber"] = this.patientUnitNumber;
+        data["patientStreetAddress"] = this.patientStreetAddress;
+        data["patientAddressLine2"] = this.patientAddressLine2;
+        data["patientAddressCity"] = this.patientAddressCity;
+        data["patientAddressPostcode"] = this.patientAddressPostcode;
+        data["patientAddressState"] = this.patientAddressState;
+        data["prescriberId"] = this.prescriberId;
+        data["prescriberNumber"] = this.prescriberNumber;
+        data["prescriberAhpra"] = this.prescriberAhpra;
+        data["prescriberTitle"] = this.prescriberTitle;
+        data["prescriberFirstName"] = this.prescriberFirstName;
+        data["prescriberLastName"] = this.prescriberLastName;
+        data["prescriberEmail"] = this.prescriberEmail;
+        data["clinicId"] = this.clinicId;
+        data["clinicName"] = this.clinicName;
+        data["clinicUnitNumber"] = this.clinicUnitNumber;
+        data["clinicStreetAddress"] = this.clinicStreetAddress;
+        data["clinicStreetAddressLine2"] = this.clinicStreetAddressLine2;
+        data["clinicCity"] = this.clinicCity;
+        data["clinicPostcode"] = this.clinicPostcode;
+        data["clinicState"] = this.clinicState;
+        return data;
+    }
+
+    clone(): GetDispensingVerificationListResponse {
+        const json = this.toJSON();
+        let result = new GetDispensingVerificationListResponse();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetDispensingVerificationListResponse {
+    id: string;
+    createdOnUtc: Date;
+    pharmacistId: string | undefined;
+    pharmacistTitle: Title;
+    pharmacistFirstName: string | undefined;
+    pharmacistLastName: string | undefined;
+    pharmacistAhpra: string | undefined;
+    dispensedMedicationId: number | undefined;
+    dispsensedMedication: string | undefined;
+    dispensedDosageId: number | undefined;
+    dispensedStrength: string | undefined;
+    dispensedQty: number | undefined;
+    dispensedOn: Date | undefined;
+    pharmacyId: string | undefined;
+    pharmacyName: string | undefined;
+    pharmacyAddressUnitNumber: string | undefined;
+    pharmacyStreetAddress: string | undefined;
+    pharmacyAddressLine2: string | undefined;
+    pharmacyAddressCity: string | undefined;
+    pharmacyAddressPostcode: string | undefined;
+    pharmacyAddressState: AddressState;
+    pharmacyAccountRefNumber: string | undefined;
+    pharmacyAccountType: PharmacyAccountType;
+    verificationNumber: string | undefined;
+    riskAssessmentCarriedOut: boolean | undefined;
+    riskAssessmentOutcome: RiskAssessmentOutcome;
+    portalProgramId: string | undefined;
+    treatmentRisk: string | undefined;
+    treatmentProfileId: string | undefined;
+    treatmentCategory: TreatmentCategory;
+    patientId: string | undefined;
+    patientTitle: Title;
+    patientFirstName: string | undefined;
+    patientLastName: string | undefined;
+    patientMiddleName: string | undefined;
+    patientFullName: string | undefined;
+    dateOfBirth: Date | undefined;
+    birthDay: number | undefined;
+    birthMonth: number | undefined;
+    birthYear: number | undefined;
+    patientUnitNumber: string | undefined;
+    patientStreetAddress: string | undefined;
+    patientAddressLine2: string | undefined;
+    patientAddressCity: string | undefined;
+    patientAddressPostcode: string | undefined;
+    patientAddressState: AddressState;
+    prescriberId: string | undefined;
+    prescriberNumber: string | undefined;
+    prescriberAhpra: string | undefined;
+    prescriberTitle: Title;
+    prescriberFirstName: string | undefined;
+    prescriberLastName: string | undefined;
+    prescriberEmail: string | undefined;
+    clinicId: string | undefined;
+    clinicName: string | undefined;
+    clinicUnitNumber: string | undefined;
+    clinicStreetAddress: string | undefined;
+    clinicStreetAddressLine2: string | undefined;
+    clinicCity: string | undefined;
+    clinicPostcode: string | undefined;
+    clinicState: AddressState;
+}
+
+export class GetDispensingVerificationListResponsePagedResultDto implements IGetDispensingVerificationListResponsePagedResultDto {
+    totalCount: number;
+    items: GetDispensingVerificationListResponse[] | undefined;
+
+    constructor(data?: IGetDispensingVerificationListResponsePagedResultDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.totalCount = _data["totalCount"];
+            if (Array.isArray(_data["items"])) {
+                this.items = [];
+                for (let item of _data["items"])
+                    this.items.push(GetDispensingVerificationListResponse.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): GetDispensingVerificationListResponsePagedResultDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetDispensingVerificationListResponsePagedResultDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["totalCount"] = this.totalCount;
+        if (Array.isArray(this.items)) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item.toJSON());
+        }
+        return data;
+    }
+
+    clone(): GetDispensingVerificationListResponsePagedResultDto {
+        const json = this.toJSON();
+        let result = new GetDispensingVerificationListResponsePagedResultDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetDispensingVerificationListResponsePagedResultDto {
+    totalCount: number;
+    items: GetDispensingVerificationListResponse[] | undefined;
+}
+
+export class GetDispensingVerificationListResponsePagedResultDtoApiResponse implements IGetDispensingVerificationListResponsePagedResultDtoApiResponse {
+    isSuccess: boolean;
+    resultObject: GetDispensingVerificationListResponsePagedResultDto;
+    problemDetails: ProblemDetails;
+
+    constructor(data?: IGetDispensingVerificationListResponsePagedResultDtoApiResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.isSuccess = _data["isSuccess"];
+            this.resultObject = _data["resultObject"] ? GetDispensingVerificationListResponsePagedResultDto.fromJS(_data["resultObject"]) : <any>undefined;
+            this.problemDetails = _data["problemDetails"] ? ProblemDetails.fromJS(_data["problemDetails"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): GetDispensingVerificationListResponsePagedResultDtoApiResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetDispensingVerificationListResponsePagedResultDtoApiResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["isSuccess"] = this.isSuccess;
+        data["resultObject"] = this.resultObject ? this.resultObject.toJSON() : <any>undefined;
+        data["problemDetails"] = this.problemDetails ? this.problemDetails.toJSON() : <any>undefined;
+        return data;
+    }
+
+    clone(): GetDispensingVerificationListResponsePagedResultDtoApiResponse {
+        const json = this.toJSON();
+        let result = new GetDispensingVerificationListResponsePagedResultDtoApiResponse();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetDispensingVerificationListResponsePagedResultDtoApiResponse {
+    isSuccess: boolean;
+    resultObject: GetDispensingVerificationListResponsePagedResultDto;
+    problemDetails: ProblemDetails;
+}
+
+export class GetLastDispenseVerificationRecordForPatientResponse implements IGetLastDispenseVerificationRecordForPatientResponse {
+    dispensingVerificationRecordId: string | undefined;
+    medicationName: string | undefined;
+    medicationStrength: string | undefined;
+    packSize: number;
+    dispensedDate: Date;
+
+    constructor(data?: IGetLastDispenseVerificationRecordForPatientResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.dispensingVerificationRecordId = _data["dispensingVerificationRecordId"];
+            this.medicationName = _data["medicationName"];
+            this.medicationStrength = _data["medicationStrength"];
+            this.packSize = _data["packSize"];
+            this.dispensedDate = _data["dispensedDate"] ? new Date(_data["dispensedDate"].toString()) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): GetLastDispenseVerificationRecordForPatientResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetLastDispenseVerificationRecordForPatientResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["dispensingVerificationRecordId"] = this.dispensingVerificationRecordId;
+        data["medicationName"] = this.medicationName;
+        data["medicationStrength"] = this.medicationStrength;
+        data["packSize"] = this.packSize;
+        data["dispensedDate"] = this.dispensedDate ? this.dispensedDate.toISOString() : <any>undefined;
+        return data;
+    }
+
+    clone(): GetLastDispenseVerificationRecordForPatientResponse {
+        const json = this.toJSON();
+        let result = new GetLastDispenseVerificationRecordForPatientResponse();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetLastDispenseVerificationRecordForPatientResponse {
+    dispensingVerificationRecordId: string | undefined;
+    medicationName: string | undefined;
+    medicationStrength: string | undefined;
+    packSize: number;
+    dispensedDate: Date;
+}
+
+export class GetLastDispenseVerificationRecordForPatientResponseApiResponse implements IGetLastDispenseVerificationRecordForPatientResponseApiResponse {
+    isSuccess: boolean;
+    resultObject: GetLastDispenseVerificationRecordForPatientResponse;
+    problemDetails: ProblemDetails;
+
+    constructor(data?: IGetLastDispenseVerificationRecordForPatientResponseApiResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.isSuccess = _data["isSuccess"];
+            this.resultObject = _data["resultObject"] ? GetLastDispenseVerificationRecordForPatientResponse.fromJS(_data["resultObject"]) : <any>undefined;
+            this.problemDetails = _data["problemDetails"] ? ProblemDetails.fromJS(_data["problemDetails"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): GetLastDispenseVerificationRecordForPatientResponseApiResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetLastDispenseVerificationRecordForPatientResponseApiResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["isSuccess"] = this.isSuccess;
+        data["resultObject"] = this.resultObject ? this.resultObject.toJSON() : <any>undefined;
+        data["problemDetails"] = this.problemDetails ? this.problemDetails.toJSON() : <any>undefined;
+        return data;
+    }
+
+    clone(): GetLastDispenseVerificationRecordForPatientResponseApiResponse {
+        const json = this.toJSON();
+        let result = new GetLastDispenseVerificationRecordForPatientResponseApiResponse();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetLastDispenseVerificationRecordForPatientResponseApiResponse {
+    isSuccess: boolean;
+    resultObject: GetLastDispenseVerificationRecordForPatientResponse;
+    problemDetails: ProblemDetails;
+}
+
+export class GetNominatedPrescriberInformationResponse implements IGetNominatedPrescriberInformationResponse {
+    name: string | undefined;
+    email: string | undefined;
+    clinic: string | undefined;
+    phone: string | undefined;
+
+    constructor(data?: IGetNominatedPrescriberInformationResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.name = _data["name"];
+            this.email = _data["email"];
+            this.clinic = _data["clinic"];
+            this.phone = _data["phone"];
+        }
+    }
+
+    static fromJS(data: any): GetNominatedPrescriberInformationResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetNominatedPrescriberInformationResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["name"] = this.name;
+        data["email"] = this.email;
+        data["clinic"] = this.clinic;
+        data["phone"] = this.phone;
+        return data;
+    }
+
+    clone(): GetNominatedPrescriberInformationResponse {
+        const json = this.toJSON();
+        let result = new GetNominatedPrescriberInformationResponse();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetNominatedPrescriberInformationResponse {
+    name: string | undefined;
+    email: string | undefined;
+    clinic: string | undefined;
+    phone: string | undefined;
+}
+
+export class GetNominatedPrescriberInformationResponseApiResponse implements IGetNominatedPrescriberInformationResponseApiResponse {
+    isSuccess: boolean;
+    resultObject: GetNominatedPrescriberInformationResponse;
+    problemDetails: ProblemDetails;
+
+    constructor(data?: IGetNominatedPrescriberInformationResponseApiResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.isSuccess = _data["isSuccess"];
+            this.resultObject = _data["resultObject"] ? GetNominatedPrescriberInformationResponse.fromJS(_data["resultObject"]) : <any>undefined;
+            this.problemDetails = _data["problemDetails"] ? ProblemDetails.fromJS(_data["problemDetails"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): GetNominatedPrescriberInformationResponseApiResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetNominatedPrescriberInformationResponseApiResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["isSuccess"] = this.isSuccess;
+        data["resultObject"] = this.resultObject ? this.resultObject.toJSON() : <any>undefined;
+        data["problemDetails"] = this.problemDetails ? this.problemDetails.toJSON() : <any>undefined;
+        return data;
+    }
+
+    clone(): GetNominatedPrescriberInformationResponseApiResponse {
+        const json = this.toJSON();
+        let result = new GetNominatedPrescriberInformationResponseApiResponse();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetNominatedPrescriberInformationResponseApiResponse {
+    isSuccess: boolean;
+    resultObject: GetNominatedPrescriberInformationResponse;
+    problemDetails: ProblemDetails;
+}
+
+export class GetPagedClinicListResponse implements IGetPagedClinicListResponse {
+    id: string;
+    name: string | undefined;
+    unitNumber: string | undefined;
+    streetAddress: string | undefined;
+    city: string | undefined;
+    state: AddressState;
+    postCode: string | undefined;
+    phone: string | undefined;
+    email: string | undefined;
+
+    constructor(data?: IGetPagedClinicListResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.name = _data["name"];
+            this.unitNumber = _data["unitNumber"];
+            this.streetAddress = _data["streetAddress"];
+            this.city = _data["city"];
+            this.state = _data["state"];
+            this.postCode = _data["postCode"];
+            this.phone = _data["phone"];
+            this.email = _data["email"];
+        }
+    }
+
+    static fromJS(data: any): GetPagedClinicListResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetPagedClinicListResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["name"] = this.name;
+        data["unitNumber"] = this.unitNumber;
+        data["streetAddress"] = this.streetAddress;
+        data["city"] = this.city;
+        data["state"] = this.state;
+        data["postCode"] = this.postCode;
+        data["phone"] = this.phone;
+        data["email"] = this.email;
+        return data;
+    }
+
+    clone(): GetPagedClinicListResponse {
+        const json = this.toJSON();
+        let result = new GetPagedClinicListResponse();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetPagedClinicListResponse {
+    id: string;
+    name: string | undefined;
+    unitNumber: string | undefined;
+    streetAddress: string | undefined;
+    city: string | undefined;
+    state: AddressState;
+    postCode: string | undefined;
+    phone: string | undefined;
+    email: string | undefined;
+}
+
+export class GetPagedClinicListResponsePagedResultDto implements IGetPagedClinicListResponsePagedResultDto {
+    totalCount: number;
+    items: GetPagedClinicListResponse[] | undefined;
+
+    constructor(data?: IGetPagedClinicListResponsePagedResultDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.totalCount = _data["totalCount"];
+            if (Array.isArray(_data["items"])) {
+                this.items = [];
+                for (let item of _data["items"])
+                    this.items.push(GetPagedClinicListResponse.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): GetPagedClinicListResponsePagedResultDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetPagedClinicListResponsePagedResultDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["totalCount"] = this.totalCount;
+        if (Array.isArray(this.items)) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item.toJSON());
+        }
+        return data;
+    }
+
+    clone(): GetPagedClinicListResponsePagedResultDto {
+        const json = this.toJSON();
+        let result = new GetPagedClinicListResponsePagedResultDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetPagedClinicListResponsePagedResultDto {
+    totalCount: number;
+    items: GetPagedClinicListResponse[] | undefined;
+}
+
+export class GetPagedClinicListResponsePagedResultDtoApiResponse implements IGetPagedClinicListResponsePagedResultDtoApiResponse {
+    isSuccess: boolean;
+    resultObject: GetPagedClinicListResponsePagedResultDto;
+    problemDetails: ProblemDetails;
+
+    constructor(data?: IGetPagedClinicListResponsePagedResultDtoApiResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.isSuccess = _data["isSuccess"];
+            this.resultObject = _data["resultObject"] ? GetPagedClinicListResponsePagedResultDto.fromJS(_data["resultObject"]) : <any>undefined;
+            this.problemDetails = _data["problemDetails"] ? ProblemDetails.fromJS(_data["problemDetails"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): GetPagedClinicListResponsePagedResultDtoApiResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetPagedClinicListResponsePagedResultDtoApiResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["isSuccess"] = this.isSuccess;
+        data["resultObject"] = this.resultObject ? this.resultObject.toJSON() : <any>undefined;
+        data["problemDetails"] = this.problemDetails ? this.problemDetails.toJSON() : <any>undefined;
+        return data;
+    }
+
+    clone(): GetPagedClinicListResponsePagedResultDtoApiResponse {
+        const json = this.toJSON();
+        let result = new GetPagedClinicListResponsePagedResultDtoApiResponse();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetPagedClinicListResponsePagedResultDtoApiResponse {
+    isSuccess: boolean;
+    resultObject: GetPagedClinicListResponsePagedResultDto;
+    problemDetails: ProblemDetails;
+}
+
+export class GetPagedPatientsByPrescriberResponse implements IGetPagedPatientsByPrescriberResponse {
+    treatmentProfileId: string;
+    patientId: string;
+    title: Title;
+    firstname: string | undefined;
+    lastname: string | undefined;
+    middlename: string | undefined;
+    dateOfBith: Date;
+    clinicName: string | undefined;
+    status: TreatmentStatus;
+
+    constructor(data?: IGetPagedPatientsByPrescriberResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.treatmentProfileId = _data["treatmentProfileId"];
+            this.patientId = _data["patientId"];
+            this.title = _data["title"];
+            this.firstname = _data["firstname"];
+            this.lastname = _data["lastname"];
+            this.middlename = _data["middlename"];
+            this.dateOfBith = _data["dateOfBith"] ? new Date(_data["dateOfBith"].toString()) : <any>undefined;
+            this.clinicName = _data["clinicName"];
+            this.status = _data["status"];
+        }
+    }
+
+    static fromJS(data: any): GetPagedPatientsByPrescriberResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetPagedPatientsByPrescriberResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["treatmentProfileId"] = this.treatmentProfileId;
+        data["patientId"] = this.patientId;
+        data["title"] = this.title;
+        data["firstname"] = this.firstname;
+        data["lastname"] = this.lastname;
+        data["middlename"] = this.middlename;
+        data["dateOfBith"] = this.dateOfBith ? this.dateOfBith.toISOString() : <any>undefined;
+        data["clinicName"] = this.clinicName;
+        data["status"] = this.status;
+        return data;
+    }
+
+    clone(): GetPagedPatientsByPrescriberResponse {
+        const json = this.toJSON();
+        let result = new GetPagedPatientsByPrescriberResponse();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetPagedPatientsByPrescriberResponse {
+    treatmentProfileId: string;
+    patientId: string;
+    title: Title;
+    firstname: string | undefined;
+    lastname: string | undefined;
+    middlename: string | undefined;
+    dateOfBith: Date;
+    clinicName: string | undefined;
+    status: TreatmentStatus;
+}
+
+export class GetPagedPatientsByPrescriberResponsePagedResultDto implements IGetPagedPatientsByPrescriberResponsePagedResultDto {
+    totalCount: number;
+    items: GetPagedPatientsByPrescriberResponse[] | undefined;
+
+    constructor(data?: IGetPagedPatientsByPrescriberResponsePagedResultDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.totalCount = _data["totalCount"];
+            if (Array.isArray(_data["items"])) {
+                this.items = [];
+                for (let item of _data["items"])
+                    this.items.push(GetPagedPatientsByPrescriberResponse.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): GetPagedPatientsByPrescriberResponsePagedResultDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetPagedPatientsByPrescriberResponsePagedResultDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["totalCount"] = this.totalCount;
+        if (Array.isArray(this.items)) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item.toJSON());
+        }
+        return data;
+    }
+
+    clone(): GetPagedPatientsByPrescriberResponsePagedResultDto {
+        const json = this.toJSON();
+        let result = new GetPagedPatientsByPrescriberResponsePagedResultDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetPagedPatientsByPrescriberResponsePagedResultDto {
+    totalCount: number;
+    items: GetPagedPatientsByPrescriberResponse[] | undefined;
+}
+
+export class GetPagedPatientsByPrescriberResponsePagedResultDtoApiResponse implements IGetPagedPatientsByPrescriberResponsePagedResultDtoApiResponse {
+    isSuccess: boolean;
+    resultObject: GetPagedPatientsByPrescriberResponsePagedResultDto;
+    problemDetails: ProblemDetails;
+
+    constructor(data?: IGetPagedPatientsByPrescriberResponsePagedResultDtoApiResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.isSuccess = _data["isSuccess"];
+            this.resultObject = _data["resultObject"] ? GetPagedPatientsByPrescriberResponsePagedResultDto.fromJS(_data["resultObject"]) : <any>undefined;
+            this.problemDetails = _data["problemDetails"] ? ProblemDetails.fromJS(_data["problemDetails"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): GetPagedPatientsByPrescriberResponsePagedResultDtoApiResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetPagedPatientsByPrescriberResponsePagedResultDtoApiResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["isSuccess"] = this.isSuccess;
+        data["resultObject"] = this.resultObject ? this.resultObject.toJSON() : <any>undefined;
+        data["problemDetails"] = this.problemDetails ? this.problemDetails.toJSON() : <any>undefined;
+        return data;
+    }
+
+    clone(): GetPagedPatientsByPrescriberResponsePagedResultDtoApiResponse {
+        const json = this.toJSON();
+        let result = new GetPagedPatientsByPrescriberResponsePagedResultDtoApiResponse();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetPagedPatientsByPrescriberResponsePagedResultDtoApiResponse {
+    isSuccess: boolean;
+    resultObject: GetPagedPatientsByPrescriberResponsePagedResultDto;
+    problemDetails: ProblemDetails;
+}
+
+export class GetPagedPharmacyListResponse implements IGetPagedPharmacyListResponse {
+    id: string;
+    name: string | undefined;
+    unitNumber: string | undefined;
+    streetAddress: string | undefined;
+    city: string | undefined;
+    state: AddressState;
+    postCode: string | undefined;
+    phone: string | undefined;
+    email: string | undefined;
+    symbionAccountNumber: string | undefined;
+    symbionAccountApproved: boolean | undefined;
+    ch2AccountNumber: string | undefined;
+    ch2AccountApproved: boolean | undefined;
+
+    constructor(data?: IGetPagedPharmacyListResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.name = _data["name"];
+            this.unitNumber = _data["unitNumber"];
+            this.streetAddress = _data["streetAddress"];
+            this.city = _data["city"];
+            this.state = _data["state"];
+            this.postCode = _data["postCode"];
+            this.phone = _data["phone"];
+            this.email = _data["email"];
+            this.symbionAccountNumber = _data["symbionAccountNumber"];
+            this.symbionAccountApproved = _data["symbionAccountApproved"];
+            this.ch2AccountNumber = _data["ch2AccountNumber"];
+            this.ch2AccountApproved = _data["ch2AccountApproved"];
+        }
+    }
+
+    static fromJS(data: any): GetPagedPharmacyListResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetPagedPharmacyListResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["name"] = this.name;
+        data["unitNumber"] = this.unitNumber;
+        data["streetAddress"] = this.streetAddress;
+        data["city"] = this.city;
+        data["state"] = this.state;
+        data["postCode"] = this.postCode;
+        data["phone"] = this.phone;
+        data["email"] = this.email;
+        data["symbionAccountNumber"] = this.symbionAccountNumber;
+        data["symbionAccountApproved"] = this.symbionAccountApproved;
+        data["ch2AccountNumber"] = this.ch2AccountNumber;
+        data["ch2AccountApproved"] = this.ch2AccountApproved;
+        return data;
+    }
+
+    clone(): GetPagedPharmacyListResponse {
+        const json = this.toJSON();
+        let result = new GetPagedPharmacyListResponse();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetPagedPharmacyListResponse {
+    id: string;
+    name: string | undefined;
+    unitNumber: string | undefined;
+    streetAddress: string | undefined;
+    city: string | undefined;
+    state: AddressState;
+    postCode: string | undefined;
+    phone: string | undefined;
+    email: string | undefined;
+    symbionAccountNumber: string | undefined;
+    symbionAccountApproved: boolean | undefined;
+    ch2AccountNumber: string | undefined;
+    ch2AccountApproved: boolean | undefined;
+}
+
+export class GetPagedPharmacyListResponsePagedResultDto implements IGetPagedPharmacyListResponsePagedResultDto {
+    totalCount: number;
+    items: GetPagedPharmacyListResponse[] | undefined;
+
+    constructor(data?: IGetPagedPharmacyListResponsePagedResultDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.totalCount = _data["totalCount"];
+            if (Array.isArray(_data["items"])) {
+                this.items = [];
+                for (let item of _data["items"])
+                    this.items.push(GetPagedPharmacyListResponse.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): GetPagedPharmacyListResponsePagedResultDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetPagedPharmacyListResponsePagedResultDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["totalCount"] = this.totalCount;
+        if (Array.isArray(this.items)) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item.toJSON());
+        }
+        return data;
+    }
+
+    clone(): GetPagedPharmacyListResponsePagedResultDto {
+        const json = this.toJSON();
+        let result = new GetPagedPharmacyListResponsePagedResultDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetPagedPharmacyListResponsePagedResultDto {
+    totalCount: number;
+    items: GetPagedPharmacyListResponse[] | undefined;
+}
+
+export class GetPagedPharmacyListResponsePagedResultDtoApiResponse implements IGetPagedPharmacyListResponsePagedResultDtoApiResponse {
+    isSuccess: boolean;
+    resultObject: GetPagedPharmacyListResponsePagedResultDto;
+    problemDetails: ProblemDetails;
+
+    constructor(data?: IGetPagedPharmacyListResponsePagedResultDtoApiResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.isSuccess = _data["isSuccess"];
+            this.resultObject = _data["resultObject"] ? GetPagedPharmacyListResponsePagedResultDto.fromJS(_data["resultObject"]) : <any>undefined;
+            this.problemDetails = _data["problemDetails"] ? ProblemDetails.fromJS(_data["problemDetails"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): GetPagedPharmacyListResponsePagedResultDtoApiResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetPagedPharmacyListResponsePagedResultDtoApiResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["isSuccess"] = this.isSuccess;
+        data["resultObject"] = this.resultObject ? this.resultObject.toJSON() : <any>undefined;
+        data["problemDetails"] = this.problemDetails ? this.problemDetails.toJSON() : <any>undefined;
+        return data;
+    }
+
+    clone(): GetPagedPharmacyListResponsePagedResultDtoApiResponse {
+        const json = this.toJSON();
+        let result = new GetPagedPharmacyListResponsePagedResultDtoApiResponse();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetPagedPharmacyListResponsePagedResultDtoApiResponse {
+    isSuccess: boolean;
+    resultObject: GetPagedPharmacyListResponsePagedResultDto;
+    problemDetails: ProblemDetails;
+}
+
+export class GetPatientByNameAndDobDto implements IGetPatientByNameAndDobDto {
+    patientFirstName: string | undefined;
+    patientLastName: string | undefined;
+    birthDay: number;
+    birthMonth: number;
+    birthYear: number;
+
+    constructor(data?: IGetPatientByNameAndDobDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.patientFirstName = _data["patientFirstName"];
+            this.patientLastName = _data["patientLastName"];
+            this.birthDay = _data["birthDay"];
+            this.birthMonth = _data["birthMonth"];
+            this.birthYear = _data["birthYear"];
+        }
+    }
+
+    static fromJS(data: any): GetPatientByNameAndDobDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetPatientByNameAndDobDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["patientFirstName"] = this.patientFirstName;
+        data["patientLastName"] = this.patientLastName;
+        data["birthDay"] = this.birthDay;
+        data["birthMonth"] = this.birthMonth;
+        data["birthYear"] = this.birthYear;
+        return data;
+    }
+
+    clone(): GetPatientByNameAndDobDto {
+        const json = this.toJSON();
+        let result = new GetPatientByNameAndDobDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetPatientByNameAndDobDto {
+    patientFirstName: string | undefined;
+    patientLastName: string | undefined;
+    birthDay: number;
+    birthMonth: number;
+    birthYear: number;
+}
+
+export class GetPatientByNameAndDobResponse implements IGetPatientByNameAndDobResponse {
+    patientId: string | undefined;
+
+    constructor(data?: IGetPatientByNameAndDobResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.patientId = _data["patientId"];
+        }
+    }
+
+    static fromJS(data: any): GetPatientByNameAndDobResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetPatientByNameAndDobResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["patientId"] = this.patientId;
+        return data;
+    }
+
+    clone(): GetPatientByNameAndDobResponse {
+        const json = this.toJSON();
+        let result = new GetPatientByNameAndDobResponse();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetPatientByNameAndDobResponse {
+    patientId: string | undefined;
+}
+
+export class GetPatientByNameAndDobResponseApiResponse implements IGetPatientByNameAndDobResponseApiResponse {
+    isSuccess: boolean;
+    resultObject: GetPatientByNameAndDobResponse;
+    problemDetails: ProblemDetails;
+
+    constructor(data?: IGetPatientByNameAndDobResponseApiResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.isSuccess = _data["isSuccess"];
+            this.resultObject = _data["resultObject"] ? GetPatientByNameAndDobResponse.fromJS(_data["resultObject"]) : <any>undefined;
+            this.problemDetails = _data["problemDetails"] ? ProblemDetails.fromJS(_data["problemDetails"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): GetPatientByNameAndDobResponseApiResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetPatientByNameAndDobResponseApiResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["isSuccess"] = this.isSuccess;
+        data["resultObject"] = this.resultObject ? this.resultObject.toJSON() : <any>undefined;
+        data["problemDetails"] = this.problemDetails ? this.problemDetails.toJSON() : <any>undefined;
+        return data;
+    }
+
+    clone(): GetPatientByNameAndDobResponseApiResponse {
+        const json = this.toJSON();
+        let result = new GetPatientByNameAndDobResponseApiResponse();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetPatientByNameAndDobResponseApiResponse {
+    isSuccess: boolean;
+    resultObject: GetPatientByNameAndDobResponse;
+    problemDetails: ProblemDetails;
+}
+
+export class GetPatientByPrescriberNameAndDobDto implements IGetPatientByPrescriberNameAndDobDto {
+    prescriberId: string;
+    patientFirstName: string | undefined;
+    patientLastName: string | undefined;
+    birthDay: number;
+    birthMonth: number;
+    birthYear: number;
+
+    constructor(data?: IGetPatientByPrescriberNameAndDobDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.prescriberId = _data["prescriberId"];
+            this.patientFirstName = _data["patientFirstName"];
+            this.patientLastName = _data["patientLastName"];
+            this.birthDay = _data["birthDay"];
+            this.birthMonth = _data["birthMonth"];
+            this.birthYear = _data["birthYear"];
+        }
+    }
+
+    static fromJS(data: any): GetPatientByPrescriberNameAndDobDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetPatientByPrescriberNameAndDobDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["prescriberId"] = this.prescriberId;
+        data["patientFirstName"] = this.patientFirstName;
+        data["patientLastName"] = this.patientLastName;
+        data["birthDay"] = this.birthDay;
+        data["birthMonth"] = this.birthMonth;
+        data["birthYear"] = this.birthYear;
+        return data;
+    }
+
+    clone(): GetPatientByPrescriberNameAndDobDto {
+        const json = this.toJSON();
+        let result = new GetPatientByPrescriberNameAndDobDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetPatientByPrescriberNameAndDobDto {
+    prescriberId: string;
+    patientFirstName: string | undefined;
+    patientLastName: string | undefined;
+    birthDay: number;
+    birthMonth: number;
+    birthYear: number;
+}
+
+export class GetPatientByPrescriberNameAndDobResponse implements IGetPatientByPrescriberNameAndDobResponse {
+    patientId: string | undefined;
+    patientFirstName: string | undefined;
+    patientLastName: string | undefined;
+    patientAddress: string | undefined;
+    treatmentCategory: TreatmentCategory;
+    prescriberName: string | undefined;
+    prescriberNumber: string | undefined;
+    patientDateOfBirth: Date | undefined;
+    medicationId: number | undefined;
+    lastDispensedMedicationId: number | undefined;
+    lastDispensedMedicationName: string | undefined;
+    lastDispenseDosageId: number | undefined;
+    lastDispenseMedicationStrength: string | undefined;
+    lastDispensePackSize: number | undefined;
+    lastDispenseDate: Date | undefined;
+
+    constructor(data?: IGetPatientByPrescriberNameAndDobResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.patientId = _data["patientId"];
+            this.patientFirstName = _data["patientFirstName"];
+            this.patientLastName = _data["patientLastName"];
+            this.patientAddress = _data["patientAddress"];
+            this.treatmentCategory = _data["treatmentCategory"];
+            this.prescriberName = _data["prescriberName"];
+            this.prescriberNumber = _data["prescriberNumber"];
+            this.patientDateOfBirth = _data["patientDateOfBirth"] ? new Date(_data["patientDateOfBirth"].toString()) : <any>undefined;
+            this.medicationId = _data["medicationId"];
+            this.lastDispensedMedicationId = _data["lastDispensedMedicationId"];
+            this.lastDispensedMedicationName = _data["lastDispensedMedicationName"];
+            this.lastDispenseDosageId = _data["lastDispenseDosageId"];
+            this.lastDispenseMedicationStrength = _data["lastDispenseMedicationStrength"];
+            this.lastDispensePackSize = _data["lastDispensePackSize"];
+            this.lastDispenseDate = _data["lastDispenseDate"] ? new Date(_data["lastDispenseDate"].toString()) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): GetPatientByPrescriberNameAndDobResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetPatientByPrescriberNameAndDobResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["patientId"] = this.patientId;
+        data["patientFirstName"] = this.patientFirstName;
+        data["patientLastName"] = this.patientLastName;
+        data["patientAddress"] = this.patientAddress;
+        data["treatmentCategory"] = this.treatmentCategory;
+        data["prescriberName"] = this.prescriberName;
+        data["prescriberNumber"] = this.prescriberNumber;
+        data["patientDateOfBirth"] = this.patientDateOfBirth ? this.patientDateOfBirth.toISOString() : <any>undefined;
+        data["medicationId"] = this.medicationId;
+        data["lastDispensedMedicationId"] = this.lastDispensedMedicationId;
+        data["lastDispensedMedicationName"] = this.lastDispensedMedicationName;
+        data["lastDispenseDosageId"] = this.lastDispenseDosageId;
+        data["lastDispenseMedicationStrength"] = this.lastDispenseMedicationStrength;
+        data["lastDispensePackSize"] = this.lastDispensePackSize;
+        data["lastDispenseDate"] = this.lastDispenseDate ? this.lastDispenseDate.toISOString() : <any>undefined;
+        return data;
+    }
+
+    clone(): GetPatientByPrescriberNameAndDobResponse {
+        const json = this.toJSON();
+        let result = new GetPatientByPrescriberNameAndDobResponse();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetPatientByPrescriberNameAndDobResponse {
+    patientId: string | undefined;
+    patientFirstName: string | undefined;
+    patientLastName: string | undefined;
+    patientAddress: string | undefined;
+    treatmentCategory: TreatmentCategory;
+    prescriberName: string | undefined;
+    prescriberNumber: string | undefined;
+    patientDateOfBirth: Date | undefined;
+    medicationId: number | undefined;
+    lastDispensedMedicationId: number | undefined;
+    lastDispensedMedicationName: string | undefined;
+    lastDispenseDosageId: number | undefined;
+    lastDispenseMedicationStrength: string | undefined;
+    lastDispensePackSize: number | undefined;
+    lastDispenseDate: Date | undefined;
+}
+
+export class GetPatientByPrescriberNameAndDobResponseApiResponse implements IGetPatientByPrescriberNameAndDobResponseApiResponse {
+    isSuccess: boolean;
+    resultObject: GetPatientByPrescriberNameAndDobResponse;
+    problemDetails: ProblemDetails;
+
+    constructor(data?: IGetPatientByPrescriberNameAndDobResponseApiResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.isSuccess = _data["isSuccess"];
+            this.resultObject = _data["resultObject"] ? GetPatientByPrescriberNameAndDobResponse.fromJS(_data["resultObject"]) : <any>undefined;
+            this.problemDetails = _data["problemDetails"] ? ProblemDetails.fromJS(_data["problemDetails"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): GetPatientByPrescriberNameAndDobResponseApiResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetPatientByPrescriberNameAndDobResponseApiResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["isSuccess"] = this.isSuccess;
+        data["resultObject"] = this.resultObject ? this.resultObject.toJSON() : <any>undefined;
+        data["problemDetails"] = this.problemDetails ? this.problemDetails.toJSON() : <any>undefined;
+        return data;
+    }
+
+    clone(): GetPatientByPrescriberNameAndDobResponseApiResponse {
+        const json = this.toJSON();
+        let result = new GetPatientByPrescriberNameAndDobResponseApiResponse();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetPatientByPrescriberNameAndDobResponseApiResponse {
+    isSuccess: boolean;
+    resultObject: GetPatientByPrescriberNameAndDobResponse;
+    problemDetails: ProblemDetails;
+}
+
+export class GetPatientDetailsByNameDateOfBirthResponse implements IGetPatientDetailsByNameDateOfBirthResponse {
+    patientId: string | undefined;
+    patientFirstName: string | undefined;
+    patientLastName: string | undefined;
+    patientAddress: string | undefined;
+    treatmentCategory: TreatmentCategory;
+    prescriberName: string | undefined;
+    prescriberNumber: string | undefined;
+    patientDateOfBirth: Date | undefined;
+    medicationId: number | undefined;
+    lastDispensedMedicationId: number | undefined;
+    lastDispensedMedicationName: string | undefined;
+    lastDispenseDosageId: number | undefined;
+    lastDispenseMedicationStrength: string | undefined;
+    lastDispensePackSize: number | undefined;
+    lastDispenseDate: Date | undefined;
+
+    constructor(data?: IGetPatientDetailsByNameDateOfBirthResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.patientId = _data["patientId"];
+            this.patientFirstName = _data["patientFirstName"];
+            this.patientLastName = _data["patientLastName"];
+            this.patientAddress = _data["patientAddress"];
+            this.treatmentCategory = _data["treatmentCategory"];
+            this.prescriberName = _data["prescriberName"];
+            this.prescriberNumber = _data["prescriberNumber"];
+            this.patientDateOfBirth = _data["patientDateOfBirth"] ? new Date(_data["patientDateOfBirth"].toString()) : <any>undefined;
+            this.medicationId = _data["medicationId"];
+            this.lastDispensedMedicationId = _data["lastDispensedMedicationId"];
+            this.lastDispensedMedicationName = _data["lastDispensedMedicationName"];
+            this.lastDispenseDosageId = _data["lastDispenseDosageId"];
+            this.lastDispenseMedicationStrength = _data["lastDispenseMedicationStrength"];
+            this.lastDispensePackSize = _data["lastDispensePackSize"];
+            this.lastDispenseDate = _data["lastDispenseDate"] ? new Date(_data["lastDispenseDate"].toString()) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): GetPatientDetailsByNameDateOfBirthResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetPatientDetailsByNameDateOfBirthResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["patientId"] = this.patientId;
+        data["patientFirstName"] = this.patientFirstName;
+        data["patientLastName"] = this.patientLastName;
+        data["patientAddress"] = this.patientAddress;
+        data["treatmentCategory"] = this.treatmentCategory;
+        data["prescriberName"] = this.prescriberName;
+        data["prescriberNumber"] = this.prescriberNumber;
+        data["patientDateOfBirth"] = this.patientDateOfBirth ? this.patientDateOfBirth.toISOString() : <any>undefined;
+        data["medicationId"] = this.medicationId;
+        data["lastDispensedMedicationId"] = this.lastDispensedMedicationId;
+        data["lastDispensedMedicationName"] = this.lastDispensedMedicationName;
+        data["lastDispenseDosageId"] = this.lastDispenseDosageId;
+        data["lastDispenseMedicationStrength"] = this.lastDispenseMedicationStrength;
+        data["lastDispensePackSize"] = this.lastDispensePackSize;
+        data["lastDispenseDate"] = this.lastDispenseDate ? this.lastDispenseDate.toISOString() : <any>undefined;
+        return data;
+    }
+
+    clone(): GetPatientDetailsByNameDateOfBirthResponse {
+        const json = this.toJSON();
+        let result = new GetPatientDetailsByNameDateOfBirthResponse();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetPatientDetailsByNameDateOfBirthResponse {
+    patientId: string | undefined;
+    patientFirstName: string | undefined;
+    patientLastName: string | undefined;
+    patientAddress: string | undefined;
+    treatmentCategory: TreatmentCategory;
+    prescriberName: string | undefined;
+    prescriberNumber: string | undefined;
+    patientDateOfBirth: Date | undefined;
+    medicationId: number | undefined;
+    lastDispensedMedicationId: number | undefined;
+    lastDispensedMedicationName: string | undefined;
+    lastDispenseDosageId: number | undefined;
+    lastDispenseMedicationStrength: string | undefined;
+    lastDispensePackSize: number | undefined;
+    lastDispenseDate: Date | undefined;
+}
+
+export class GetPatientDetailsByNameDateOfBirthResponseApiResponse implements IGetPatientDetailsByNameDateOfBirthResponseApiResponse {
+    isSuccess: boolean;
+    resultObject: GetPatientDetailsByNameDateOfBirthResponse;
+    problemDetails: ProblemDetails;
+
+    constructor(data?: IGetPatientDetailsByNameDateOfBirthResponseApiResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.isSuccess = _data["isSuccess"];
+            this.resultObject = _data["resultObject"] ? GetPatientDetailsByNameDateOfBirthResponse.fromJS(_data["resultObject"]) : <any>undefined;
+            this.problemDetails = _data["problemDetails"] ? ProblemDetails.fromJS(_data["problemDetails"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): GetPatientDetailsByNameDateOfBirthResponseApiResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetPatientDetailsByNameDateOfBirthResponseApiResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["isSuccess"] = this.isSuccess;
+        data["resultObject"] = this.resultObject ? this.resultObject.toJSON() : <any>undefined;
+        data["problemDetails"] = this.problemDetails ? this.problemDetails.toJSON() : <any>undefined;
+        return data;
+    }
+
+    clone(): GetPatientDetailsByNameDateOfBirthResponseApiResponse {
+        const json = this.toJSON();
+        let result = new GetPatientDetailsByNameDateOfBirthResponseApiResponse();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetPatientDetailsByNameDateOfBirthResponseApiResponse {
+    isSuccess: boolean;
+    resultObject: GetPatientDetailsByNameDateOfBirthResponse;
+    problemDetails: ProblemDetails;
+}
+
+export class GetPatientEligibilityCriteriaResponse implements IGetPatientEligibilityCriteriaResponse {
+    id: number;
+    optionName: string | undefined;
+    optionOrder: number;
+    optionDescription: string | undefined;
+    optionCriteria: boolean;
+
+    constructor(data?: IGetPatientEligibilityCriteriaResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.optionName = _data["optionName"];
+            this.optionOrder = _data["optionOrder"];
+            this.optionDescription = _data["optionDescription"];
+            this.optionCriteria = _data["optionCriteria"];
+        }
+    }
+
+    static fromJS(data: any): GetPatientEligibilityCriteriaResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetPatientEligibilityCriteriaResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["optionName"] = this.optionName;
+        data["optionOrder"] = this.optionOrder;
+        data["optionDescription"] = this.optionDescription;
+        data["optionCriteria"] = this.optionCriteria;
+        return data;
+    }
+
+    clone(): GetPatientEligibilityCriteriaResponse {
+        const json = this.toJSON();
+        let result = new GetPatientEligibilityCriteriaResponse();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetPatientEligibilityCriteriaResponse {
+    id: number;
+    optionName: string | undefined;
+    optionOrder: number;
+    optionDescription: string | undefined;
+    optionCriteria: boolean;
+}
+
+export class GetPatientEligibilityCriteriaResponseIEnumerableApiResponse implements IGetPatientEligibilityCriteriaResponseIEnumerableApiResponse {
+    isSuccess: boolean;
+    readonly resultObject: GetPatientEligibilityCriteriaResponse[] | undefined;
+    problemDetails: ProblemDetails;
+
+    constructor(data?: IGetPatientEligibilityCriteriaResponseIEnumerableApiResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.isSuccess = _data["isSuccess"];
+            if (Array.isArray(_data["resultObject"])) {
+                (<any>this).resultObject = [];
+                for (let item of _data["resultObject"])
+                    (<any>this).resultObject.push(GetPatientEligibilityCriteriaResponse.fromJS(item));
+            }
+            this.problemDetails = _data["problemDetails"] ? ProblemDetails.fromJS(_data["problemDetails"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): GetPatientEligibilityCriteriaResponseIEnumerableApiResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetPatientEligibilityCriteriaResponseIEnumerableApiResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["isSuccess"] = this.isSuccess;
+        if (Array.isArray(this.resultObject)) {
+            data["resultObject"] = [];
+            for (let item of this.resultObject)
+                data["resultObject"].push(item.toJSON());
+        }
+        data["problemDetails"] = this.problemDetails ? this.problemDetails.toJSON() : <any>undefined;
+        return data;
+    }
+
+    clone(): GetPatientEligibilityCriteriaResponseIEnumerableApiResponse {
+        const json = this.toJSON();
+        let result = new GetPatientEligibilityCriteriaResponseIEnumerableApiResponse();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetPatientEligibilityCriteriaResponseIEnumerableApiResponse {
+    isSuccess: boolean;
+    resultObject: GetPatientEligibilityCriteriaResponse[] | undefined;
+    problemDetails: ProblemDetails;
+}
+
+export class GetPatientListResponse implements IGetPatientListResponse {
+    id: string;
+    title: Title;
+    firstName: string | undefined;
+    lastName: string | undefined;
+    name: string | undefined;
+    dateOfBirth: Date;
+    email: string | undefined;
+    city: string | undefined;
+    state: AddressState;
+    status: TreatmentStatus;
+    prescriberTitle: Title;
+    prescriberFirstName: string | undefined;
+    prescriberLastName: string | undefined;
+    prescriberName: string | undefined;
+    canContinue: boolean;
+
+    constructor(data?: IGetPatientListResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.title = _data["title"];
+            this.firstName = _data["firstName"];
+            this.lastName = _data["lastName"];
+            this.name = _data["name"];
+            this.dateOfBirth = _data["dateOfBirth"] ? new Date(_data["dateOfBirth"].toString()) : <any>undefined;
+            this.email = _data["email"];
+            this.city = _data["city"];
+            this.state = _data["state"];
+            this.status = _data["status"];
+            this.prescriberTitle = _data["prescriberTitle"];
+            this.prescriberFirstName = _data["prescriberFirstName"];
+            this.prescriberLastName = _data["prescriberLastName"];
+            this.prescriberName = _data["prescriberName"];
+            this.canContinue = _data["canContinue"];
+        }
+    }
+
+    static fromJS(data: any): GetPatientListResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetPatientListResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["title"] = this.title;
+        data["firstName"] = this.firstName;
+        data["lastName"] = this.lastName;
+        data["name"] = this.name;
+        data["dateOfBirth"] = this.dateOfBirth ? this.dateOfBirth.toISOString() : <any>undefined;
+        data["email"] = this.email;
+        data["city"] = this.city;
+        data["state"] = this.state;
+        data["status"] = this.status;
+        data["prescriberTitle"] = this.prescriberTitle;
+        data["prescriberFirstName"] = this.prescriberFirstName;
+        data["prescriberLastName"] = this.prescriberLastName;
+        data["prescriberName"] = this.prescriberName;
+        data["canContinue"] = this.canContinue;
+        return data;
+    }
+
+    clone(): GetPatientListResponse {
+        const json = this.toJSON();
+        let result = new GetPatientListResponse();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetPatientListResponse {
+    id: string;
+    title: Title;
+    firstName: string | undefined;
+    lastName: string | undefined;
+    name: string | undefined;
+    dateOfBirth: Date;
+    email: string | undefined;
+    city: string | undefined;
+    state: AddressState;
+    status: TreatmentStatus;
+    prescriberTitle: Title;
+    prescriberFirstName: string | undefined;
+    prescriberLastName: string | undefined;
+    prescriberName: string | undefined;
+    canContinue: boolean;
+}
+
+export class GetPatientListResponsePagedResultDto implements IGetPatientListResponsePagedResultDto {
+    totalCount: number;
+    items: GetPatientListResponse[] | undefined;
+
+    constructor(data?: IGetPatientListResponsePagedResultDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.totalCount = _data["totalCount"];
+            if (Array.isArray(_data["items"])) {
+                this.items = [];
+                for (let item of _data["items"])
+                    this.items.push(GetPatientListResponse.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): GetPatientListResponsePagedResultDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetPatientListResponsePagedResultDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["totalCount"] = this.totalCount;
+        if (Array.isArray(this.items)) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item.toJSON());
+        }
+        return data;
+    }
+
+    clone(): GetPatientListResponsePagedResultDto {
+        const json = this.toJSON();
+        let result = new GetPatientListResponsePagedResultDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetPatientListResponsePagedResultDto {
+    totalCount: number;
+    items: GetPatientListResponse[] | undefined;
+}
+
+export class GetPatientListResponsePagedResultDtoApiResponse implements IGetPatientListResponsePagedResultDtoApiResponse {
+    isSuccess: boolean;
+    resultObject: GetPatientListResponsePagedResultDto;
+    problemDetails: ProblemDetails;
+
+    constructor(data?: IGetPatientListResponsePagedResultDtoApiResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.isSuccess = _data["isSuccess"];
+            this.resultObject = _data["resultObject"] ? GetPatientListResponsePagedResultDto.fromJS(_data["resultObject"]) : <any>undefined;
+            this.problemDetails = _data["problemDetails"] ? ProblemDetails.fromJS(_data["problemDetails"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): GetPatientListResponsePagedResultDtoApiResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetPatientListResponsePagedResultDtoApiResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["isSuccess"] = this.isSuccess;
+        data["resultObject"] = this.resultObject ? this.resultObject.toJSON() : <any>undefined;
+        data["problemDetails"] = this.problemDetails ? this.problemDetails.toJSON() : <any>undefined;
+        return data;
+    }
+
+    clone(): GetPatientListResponsePagedResultDtoApiResponse {
+        const json = this.toJSON();
+        let result = new GetPatientListResponsePagedResultDtoApiResponse();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetPatientListResponsePagedResultDtoApiResponse {
+    isSuccess: boolean;
+    resultObject: GetPatientListResponsePagedResultDto;
+    problemDetails: ProblemDetails;
+}
+
+export class GetPatientPreEnrolmentInformationResponse implements IGetPatientPreEnrolmentInformationResponse {
+    prescriberId: string | undefined;
+    registrationMethod: RegistrationMethod;
+    title: Title;
+    firstName: string | undefined;
+    middleName: string | undefined;
+    lastName: string | undefined;
+    email: string | undefined;
+    dateOfBirth: Date;
+    gender: Gender;
+    phone: string | undefined;
+    mobile: string | undefined;
+    supportProgramAccessRequested: boolean | undefined;
+    homeUnitNumber: string | undefined;
+    homeStreetAddress: string | undefined;
+    homeCity: string | undefined;
+    homeState: AddressState;
+    homePostcode: string | undefined;
+    pharmacyId: string | undefined;
+    clinicId: string | undefined;
+    clinicName: string | undefined;
+    clinicUnitNumber: string | undefined;
+    clinicStreetAddress: string | undefined;
+    clinicCity: string | undefined;
+    clinicPostcode: string | undefined;
+    clinicPhone: string | undefined;
+    clinicState: AddressState;
+
+    constructor(data?: IGetPatientPreEnrolmentInformationResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.prescriberId = _data["prescriberId"];
+            this.registrationMethod = _data["registrationMethod"];
+            this.title = _data["title"];
+            this.firstName = _data["firstName"];
+            this.middleName = _data["middleName"];
+            this.lastName = _data["lastName"];
+            this.email = _data["email"];
+            this.dateOfBirth = _data["dateOfBirth"] ? new Date(_data["dateOfBirth"].toString()) : <any>undefined;
+            this.gender = _data["gender"];
+            this.phone = _data["phone"];
+            this.mobile = _data["mobile"];
+            this.supportProgramAccessRequested = _data["supportProgramAccessRequested"];
+            this.homeUnitNumber = _data["homeUnitNumber"];
+            this.homeStreetAddress = _data["homeStreetAddress"];
+            this.homeCity = _data["homeCity"];
+            this.homeState = _data["homeState"];
+            this.homePostcode = _data["homePostcode"];
+            this.pharmacyId = _data["pharmacyId"];
+            this.clinicId = _data["clinicId"];
+            this.clinicName = _data["clinicName"];
+            this.clinicUnitNumber = _data["clinicUnitNumber"];
+            this.clinicStreetAddress = _data["clinicStreetAddress"];
+            this.clinicCity = _data["clinicCity"];
+            this.clinicPostcode = _data["clinicPostcode"];
+            this.clinicPhone = _data["clinicPhone"];
+            this.clinicState = _data["clinicState"];
+        }
+    }
+
+    static fromJS(data: any): GetPatientPreEnrolmentInformationResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetPatientPreEnrolmentInformationResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["prescriberId"] = this.prescriberId;
+        data["registrationMethod"] = this.registrationMethod;
+        data["title"] = this.title;
+        data["firstName"] = this.firstName;
+        data["middleName"] = this.middleName;
+        data["lastName"] = this.lastName;
+        data["email"] = this.email;
+        data["dateOfBirth"] = this.dateOfBirth ? this.dateOfBirth.toISOString() : <any>undefined;
+        data["gender"] = this.gender;
+        data["phone"] = this.phone;
+        data["mobile"] = this.mobile;
+        data["supportProgramAccessRequested"] = this.supportProgramAccessRequested;
+        data["homeUnitNumber"] = this.homeUnitNumber;
+        data["homeStreetAddress"] = this.homeStreetAddress;
+        data["homeCity"] = this.homeCity;
+        data["homeState"] = this.homeState;
+        data["homePostcode"] = this.homePostcode;
+        data["pharmacyId"] = this.pharmacyId;
+        data["clinicId"] = this.clinicId;
+        data["clinicName"] = this.clinicName;
+        data["clinicUnitNumber"] = this.clinicUnitNumber;
+        data["clinicStreetAddress"] = this.clinicStreetAddress;
+        data["clinicCity"] = this.clinicCity;
+        data["clinicPostcode"] = this.clinicPostcode;
+        data["clinicPhone"] = this.clinicPhone;
+        data["clinicState"] = this.clinicState;
+        return data;
+    }
+
+    clone(): GetPatientPreEnrolmentInformationResponse {
+        const json = this.toJSON();
+        let result = new GetPatientPreEnrolmentInformationResponse();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetPatientPreEnrolmentInformationResponse {
+    prescriberId: string | undefined;
+    registrationMethod: RegistrationMethod;
+    title: Title;
+    firstName: string | undefined;
+    middleName: string | undefined;
+    lastName: string | undefined;
+    email: string | undefined;
+    dateOfBirth: Date;
+    gender: Gender;
+    phone: string | undefined;
+    mobile: string | undefined;
+    supportProgramAccessRequested: boolean | undefined;
+    homeUnitNumber: string | undefined;
+    homeStreetAddress: string | undefined;
+    homeCity: string | undefined;
+    homeState: AddressState;
+    homePostcode: string | undefined;
+    pharmacyId: string | undefined;
+    clinicId: string | undefined;
+    clinicName: string | undefined;
+    clinicUnitNumber: string | undefined;
+    clinicStreetAddress: string | undefined;
+    clinicCity: string | undefined;
+    clinicPostcode: string | undefined;
+    clinicPhone: string | undefined;
+    clinicState: AddressState;
+}
+
+export class GetPatientPreEnrolmentInformationResponseApiResponse implements IGetPatientPreEnrolmentInformationResponseApiResponse {
+    isSuccess: boolean;
+    resultObject: GetPatientPreEnrolmentInformationResponse;
+    problemDetails: ProblemDetails;
+
+    constructor(data?: IGetPatientPreEnrolmentInformationResponseApiResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.isSuccess = _data["isSuccess"];
+            this.resultObject = _data["resultObject"] ? GetPatientPreEnrolmentInformationResponse.fromJS(_data["resultObject"]) : <any>undefined;
+            this.problemDetails = _data["problemDetails"] ? ProblemDetails.fromJS(_data["problemDetails"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): GetPatientPreEnrolmentInformationResponseApiResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetPatientPreEnrolmentInformationResponseApiResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["isSuccess"] = this.isSuccess;
+        data["resultObject"] = this.resultObject ? this.resultObject.toJSON() : <any>undefined;
+        data["problemDetails"] = this.problemDetails ? this.problemDetails.toJSON() : <any>undefined;
+        return data;
+    }
+
+    clone(): GetPatientPreEnrolmentInformationResponseApiResponse {
+        const json = this.toJSON();
+        let result = new GetPatientPreEnrolmentInformationResponseApiResponse();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetPatientPreEnrolmentInformationResponseApiResponse {
+    isSuccess: boolean;
+    resultObject: GetPatientPreEnrolmentInformationResponse;
+    problemDetails: ProblemDetails;
+}
+
+export class GetPatientProgramRegistrationConfigurationSettiingsResponse implements IGetPatientProgramRegistrationConfigurationSettiingsResponse {
+    requiresEmailAddress: boolean;
+    requiresMobileNumber: boolean;
+    requiresPhoneNumber: boolean;
+    requiresAtLeastOneContactNumber: boolean;
+    requiresAdminApproval: boolean;
+    requiresPrescriberApproval: boolean;
+    requiresLocationAddress: boolean;
+    requiresWelcomeNotification: boolean;
+    requiresUserAccess: boolean;
+    requiresPrescriber: boolean;
+    requiresDispensingPharmacy: boolean;
+    requiresHomeDelivery: boolean;
+    minimumRegistrationAge: number;
+    medicationOptionRequired: boolean;
+    eligibilityCriteriaRequired: boolean;
+
+    constructor(data?: IGetPatientProgramRegistrationConfigurationSettiingsResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.requiresEmailAddress = _data["requiresEmailAddress"];
+            this.requiresMobileNumber = _data["requiresMobileNumber"];
+            this.requiresPhoneNumber = _data["requiresPhoneNumber"];
+            this.requiresAtLeastOneContactNumber = _data["requiresAtLeastOneContactNumber"];
+            this.requiresAdminApproval = _data["requiresAdminApproval"];
+            this.requiresPrescriberApproval = _data["requiresPrescriberApproval"];
+            this.requiresLocationAddress = _data["requiresLocationAddress"];
+            this.requiresWelcomeNotification = _data["requiresWelcomeNotification"];
+            this.requiresUserAccess = _data["requiresUserAccess"];
+            this.requiresPrescriber = _data["requiresPrescriber"];
+            this.requiresDispensingPharmacy = _data["requiresDispensingPharmacy"];
+            this.requiresHomeDelivery = _data["requiresHomeDelivery"];
+            this.minimumRegistrationAge = _data["minimumRegistrationAge"];
+            this.medicationOptionRequired = _data["medicationOptionRequired"];
+            this.eligibilityCriteriaRequired = _data["eligibilityCriteriaRequired"];
+        }
+    }
+
+    static fromJS(data: any): GetPatientProgramRegistrationConfigurationSettiingsResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetPatientProgramRegistrationConfigurationSettiingsResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["requiresEmailAddress"] = this.requiresEmailAddress;
+        data["requiresMobileNumber"] = this.requiresMobileNumber;
+        data["requiresPhoneNumber"] = this.requiresPhoneNumber;
+        data["requiresAtLeastOneContactNumber"] = this.requiresAtLeastOneContactNumber;
+        data["requiresAdminApproval"] = this.requiresAdminApproval;
+        data["requiresPrescriberApproval"] = this.requiresPrescriberApproval;
+        data["requiresLocationAddress"] = this.requiresLocationAddress;
+        data["requiresWelcomeNotification"] = this.requiresWelcomeNotification;
+        data["requiresUserAccess"] = this.requiresUserAccess;
+        data["requiresPrescriber"] = this.requiresPrescriber;
+        data["requiresDispensingPharmacy"] = this.requiresDispensingPharmacy;
+        data["requiresHomeDelivery"] = this.requiresHomeDelivery;
+        data["minimumRegistrationAge"] = this.minimumRegistrationAge;
+        data["medicationOptionRequired"] = this.medicationOptionRequired;
+        data["eligibilityCriteriaRequired"] = this.eligibilityCriteriaRequired;
+        return data;
+    }
+
+    clone(): GetPatientProgramRegistrationConfigurationSettiingsResponse {
+        const json = this.toJSON();
+        let result = new GetPatientProgramRegistrationConfigurationSettiingsResponse();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetPatientProgramRegistrationConfigurationSettiingsResponse {
+    requiresEmailAddress: boolean;
+    requiresMobileNumber: boolean;
+    requiresPhoneNumber: boolean;
+    requiresAtLeastOneContactNumber: boolean;
+    requiresAdminApproval: boolean;
+    requiresPrescriberApproval: boolean;
+    requiresLocationAddress: boolean;
+    requiresWelcomeNotification: boolean;
+    requiresUserAccess: boolean;
+    requiresPrescriber: boolean;
+    requiresDispensingPharmacy: boolean;
+    requiresHomeDelivery: boolean;
+    minimumRegistrationAge: number;
+    medicationOptionRequired: boolean;
+    eligibilityCriteriaRequired: boolean;
+}
+
+export class GetPatientProgramRegistrationConfigurationSettiingsResponseApiResponse implements IGetPatientProgramRegistrationConfigurationSettiingsResponseApiResponse {
+    isSuccess: boolean;
+    resultObject: GetPatientProgramRegistrationConfigurationSettiingsResponse;
+    problemDetails: ProblemDetails;
+
+    constructor(data?: IGetPatientProgramRegistrationConfigurationSettiingsResponseApiResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.isSuccess = _data["isSuccess"];
+            this.resultObject = _data["resultObject"] ? GetPatientProgramRegistrationConfigurationSettiingsResponse.fromJS(_data["resultObject"]) : <any>undefined;
+            this.problemDetails = _data["problemDetails"] ? ProblemDetails.fromJS(_data["problemDetails"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): GetPatientProgramRegistrationConfigurationSettiingsResponseApiResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetPatientProgramRegistrationConfigurationSettiingsResponseApiResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["isSuccess"] = this.isSuccess;
+        data["resultObject"] = this.resultObject ? this.resultObject.toJSON() : <any>undefined;
+        data["problemDetails"] = this.problemDetails ? this.problemDetails.toJSON() : <any>undefined;
+        return data;
+    }
+
+    clone(): GetPatientProgramRegistrationConfigurationSettiingsResponseApiResponse {
+        const json = this.toJSON();
+        let result = new GetPatientProgramRegistrationConfigurationSettiingsResponseApiResponse();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetPatientProgramRegistrationConfigurationSettiingsResponseApiResponse {
+    isSuccess: boolean;
+    resultObject: GetPatientProgramRegistrationConfigurationSettiingsResponse;
+    problemDetails: ProblemDetails;
+}
+
+export class GetPatientProgramRegistrationProfileResponse implements IGetPatientProgramRegistrationProfileResponse {
+    registrationId: string;
+    enrolledOn: Date;
+    registrationStatus: RegistrationStatus;
+    privacyConsentProvided: boolean;
+    programTermsAgreed: boolean;
+    marketingCommunicationConsentProvided: boolean;
+    adverseEventContactConsentProvided: boolean;
+    preferredContactMethod: PreferredContactMethod;
+    adminNotes: string | undefined;
+    enrolledBy: string | undefined;
+
+    constructor(data?: IGetPatientProgramRegistrationProfileResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.registrationId = _data["registrationId"];
+            this.enrolledOn = _data["enrolledOn"] ? new Date(_data["enrolledOn"].toString()) : <any>undefined;
+            this.registrationStatus = _data["registrationStatus"];
+            this.privacyConsentProvided = _data["privacyConsentProvided"];
+            this.programTermsAgreed = _data["programTermsAgreed"];
+            this.marketingCommunicationConsentProvided = _data["marketingCommunicationConsentProvided"];
+            this.adverseEventContactConsentProvided = _data["adverseEventContactConsentProvided"];
+            this.preferredContactMethod = _data["preferredContactMethod"];
+            this.adminNotes = _data["adminNotes"];
+            this.enrolledBy = _data["enrolledBy"];
+        }
+    }
+
+    static fromJS(data: any): GetPatientProgramRegistrationProfileResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetPatientProgramRegistrationProfileResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["registrationId"] = this.registrationId;
+        data["enrolledOn"] = this.enrolledOn ? this.enrolledOn.toISOString() : <any>undefined;
+        data["registrationStatus"] = this.registrationStatus;
+        data["privacyConsentProvided"] = this.privacyConsentProvided;
+        data["programTermsAgreed"] = this.programTermsAgreed;
+        data["marketingCommunicationConsentProvided"] = this.marketingCommunicationConsentProvided;
+        data["adverseEventContactConsentProvided"] = this.adverseEventContactConsentProvided;
+        data["preferredContactMethod"] = this.preferredContactMethod;
+        data["adminNotes"] = this.adminNotes;
+        data["enrolledBy"] = this.enrolledBy;
+        return data;
+    }
+
+    clone(): GetPatientProgramRegistrationProfileResponse {
+        const json = this.toJSON();
+        let result = new GetPatientProgramRegistrationProfileResponse();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetPatientProgramRegistrationProfileResponse {
+    registrationId: string;
+    enrolledOn: Date;
+    registrationStatus: RegistrationStatus;
+    privacyConsentProvided: boolean;
+    programTermsAgreed: boolean;
+    marketingCommunicationConsentProvided: boolean;
+    adverseEventContactConsentProvided: boolean;
+    preferredContactMethod: PreferredContactMethod;
+    adminNotes: string | undefined;
+    enrolledBy: string | undefined;
+}
+
+export class GetPatientProgramRegistrationProfileResponseApiResponse implements IGetPatientProgramRegistrationProfileResponseApiResponse {
+    isSuccess: boolean;
+    resultObject: GetPatientProgramRegistrationProfileResponse;
+    problemDetails: ProblemDetails;
+
+    constructor(data?: IGetPatientProgramRegistrationProfileResponseApiResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.isSuccess = _data["isSuccess"];
+            this.resultObject = _data["resultObject"] ? GetPatientProgramRegistrationProfileResponse.fromJS(_data["resultObject"]) : <any>undefined;
+            this.problemDetails = _data["problemDetails"] ? ProblemDetails.fromJS(_data["problemDetails"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): GetPatientProgramRegistrationProfileResponseApiResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetPatientProgramRegistrationProfileResponseApiResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["isSuccess"] = this.isSuccess;
+        data["resultObject"] = this.resultObject ? this.resultObject.toJSON() : <any>undefined;
+        data["problemDetails"] = this.problemDetails ? this.problemDetails.toJSON() : <any>undefined;
+        return data;
+    }
+
+    clone(): GetPatientProgramRegistrationProfileResponseApiResponse {
+        const json = this.toJSON();
+        let result = new GetPatientProgramRegistrationProfileResponseApiResponse();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetPatientProgramRegistrationProfileResponseApiResponse {
+    isSuccess: boolean;
+    resultObject: GetPatientProgramRegistrationProfileResponse;
     problemDetails: ProblemDetails;
 }
 
@@ -2280,22 +13785,36 @@ export class GetPatientResponse implements IGetPatientResponse {
     email: string | undefined;
     phone: string | undefined;
     mobile: string | undefined;
-    unitNumber: string | undefined;
-    addressLine1: string | undefined;
-    addressLine2: string | undefined;
-    city: string | undefined;
-    state: AddressState;
-    postcode: string | undefined;
+    medicareNumber: string | undefined;
+    nationalHealthIndex: string | undefined;
+    salesForceId: string | undefined;
+    homeUnitNumber: string | undefined;
+    homeStreetAddress: string | undefined;
+    homeCity: string | undefined;
+    homeState: AddressState;
+    homePostcode: string | undefined;
+    deliveryUnitNumber: string | undefined;
+    deliveryStreetAddress: string | undefined;
+    deliveryCity: string | undefined;
+    deliveryState: AddressState;
+    deliveryPostcode: string | undefined;
     status: TreatmentStatus;
     registeredOn: Date;
-    canContinue: boolean;
-    canResupply: boolean;
     carerTitle: Title;
     carerFirstName: string | undefined;
     carerLastName: string | undefined;
     carerPhone: string | undefined;
     carerMobile: string | undefined;
     prescriberNumber: string | undefined;
+    canContinue: boolean;
+    pharmacyName: string | undefined;
+    pharmacyUnitNumber: string | undefined;
+    pharmacyStreetAddress: string | undefined;
+    pharmacyCity: string | undefined;
+    pharmacyState: AddressState;
+    pharmacyPostcode: string | undefined;
+    pharmacyPhone: string | undefined;
+    dosageId: number | undefined;
 
     constructor(data?: IGetPatientResponse) {
         if (data) {
@@ -2319,22 +13838,36 @@ export class GetPatientResponse implements IGetPatientResponse {
             this.email = _data["email"];
             this.phone = _data["phone"];
             this.mobile = _data["mobile"];
-            this.unitNumber = _data["unitNumber"];
-            this.addressLine1 = _data["addressLine1"];
-            this.addressLine2 = _data["addressLine2"];
-            this.city = _data["city"];
-            this.state = _data["state"];
-            this.postcode = _data["postcode"];
+            this.medicareNumber = _data["medicareNumber"];
+            this.nationalHealthIndex = _data["nationalHealthIndex"];
+            this.salesForceId = _data["salesForceId"];
+            this.homeUnitNumber = _data["homeUnitNumber"];
+            this.homeStreetAddress = _data["homeStreetAddress"];
+            this.homeCity = _data["homeCity"];
+            this.homeState = _data["homeState"];
+            this.homePostcode = _data["homePostcode"];
+            this.deliveryUnitNumber = _data["deliveryUnitNumber"];
+            this.deliveryStreetAddress = _data["deliveryStreetAddress"];
+            this.deliveryCity = _data["deliveryCity"];
+            this.deliveryState = _data["deliveryState"];
+            this.deliveryPostcode = _data["deliveryPostcode"];
             this.status = _data["status"];
             this.registeredOn = _data["registeredOn"] ? new Date(_data["registeredOn"].toString()) : <any>undefined;
-            this.canContinue = _data["canContinue"];
-            this.canResupply = _data["canResupply"];
             this.carerTitle = _data["carerTitle"];
             this.carerFirstName = _data["carerFirstName"];
             this.carerLastName = _data["carerLastName"];
             this.carerPhone = _data["carerPhone"];
             this.carerMobile = _data["carerMobile"];
             this.prescriberNumber = _data["prescriberNumber"];
+            this.canContinue = _data["canContinue"];
+            this.pharmacyName = _data["pharmacyName"];
+            this.pharmacyUnitNumber = _data["pharmacyUnitNumber"];
+            this.pharmacyStreetAddress = _data["pharmacyStreetAddress"];
+            this.pharmacyCity = _data["pharmacyCity"];
+            this.pharmacyState = _data["pharmacyState"];
+            this.pharmacyPostcode = _data["pharmacyPostcode"];
+            this.pharmacyPhone = _data["pharmacyPhone"];
+            this.dosageId = _data["dosageId"];
         }
     }
 
@@ -2358,22 +13891,36 @@ export class GetPatientResponse implements IGetPatientResponse {
         data["email"] = this.email;
         data["phone"] = this.phone;
         data["mobile"] = this.mobile;
-        data["unitNumber"] = this.unitNumber;
-        data["addressLine1"] = this.addressLine1;
-        data["addressLine2"] = this.addressLine2;
-        data["city"] = this.city;
-        data["state"] = this.state;
-        data["postcode"] = this.postcode;
+        data["medicareNumber"] = this.medicareNumber;
+        data["nationalHealthIndex"] = this.nationalHealthIndex;
+        data["salesForceId"] = this.salesForceId;
+        data["homeUnitNumber"] = this.homeUnitNumber;
+        data["homeStreetAddress"] = this.homeStreetAddress;
+        data["homeCity"] = this.homeCity;
+        data["homeState"] = this.homeState;
+        data["homePostcode"] = this.homePostcode;
+        data["deliveryUnitNumber"] = this.deliveryUnitNumber;
+        data["deliveryStreetAddress"] = this.deliveryStreetAddress;
+        data["deliveryCity"] = this.deliveryCity;
+        data["deliveryState"] = this.deliveryState;
+        data["deliveryPostcode"] = this.deliveryPostcode;
         data["status"] = this.status;
         data["registeredOn"] = this.registeredOn ? this.registeredOn.toISOString() : <any>undefined;
-        data["canContinue"] = this.canContinue;
-        data["canResupply"] = this.canResupply;
         data["carerTitle"] = this.carerTitle;
         data["carerFirstName"] = this.carerFirstName;
         data["carerLastName"] = this.carerLastName;
         data["carerPhone"] = this.carerPhone;
         data["carerMobile"] = this.carerMobile;
         data["prescriberNumber"] = this.prescriberNumber;
+        data["canContinue"] = this.canContinue;
+        data["pharmacyName"] = this.pharmacyName;
+        data["pharmacyUnitNumber"] = this.pharmacyUnitNumber;
+        data["pharmacyStreetAddress"] = this.pharmacyStreetAddress;
+        data["pharmacyCity"] = this.pharmacyCity;
+        data["pharmacyState"] = this.pharmacyState;
+        data["pharmacyPostcode"] = this.pharmacyPostcode;
+        data["pharmacyPhone"] = this.pharmacyPhone;
+        data["dosageId"] = this.dosageId;
         return data;
     }
 
@@ -2397,22 +13944,36 @@ export interface IGetPatientResponse {
     email: string | undefined;
     phone: string | undefined;
     mobile: string | undefined;
-    unitNumber: string | undefined;
-    addressLine1: string | undefined;
-    addressLine2: string | undefined;
-    city: string | undefined;
-    state: AddressState;
-    postcode: string | undefined;
+    medicareNumber: string | undefined;
+    nationalHealthIndex: string | undefined;
+    salesForceId: string | undefined;
+    homeUnitNumber: string | undefined;
+    homeStreetAddress: string | undefined;
+    homeCity: string | undefined;
+    homeState: AddressState;
+    homePostcode: string | undefined;
+    deliveryUnitNumber: string | undefined;
+    deliveryStreetAddress: string | undefined;
+    deliveryCity: string | undefined;
+    deliveryState: AddressState;
+    deliveryPostcode: string | undefined;
     status: TreatmentStatus;
     registeredOn: Date;
-    canContinue: boolean;
-    canResupply: boolean;
     carerTitle: Title;
     carerFirstName: string | undefined;
     carerLastName: string | undefined;
     carerPhone: string | undefined;
     carerMobile: string | undefined;
     prescriberNumber: string | undefined;
+    canContinue: boolean;
+    pharmacyName: string | undefined;
+    pharmacyUnitNumber: string | undefined;
+    pharmacyStreetAddress: string | undefined;
+    pharmacyCity: string | undefined;
+    pharmacyState: AddressState;
+    pharmacyPostcode: string | undefined;
+    pharmacyPhone: string | undefined;
+    dosageId: number | undefined;
 }
 
 export class GetPatientResponseApiResponse implements IGetPatientResponseApiResponse {
@@ -2466,9 +14027,473 @@ export interface IGetPatientResponseApiResponse {
     problemDetails: ProblemDetails;
 }
 
+export class GetPatientTreatmentByNameDateOfBirthDto implements IGetPatientTreatmentByNameDateOfBirthDto {
+    firstName: string | undefined;
+    lastName: string | undefined;
+    birthDay: number;
+    birthMonth: number;
+    birthYear: number;
+
+    constructor(data?: IGetPatientTreatmentByNameDateOfBirthDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.firstName = _data["firstName"];
+            this.lastName = _data["lastName"];
+            this.birthDay = _data["birthDay"];
+            this.birthMonth = _data["birthMonth"];
+            this.birthYear = _data["birthYear"];
+        }
+    }
+
+    static fromJS(data: any): GetPatientTreatmentByNameDateOfBirthDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetPatientTreatmentByNameDateOfBirthDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["firstName"] = this.firstName;
+        data["lastName"] = this.lastName;
+        data["birthDay"] = this.birthDay;
+        data["birthMonth"] = this.birthMonth;
+        data["birthYear"] = this.birthYear;
+        return data;
+    }
+
+    clone(): GetPatientTreatmentByNameDateOfBirthDto {
+        const json = this.toJSON();
+        let result = new GetPatientTreatmentByNameDateOfBirthDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetPatientTreatmentByNameDateOfBirthDto {
+    firstName: string | undefined;
+    lastName: string | undefined;
+    birthDay: number;
+    birthMonth: number;
+    birthYear: number;
+}
+
+export class GetPatientTreatmentByNameDateOfBirthResponse implements IGetPatientTreatmentByNameDateOfBirthResponse {
+    treatmentId: string;
+    patientId: string;
+    title: Title;
+    firstName: string | undefined;
+    lastName: string | undefined;
+    middleName: string | undefined;
+    dateOfBirth: Date | undefined;
+    patientStreetAddress: string | undefined;
+    patientAddressLine2: string | undefined;
+    patientCity: string | undefined;
+    patientState: AddressState;
+    patientPostcode: string | undefined;
+    preenrolmentClinicId: string | undefined;
+    preenrolmentClinicName: string | undefined;
+    preenrolmentUtcDate: Date | undefined;
+    preenrolmentPrescriberId: string | undefined;
+    treatmentCategory: TreatmentCategory;
+    clinicId: string | undefined;
+    clinicName: string | undefined;
+    clinicUnitNumber: string | undefined;
+    clinicAddress: string | undefined;
+    clinicCity: string | undefined;
+    clinicState: AddressState;
+    clinicPostcode: string | undefined;
+    prescriberId: string | undefined;
+    prescriberTitle: Title;
+    prescriberFirstName: string | undefined;
+    prescriberLastName: string | undefined;
+    pharmacyId: string | undefined;
+    pharmacyName: string | undefined;
+    pharmacyUnitNumber: string | undefined;
+    pharmacyAddress: string | undefined;
+    pharmacyCity: string | undefined;
+    pharmacyState: AddressState;
+    pharmacyPostcode: string | undefined;
+    pharmacyAccount: string | undefined;
+    medicationId: number | undefined;
+    medicationName: string | undefined;
+    lastMedicationId: number | undefined;
+    lastDispensedStrength: string | undefined;
+    lastDispensedQuantity: number | undefined;
+    lastDispensedDate: Date | undefined;
+
+    constructor(data?: IGetPatientTreatmentByNameDateOfBirthResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.treatmentId = _data["treatmentId"];
+            this.patientId = _data["patientId"];
+            this.title = _data["title"];
+            this.firstName = _data["firstName"];
+            this.lastName = _data["lastName"];
+            this.middleName = _data["middleName"];
+            this.dateOfBirth = _data["dateOfBirth"] ? new Date(_data["dateOfBirth"].toString()) : <any>undefined;
+            this.patientStreetAddress = _data["patientStreetAddress"];
+            this.patientAddressLine2 = _data["patientAddressLine2"];
+            this.patientCity = _data["patientCity"];
+            this.patientState = _data["patientState"];
+            this.patientPostcode = _data["patientPostcode"];
+            this.preenrolmentClinicId = _data["preenrolmentClinicId"];
+            this.preenrolmentClinicName = _data["preenrolmentClinicName"];
+            this.preenrolmentUtcDate = _data["preenrolmentUtcDate"] ? new Date(_data["preenrolmentUtcDate"].toString()) : <any>undefined;
+            this.preenrolmentPrescriberId = _data["preenrolmentPrescriberId"];
+            this.treatmentCategory = _data["treatmentCategory"];
+            this.clinicId = _data["clinicId"];
+            this.clinicName = _data["clinicName"];
+            this.clinicUnitNumber = _data["clinicUnitNumber"];
+            this.clinicAddress = _data["clinicAddress"];
+            this.clinicCity = _data["clinicCity"];
+            this.clinicState = _data["clinicState"];
+            this.clinicPostcode = _data["clinicPostcode"];
+            this.prescriberId = _data["prescriberId"];
+            this.prescriberTitle = _data["prescriberTitle"];
+            this.prescriberFirstName = _data["prescriberFirstName"];
+            this.prescriberLastName = _data["prescriberLastName"];
+            this.pharmacyId = _data["pharmacyId"];
+            this.pharmacyName = _data["pharmacyName"];
+            this.pharmacyUnitNumber = _data["pharmacyUnitNumber"];
+            this.pharmacyAddress = _data["pharmacyAddress"];
+            this.pharmacyCity = _data["pharmacyCity"];
+            this.pharmacyState = _data["pharmacyState"];
+            this.pharmacyPostcode = _data["pharmacyPostcode"];
+            this.pharmacyAccount = _data["pharmacyAccount"];
+            this.medicationId = _data["medicationId"];
+            this.medicationName = _data["medicationName"];
+            this.lastMedicationId = _data["lastMedicationId"];
+            this.lastDispensedStrength = _data["lastDispensedStrength"];
+            this.lastDispensedQuantity = _data["lastDispensedQuantity"];
+            this.lastDispensedDate = _data["lastDispensedDate"] ? new Date(_data["lastDispensedDate"].toString()) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): GetPatientTreatmentByNameDateOfBirthResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetPatientTreatmentByNameDateOfBirthResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["treatmentId"] = this.treatmentId;
+        data["patientId"] = this.patientId;
+        data["title"] = this.title;
+        data["firstName"] = this.firstName;
+        data["lastName"] = this.lastName;
+        data["middleName"] = this.middleName;
+        data["dateOfBirth"] = this.dateOfBirth ? this.dateOfBirth.toISOString() : <any>undefined;
+        data["patientStreetAddress"] = this.patientStreetAddress;
+        data["patientAddressLine2"] = this.patientAddressLine2;
+        data["patientCity"] = this.patientCity;
+        data["patientState"] = this.patientState;
+        data["patientPostcode"] = this.patientPostcode;
+        data["preenrolmentClinicId"] = this.preenrolmentClinicId;
+        data["preenrolmentClinicName"] = this.preenrolmentClinicName;
+        data["preenrolmentUtcDate"] = this.preenrolmentUtcDate ? this.preenrolmentUtcDate.toISOString() : <any>undefined;
+        data["preenrolmentPrescriberId"] = this.preenrolmentPrescriberId;
+        data["treatmentCategory"] = this.treatmentCategory;
+        data["clinicId"] = this.clinicId;
+        data["clinicName"] = this.clinicName;
+        data["clinicUnitNumber"] = this.clinicUnitNumber;
+        data["clinicAddress"] = this.clinicAddress;
+        data["clinicCity"] = this.clinicCity;
+        data["clinicState"] = this.clinicState;
+        data["clinicPostcode"] = this.clinicPostcode;
+        data["prescriberId"] = this.prescriberId;
+        data["prescriberTitle"] = this.prescriberTitle;
+        data["prescriberFirstName"] = this.prescriberFirstName;
+        data["prescriberLastName"] = this.prescriberLastName;
+        data["pharmacyId"] = this.pharmacyId;
+        data["pharmacyName"] = this.pharmacyName;
+        data["pharmacyUnitNumber"] = this.pharmacyUnitNumber;
+        data["pharmacyAddress"] = this.pharmacyAddress;
+        data["pharmacyCity"] = this.pharmacyCity;
+        data["pharmacyState"] = this.pharmacyState;
+        data["pharmacyPostcode"] = this.pharmacyPostcode;
+        data["pharmacyAccount"] = this.pharmacyAccount;
+        data["medicationId"] = this.medicationId;
+        data["medicationName"] = this.medicationName;
+        data["lastMedicationId"] = this.lastMedicationId;
+        data["lastDispensedStrength"] = this.lastDispensedStrength;
+        data["lastDispensedQuantity"] = this.lastDispensedQuantity;
+        data["lastDispensedDate"] = this.lastDispensedDate ? this.lastDispensedDate.toISOString() : <any>undefined;
+        return data;
+    }
+
+    clone(): GetPatientTreatmentByNameDateOfBirthResponse {
+        const json = this.toJSON();
+        let result = new GetPatientTreatmentByNameDateOfBirthResponse();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetPatientTreatmentByNameDateOfBirthResponse {
+    treatmentId: string;
+    patientId: string;
+    title: Title;
+    firstName: string | undefined;
+    lastName: string | undefined;
+    middleName: string | undefined;
+    dateOfBirth: Date | undefined;
+    patientStreetAddress: string | undefined;
+    patientAddressLine2: string | undefined;
+    patientCity: string | undefined;
+    patientState: AddressState;
+    patientPostcode: string | undefined;
+    preenrolmentClinicId: string | undefined;
+    preenrolmentClinicName: string | undefined;
+    preenrolmentUtcDate: Date | undefined;
+    preenrolmentPrescriberId: string | undefined;
+    treatmentCategory: TreatmentCategory;
+    clinicId: string | undefined;
+    clinicName: string | undefined;
+    clinicUnitNumber: string | undefined;
+    clinicAddress: string | undefined;
+    clinicCity: string | undefined;
+    clinicState: AddressState;
+    clinicPostcode: string | undefined;
+    prescriberId: string | undefined;
+    prescriberTitle: Title;
+    prescriberFirstName: string | undefined;
+    prescriberLastName: string | undefined;
+    pharmacyId: string | undefined;
+    pharmacyName: string | undefined;
+    pharmacyUnitNumber: string | undefined;
+    pharmacyAddress: string | undefined;
+    pharmacyCity: string | undefined;
+    pharmacyState: AddressState;
+    pharmacyPostcode: string | undefined;
+    pharmacyAccount: string | undefined;
+    medicationId: number | undefined;
+    medicationName: string | undefined;
+    lastMedicationId: number | undefined;
+    lastDispensedStrength: string | undefined;
+    lastDispensedQuantity: number | undefined;
+    lastDispensedDate: Date | undefined;
+}
+
+export class GetPatientTreatmentByNameDateOfBirthResponseIEnumerableApiResponse implements IGetPatientTreatmentByNameDateOfBirthResponseIEnumerableApiResponse {
+    isSuccess: boolean;
+    readonly resultObject: GetPatientTreatmentByNameDateOfBirthResponse[] | undefined;
+    problemDetails: ProblemDetails;
+
+    constructor(data?: IGetPatientTreatmentByNameDateOfBirthResponseIEnumerableApiResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.isSuccess = _data["isSuccess"];
+            if (Array.isArray(_data["resultObject"])) {
+                (<any>this).resultObject = [];
+                for (let item of _data["resultObject"])
+                    (<any>this).resultObject.push(GetPatientTreatmentByNameDateOfBirthResponse.fromJS(item));
+            }
+            this.problemDetails = _data["problemDetails"] ? ProblemDetails.fromJS(_data["problemDetails"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): GetPatientTreatmentByNameDateOfBirthResponseIEnumerableApiResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetPatientTreatmentByNameDateOfBirthResponseIEnumerableApiResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["isSuccess"] = this.isSuccess;
+        if (Array.isArray(this.resultObject)) {
+            data["resultObject"] = [];
+            for (let item of this.resultObject)
+                data["resultObject"].push(item.toJSON());
+        }
+        data["problemDetails"] = this.problemDetails ? this.problemDetails.toJSON() : <any>undefined;
+        return data;
+    }
+
+    clone(): GetPatientTreatmentByNameDateOfBirthResponseIEnumerableApiResponse {
+        const json = this.toJSON();
+        let result = new GetPatientTreatmentByNameDateOfBirthResponseIEnumerableApiResponse();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetPatientTreatmentByNameDateOfBirthResponseIEnumerableApiResponse {
+    isSuccess: boolean;
+    resultObject: GetPatientTreatmentByNameDateOfBirthResponse[] | undefined;
+    problemDetails: ProblemDetails;
+}
+
+export class GetPatientTreatmentCategoryProfileResponse implements IGetPatientTreatmentCategoryProfileResponse {
+    treatmentProfileId: string;
+    firstName: string | undefined;
+    lastName: string | undefined;
+    dateOfBirth: Date;
+    homeUnitNumber: string | undefined;
+    homeStreetAddress: string | undefined;
+    homeCity: string | undefined;
+    homeState: AddressState;
+    homePostcode: string | undefined;
+    treatmentCategory: TreatmentCategory;
+    medicationId: number | undefined;
+    email: string | undefined;
+
+    constructor(data?: IGetPatientTreatmentCategoryProfileResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.treatmentProfileId = _data["treatmentProfileId"];
+            this.firstName = _data["firstName"];
+            this.lastName = _data["lastName"];
+            this.dateOfBirth = _data["dateOfBirth"] ? new Date(_data["dateOfBirth"].toString()) : <any>undefined;
+            this.homeUnitNumber = _data["homeUnitNumber"];
+            this.homeStreetAddress = _data["homeStreetAddress"];
+            this.homeCity = _data["homeCity"];
+            this.homeState = _data["homeState"];
+            this.homePostcode = _data["homePostcode"];
+            this.treatmentCategory = _data["treatmentCategory"];
+            this.medicationId = _data["medicationId"];
+            this.email = _data["email"];
+        }
+    }
+
+    static fromJS(data: any): GetPatientTreatmentCategoryProfileResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetPatientTreatmentCategoryProfileResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["treatmentProfileId"] = this.treatmentProfileId;
+        data["firstName"] = this.firstName;
+        data["lastName"] = this.lastName;
+        data["dateOfBirth"] = this.dateOfBirth ? this.dateOfBirth.toISOString() : <any>undefined;
+        data["homeUnitNumber"] = this.homeUnitNumber;
+        data["homeStreetAddress"] = this.homeStreetAddress;
+        data["homeCity"] = this.homeCity;
+        data["homeState"] = this.homeState;
+        data["homePostcode"] = this.homePostcode;
+        data["treatmentCategory"] = this.treatmentCategory;
+        data["medicationId"] = this.medicationId;
+        data["email"] = this.email;
+        return data;
+    }
+
+    clone(): GetPatientTreatmentCategoryProfileResponse {
+        const json = this.toJSON();
+        let result = new GetPatientTreatmentCategoryProfileResponse();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetPatientTreatmentCategoryProfileResponse {
+    treatmentProfileId: string;
+    firstName: string | undefined;
+    lastName: string | undefined;
+    dateOfBirth: Date;
+    homeUnitNumber: string | undefined;
+    homeStreetAddress: string | undefined;
+    homeCity: string | undefined;
+    homeState: AddressState;
+    homePostcode: string | undefined;
+    treatmentCategory: TreatmentCategory;
+    medicationId: number | undefined;
+    email: string | undefined;
+}
+
+export class GetPatientTreatmentCategoryProfileResponseApiResponse implements IGetPatientTreatmentCategoryProfileResponseApiResponse {
+    isSuccess: boolean;
+    resultObject: GetPatientTreatmentCategoryProfileResponse;
+    problemDetails: ProblemDetails;
+
+    constructor(data?: IGetPatientTreatmentCategoryProfileResponseApiResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.isSuccess = _data["isSuccess"];
+            this.resultObject = _data["resultObject"] ? GetPatientTreatmentCategoryProfileResponse.fromJS(_data["resultObject"]) : <any>undefined;
+            this.problemDetails = _data["problemDetails"] ? ProblemDetails.fromJS(_data["problemDetails"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): GetPatientTreatmentCategoryProfileResponseApiResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetPatientTreatmentCategoryProfileResponseApiResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["isSuccess"] = this.isSuccess;
+        data["resultObject"] = this.resultObject ? this.resultObject.toJSON() : <any>undefined;
+        data["problemDetails"] = this.problemDetails ? this.problemDetails.toJSON() : <any>undefined;
+        return data;
+    }
+
+    clone(): GetPatientTreatmentCategoryProfileResponseApiResponse {
+        const json = this.toJSON();
+        let result = new GetPatientTreatmentCategoryProfileResponseApiResponse();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetPatientTreatmentCategoryProfileResponseApiResponse {
+    isSuccess: boolean;
+    resultObject: GetPatientTreatmentCategoryProfileResponse;
+    problemDetails: ProblemDetails;
+}
+
 export class GetPatientTreatmentProfileForAdminResponse implements IGetPatientTreatmentProfileForAdminResponse {
     patientId: string;
     treatmentStatus: TreatmentStatus;
+    treatmentCategory: TreatmentCategory;
     treatmentStartDate: Date | undefined;
     prescriberId: string | undefined;
     prescriberName: string | undefined;
@@ -2480,8 +14505,13 @@ export class GetPatientTreatmentProfileForAdminResponse implements IGetPatientTr
     pharmacyName: string | undefined;
     dosageId: number | undefined;
     dosageDescription: string | undefined;
+    medicationId: number | undefined;
+    medicationDescription: string | undefined;
     patientTransferRequestId: string | undefined;
     totalDosageOptions: number;
+    canContinue: boolean;
+    canReapprove: boolean;
+    discontinuedDate: Date | undefined;
 
     constructor(data?: IGetPatientTreatmentProfileForAdminResponse) {
         if (data) {
@@ -2496,6 +14526,7 @@ export class GetPatientTreatmentProfileForAdminResponse implements IGetPatientTr
         if (_data) {
             this.patientId = _data["patientId"];
             this.treatmentStatus = _data["treatmentStatus"];
+            this.treatmentCategory = _data["treatmentCategory"];
             this.treatmentStartDate = _data["treatmentStartDate"] ? new Date(_data["treatmentStartDate"].toString()) : <any>undefined;
             this.prescriberId = _data["prescriberId"];
             this.prescriberName = _data["prescriberName"];
@@ -2507,8 +14538,13 @@ export class GetPatientTreatmentProfileForAdminResponse implements IGetPatientTr
             this.pharmacyName = _data["pharmacyName"];
             this.dosageId = _data["dosageId"];
             this.dosageDescription = _data["dosageDescription"];
+            this.medicationId = _data["medicationId"];
+            this.medicationDescription = _data["medicationDescription"];
             this.patientTransferRequestId = _data["patientTransferRequestId"];
             this.totalDosageOptions = _data["totalDosageOptions"];
+            this.canContinue = _data["canContinue"];
+            this.canReapprove = _data["canReapprove"];
+            this.discontinuedDate = _data["discontinuedDate"] ? new Date(_data["discontinuedDate"].toString()) : <any>undefined;
         }
     }
 
@@ -2523,6 +14559,7 @@ export class GetPatientTreatmentProfileForAdminResponse implements IGetPatientTr
         data = typeof data === 'object' ? data : {};
         data["patientId"] = this.patientId;
         data["treatmentStatus"] = this.treatmentStatus;
+        data["treatmentCategory"] = this.treatmentCategory;
         data["treatmentStartDate"] = this.treatmentStartDate ? this.treatmentStartDate.toISOString() : <any>undefined;
         data["prescriberId"] = this.prescriberId;
         data["prescriberName"] = this.prescriberName;
@@ -2534,8 +14571,13 @@ export class GetPatientTreatmentProfileForAdminResponse implements IGetPatientTr
         data["pharmacyName"] = this.pharmacyName;
         data["dosageId"] = this.dosageId;
         data["dosageDescription"] = this.dosageDescription;
+        data["medicationId"] = this.medicationId;
+        data["medicationDescription"] = this.medicationDescription;
         data["patientTransferRequestId"] = this.patientTransferRequestId;
         data["totalDosageOptions"] = this.totalDosageOptions;
+        data["canContinue"] = this.canContinue;
+        data["canReapprove"] = this.canReapprove;
+        data["discontinuedDate"] = this.discontinuedDate ? this.discontinuedDate.toISOString() : <any>undefined;
         return data;
     }
 
@@ -2550,6 +14592,7 @@ export class GetPatientTreatmentProfileForAdminResponse implements IGetPatientTr
 export interface IGetPatientTreatmentProfileForAdminResponse {
     patientId: string;
     treatmentStatus: TreatmentStatus;
+    treatmentCategory: TreatmentCategory;
     treatmentStartDate: Date | undefined;
     prescriberId: string | undefined;
     prescriberName: string | undefined;
@@ -2561,8 +14604,13 @@ export interface IGetPatientTreatmentProfileForAdminResponse {
     pharmacyName: string | undefined;
     dosageId: number | undefined;
     dosageDescription: string | undefined;
+    medicationId: number | undefined;
+    medicationDescription: string | undefined;
     patientTransferRequestId: string | undefined;
     totalDosageOptions: number;
+    canContinue: boolean;
+    canReapprove: boolean;
+    discontinuedDate: Date | undefined;
 }
 
 export class GetPatientTreatmentProfileForAdminResponseApiResponse implements IGetPatientTreatmentProfileForAdminResponseApiResponse {
@@ -2802,25 +14850,20 @@ export interface IGetPatientsForPrescriberResponseIEnumerableApiResponse {
     problemDetails: ProblemDetails;
 }
 
-export class GetPatientsResponse implements IGetPatientsResponse {
+export class GetPharmaciesResponse implements IGetPharmaciesResponse {
     id: string;
-    title: Title;
-    firstName: string | undefined;
-    lastName: string | undefined;
     name: string | undefined;
-    dateOfBirth: Date;
-    email: string | undefined;
+    unitNumber: string | undefined;
+    streetAddress: string | undefined;
     city: string | undefined;
     state: AddressState;
-    status: TreatmentStatus;
-    prescriberTitle: Title;
-    prescriberFirstName: string | undefined;
-    prescriberLastName: string | undefined;
-    prescriberName: string | undefined;
-    canContinue: boolean;
-    canResupply: boolean;
+    postCode: string | undefined;
+    phone: string | undefined;
+    email: string | undefined;
+    accountReferenceNumber: string | undefined;
+    pharmacyAccountType: PharmacyAccountType;
 
-    constructor(data?: IGetPatientsResponse) {
+    constructor(data?: IGetPharmaciesResponse) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -2832,27 +14875,22 @@ export class GetPatientsResponse implements IGetPatientsResponse {
     init(_data?: any) {
         if (_data) {
             this.id = _data["id"];
-            this.title = _data["title"];
-            this.firstName = _data["firstName"];
-            this.lastName = _data["lastName"];
             this.name = _data["name"];
-            this.dateOfBirth = _data["dateOfBirth"] ? new Date(_data["dateOfBirth"].toString()) : <any>undefined;
-            this.email = _data["email"];
+            this.unitNumber = _data["unitNumber"];
+            this.streetAddress = _data["streetAddress"];
             this.city = _data["city"];
             this.state = _data["state"];
-            this.status = _data["status"];
-            this.prescriberTitle = _data["prescriberTitle"];
-            this.prescriberFirstName = _data["prescriberFirstName"];
-            this.prescriberLastName = _data["prescriberLastName"];
-            this.prescriberName = _data["prescriberName"];
-            this.canContinue = _data["canContinue"];
-            this.canResupply = _data["canResupply"];
+            this.postCode = _data["postCode"];
+            this.phone = _data["phone"];
+            this.email = _data["email"];
+            this.accountReferenceNumber = _data["accountReferenceNumber"];
+            this.pharmacyAccountType = _data["pharmacyAccountType"];
         }
     }
 
-    static fromJS(data: any): GetPatientsResponse {
+    static fromJS(data: any): GetPharmaciesResponse {
         data = typeof data === 'object' ? data : {};
-        let result = new GetPatientsResponse();
+        let result = new GetPharmaciesResponse();
         result.init(data);
         return result;
     }
@@ -2860,57 +14898,47 @@ export class GetPatientsResponse implements IGetPatientsResponse {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id;
-        data["title"] = this.title;
-        data["firstName"] = this.firstName;
-        data["lastName"] = this.lastName;
         data["name"] = this.name;
-        data["dateOfBirth"] = this.dateOfBirth ? this.dateOfBirth.toISOString() : <any>undefined;
-        data["email"] = this.email;
+        data["unitNumber"] = this.unitNumber;
+        data["streetAddress"] = this.streetAddress;
         data["city"] = this.city;
         data["state"] = this.state;
-        data["status"] = this.status;
-        data["prescriberTitle"] = this.prescriberTitle;
-        data["prescriberFirstName"] = this.prescriberFirstName;
-        data["prescriberLastName"] = this.prescriberLastName;
-        data["prescriberName"] = this.prescriberName;
-        data["canContinue"] = this.canContinue;
-        data["canResupply"] = this.canResupply;
+        data["postCode"] = this.postCode;
+        data["phone"] = this.phone;
+        data["email"] = this.email;
+        data["accountReferenceNumber"] = this.accountReferenceNumber;
+        data["pharmacyAccountType"] = this.pharmacyAccountType;
         return data;
     }
 
-    clone(): GetPatientsResponse {
+    clone(): GetPharmaciesResponse {
         const json = this.toJSON();
-        let result = new GetPatientsResponse();
+        let result = new GetPharmaciesResponse();
         result.init(json);
         return result;
     }
 }
 
-export interface IGetPatientsResponse {
+export interface IGetPharmaciesResponse {
     id: string;
-    title: Title;
-    firstName: string | undefined;
-    lastName: string | undefined;
     name: string | undefined;
-    dateOfBirth: Date;
-    email: string | undefined;
+    unitNumber: string | undefined;
+    streetAddress: string | undefined;
     city: string | undefined;
     state: AddressState;
-    status: TreatmentStatus;
-    prescriberTitle: Title;
-    prescriberFirstName: string | undefined;
-    prescriberLastName: string | undefined;
-    prescriberName: string | undefined;
-    canContinue: boolean;
-    canResupply: boolean;
+    postCode: string | undefined;
+    phone: string | undefined;
+    email: string | undefined;
+    accountReferenceNumber: string | undefined;
+    pharmacyAccountType: PharmacyAccountType;
 }
 
-export class GetPatientsResponseIEnumerableApiResponse implements IGetPatientsResponseIEnumerableApiResponse {
+export class GetPharmaciesResponseIEnumerableApiResponse implements IGetPharmaciesResponseIEnumerableApiResponse {
     isSuccess: boolean;
-    readonly resultObject: GetPatientsResponse[] | undefined;
+    readonly resultObject: GetPharmaciesResponse[] | undefined;
     problemDetails: ProblemDetails;
 
-    constructor(data?: IGetPatientsResponseIEnumerableApiResponse) {
+    constructor(data?: IGetPharmaciesResponseIEnumerableApiResponse) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -2925,15 +14953,15 @@ export class GetPatientsResponseIEnumerableApiResponse implements IGetPatientsRe
             if (Array.isArray(_data["resultObject"])) {
                 (<any>this).resultObject = [];
                 for (let item of _data["resultObject"])
-                    (<any>this).resultObject.push(GetPatientsResponse.fromJS(item));
+                    (<any>this).resultObject.push(GetPharmaciesResponse.fromJS(item));
             }
             this.problemDetails = _data["problemDetails"] ? ProblemDetails.fromJS(_data["problemDetails"]) : <any>undefined;
         }
     }
 
-    static fromJS(data: any): GetPatientsResponseIEnumerableApiResponse {
+    static fromJS(data: any): GetPharmaciesResponseIEnumerableApiResponse {
         data = typeof data === 'object' ? data : {};
-        let result = new GetPatientsResponseIEnumerableApiResponse();
+        let result = new GetPharmaciesResponseIEnumerableApiResponse();
         result.init(data);
         return result;
     }
@@ -2950,17 +14978,1646 @@ export class GetPatientsResponseIEnumerableApiResponse implements IGetPatientsRe
         return data;
     }
 
-    clone(): GetPatientsResponseIEnumerableApiResponse {
+    clone(): GetPharmaciesResponseIEnumerableApiResponse {
         const json = this.toJSON();
-        let result = new GetPatientsResponseIEnumerableApiResponse();
+        let result = new GetPharmaciesResponseIEnumerableApiResponse();
         result.init(json);
         return result;
     }
 }
 
-export interface IGetPatientsResponseIEnumerableApiResponse {
+export interface IGetPharmaciesResponseIEnumerableApiResponse {
     isSuccess: boolean;
-    resultObject: GetPatientsResponse[] | undefined;
+    resultObject: GetPharmaciesResponse[] | undefined;
+    problemDetails: ProblemDetails;
+}
+
+export class GetPharmacistAdminListResponse implements IGetPharmacistAdminListResponse {
+    id: string;
+    fullName: string | undefined;
+    firstName: string | undefined;
+    lastName: string | undefined;
+    title: Title;
+    middleName: string | undefined;
+    name: string | undefined;
+    ahpraNumber: string | undefined;
+    email: string | undefined;
+    phone: string | undefined;
+    mobile: string | undefined;
+    state: AddressState;
+    stateDescription: string | undefined;
+    registrationStatus: RegistrationStatus;
+
+    constructor(data?: IGetPharmacistAdminListResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.fullName = _data["fullName"];
+            this.firstName = _data["firstName"];
+            this.lastName = _data["lastName"];
+            this.title = _data["title"];
+            this.middleName = _data["middleName"];
+            this.name = _data["name"];
+            this.ahpraNumber = _data["ahpraNumber"];
+            this.email = _data["email"];
+            this.phone = _data["phone"];
+            this.mobile = _data["mobile"];
+            this.state = _data["state"];
+            this.stateDescription = _data["stateDescription"];
+            this.registrationStatus = _data["registrationStatus"];
+        }
+    }
+
+    static fromJS(data: any): GetPharmacistAdminListResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetPharmacistAdminListResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["fullName"] = this.fullName;
+        data["firstName"] = this.firstName;
+        data["lastName"] = this.lastName;
+        data["title"] = this.title;
+        data["middleName"] = this.middleName;
+        data["name"] = this.name;
+        data["ahpraNumber"] = this.ahpraNumber;
+        data["email"] = this.email;
+        data["phone"] = this.phone;
+        data["mobile"] = this.mobile;
+        data["state"] = this.state;
+        data["stateDescription"] = this.stateDescription;
+        data["registrationStatus"] = this.registrationStatus;
+        return data;
+    }
+
+    clone(): GetPharmacistAdminListResponse {
+        const json = this.toJSON();
+        let result = new GetPharmacistAdminListResponse();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetPharmacistAdminListResponse {
+    id: string;
+    fullName: string | undefined;
+    firstName: string | undefined;
+    lastName: string | undefined;
+    title: Title;
+    middleName: string | undefined;
+    name: string | undefined;
+    ahpraNumber: string | undefined;
+    email: string | undefined;
+    phone: string | undefined;
+    mobile: string | undefined;
+    state: AddressState;
+    stateDescription: string | undefined;
+    registrationStatus: RegistrationStatus;
+}
+
+export class GetPharmacistAdminListResponsePagedResultDto implements IGetPharmacistAdminListResponsePagedResultDto {
+    totalCount: number;
+    items: GetPharmacistAdminListResponse[] | undefined;
+
+    constructor(data?: IGetPharmacistAdminListResponsePagedResultDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.totalCount = _data["totalCount"];
+            if (Array.isArray(_data["items"])) {
+                this.items = [];
+                for (let item of _data["items"])
+                    this.items.push(GetPharmacistAdminListResponse.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): GetPharmacistAdminListResponsePagedResultDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetPharmacistAdminListResponsePagedResultDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["totalCount"] = this.totalCount;
+        if (Array.isArray(this.items)) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item.toJSON());
+        }
+        return data;
+    }
+
+    clone(): GetPharmacistAdminListResponsePagedResultDto {
+        const json = this.toJSON();
+        let result = new GetPharmacistAdminListResponsePagedResultDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetPharmacistAdminListResponsePagedResultDto {
+    totalCount: number;
+    items: GetPharmacistAdminListResponse[] | undefined;
+}
+
+export class GetPharmacistAdminListResponsePagedResultDtoApiResponse implements IGetPharmacistAdminListResponsePagedResultDtoApiResponse {
+    isSuccess: boolean;
+    resultObject: GetPharmacistAdminListResponsePagedResultDto;
+    problemDetails: ProblemDetails;
+
+    constructor(data?: IGetPharmacistAdminListResponsePagedResultDtoApiResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.isSuccess = _data["isSuccess"];
+            this.resultObject = _data["resultObject"] ? GetPharmacistAdminListResponsePagedResultDto.fromJS(_data["resultObject"]) : <any>undefined;
+            this.problemDetails = _data["problemDetails"] ? ProblemDetails.fromJS(_data["problemDetails"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): GetPharmacistAdminListResponsePagedResultDtoApiResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetPharmacistAdminListResponsePagedResultDtoApiResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["isSuccess"] = this.isSuccess;
+        data["resultObject"] = this.resultObject ? this.resultObject.toJSON() : <any>undefined;
+        data["problemDetails"] = this.problemDetails ? this.problemDetails.toJSON() : <any>undefined;
+        return data;
+    }
+
+    clone(): GetPharmacistAdminListResponsePagedResultDtoApiResponse {
+        const json = this.toJSON();
+        let result = new GetPharmacistAdminListResponsePagedResultDtoApiResponse();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetPharmacistAdminListResponsePagedResultDtoApiResponse {
+    isSuccess: boolean;
+    resultObject: GetPharmacistAdminListResponsePagedResultDto;
+    problemDetails: ProblemDetails;
+}
+
+export class GetPharmacistContactInformationResponse implements IGetPharmacistContactInformationResponse {
+    title: Title;
+    firstName: string | undefined;
+    lastName: string | undefined;
+    phoneNumber: string | undefined;
+    email: string | undefined;
+    mobileNumber: string | undefined;
+    ahpraNumber: string | undefined;
+
+    constructor(data?: IGetPharmacistContactInformationResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.title = _data["title"];
+            this.firstName = _data["firstName"];
+            this.lastName = _data["lastName"];
+            this.phoneNumber = _data["phoneNumber"];
+            this.email = _data["email"];
+            this.mobileNumber = _data["mobileNumber"];
+            this.ahpraNumber = _data["ahpraNumber"];
+        }
+    }
+
+    static fromJS(data: any): GetPharmacistContactInformationResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetPharmacistContactInformationResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["title"] = this.title;
+        data["firstName"] = this.firstName;
+        data["lastName"] = this.lastName;
+        data["phoneNumber"] = this.phoneNumber;
+        data["email"] = this.email;
+        data["mobileNumber"] = this.mobileNumber;
+        data["ahpraNumber"] = this.ahpraNumber;
+        return data;
+    }
+
+    clone(): GetPharmacistContactInformationResponse {
+        const json = this.toJSON();
+        let result = new GetPharmacistContactInformationResponse();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetPharmacistContactInformationResponse {
+    title: Title;
+    firstName: string | undefined;
+    lastName: string | undefined;
+    phoneNumber: string | undefined;
+    email: string | undefined;
+    mobileNumber: string | undefined;
+    ahpraNumber: string | undefined;
+}
+
+export class GetPharmacistContactInformationResponseApiResponse implements IGetPharmacistContactInformationResponseApiResponse {
+    isSuccess: boolean;
+    resultObject: GetPharmacistContactInformationResponse;
+    problemDetails: ProblemDetails;
+
+    constructor(data?: IGetPharmacistContactInformationResponseApiResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.isSuccess = _data["isSuccess"];
+            this.resultObject = _data["resultObject"] ? GetPharmacistContactInformationResponse.fromJS(_data["resultObject"]) : <any>undefined;
+            this.problemDetails = _data["problemDetails"] ? ProblemDetails.fromJS(_data["problemDetails"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): GetPharmacistContactInformationResponseApiResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetPharmacistContactInformationResponseApiResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["isSuccess"] = this.isSuccess;
+        data["resultObject"] = this.resultObject ? this.resultObject.toJSON() : <any>undefined;
+        data["problemDetails"] = this.problemDetails ? this.problemDetails.toJSON() : <any>undefined;
+        return data;
+    }
+
+    clone(): GetPharmacistContactInformationResponseApiResponse {
+        const json = this.toJSON();
+        let result = new GetPharmacistContactInformationResponseApiResponse();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetPharmacistContactInformationResponseApiResponse {
+    isSuccess: boolean;
+    resultObject: GetPharmacistContactInformationResponse;
+    problemDetails: ProblemDetails;
+}
+
+export class GetPharmacyProgramAccountForPharmacistListResponse implements IGetPharmacyProgramAccountForPharmacistListResponse {
+    id: string;
+    pharmacyName: string | undefined;
+    unitNumber: string | undefined;
+    streetAddress: string | undefined;
+    city: string | undefined;
+    state: AddressState;
+    postCode: string | undefined;
+    phone: string | undefined;
+    email: string | undefined;
+    accountReferenceNumber: string | undefined;
+    pharmacyAccountType: PharmacyAccountType;
+    programAccountApproved: boolean;
+
+    constructor(data?: IGetPharmacyProgramAccountForPharmacistListResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.pharmacyName = _data["pharmacyName"];
+            this.unitNumber = _data["unitNumber"];
+            this.streetAddress = _data["streetAddress"];
+            this.city = _data["city"];
+            this.state = _data["state"];
+            this.postCode = _data["postCode"];
+            this.phone = _data["phone"];
+            this.email = _data["email"];
+            this.accountReferenceNumber = _data["accountReferenceNumber"];
+            this.pharmacyAccountType = _data["pharmacyAccountType"];
+            this.programAccountApproved = _data["programAccountApproved"];
+        }
+    }
+
+    static fromJS(data: any): GetPharmacyProgramAccountForPharmacistListResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetPharmacyProgramAccountForPharmacistListResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["pharmacyName"] = this.pharmacyName;
+        data["unitNumber"] = this.unitNumber;
+        data["streetAddress"] = this.streetAddress;
+        data["city"] = this.city;
+        data["state"] = this.state;
+        data["postCode"] = this.postCode;
+        data["phone"] = this.phone;
+        data["email"] = this.email;
+        data["accountReferenceNumber"] = this.accountReferenceNumber;
+        data["pharmacyAccountType"] = this.pharmacyAccountType;
+        data["programAccountApproved"] = this.programAccountApproved;
+        return data;
+    }
+
+    clone(): GetPharmacyProgramAccountForPharmacistListResponse {
+        const json = this.toJSON();
+        let result = new GetPharmacyProgramAccountForPharmacistListResponse();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetPharmacyProgramAccountForPharmacistListResponse {
+    id: string;
+    pharmacyName: string | undefined;
+    unitNumber: string | undefined;
+    streetAddress: string | undefined;
+    city: string | undefined;
+    state: AddressState;
+    postCode: string | undefined;
+    phone: string | undefined;
+    email: string | undefined;
+    accountReferenceNumber: string | undefined;
+    pharmacyAccountType: PharmacyAccountType;
+    programAccountApproved: boolean;
+}
+
+export class GetPharmacyProgramAccountForPharmacistListResponseIEnumerableApiResponse implements IGetPharmacyProgramAccountForPharmacistListResponseIEnumerableApiResponse {
+    isSuccess: boolean;
+    readonly resultObject: GetPharmacyProgramAccountForPharmacistListResponse[] | undefined;
+    problemDetails: ProblemDetails;
+
+    constructor(data?: IGetPharmacyProgramAccountForPharmacistListResponseIEnumerableApiResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.isSuccess = _data["isSuccess"];
+            if (Array.isArray(_data["resultObject"])) {
+                (<any>this).resultObject = [];
+                for (let item of _data["resultObject"])
+                    (<any>this).resultObject.push(GetPharmacyProgramAccountForPharmacistListResponse.fromJS(item));
+            }
+            this.problemDetails = _data["problemDetails"] ? ProblemDetails.fromJS(_data["problemDetails"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): GetPharmacyProgramAccountForPharmacistListResponseIEnumerableApiResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetPharmacyProgramAccountForPharmacistListResponseIEnumerableApiResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["isSuccess"] = this.isSuccess;
+        if (Array.isArray(this.resultObject)) {
+            data["resultObject"] = [];
+            for (let item of this.resultObject)
+                data["resultObject"].push(item.toJSON());
+        }
+        data["problemDetails"] = this.problemDetails ? this.problemDetails.toJSON() : <any>undefined;
+        return data;
+    }
+
+    clone(): GetPharmacyProgramAccountForPharmacistListResponseIEnumerableApiResponse {
+        const json = this.toJSON();
+        let result = new GetPharmacyProgramAccountForPharmacistListResponseIEnumerableApiResponse();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetPharmacyProgramAccountForPharmacistListResponseIEnumerableApiResponse {
+    isSuccess: boolean;
+    resultObject: GetPharmacyProgramAccountForPharmacistListResponse[] | undefined;
+    problemDetails: ProblemDetails;
+}
+
+export class GetPharmacyWithAccountsForPharmacistListResponse implements IGetPharmacyWithAccountsForPharmacistListResponse {
+    id: string;
+    pharmacyName: string | undefined;
+    unitNumber: string | undefined;
+    streetAddress: string | undefined;
+    city: string | undefined;
+    state: AddressState;
+    postCode: string | undefined;
+    phone: string | undefined;
+    email: string | undefined;
+    symbionAccountNumber: string | undefined;
+    symbionAccountApproved: boolean | undefined;
+    ch2AccountNumber: string | undefined;
+    ch2AccountApproved: boolean | undefined;
+
+    constructor(data?: IGetPharmacyWithAccountsForPharmacistListResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.pharmacyName = _data["pharmacyName"];
+            this.unitNumber = _data["unitNumber"];
+            this.streetAddress = _data["streetAddress"];
+            this.city = _data["city"];
+            this.state = _data["state"];
+            this.postCode = _data["postCode"];
+            this.phone = _data["phone"];
+            this.email = _data["email"];
+            this.symbionAccountNumber = _data["symbionAccountNumber"];
+            this.symbionAccountApproved = _data["symbionAccountApproved"];
+            this.ch2AccountNumber = _data["ch2AccountNumber"];
+            this.ch2AccountApproved = _data["ch2AccountApproved"];
+        }
+    }
+
+    static fromJS(data: any): GetPharmacyWithAccountsForPharmacistListResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetPharmacyWithAccountsForPharmacistListResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["pharmacyName"] = this.pharmacyName;
+        data["unitNumber"] = this.unitNumber;
+        data["streetAddress"] = this.streetAddress;
+        data["city"] = this.city;
+        data["state"] = this.state;
+        data["postCode"] = this.postCode;
+        data["phone"] = this.phone;
+        data["email"] = this.email;
+        data["symbionAccountNumber"] = this.symbionAccountNumber;
+        data["symbionAccountApproved"] = this.symbionAccountApproved;
+        data["ch2AccountNumber"] = this.ch2AccountNumber;
+        data["ch2AccountApproved"] = this.ch2AccountApproved;
+        return data;
+    }
+
+    clone(): GetPharmacyWithAccountsForPharmacistListResponse {
+        const json = this.toJSON();
+        let result = new GetPharmacyWithAccountsForPharmacistListResponse();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetPharmacyWithAccountsForPharmacistListResponse {
+    id: string;
+    pharmacyName: string | undefined;
+    unitNumber: string | undefined;
+    streetAddress: string | undefined;
+    city: string | undefined;
+    state: AddressState;
+    postCode: string | undefined;
+    phone: string | undefined;
+    email: string | undefined;
+    symbionAccountNumber: string | undefined;
+    symbionAccountApproved: boolean | undefined;
+    ch2AccountNumber: string | undefined;
+    ch2AccountApproved: boolean | undefined;
+}
+
+export class GetPharmacyWithAccountsForPharmacistListResponseIEnumerableApiResponse implements IGetPharmacyWithAccountsForPharmacistListResponseIEnumerableApiResponse {
+    isSuccess: boolean;
+    readonly resultObject: GetPharmacyWithAccountsForPharmacistListResponse[] | undefined;
+    problemDetails: ProblemDetails;
+
+    constructor(data?: IGetPharmacyWithAccountsForPharmacistListResponseIEnumerableApiResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.isSuccess = _data["isSuccess"];
+            if (Array.isArray(_data["resultObject"])) {
+                (<any>this).resultObject = [];
+                for (let item of _data["resultObject"])
+                    (<any>this).resultObject.push(GetPharmacyWithAccountsForPharmacistListResponse.fromJS(item));
+            }
+            this.problemDetails = _data["problemDetails"] ? ProblemDetails.fromJS(_data["problemDetails"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): GetPharmacyWithAccountsForPharmacistListResponseIEnumerableApiResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetPharmacyWithAccountsForPharmacistListResponseIEnumerableApiResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["isSuccess"] = this.isSuccess;
+        if (Array.isArray(this.resultObject)) {
+            data["resultObject"] = [];
+            for (let item of this.resultObject)
+                data["resultObject"].push(item.toJSON());
+        }
+        data["problemDetails"] = this.problemDetails ? this.problemDetails.toJSON() : <any>undefined;
+        return data;
+    }
+
+    clone(): GetPharmacyWithAccountsForPharmacistListResponseIEnumerableApiResponse {
+        const json = this.toJSON();
+        let result = new GetPharmacyWithAccountsForPharmacistListResponseIEnumerableApiResponse();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetPharmacyWithAccountsForPharmacistListResponseIEnumerableApiResponse {
+    isSuccess: boolean;
+    resultObject: GetPharmacyWithAccountsForPharmacistListResponse[] | undefined;
+    problemDetails: ProblemDetails;
+}
+
+export class GetPreenrolmentListResponse implements IGetPreenrolmentListResponse {
+    preEnrolmentId: string;
+    patientCreatedOnUtc: Date;
+    patientId: string | undefined;
+    patientTitle: Title;
+    patientFirstName: string | undefined;
+    patientLastName: string | undefined;
+    patientMiddleName: string | undefined;
+    patientGender: Gender;
+    patientDob: Date | undefined;
+    birthDay: number;
+    birthMonth: number;
+    birthYear: number;
+    patientStreetAddress: string | undefined;
+    patientAddressLine2: string | undefined;
+    patientCity: string | undefined;
+    patientPostcode: string | undefined;
+    patientState: AddressState;
+    clinicId: string | undefined;
+    clinicName: string | undefined;
+    clinicStreetAddress: string | undefined;
+    clinicAddressLine2: string | undefined;
+    clinicCity: string | undefined;
+    clinicPostcode: string | undefined;
+    clinicState: AddressState;
+    preenrolmentUtcDate: Date | undefined;
+    prescriberId: string | undefined;
+    prescriberTitle: Title;
+    prescriberFirstName: string | undefined;
+    prescriberLastName: string | undefined;
+    prescriberAhpra: string | undefined;
+    requiresSupportProgramResourceAccess: boolean | undefined;
+    preenrolmentStatus: RegistrationStatus;
+    cancelledOnUtc: Date | undefined;
+    cancelledById: string | undefined;
+    programAdminId: string;
+
+    constructor(data?: IGetPreenrolmentListResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.preEnrolmentId = _data["preEnrolmentId"];
+            this.patientCreatedOnUtc = _data["patientCreatedOnUtc"] ? new Date(_data["patientCreatedOnUtc"].toString()) : <any>undefined;
+            this.patientId = _data["patientId"];
+            this.patientTitle = _data["patientTitle"];
+            this.patientFirstName = _data["patientFirstName"];
+            this.patientLastName = _data["patientLastName"];
+            this.patientMiddleName = _data["patientMiddleName"];
+            this.patientGender = _data["patientGender"];
+            this.patientDob = _data["patientDob"] ? new Date(_data["patientDob"].toString()) : <any>undefined;
+            this.birthDay = _data["birthDay"];
+            this.birthMonth = _data["birthMonth"];
+            this.birthYear = _data["birthYear"];
+            this.patientStreetAddress = _data["patientStreetAddress"];
+            this.patientAddressLine2 = _data["patientAddressLine2"];
+            this.patientCity = _data["patientCity"];
+            this.patientPostcode = _data["patientPostcode"];
+            this.patientState = _data["patientState"];
+            this.clinicId = _data["clinicId"];
+            this.clinicName = _data["clinicName"];
+            this.clinicStreetAddress = _data["clinicStreetAddress"];
+            this.clinicAddressLine2 = _data["clinicAddressLine2"];
+            this.clinicCity = _data["clinicCity"];
+            this.clinicPostcode = _data["clinicPostcode"];
+            this.clinicState = _data["clinicState"];
+            this.preenrolmentUtcDate = _data["preenrolmentUtcDate"] ? new Date(_data["preenrolmentUtcDate"].toString()) : <any>undefined;
+            this.prescriberId = _data["prescriberId"];
+            this.prescriberTitle = _data["prescriberTitle"];
+            this.prescriberFirstName = _data["prescriberFirstName"];
+            this.prescriberLastName = _data["prescriberLastName"];
+            this.prescriberAhpra = _data["prescriberAhpra"];
+            this.requiresSupportProgramResourceAccess = _data["requiresSupportProgramResourceAccess"];
+            this.preenrolmentStatus = _data["preenrolmentStatus"];
+            this.cancelledOnUtc = _data["cancelledOnUtc"] ? new Date(_data["cancelledOnUtc"].toString()) : <any>undefined;
+            this.cancelledById = _data["cancelledById"];
+            this.programAdminId = _data["programAdminId"];
+        }
+    }
+
+    static fromJS(data: any): GetPreenrolmentListResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetPreenrolmentListResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["preEnrolmentId"] = this.preEnrolmentId;
+        data["patientCreatedOnUtc"] = this.patientCreatedOnUtc ? this.patientCreatedOnUtc.toISOString() : <any>undefined;
+        data["patientId"] = this.patientId;
+        data["patientTitle"] = this.patientTitle;
+        data["patientFirstName"] = this.patientFirstName;
+        data["patientLastName"] = this.patientLastName;
+        data["patientMiddleName"] = this.patientMiddleName;
+        data["patientGender"] = this.patientGender;
+        data["patientDob"] = this.patientDob ? this.patientDob.toISOString() : <any>undefined;
+        data["birthDay"] = this.birthDay;
+        data["birthMonth"] = this.birthMonth;
+        data["birthYear"] = this.birthYear;
+        data["patientStreetAddress"] = this.patientStreetAddress;
+        data["patientAddressLine2"] = this.patientAddressLine2;
+        data["patientCity"] = this.patientCity;
+        data["patientPostcode"] = this.patientPostcode;
+        data["patientState"] = this.patientState;
+        data["clinicId"] = this.clinicId;
+        data["clinicName"] = this.clinicName;
+        data["clinicStreetAddress"] = this.clinicStreetAddress;
+        data["clinicAddressLine2"] = this.clinicAddressLine2;
+        data["clinicCity"] = this.clinicCity;
+        data["clinicPostcode"] = this.clinicPostcode;
+        data["clinicState"] = this.clinicState;
+        data["preenrolmentUtcDate"] = this.preenrolmentUtcDate ? this.preenrolmentUtcDate.toISOString() : <any>undefined;
+        data["prescriberId"] = this.prescriberId;
+        data["prescriberTitle"] = this.prescriberTitle;
+        data["prescriberFirstName"] = this.prescriberFirstName;
+        data["prescriberLastName"] = this.prescriberLastName;
+        data["prescriberAhpra"] = this.prescriberAhpra;
+        data["requiresSupportProgramResourceAccess"] = this.requiresSupportProgramResourceAccess;
+        data["preenrolmentStatus"] = this.preenrolmentStatus;
+        data["cancelledOnUtc"] = this.cancelledOnUtc ? this.cancelledOnUtc.toISOString() : <any>undefined;
+        data["cancelledById"] = this.cancelledById;
+        data["programAdminId"] = this.programAdminId;
+        return data;
+    }
+
+    clone(): GetPreenrolmentListResponse {
+        const json = this.toJSON();
+        let result = new GetPreenrolmentListResponse();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetPreenrolmentListResponse {
+    preEnrolmentId: string;
+    patientCreatedOnUtc: Date;
+    patientId: string | undefined;
+    patientTitle: Title;
+    patientFirstName: string | undefined;
+    patientLastName: string | undefined;
+    patientMiddleName: string | undefined;
+    patientGender: Gender;
+    patientDob: Date | undefined;
+    birthDay: number;
+    birthMonth: number;
+    birthYear: number;
+    patientStreetAddress: string | undefined;
+    patientAddressLine2: string | undefined;
+    patientCity: string | undefined;
+    patientPostcode: string | undefined;
+    patientState: AddressState;
+    clinicId: string | undefined;
+    clinicName: string | undefined;
+    clinicStreetAddress: string | undefined;
+    clinicAddressLine2: string | undefined;
+    clinicCity: string | undefined;
+    clinicPostcode: string | undefined;
+    clinicState: AddressState;
+    preenrolmentUtcDate: Date | undefined;
+    prescriberId: string | undefined;
+    prescriberTitle: Title;
+    prescriberFirstName: string | undefined;
+    prescriberLastName: string | undefined;
+    prescriberAhpra: string | undefined;
+    requiresSupportProgramResourceAccess: boolean | undefined;
+    preenrolmentStatus: RegistrationStatus;
+    cancelledOnUtc: Date | undefined;
+    cancelledById: string | undefined;
+    programAdminId: string;
+}
+
+export class GetPreenrolmentListResponsePagedResultDto implements IGetPreenrolmentListResponsePagedResultDto {
+    totalCount: number;
+    items: GetPreenrolmentListResponse[] | undefined;
+
+    constructor(data?: IGetPreenrolmentListResponsePagedResultDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.totalCount = _data["totalCount"];
+            if (Array.isArray(_data["items"])) {
+                this.items = [];
+                for (let item of _data["items"])
+                    this.items.push(GetPreenrolmentListResponse.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): GetPreenrolmentListResponsePagedResultDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetPreenrolmentListResponsePagedResultDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["totalCount"] = this.totalCount;
+        if (Array.isArray(this.items)) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item.toJSON());
+        }
+        return data;
+    }
+
+    clone(): GetPreenrolmentListResponsePagedResultDto {
+        const json = this.toJSON();
+        let result = new GetPreenrolmentListResponsePagedResultDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetPreenrolmentListResponsePagedResultDto {
+    totalCount: number;
+    items: GetPreenrolmentListResponse[] | undefined;
+}
+
+export class GetPreenrolmentListResponsePagedResultDtoApiResponse implements IGetPreenrolmentListResponsePagedResultDtoApiResponse {
+    isSuccess: boolean;
+    resultObject: GetPreenrolmentListResponsePagedResultDto;
+    problemDetails: ProblemDetails;
+
+    constructor(data?: IGetPreenrolmentListResponsePagedResultDtoApiResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.isSuccess = _data["isSuccess"];
+            this.resultObject = _data["resultObject"] ? GetPreenrolmentListResponsePagedResultDto.fromJS(_data["resultObject"]) : <any>undefined;
+            this.problemDetails = _data["problemDetails"] ? ProblemDetails.fromJS(_data["problemDetails"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): GetPreenrolmentListResponsePagedResultDtoApiResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetPreenrolmentListResponsePagedResultDtoApiResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["isSuccess"] = this.isSuccess;
+        data["resultObject"] = this.resultObject ? this.resultObject.toJSON() : <any>undefined;
+        data["problemDetails"] = this.problemDetails ? this.problemDetails.toJSON() : <any>undefined;
+        return data;
+    }
+
+    clone(): GetPreenrolmentListResponsePagedResultDtoApiResponse {
+        const json = this.toJSON();
+        let result = new GetPreenrolmentListResponsePagedResultDtoApiResponse();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetPreenrolmentListResponsePagedResultDtoApiResponse {
+    isSuccess: boolean;
+    resultObject: GetPreenrolmentListResponsePagedResultDto;
+    problemDetails: ProblemDetails;
+}
+
+export class GetPrescriberAdminListResponse implements IGetPrescriberAdminListResponse {
+    id: string;
+    firstName: string | undefined;
+    lastName: string | undefined;
+    fullName: string | undefined;
+    ahpraNumber: string | undefined;
+    prescriberNumber: string | undefined;
+    email: string | undefined;
+    phone: string | undefined;
+    mobile: string | undefined;
+    speciality: Specialty;
+    specialialtyDescription: string | undefined;
+    state: AddressState;
+    stateDescription: string | undefined;
+    registrationStatus: RegistrationStatus;
+
+    constructor(data?: IGetPrescriberAdminListResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.firstName = _data["firstName"];
+            this.lastName = _data["lastName"];
+            this.fullName = _data["fullName"];
+            this.ahpraNumber = _data["ahpraNumber"];
+            this.prescriberNumber = _data["prescriberNumber"];
+            this.email = _data["email"];
+            this.phone = _data["phone"];
+            this.mobile = _data["mobile"];
+            this.speciality = _data["speciality"];
+            this.specialialtyDescription = _data["specialialtyDescription"];
+            this.state = _data["state"];
+            this.stateDescription = _data["stateDescription"];
+            this.registrationStatus = _data["registrationStatus"];
+        }
+    }
+
+    static fromJS(data: any): GetPrescriberAdminListResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetPrescriberAdminListResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["firstName"] = this.firstName;
+        data["lastName"] = this.lastName;
+        data["fullName"] = this.fullName;
+        data["ahpraNumber"] = this.ahpraNumber;
+        data["prescriberNumber"] = this.prescriberNumber;
+        data["email"] = this.email;
+        data["phone"] = this.phone;
+        data["mobile"] = this.mobile;
+        data["speciality"] = this.speciality;
+        data["specialialtyDescription"] = this.specialialtyDescription;
+        data["state"] = this.state;
+        data["stateDescription"] = this.stateDescription;
+        data["registrationStatus"] = this.registrationStatus;
+        return data;
+    }
+
+    clone(): GetPrescriberAdminListResponse {
+        const json = this.toJSON();
+        let result = new GetPrescriberAdminListResponse();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetPrescriberAdminListResponse {
+    id: string;
+    firstName: string | undefined;
+    lastName: string | undefined;
+    fullName: string | undefined;
+    ahpraNumber: string | undefined;
+    prescriberNumber: string | undefined;
+    email: string | undefined;
+    phone: string | undefined;
+    mobile: string | undefined;
+    speciality: Specialty;
+    specialialtyDescription: string | undefined;
+    state: AddressState;
+    stateDescription: string | undefined;
+    registrationStatus: RegistrationStatus;
+}
+
+export class GetPrescriberAdminListResponsePagedResultDto implements IGetPrescriberAdminListResponsePagedResultDto {
+    totalCount: number;
+    items: GetPrescriberAdminListResponse[] | undefined;
+
+    constructor(data?: IGetPrescriberAdminListResponsePagedResultDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.totalCount = _data["totalCount"];
+            if (Array.isArray(_data["items"])) {
+                this.items = [];
+                for (let item of _data["items"])
+                    this.items.push(GetPrescriberAdminListResponse.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): GetPrescriberAdminListResponsePagedResultDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetPrescriberAdminListResponsePagedResultDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["totalCount"] = this.totalCount;
+        if (Array.isArray(this.items)) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item.toJSON());
+        }
+        return data;
+    }
+
+    clone(): GetPrescriberAdminListResponsePagedResultDto {
+        const json = this.toJSON();
+        let result = new GetPrescriberAdminListResponsePagedResultDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetPrescriberAdminListResponsePagedResultDto {
+    totalCount: number;
+    items: GetPrescriberAdminListResponse[] | undefined;
+}
+
+export class GetPrescriberAdminListResponsePagedResultDtoApiResponse implements IGetPrescriberAdminListResponsePagedResultDtoApiResponse {
+    isSuccess: boolean;
+    resultObject: GetPrescriberAdminListResponsePagedResultDto;
+    problemDetails: ProblemDetails;
+
+    constructor(data?: IGetPrescriberAdminListResponsePagedResultDtoApiResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.isSuccess = _data["isSuccess"];
+            this.resultObject = _data["resultObject"] ? GetPrescriberAdminListResponsePagedResultDto.fromJS(_data["resultObject"]) : <any>undefined;
+            this.problemDetails = _data["problemDetails"] ? ProblemDetails.fromJS(_data["problemDetails"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): GetPrescriberAdminListResponsePagedResultDtoApiResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetPrescriberAdminListResponsePagedResultDtoApiResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["isSuccess"] = this.isSuccess;
+        data["resultObject"] = this.resultObject ? this.resultObject.toJSON() : <any>undefined;
+        data["problemDetails"] = this.problemDetails ? this.problemDetails.toJSON() : <any>undefined;
+        return data;
+    }
+
+    clone(): GetPrescriberAdminListResponsePagedResultDtoApiResponse {
+        const json = this.toJSON();
+        let result = new GetPrescriberAdminListResponsePagedResultDtoApiResponse();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetPrescriberAdminListResponsePagedResultDtoApiResponse {
+    isSuccess: boolean;
+    resultObject: GetPrescriberAdminListResponsePagedResultDto;
+    problemDetails: ProblemDetails;
+}
+
+export class GetPrescriberClinicForProgrAdminResponse implements IGetPrescriberClinicForProgrAdminResponse {
+    prescriberId: string;
+    clinicId: string;
+    clinicName: string | undefined;
+    streetAddress: string | undefined;
+    city: string | undefined;
+    state: AddressState;
+    postCode: string | undefined;
+    unitNumber: string | undefined;
+    phoneNumber: string | undefined;
+
+    constructor(data?: IGetPrescriberClinicForProgrAdminResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.prescriberId = _data["prescriberId"];
+            this.clinicId = _data["clinicId"];
+            this.clinicName = _data["clinicName"];
+            this.streetAddress = _data["streetAddress"];
+            this.city = _data["city"];
+            this.state = _data["state"];
+            this.postCode = _data["postCode"];
+            this.unitNumber = _data["unitNumber"];
+            this.phoneNumber = _data["phoneNumber"];
+        }
+    }
+
+    static fromJS(data: any): GetPrescriberClinicForProgrAdminResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetPrescriberClinicForProgrAdminResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["prescriberId"] = this.prescriberId;
+        data["clinicId"] = this.clinicId;
+        data["clinicName"] = this.clinicName;
+        data["streetAddress"] = this.streetAddress;
+        data["city"] = this.city;
+        data["state"] = this.state;
+        data["postCode"] = this.postCode;
+        data["unitNumber"] = this.unitNumber;
+        data["phoneNumber"] = this.phoneNumber;
+        return data;
+    }
+
+    clone(): GetPrescriberClinicForProgrAdminResponse {
+        const json = this.toJSON();
+        let result = new GetPrescriberClinicForProgrAdminResponse();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetPrescriberClinicForProgrAdminResponse {
+    prescriberId: string;
+    clinicId: string;
+    clinicName: string | undefined;
+    streetAddress: string | undefined;
+    city: string | undefined;
+    state: AddressState;
+    postCode: string | undefined;
+    unitNumber: string | undefined;
+    phoneNumber: string | undefined;
+}
+
+export class GetPrescriberClinicForProgrAdminResponseIEnumerableApiResponse implements IGetPrescriberClinicForProgrAdminResponseIEnumerableApiResponse {
+    isSuccess: boolean;
+    readonly resultObject: GetPrescriberClinicForProgrAdminResponse[] | undefined;
+    problemDetails: ProblemDetails;
+
+    constructor(data?: IGetPrescriberClinicForProgrAdminResponseIEnumerableApiResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.isSuccess = _data["isSuccess"];
+            if (Array.isArray(_data["resultObject"])) {
+                (<any>this).resultObject = [];
+                for (let item of _data["resultObject"])
+                    (<any>this).resultObject.push(GetPrescriberClinicForProgrAdminResponse.fromJS(item));
+            }
+            this.problemDetails = _data["problemDetails"] ? ProblemDetails.fromJS(_data["problemDetails"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): GetPrescriberClinicForProgrAdminResponseIEnumerableApiResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetPrescriberClinicForProgrAdminResponseIEnumerableApiResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["isSuccess"] = this.isSuccess;
+        if (Array.isArray(this.resultObject)) {
+            data["resultObject"] = [];
+            for (let item of this.resultObject)
+                data["resultObject"].push(item.toJSON());
+        }
+        data["problemDetails"] = this.problemDetails ? this.problemDetails.toJSON() : <any>undefined;
+        return data;
+    }
+
+    clone(): GetPrescriberClinicForProgrAdminResponseIEnumerableApiResponse {
+        const json = this.toJSON();
+        let result = new GetPrescriberClinicForProgrAdminResponseIEnumerableApiResponse();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetPrescriberClinicForProgrAdminResponseIEnumerableApiResponse {
+    isSuccess: boolean;
+    resultObject: GetPrescriberClinicForProgrAdminResponse[] | undefined;
+    problemDetails: ProblemDetails;
+}
+
+export class GetPrescriberClinicResponse implements IGetPrescriberClinicResponse {
+    clinicId: string;
+    clinicName: string | undefined;
+    unitNumber: string | undefined;
+    streetAddress: string | undefined;
+    city: string | undefined;
+    state: AddressState;
+    postCode: string | undefined;
+    phoneNumber: string | undefined;
+    notificationEmail: string | undefined;
+    status: string | undefined;
+    createdOn: Date | undefined;
+
+    constructor(data?: IGetPrescriberClinicResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.clinicId = _data["clinicId"];
+            this.clinicName = _data["clinicName"];
+            this.unitNumber = _data["unitNumber"];
+            this.streetAddress = _data["streetAddress"];
+            this.city = _data["city"];
+            this.state = _data["state"];
+            this.postCode = _data["postCode"];
+            this.phoneNumber = _data["phoneNumber"];
+            this.notificationEmail = _data["notificationEmail"];
+            this.status = _data["status"];
+            this.createdOn = _data["createdOn"] ? new Date(_data["createdOn"].toString()) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): GetPrescriberClinicResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetPrescriberClinicResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["clinicId"] = this.clinicId;
+        data["clinicName"] = this.clinicName;
+        data["unitNumber"] = this.unitNumber;
+        data["streetAddress"] = this.streetAddress;
+        data["city"] = this.city;
+        data["state"] = this.state;
+        data["postCode"] = this.postCode;
+        data["phoneNumber"] = this.phoneNumber;
+        data["notificationEmail"] = this.notificationEmail;
+        data["status"] = this.status;
+        data["createdOn"] = this.createdOn ? this.createdOn.toISOString() : <any>undefined;
+        return data;
+    }
+
+    clone(): GetPrescriberClinicResponse {
+        const json = this.toJSON();
+        let result = new GetPrescriberClinicResponse();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetPrescriberClinicResponse {
+    clinicId: string;
+    clinicName: string | undefined;
+    unitNumber: string | undefined;
+    streetAddress: string | undefined;
+    city: string | undefined;
+    state: AddressState;
+    postCode: string | undefined;
+    phoneNumber: string | undefined;
+    notificationEmail: string | undefined;
+    status: string | undefined;
+    createdOn: Date | undefined;
+}
+
+export class GetPrescriberClinicResponseIEnumerableApiResponse implements IGetPrescriberClinicResponseIEnumerableApiResponse {
+    isSuccess: boolean;
+    readonly resultObject: GetPrescriberClinicResponse[] | undefined;
+    problemDetails: ProblemDetails;
+
+    constructor(data?: IGetPrescriberClinicResponseIEnumerableApiResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.isSuccess = _data["isSuccess"];
+            if (Array.isArray(_data["resultObject"])) {
+                (<any>this).resultObject = [];
+                for (let item of _data["resultObject"])
+                    (<any>this).resultObject.push(GetPrescriberClinicResponse.fromJS(item));
+            }
+            this.problemDetails = _data["problemDetails"] ? ProblemDetails.fromJS(_data["problemDetails"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): GetPrescriberClinicResponseIEnumerableApiResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetPrescriberClinicResponseIEnumerableApiResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["isSuccess"] = this.isSuccess;
+        if (Array.isArray(this.resultObject)) {
+            data["resultObject"] = [];
+            for (let item of this.resultObject)
+                data["resultObject"].push(item.toJSON());
+        }
+        data["problemDetails"] = this.problemDetails ? this.problemDetails.toJSON() : <any>undefined;
+        return data;
+    }
+
+    clone(): GetPrescriberClinicResponseIEnumerableApiResponse {
+        const json = this.toJSON();
+        let result = new GetPrescriberClinicResponseIEnumerableApiResponse();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetPrescriberClinicResponseIEnumerableApiResponse {
+    isSuccess: boolean;
+    resultObject: GetPrescriberClinicResponse[] | undefined;
+    problemDetails: ProblemDetails;
+}
+
+export class GetPrescriberContactInformationResponse implements IGetPrescriberContactInformationResponse {
+    title: string | undefined;
+    firstName: string | undefined;
+    lastName: string | undefined;
+    phoneNumber: string | undefined;
+    email: string | undefined;
+    mobileNumber: string | undefined;
+    ahpraNumber: string | undefined;
+    speciality: string | undefined;
+    prescriberNumber: string | undefined;
+
+    constructor(data?: IGetPrescriberContactInformationResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.title = _data["title"];
+            this.firstName = _data["firstName"];
+            this.lastName = _data["lastName"];
+            this.phoneNumber = _data["phoneNumber"];
+            this.email = _data["email"];
+            this.mobileNumber = _data["mobileNumber"];
+            this.ahpraNumber = _data["ahpraNumber"];
+            this.speciality = _data["speciality"];
+            this.prescriberNumber = _data["prescriberNumber"];
+        }
+    }
+
+    static fromJS(data: any): GetPrescriberContactInformationResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetPrescriberContactInformationResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["title"] = this.title;
+        data["firstName"] = this.firstName;
+        data["lastName"] = this.lastName;
+        data["phoneNumber"] = this.phoneNumber;
+        data["email"] = this.email;
+        data["mobileNumber"] = this.mobileNumber;
+        data["ahpraNumber"] = this.ahpraNumber;
+        data["speciality"] = this.speciality;
+        data["prescriberNumber"] = this.prescriberNumber;
+        return data;
+    }
+
+    clone(): GetPrescriberContactInformationResponse {
+        const json = this.toJSON();
+        let result = new GetPrescriberContactInformationResponse();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetPrescriberContactInformationResponse {
+    title: string | undefined;
+    firstName: string | undefined;
+    lastName: string | undefined;
+    phoneNumber: string | undefined;
+    email: string | undefined;
+    mobileNumber: string | undefined;
+    ahpraNumber: string | undefined;
+    speciality: string | undefined;
+    prescriberNumber: string | undefined;
+}
+
+export class GetPrescriberContactInformationResponseApiResponse implements IGetPrescriberContactInformationResponseApiResponse {
+    isSuccess: boolean;
+    resultObject: GetPrescriberContactInformationResponse;
+    problemDetails: ProblemDetails;
+
+    constructor(data?: IGetPrescriberContactInformationResponseApiResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.isSuccess = _data["isSuccess"];
+            this.resultObject = _data["resultObject"] ? GetPrescriberContactInformationResponse.fromJS(_data["resultObject"]) : <any>undefined;
+            this.problemDetails = _data["problemDetails"] ? ProblemDetails.fromJS(_data["problemDetails"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): GetPrescriberContactInformationResponseApiResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetPrescriberContactInformationResponseApiResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["isSuccess"] = this.isSuccess;
+        data["resultObject"] = this.resultObject ? this.resultObject.toJSON() : <any>undefined;
+        data["problemDetails"] = this.problemDetails ? this.problemDetails.toJSON() : <any>undefined;
+        return data;
+    }
+
+    clone(): GetPrescriberContactInformationResponseApiResponse {
+        const json = this.toJSON();
+        let result = new GetPrescriberContactInformationResponseApiResponse();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetPrescriberContactInformationResponseApiResponse {
+    isSuccess: boolean;
+    resultObject: GetPrescriberContactInformationResponse;
+    problemDetails: ProblemDetails;
+}
+
+export class GetPrescriberForProgAdminResponse implements IGetPrescriberForProgAdminResponse {
+    prescriberId: string;
+    firstName: string | undefined;
+    lastName: string | undefined;
+    prescriberNumber: string | undefined;
+    ahpraNumber: string | undefined;
+    email: string | undefined;
+    phone: string | undefined;
+
+    constructor(data?: IGetPrescriberForProgAdminResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.prescriberId = _data["prescriberId"];
+            this.firstName = _data["firstName"];
+            this.lastName = _data["lastName"];
+            this.prescriberNumber = _data["prescriberNumber"];
+            this.ahpraNumber = _data["ahpraNumber"];
+            this.email = _data["email"];
+            this.phone = _data["phone"];
+        }
+    }
+
+    static fromJS(data: any): GetPrescriberForProgAdminResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetPrescriberForProgAdminResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["prescriberId"] = this.prescriberId;
+        data["firstName"] = this.firstName;
+        data["lastName"] = this.lastName;
+        data["prescriberNumber"] = this.prescriberNumber;
+        data["ahpraNumber"] = this.ahpraNumber;
+        data["email"] = this.email;
+        data["phone"] = this.phone;
+        return data;
+    }
+
+    clone(): GetPrescriberForProgAdminResponse {
+        const json = this.toJSON();
+        let result = new GetPrescriberForProgAdminResponse();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetPrescriberForProgAdminResponse {
+    prescriberId: string;
+    firstName: string | undefined;
+    lastName: string | undefined;
+    prescriberNumber: string | undefined;
+    ahpraNumber: string | undefined;
+    email: string | undefined;
+    phone: string | undefined;
+}
+
+export class GetPrescriberForProgAdminResponseIEnumerableApiResponse implements IGetPrescriberForProgAdminResponseIEnumerableApiResponse {
+    isSuccess: boolean;
+    readonly resultObject: GetPrescriberForProgAdminResponse[] | undefined;
+    problemDetails: ProblemDetails;
+
+    constructor(data?: IGetPrescriberForProgAdminResponseIEnumerableApiResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.isSuccess = _data["isSuccess"];
+            if (Array.isArray(_data["resultObject"])) {
+                (<any>this).resultObject = [];
+                for (let item of _data["resultObject"])
+                    (<any>this).resultObject.push(GetPrescriberForProgAdminResponse.fromJS(item));
+            }
+            this.problemDetails = _data["problemDetails"] ? ProblemDetails.fromJS(_data["problemDetails"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): GetPrescriberForProgAdminResponseIEnumerableApiResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetPrescriberForProgAdminResponseIEnumerableApiResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["isSuccess"] = this.isSuccess;
+        if (Array.isArray(this.resultObject)) {
+            data["resultObject"] = [];
+            for (let item of this.resultObject)
+                data["resultObject"].push(item.toJSON());
+        }
+        data["problemDetails"] = this.problemDetails ? this.problemDetails.toJSON() : <any>undefined;
+        return data;
+    }
+
+    clone(): GetPrescriberForProgAdminResponseIEnumerableApiResponse {
+        const json = this.toJSON();
+        let result = new GetPrescriberForProgAdminResponseIEnumerableApiResponse();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetPrescriberForProgAdminResponseIEnumerableApiResponse {
+    isSuccess: boolean;
+    resultObject: GetPrescriberForProgAdminResponse[] | undefined;
     problemDetails: ProblemDetails;
 }
 
@@ -2968,6 +16625,7 @@ export class GetPrescriberListResponse implements IGetPrescriberListResponse {
     id: string;
     name: string | undefined;
     ahpraNumber: string | undefined;
+    prescriberNumber: string | undefined;
     email: string | undefined;
     phone: string | undefined;
     mobile: string | undefined;
@@ -2993,6 +16651,7 @@ export class GetPrescriberListResponse implements IGetPrescriberListResponse {
             this.id = _data["id"];
             this.name = _data["name"];
             this.ahpraNumber = _data["ahpraNumber"];
+            this.prescriberNumber = _data["prescriberNumber"];
             this.email = _data["email"];
             this.phone = _data["phone"];
             this.mobile = _data["mobile"];
@@ -3018,6 +16677,7 @@ export class GetPrescriberListResponse implements IGetPrescriberListResponse {
         data["id"] = this.id;
         data["name"] = this.name;
         data["ahpraNumber"] = this.ahpraNumber;
+        data["prescriberNumber"] = this.prescriberNumber;
         data["email"] = this.email;
         data["phone"] = this.phone;
         data["mobile"] = this.mobile;
@@ -3043,6 +16703,7 @@ export interface IGetPrescriberListResponse {
     id: string;
     name: string | undefined;
     ahpraNumber: string | undefined;
+    prescriberNumber: string | undefined;
     email: string | undefined;
     phone: string | undefined;
     mobile: string | undefined;
@@ -3114,6 +16775,1250 @@ export interface IGetPrescriberListResponseIEnumerableApiResponse {
     problemDetails: ProblemDetails;
 }
 
+export class GetPrescriberProfileResponse implements IGetPrescriberProfileResponse {
+    title: Title;
+    firstName: string | undefined;
+    middleName: string | undefined;
+    lastName: string | undefined;
+    email: string | undefined;
+    specialty: Specialty;
+    specialtyOther: string | undefined;
+    phone: string | undefined;
+    mobile: string | undefined;
+    ahpraNumber: string | undefined;
+    prescriberNumber: string | undefined;
+    programReportingId: string | undefined;
+
+    constructor(data?: IGetPrescriberProfileResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.title = _data["title"];
+            this.firstName = _data["firstName"];
+            this.middleName = _data["middleName"];
+            this.lastName = _data["lastName"];
+            this.email = _data["email"];
+            this.specialty = _data["specialty"];
+            this.specialtyOther = _data["specialtyOther"];
+            this.phone = _data["phone"];
+            this.mobile = _data["mobile"];
+            this.ahpraNumber = _data["ahpraNumber"];
+            this.prescriberNumber = _data["prescriberNumber"];
+            this.programReportingId = _data["programReportingId"];
+        }
+    }
+
+    static fromJS(data: any): GetPrescriberProfileResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetPrescriberProfileResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["title"] = this.title;
+        data["firstName"] = this.firstName;
+        data["middleName"] = this.middleName;
+        data["lastName"] = this.lastName;
+        data["email"] = this.email;
+        data["specialty"] = this.specialty;
+        data["specialtyOther"] = this.specialtyOther;
+        data["phone"] = this.phone;
+        data["mobile"] = this.mobile;
+        data["ahpraNumber"] = this.ahpraNumber;
+        data["prescriberNumber"] = this.prescriberNumber;
+        data["programReportingId"] = this.programReportingId;
+        return data;
+    }
+
+    clone(): GetPrescriberProfileResponse {
+        const json = this.toJSON();
+        let result = new GetPrescriberProfileResponse();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetPrescriberProfileResponse {
+    title: Title;
+    firstName: string | undefined;
+    middleName: string | undefined;
+    lastName: string | undefined;
+    email: string | undefined;
+    specialty: Specialty;
+    specialtyOther: string | undefined;
+    phone: string | undefined;
+    mobile: string | undefined;
+    ahpraNumber: string | undefined;
+    prescriberNumber: string | undefined;
+    programReportingId: string | undefined;
+}
+
+export class GetPrescriberProfileResponseApiResponse implements IGetPrescriberProfileResponseApiResponse {
+    isSuccess: boolean;
+    resultObject: GetPrescriberProfileResponse;
+    problemDetails: ProblemDetails;
+
+    constructor(data?: IGetPrescriberProfileResponseApiResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.isSuccess = _data["isSuccess"];
+            this.resultObject = _data["resultObject"] ? GetPrescriberProfileResponse.fromJS(_data["resultObject"]) : <any>undefined;
+            this.problemDetails = _data["problemDetails"] ? ProblemDetails.fromJS(_data["problemDetails"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): GetPrescriberProfileResponseApiResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetPrescriberProfileResponseApiResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["isSuccess"] = this.isSuccess;
+        data["resultObject"] = this.resultObject ? this.resultObject.toJSON() : <any>undefined;
+        data["problemDetails"] = this.problemDetails ? this.problemDetails.toJSON() : <any>undefined;
+        return data;
+    }
+
+    clone(): GetPrescriberProfileResponseApiResponse {
+        const json = this.toJSON();
+        let result = new GetPrescriberProfileResponseApiResponse();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetPrescriberProfileResponseApiResponse {
+    isSuccess: boolean;
+    resultObject: GetPrescriberProfileResponse;
+    problemDetails: ProblemDetails;
+}
+
+export class GetProgramAdminContactInformationResponse implements IGetProgramAdminContactInformationResponse {
+    title: Title;
+    firstName: string | undefined;
+    lastName: string | undefined;
+    email: string | undefined;
+
+    constructor(data?: IGetProgramAdminContactInformationResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.title = _data["title"];
+            this.firstName = _data["firstName"];
+            this.lastName = _data["lastName"];
+            this.email = _data["email"];
+        }
+    }
+
+    static fromJS(data: any): GetProgramAdminContactInformationResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetProgramAdminContactInformationResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["title"] = this.title;
+        data["firstName"] = this.firstName;
+        data["lastName"] = this.lastName;
+        data["email"] = this.email;
+        return data;
+    }
+
+    clone(): GetProgramAdminContactInformationResponse {
+        const json = this.toJSON();
+        let result = new GetProgramAdminContactInformationResponse();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetProgramAdminContactInformationResponse {
+    title: Title;
+    firstName: string | undefined;
+    lastName: string | undefined;
+    email: string | undefined;
+}
+
+export class GetProgramAdminContactInformationResponseApiResponse implements IGetProgramAdminContactInformationResponseApiResponse {
+    isSuccess: boolean;
+    resultObject: GetProgramAdminContactInformationResponse;
+    problemDetails: ProblemDetails;
+
+    constructor(data?: IGetProgramAdminContactInformationResponseApiResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.isSuccess = _data["isSuccess"];
+            this.resultObject = _data["resultObject"] ? GetProgramAdminContactInformationResponse.fromJS(_data["resultObject"]) : <any>undefined;
+            this.problemDetails = _data["problemDetails"] ? ProblemDetails.fromJS(_data["problemDetails"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): GetProgramAdminContactInformationResponseApiResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetProgramAdminContactInformationResponseApiResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["isSuccess"] = this.isSuccess;
+        data["resultObject"] = this.resultObject ? this.resultObject.toJSON() : <any>undefined;
+        data["problemDetails"] = this.problemDetails ? this.problemDetails.toJSON() : <any>undefined;
+        return data;
+    }
+
+    clone(): GetProgramAdminContactInformationResponseApiResponse {
+        const json = this.toJSON();
+        let result = new GetProgramAdminContactInformationResponseApiResponse();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetProgramAdminContactInformationResponseApiResponse {
+    isSuccess: boolean;
+    resultObject: GetProgramAdminContactInformationResponse;
+    problemDetails: ProblemDetails;
+}
+
+export class GetProgramAdminForPrescriberResponse implements IGetProgramAdminForPrescriberResponse {
+    id: string;
+    name: string | undefined;
+    email: string | undefined;
+    clinics: string | undefined;
+
+    constructor(data?: IGetProgramAdminForPrescriberResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.name = _data["name"];
+            this.email = _data["email"];
+            this.clinics = _data["clinics"];
+        }
+    }
+
+    static fromJS(data: any): GetProgramAdminForPrescriberResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetProgramAdminForPrescriberResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["name"] = this.name;
+        data["email"] = this.email;
+        data["clinics"] = this.clinics;
+        return data;
+    }
+
+    clone(): GetProgramAdminForPrescriberResponse {
+        const json = this.toJSON();
+        let result = new GetProgramAdminForPrescriberResponse();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetProgramAdminForPrescriberResponse {
+    id: string;
+    name: string | undefined;
+    email: string | undefined;
+    clinics: string | undefined;
+}
+
+export class GetProgramAdminForPrescriberResponseIEnumerableApiResponse implements IGetProgramAdminForPrescriberResponseIEnumerableApiResponse {
+    isSuccess: boolean;
+    readonly resultObject: GetProgramAdminForPrescriberResponse[] | undefined;
+    problemDetails: ProblemDetails;
+
+    constructor(data?: IGetProgramAdminForPrescriberResponseIEnumerableApiResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.isSuccess = _data["isSuccess"];
+            if (Array.isArray(_data["resultObject"])) {
+                (<any>this).resultObject = [];
+                for (let item of _data["resultObject"])
+                    (<any>this).resultObject.push(GetProgramAdminForPrescriberResponse.fromJS(item));
+            }
+            this.problemDetails = _data["problemDetails"] ? ProblemDetails.fromJS(_data["problemDetails"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): GetProgramAdminForPrescriberResponseIEnumerableApiResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetProgramAdminForPrescriberResponseIEnumerableApiResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["isSuccess"] = this.isSuccess;
+        if (Array.isArray(this.resultObject)) {
+            data["resultObject"] = [];
+            for (let item of this.resultObject)
+                data["resultObject"].push(item.toJSON());
+        }
+        data["problemDetails"] = this.problemDetails ? this.problemDetails.toJSON() : <any>undefined;
+        return data;
+    }
+
+    clone(): GetProgramAdminForPrescriberResponseIEnumerableApiResponse {
+        const json = this.toJSON();
+        let result = new GetProgramAdminForPrescriberResponseIEnumerableApiResponse();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetProgramAdminForPrescriberResponseIEnumerableApiResponse {
+    isSuccess: boolean;
+    resultObject: GetProgramAdminForPrescriberResponse[] | undefined;
+    problemDetails: ProblemDetails;
+}
+
+export class GetProgramMedicationInformationResponse implements IGetProgramMedicationInformationResponse {
+    id: number;
+    productName: string | undefined;
+    administrationMethod: string | undefined;
+    dosages: MedicationDoseResponse[] | undefined;
+
+    constructor(data?: IGetProgramMedicationInformationResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.productName = _data["productName"];
+            this.administrationMethod = _data["administrationMethod"];
+            if (Array.isArray(_data["dosages"])) {
+                this.dosages = [];
+                for (let item of _data["dosages"])
+                    this.dosages.push(MedicationDoseResponse.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): GetProgramMedicationInformationResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetProgramMedicationInformationResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["productName"] = this.productName;
+        data["administrationMethod"] = this.administrationMethod;
+        if (Array.isArray(this.dosages)) {
+            data["dosages"] = [];
+            for (let item of this.dosages)
+                data["dosages"].push(item.toJSON());
+        }
+        return data;
+    }
+
+    clone(): GetProgramMedicationInformationResponse {
+        const json = this.toJSON();
+        let result = new GetProgramMedicationInformationResponse();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetProgramMedicationInformationResponse {
+    id: number;
+    productName: string | undefined;
+    administrationMethod: string | undefined;
+    dosages: MedicationDoseResponse[] | undefined;
+}
+
+export class GetProgramMedicationInformationResponseIEnumerableApiResponse implements IGetProgramMedicationInformationResponseIEnumerableApiResponse {
+    isSuccess: boolean;
+    readonly resultObject: GetProgramMedicationInformationResponse[] | undefined;
+    problemDetails: ProblemDetails;
+
+    constructor(data?: IGetProgramMedicationInformationResponseIEnumerableApiResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.isSuccess = _data["isSuccess"];
+            if (Array.isArray(_data["resultObject"])) {
+                (<any>this).resultObject = [];
+                for (let item of _data["resultObject"])
+                    (<any>this).resultObject.push(GetProgramMedicationInformationResponse.fromJS(item));
+            }
+            this.problemDetails = _data["problemDetails"] ? ProblemDetails.fromJS(_data["problemDetails"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): GetProgramMedicationInformationResponseIEnumerableApiResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetProgramMedicationInformationResponseIEnumerableApiResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["isSuccess"] = this.isSuccess;
+        if (Array.isArray(this.resultObject)) {
+            data["resultObject"] = [];
+            for (let item of this.resultObject)
+                data["resultObject"].push(item.toJSON());
+        }
+        data["problemDetails"] = this.problemDetails ? this.problemDetails.toJSON() : <any>undefined;
+        return data;
+    }
+
+    clone(): GetProgramMedicationInformationResponseIEnumerableApiResponse {
+        const json = this.toJSON();
+        let result = new GetProgramMedicationInformationResponseIEnumerableApiResponse();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetProgramMedicationInformationResponseIEnumerableApiResponse {
+    isSuccess: boolean;
+    resultObject: GetProgramMedicationInformationResponse[] | undefined;
+    problemDetails: ProblemDetails;
+}
+
+export class GetPspMaterialsAccessDto implements IGetPspMaterialsAccessDto {
+    accessCode: string | undefined;
+
+    constructor(data?: IGetPspMaterialsAccessDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.accessCode = _data["accessCode"];
+        }
+    }
+
+    static fromJS(data: any): GetPspMaterialsAccessDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetPspMaterialsAccessDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["accessCode"] = this.accessCode;
+        return data;
+    }
+
+    clone(): GetPspMaterialsAccessDto {
+        const json = this.toJSON();
+        let result = new GetPspMaterialsAccessDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetPspMaterialsAccessDto {
+    accessCode: string | undefined;
+}
+
+export class GetPspMaterialsAccessResponse implements IGetPspMaterialsAccessResponse {
+    hasAccess: boolean;
+    medicationId: number | undefined;
+
+    constructor(data?: IGetPspMaterialsAccessResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.hasAccess = _data["hasAccess"];
+            this.medicationId = _data["medicationId"];
+        }
+    }
+
+    static fromJS(data: any): GetPspMaterialsAccessResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetPspMaterialsAccessResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["hasAccess"] = this.hasAccess;
+        data["medicationId"] = this.medicationId;
+        return data;
+    }
+
+    clone(): GetPspMaterialsAccessResponse {
+        const json = this.toJSON();
+        let result = new GetPspMaterialsAccessResponse();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetPspMaterialsAccessResponse {
+    hasAccess: boolean;
+    medicationId: number | undefined;
+}
+
+export class GetPspMaterialsAccessResponseApiResponse implements IGetPspMaterialsAccessResponseApiResponse {
+    isSuccess: boolean;
+    resultObject: GetPspMaterialsAccessResponse;
+    problemDetails: ProblemDetails;
+
+    constructor(data?: IGetPspMaterialsAccessResponseApiResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.isSuccess = _data["isSuccess"];
+            this.resultObject = _data["resultObject"] ? GetPspMaterialsAccessResponse.fromJS(_data["resultObject"]) : <any>undefined;
+            this.problemDetails = _data["problemDetails"] ? ProblemDetails.fromJS(_data["problemDetails"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): GetPspMaterialsAccessResponseApiResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetPspMaterialsAccessResponseApiResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["isSuccess"] = this.isSuccess;
+        data["resultObject"] = this.resultObject ? this.resultObject.toJSON() : <any>undefined;
+        data["problemDetails"] = this.problemDetails ? this.problemDetails.toJSON() : <any>undefined;
+        return data;
+    }
+
+    clone(): GetPspMaterialsAccessResponseApiResponse {
+        const json = this.toJSON();
+        let result = new GetPspMaterialsAccessResponseApiResponse();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetPspMaterialsAccessResponseApiResponse {
+    isSuccess: boolean;
+    resultObject: GetPspMaterialsAccessResponse;
+    problemDetails: ProblemDetails;
+}
+
+export class GetRegistrationStatusRepsonse implements IGetRegistrationStatusRepsonse {
+    status: RegistrationStatus;
+
+    constructor(data?: IGetRegistrationStatusRepsonse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.status = _data["status"];
+        }
+    }
+
+    static fromJS(data: any): GetRegistrationStatusRepsonse {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetRegistrationStatusRepsonse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["status"] = this.status;
+        return data;
+    }
+
+    clone(): GetRegistrationStatusRepsonse {
+        const json = this.toJSON();
+        let result = new GetRegistrationStatusRepsonse();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetRegistrationStatusRepsonse {
+    status: RegistrationStatus;
+}
+
+export class GetRegistrationStatusRepsonseApiResponse implements IGetRegistrationStatusRepsonseApiResponse {
+    isSuccess: boolean;
+    resultObject: GetRegistrationStatusRepsonse;
+    problemDetails: ProblemDetails;
+
+    constructor(data?: IGetRegistrationStatusRepsonseApiResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.isSuccess = _data["isSuccess"];
+            this.resultObject = _data["resultObject"] ? GetRegistrationStatusRepsonse.fromJS(_data["resultObject"]) : <any>undefined;
+            this.problemDetails = _data["problemDetails"] ? ProblemDetails.fromJS(_data["problemDetails"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): GetRegistrationStatusRepsonseApiResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetRegistrationStatusRepsonseApiResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["isSuccess"] = this.isSuccess;
+        data["resultObject"] = this.resultObject ? this.resultObject.toJSON() : <any>undefined;
+        data["problemDetails"] = this.problemDetails ? this.problemDetails.toJSON() : <any>undefined;
+        return data;
+    }
+
+    clone(): GetRegistrationStatusRepsonseApiResponse {
+        const json = this.toJSON();
+        let result = new GetRegistrationStatusRepsonseApiResponse();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetRegistrationStatusRepsonseApiResponse {
+    isSuccess: boolean;
+    resultObject: GetRegistrationStatusRepsonse;
+    problemDetails: ProblemDetails;
+}
+
+export class GetRestartTreatmentValidationInformationResponse implements IGetRestartTreatmentValidationInformationResponse {
+    dosageId: number;
+    repeats: number;
+    lastEvaluationDueOn: DateOnly;
+    patientId: string;
+
+    constructor(data?: IGetRestartTreatmentValidationInformationResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.dosageId = _data["dosageId"];
+            this.repeats = _data["repeats"];
+            this.lastEvaluationDueOn = _data["lastEvaluationDueOn"] ? DateOnly.fromJS(_data["lastEvaluationDueOn"]) : <any>undefined;
+            this.patientId = _data["patientId"];
+        }
+    }
+
+    static fromJS(data: any): GetRestartTreatmentValidationInformationResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetRestartTreatmentValidationInformationResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["dosageId"] = this.dosageId;
+        data["repeats"] = this.repeats;
+        data["lastEvaluationDueOn"] = this.lastEvaluationDueOn ? this.lastEvaluationDueOn.toJSON() : <any>undefined;
+        data["patientId"] = this.patientId;
+        return data;
+    }
+
+    clone(): GetRestartTreatmentValidationInformationResponse {
+        const json = this.toJSON();
+        let result = new GetRestartTreatmentValidationInformationResponse();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetRestartTreatmentValidationInformationResponse {
+    dosageId: number;
+    repeats: number;
+    lastEvaluationDueOn: DateOnly;
+    patientId: string;
+}
+
+export class GetRestartTreatmentValidationInformationResponseApiResponse implements IGetRestartTreatmentValidationInformationResponseApiResponse {
+    isSuccess: boolean;
+    resultObject: GetRestartTreatmentValidationInformationResponse;
+    problemDetails: ProblemDetails;
+
+    constructor(data?: IGetRestartTreatmentValidationInformationResponseApiResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.isSuccess = _data["isSuccess"];
+            this.resultObject = _data["resultObject"] ? GetRestartTreatmentValidationInformationResponse.fromJS(_data["resultObject"]) : <any>undefined;
+            this.problemDetails = _data["problemDetails"] ? ProblemDetails.fromJS(_data["problemDetails"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): GetRestartTreatmentValidationInformationResponseApiResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetRestartTreatmentValidationInformationResponseApiResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["isSuccess"] = this.isSuccess;
+        data["resultObject"] = this.resultObject ? this.resultObject.toJSON() : <any>undefined;
+        data["problemDetails"] = this.problemDetails ? this.problemDetails.toJSON() : <any>undefined;
+        return data;
+    }
+
+    clone(): GetRestartTreatmentValidationInformationResponseApiResponse {
+        const json = this.toJSON();
+        let result = new GetRestartTreatmentValidationInformationResponseApiResponse();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetRestartTreatmentValidationInformationResponseApiResponse {
+    isSuccess: boolean;
+    resultObject: GetRestartTreatmentValidationInformationResponse;
+    problemDetails: ProblemDetails;
+}
+
+export class GetTreatmentActivitiesResponse implements IGetTreatmentActivitiesResponse {
+    eventDate: Date;
+    description: string | undefined;
+
+    constructor(data?: IGetTreatmentActivitiesResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.eventDate = _data["eventDate"] ? new Date(_data["eventDate"].toString()) : <any>undefined;
+            this.description = _data["description"];
+        }
+    }
+
+    static fromJS(data: any): GetTreatmentActivitiesResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetTreatmentActivitiesResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["eventDate"] = this.eventDate ? this.eventDate.toISOString() : <any>undefined;
+        data["description"] = this.description;
+        return data;
+    }
+
+    clone(): GetTreatmentActivitiesResponse {
+        const json = this.toJSON();
+        let result = new GetTreatmentActivitiesResponse();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetTreatmentActivitiesResponse {
+    eventDate: Date;
+    description: string | undefined;
+}
+
+export class GetTreatmentActivitiesResponseIEnumerableApiResponse implements IGetTreatmentActivitiesResponseIEnumerableApiResponse {
+    isSuccess: boolean;
+    readonly resultObject: GetTreatmentActivitiesResponse[] | undefined;
+    problemDetails: ProblemDetails;
+
+    constructor(data?: IGetTreatmentActivitiesResponseIEnumerableApiResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.isSuccess = _data["isSuccess"];
+            if (Array.isArray(_data["resultObject"])) {
+                (<any>this).resultObject = [];
+                for (let item of _data["resultObject"])
+                    (<any>this).resultObject.push(GetTreatmentActivitiesResponse.fromJS(item));
+            }
+            this.problemDetails = _data["problemDetails"] ? ProblemDetails.fromJS(_data["problemDetails"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): GetTreatmentActivitiesResponseIEnumerableApiResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetTreatmentActivitiesResponseIEnumerableApiResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["isSuccess"] = this.isSuccess;
+        if (Array.isArray(this.resultObject)) {
+            data["resultObject"] = [];
+            for (let item of this.resultObject)
+                data["resultObject"].push(item.toJSON());
+        }
+        data["problemDetails"] = this.problemDetails ? this.problemDetails.toJSON() : <any>undefined;
+        return data;
+    }
+
+    clone(): GetTreatmentActivitiesResponseIEnumerableApiResponse {
+        const json = this.toJSON();
+        let result = new GetTreatmentActivitiesResponseIEnumerableApiResponse();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetTreatmentActivitiesResponseIEnumerableApiResponse {
+    isSuccess: boolean;
+    resultObject: GetTreatmentActivitiesResponse[] | undefined;
+    problemDetails: ProblemDetails;
+}
+
+export class GetTreatmentSummaryListResponse implements IGetTreatmentSummaryListResponse {
+    treatmentId: string;
+    patientId: string;
+    title: Title;
+    firstName: string | undefined;
+    lastName: string | undefined;
+    middleName: string | undefined;
+    name: string | undefined;
+    dateOfBirth: Date | undefined;
+    patientStreetAddress: string | undefined;
+    patientAddressLine2: string | undefined;
+    patientCity: string | undefined;
+    patientState: AddressState;
+    patientPostcode: string | undefined;
+    preenrolmentClinicId: string | undefined;
+    preenrolmentClinicName: string | undefined;
+    preenrolmentUtcDate: Date | undefined;
+    preenrolmentPrescriberId: string | undefined;
+    treatmentCategory: TreatmentCategory;
+    clinicId: string | undefined;
+    clinicName: string | undefined;
+    clinicUnitNumber: string | undefined;
+    clinicAddress: string | undefined;
+    clinicCity: string | undefined;
+    clinicState: AddressState;
+    clinicPostcode: string | undefined;
+    prescriberId: string | undefined;
+    prescriberTitle: Title;
+    prescriberFirstName: string | undefined;
+    prescriberLastName: string | undefined;
+    pharmacyId: string | undefined;
+    pharmacyName: string | undefined;
+    pharmacyUnitNumber: string | undefined;
+    pharmacyAddress: string | undefined;
+    pharmacyCity: string | undefined;
+    pharmacyState: AddressState;
+    pharmacyPostcode: string | undefined;
+    pharmacyAccount: string | undefined;
+    medicationId: number | undefined;
+    medicationName: string | undefined;
+    lastMedicationId: number | undefined;
+    lastDispensedStrength: string | undefined;
+    lastDispensedQuantity: number | undefined;
+    lastDispensedDate: Date | undefined;
+
+    constructor(data?: IGetTreatmentSummaryListResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.treatmentId = _data["treatmentId"];
+            this.patientId = _data["patientId"];
+            this.title = _data["title"];
+            this.firstName = _data["firstName"];
+            this.lastName = _data["lastName"];
+            this.middleName = _data["middleName"];
+            this.name = _data["name"];
+            this.dateOfBirth = _data["dateOfBirth"] ? new Date(_data["dateOfBirth"].toString()) : <any>undefined;
+            this.patientStreetAddress = _data["patientStreetAddress"];
+            this.patientAddressLine2 = _data["patientAddressLine2"];
+            this.patientCity = _data["patientCity"];
+            this.patientState = _data["patientState"];
+            this.patientPostcode = _data["patientPostcode"];
+            this.preenrolmentClinicId = _data["preenrolmentClinicId"];
+            this.preenrolmentClinicName = _data["preenrolmentClinicName"];
+            this.preenrolmentUtcDate = _data["preenrolmentUtcDate"] ? new Date(_data["preenrolmentUtcDate"].toString()) : <any>undefined;
+            this.preenrolmentPrescriberId = _data["preenrolmentPrescriberId"];
+            this.treatmentCategory = _data["treatmentCategory"];
+            this.clinicId = _data["clinicId"];
+            this.clinicName = _data["clinicName"];
+            this.clinicUnitNumber = _data["clinicUnitNumber"];
+            this.clinicAddress = _data["clinicAddress"];
+            this.clinicCity = _data["clinicCity"];
+            this.clinicState = _data["clinicState"];
+            this.clinicPostcode = _data["clinicPostcode"];
+            this.prescriberId = _data["prescriberId"];
+            this.prescriberTitle = _data["prescriberTitle"];
+            this.prescriberFirstName = _data["prescriberFirstName"];
+            this.prescriberLastName = _data["prescriberLastName"];
+            this.pharmacyId = _data["pharmacyId"];
+            this.pharmacyName = _data["pharmacyName"];
+            this.pharmacyUnitNumber = _data["pharmacyUnitNumber"];
+            this.pharmacyAddress = _data["pharmacyAddress"];
+            this.pharmacyCity = _data["pharmacyCity"];
+            this.pharmacyState = _data["pharmacyState"];
+            this.pharmacyPostcode = _data["pharmacyPostcode"];
+            this.pharmacyAccount = _data["pharmacyAccount"];
+            this.medicationId = _data["medicationId"];
+            this.medicationName = _data["medicationName"];
+            this.lastMedicationId = _data["lastMedicationId"];
+            this.lastDispensedStrength = _data["lastDispensedStrength"];
+            this.lastDispensedQuantity = _data["lastDispensedQuantity"];
+            this.lastDispensedDate = _data["lastDispensedDate"] ? new Date(_data["lastDispensedDate"].toString()) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): GetTreatmentSummaryListResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetTreatmentSummaryListResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["treatmentId"] = this.treatmentId;
+        data["patientId"] = this.patientId;
+        data["title"] = this.title;
+        data["firstName"] = this.firstName;
+        data["lastName"] = this.lastName;
+        data["middleName"] = this.middleName;
+        data["name"] = this.name;
+        data["dateOfBirth"] = this.dateOfBirth ? this.dateOfBirth.toISOString() : <any>undefined;
+        data["patientStreetAddress"] = this.patientStreetAddress;
+        data["patientAddressLine2"] = this.patientAddressLine2;
+        data["patientCity"] = this.patientCity;
+        data["patientState"] = this.patientState;
+        data["patientPostcode"] = this.patientPostcode;
+        data["preenrolmentClinicId"] = this.preenrolmentClinicId;
+        data["preenrolmentClinicName"] = this.preenrolmentClinicName;
+        data["preenrolmentUtcDate"] = this.preenrolmentUtcDate ? this.preenrolmentUtcDate.toISOString() : <any>undefined;
+        data["preenrolmentPrescriberId"] = this.preenrolmentPrescriberId;
+        data["treatmentCategory"] = this.treatmentCategory;
+        data["clinicId"] = this.clinicId;
+        data["clinicName"] = this.clinicName;
+        data["clinicUnitNumber"] = this.clinicUnitNumber;
+        data["clinicAddress"] = this.clinicAddress;
+        data["clinicCity"] = this.clinicCity;
+        data["clinicState"] = this.clinicState;
+        data["clinicPostcode"] = this.clinicPostcode;
+        data["prescriberId"] = this.prescriberId;
+        data["prescriberTitle"] = this.prescriberTitle;
+        data["prescriberFirstName"] = this.prescriberFirstName;
+        data["prescriberLastName"] = this.prescriberLastName;
+        data["pharmacyId"] = this.pharmacyId;
+        data["pharmacyName"] = this.pharmacyName;
+        data["pharmacyUnitNumber"] = this.pharmacyUnitNumber;
+        data["pharmacyAddress"] = this.pharmacyAddress;
+        data["pharmacyCity"] = this.pharmacyCity;
+        data["pharmacyState"] = this.pharmacyState;
+        data["pharmacyPostcode"] = this.pharmacyPostcode;
+        data["pharmacyAccount"] = this.pharmacyAccount;
+        data["medicationId"] = this.medicationId;
+        data["medicationName"] = this.medicationName;
+        data["lastMedicationId"] = this.lastMedicationId;
+        data["lastDispensedStrength"] = this.lastDispensedStrength;
+        data["lastDispensedQuantity"] = this.lastDispensedQuantity;
+        data["lastDispensedDate"] = this.lastDispensedDate ? this.lastDispensedDate.toISOString() : <any>undefined;
+        return data;
+    }
+
+    clone(): GetTreatmentSummaryListResponse {
+        const json = this.toJSON();
+        let result = new GetTreatmentSummaryListResponse();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetTreatmentSummaryListResponse {
+    treatmentId: string;
+    patientId: string;
+    title: Title;
+    firstName: string | undefined;
+    lastName: string | undefined;
+    middleName: string | undefined;
+    name: string | undefined;
+    dateOfBirth: Date | undefined;
+    patientStreetAddress: string | undefined;
+    patientAddressLine2: string | undefined;
+    patientCity: string | undefined;
+    patientState: AddressState;
+    patientPostcode: string | undefined;
+    preenrolmentClinicId: string | undefined;
+    preenrolmentClinicName: string | undefined;
+    preenrolmentUtcDate: Date | undefined;
+    preenrolmentPrescriberId: string | undefined;
+    treatmentCategory: TreatmentCategory;
+    clinicId: string | undefined;
+    clinicName: string | undefined;
+    clinicUnitNumber: string | undefined;
+    clinicAddress: string | undefined;
+    clinicCity: string | undefined;
+    clinicState: AddressState;
+    clinicPostcode: string | undefined;
+    prescriberId: string | undefined;
+    prescriberTitle: Title;
+    prescriberFirstName: string | undefined;
+    prescriberLastName: string | undefined;
+    pharmacyId: string | undefined;
+    pharmacyName: string | undefined;
+    pharmacyUnitNumber: string | undefined;
+    pharmacyAddress: string | undefined;
+    pharmacyCity: string | undefined;
+    pharmacyState: AddressState;
+    pharmacyPostcode: string | undefined;
+    pharmacyAccount: string | undefined;
+    medicationId: number | undefined;
+    medicationName: string | undefined;
+    lastMedicationId: number | undefined;
+    lastDispensedStrength: string | undefined;
+    lastDispensedQuantity: number | undefined;
+    lastDispensedDate: Date | undefined;
+}
+
+export class GetTreatmentSummaryListResponsePagedResultDto implements IGetTreatmentSummaryListResponsePagedResultDto {
+    totalCount: number;
+    items: GetTreatmentSummaryListResponse[] | undefined;
+
+    constructor(data?: IGetTreatmentSummaryListResponsePagedResultDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.totalCount = _data["totalCount"];
+            if (Array.isArray(_data["items"])) {
+                this.items = [];
+                for (let item of _data["items"])
+                    this.items.push(GetTreatmentSummaryListResponse.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): GetTreatmentSummaryListResponsePagedResultDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetTreatmentSummaryListResponsePagedResultDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["totalCount"] = this.totalCount;
+        if (Array.isArray(this.items)) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item.toJSON());
+        }
+        return data;
+    }
+
+    clone(): GetTreatmentSummaryListResponsePagedResultDto {
+        const json = this.toJSON();
+        let result = new GetTreatmentSummaryListResponsePagedResultDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetTreatmentSummaryListResponsePagedResultDto {
+    totalCount: number;
+    items: GetTreatmentSummaryListResponse[] | undefined;
+}
+
+export class GetTreatmentSummaryListResponsePagedResultDtoApiResponse implements IGetTreatmentSummaryListResponsePagedResultDtoApiResponse {
+    isSuccess: boolean;
+    resultObject: GetTreatmentSummaryListResponsePagedResultDto;
+    problemDetails: ProblemDetails;
+
+    constructor(data?: IGetTreatmentSummaryListResponsePagedResultDtoApiResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.isSuccess = _data["isSuccess"];
+            this.resultObject = _data["resultObject"] ? GetTreatmentSummaryListResponsePagedResultDto.fromJS(_data["resultObject"]) : <any>undefined;
+            this.problemDetails = _data["problemDetails"] ? ProblemDetails.fromJS(_data["problemDetails"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): GetTreatmentSummaryListResponsePagedResultDtoApiResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetTreatmentSummaryListResponsePagedResultDtoApiResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["isSuccess"] = this.isSuccess;
+        data["resultObject"] = this.resultObject ? this.resultObject.toJSON() : <any>undefined;
+        data["problemDetails"] = this.problemDetails ? this.problemDetails.toJSON() : <any>undefined;
+        return data;
+    }
+
+    clone(): GetTreatmentSummaryListResponsePagedResultDtoApiResponse {
+        const json = this.toJSON();
+        let result = new GetTreatmentSummaryListResponsePagedResultDtoApiResponse();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetTreatmentSummaryListResponsePagedResultDtoApiResponse {
+    isSuccess: boolean;
+    resultObject: GetTreatmentSummaryListResponsePagedResultDto;
+    problemDetails: ProblemDetails;
+}
+
 export class GuidApiResponse implements IGuidApiResponse {
     isSuccess: boolean;
     readonly resultObject: string;
@@ -3163,6 +18068,1347 @@ export interface IGuidApiResponse {
     isSuccess: boolean;
     resultObject: string;
     problemDetails: ProblemDetails;
+}
+
+export class Int32ApiResponse implements IInt32ApiResponse {
+    isSuccess: boolean;
+    readonly resultObject: number;
+    problemDetails: ProblemDetails;
+
+    constructor(data?: IInt32ApiResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.isSuccess = _data["isSuccess"];
+            (<any>this).resultObject = _data["resultObject"];
+            this.problemDetails = _data["problemDetails"] ? ProblemDetails.fromJS(_data["problemDetails"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): Int32ApiResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new Int32ApiResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["isSuccess"] = this.isSuccess;
+        data["resultObject"] = this.resultObject;
+        data["problemDetails"] = this.problemDetails ? this.problemDetails.toJSON() : <any>undefined;
+        return data;
+    }
+
+    clone(): Int32ApiResponse {
+        const json = this.toJSON();
+        let result = new Int32ApiResponse();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IInt32ApiResponse {
+    isSuccess: boolean;
+    resultObject: number;
+    problemDetails: ProblemDetails;
+}
+
+/** 1 = Invited (Invitation sent) 2 = Accepted (Invitation accepted) 3 = Cancelled (Invitation cancelled) 4 = Declined (Invitation declined) 5 = Resent (Invitation resent) */
+export enum InvitationStatus {
+    Invited = 1,
+    Accepted = 2,
+    Cancelled = 3,
+    Declined = 4,
+    Resent = 5,
+}
+
+export class InvitePharmacistToRegisterDto implements IInvitePharmacistToRegisterDto {
+    email: string | undefined;
+    phone: string | undefined;
+
+    constructor(data?: IInvitePharmacistToRegisterDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.email = _data["email"];
+            this.phone = _data["phone"];
+        }
+    }
+
+    static fromJS(data: any): InvitePharmacistToRegisterDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new InvitePharmacistToRegisterDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["email"] = this.email;
+        data["phone"] = this.phone;
+        return data;
+    }
+
+    clone(): InvitePharmacistToRegisterDto {
+        const json = this.toJSON();
+        let result = new InvitePharmacistToRegisterDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IInvitePharmacistToRegisterDto {
+    email: string | undefined;
+    phone: string | undefined;
+}
+
+export class Medication implements IMedication {
+    id: number;
+    readonly isDeleted: boolean;
+    readonly deletedOnUtc: Date | undefined;
+    readonly deletedBy: string | undefined;
+    deletedReason: DeletedReason;
+    readonly portalProgramId: string;
+    productName: string | undefined;
+    activeIngredient: string | undefined;
+    readonly consumerInformation: string | undefined;
+    readonly prescriberInformation: string | undefined;
+    readonly administrationMethod: string | undefined;
+    readonly dosages: Dosage[] | undefined;
+
+    constructor(data?: IMedication) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            (<any>this).isDeleted = _data["isDeleted"];
+            (<any>this).deletedOnUtc = _data["deletedOnUtc"] ? new Date(_data["deletedOnUtc"].toString()) : <any>undefined;
+            (<any>this).deletedBy = _data["deletedBy"];
+            this.deletedReason = _data["deletedReason"];
+            (<any>this).portalProgramId = _data["portalProgramId"];
+            this.productName = _data["productName"];
+            this.activeIngredient = _data["activeIngredient"];
+            (<any>this).consumerInformation = _data["consumerInformation"];
+            (<any>this).prescriberInformation = _data["prescriberInformation"];
+            (<any>this).administrationMethod = _data["administrationMethod"];
+            if (Array.isArray(_data["dosages"])) {
+                (<any>this).dosages = [];
+                for (let item of _data["dosages"])
+                    (<any>this).dosages.push(Dosage.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): Medication {
+        data = typeof data === 'object' ? data : {};
+        let result = new Medication();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["isDeleted"] = this.isDeleted;
+        data["deletedOnUtc"] = this.deletedOnUtc ? this.deletedOnUtc.toISOString() : <any>undefined;
+        data["deletedBy"] = this.deletedBy;
+        data["deletedReason"] = this.deletedReason;
+        data["portalProgramId"] = this.portalProgramId;
+        data["productName"] = this.productName;
+        data["activeIngredient"] = this.activeIngredient;
+        data["consumerInformation"] = this.consumerInformation;
+        data["prescriberInformation"] = this.prescriberInformation;
+        data["administrationMethod"] = this.administrationMethod;
+        if (Array.isArray(this.dosages)) {
+            data["dosages"] = [];
+            for (let item of this.dosages)
+                data["dosages"].push(item.toJSON());
+        }
+        return data;
+    }
+
+    clone(): Medication {
+        const json = this.toJSON();
+        let result = new Medication();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IMedication {
+    id: number;
+    isDeleted: boolean;
+    deletedOnUtc: Date | undefined;
+    deletedBy: string | undefined;
+    deletedReason: DeletedReason;
+    portalProgramId: string;
+    productName: string | undefined;
+    activeIngredient: string | undefined;
+    consumerInformation: string | undefined;
+    prescriberInformation: string | undefined;
+    administrationMethod: string | undefined;
+    dosages: Dosage[] | undefined;
+}
+
+export class MedicationDoseResponse implements IMedicationDoseResponse {
+    id: number;
+    medicationId: number | undefined;
+    strength: string | undefined;
+    dosageDescription: string | undefined;
+
+    constructor(data?: IMedicationDoseResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.medicationId = _data["medicationId"];
+            this.strength = _data["strength"];
+            this.dosageDescription = _data["dosageDescription"];
+        }
+    }
+
+    static fromJS(data: any): MedicationDoseResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new MedicationDoseResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["medicationId"] = this.medicationId;
+        data["strength"] = this.strength;
+        data["dosageDescription"] = this.dosageDescription;
+        return data;
+    }
+
+    clone(): MedicationDoseResponse {
+        const json = this.toJSON();
+        let result = new MedicationDoseResponse();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IMedicationDoseResponse {
+    id: number;
+    medicationId: number | undefined;
+    strength: string | undefined;
+    dosageDescription: string | undefined;
+}
+
+export class MobileNumber implements IMobileNumber {
+    readonly value: string | undefined;
+
+    constructor(data?: IMobileNumber) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            (<any>this).value = _data["value"];
+        }
+    }
+
+    static fromJS(data: any): MobileNumber {
+        data = typeof data === 'object' ? data : {};
+        let result = new MobileNumber();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["value"] = this.value;
+        return data;
+    }
+
+    clone(): MobileNumber {
+        const json = this.toJSON();
+        let result = new MobileNumber();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IMobileNumber {
+    value: string | undefined;
+}
+
+export class Patient implements IPatient {
+    id: string;
+    readonly isDeleted: boolean;
+    readonly deletedOnUtc: Date | undefined;
+    readonly deletedBy: string | undefined;
+    deletedReason: DeletedReason;
+    title: Title;
+    address: Address;
+    email: EmailAddress;
+    phone: PhoneNumber;
+    mobile: MobileNumber;
+    patientStatus: PatientStatus;
+    name: PersonName;
+    dateOfBirth: DateOfBirth;
+    gender: Gender;
+    readonly medicareNumber: string | undefined;
+    readonly nationalHealthIndex: string | undefined;
+    readonly userId: string | undefined;
+    readonly requiresSupportProgramResourceAccess: boolean | undefined;
+    readonly supportProgramResourceAccessCode: string | undefined;
+    readonly treatmentProfiles: TreatmentProfile[] | undefined;
+
+    constructor(data?: IPatient) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            (<any>this).isDeleted = _data["isDeleted"];
+            (<any>this).deletedOnUtc = _data["deletedOnUtc"] ? new Date(_data["deletedOnUtc"].toString()) : <any>undefined;
+            (<any>this).deletedBy = _data["deletedBy"];
+            this.deletedReason = _data["deletedReason"];
+            this.title = _data["title"];
+            this.address = _data["address"] ? Address.fromJS(_data["address"]) : <any>undefined;
+            this.email = _data["email"] ? EmailAddress.fromJS(_data["email"]) : <any>undefined;
+            this.phone = _data["phone"] ? PhoneNumber.fromJS(_data["phone"]) : <any>undefined;
+            this.mobile = _data["mobile"] ? MobileNumber.fromJS(_data["mobile"]) : <any>undefined;
+            this.patientStatus = _data["patientStatus"];
+            this.name = _data["name"] ? PersonName.fromJS(_data["name"]) : <any>undefined;
+            this.dateOfBirth = _data["dateOfBirth"] ? DateOfBirth.fromJS(_data["dateOfBirth"]) : <any>undefined;
+            this.gender = _data["gender"];
+            (<any>this).medicareNumber = _data["medicareNumber"];
+            (<any>this).nationalHealthIndex = _data["nationalHealthIndex"];
+            (<any>this).userId = _data["userId"];
+            (<any>this).requiresSupportProgramResourceAccess = _data["requiresSupportProgramResourceAccess"];
+            (<any>this).supportProgramResourceAccessCode = _data["supportProgramResourceAccessCode"];
+            if (Array.isArray(_data["treatmentProfiles"])) {
+                (<any>this).treatmentProfiles = [];
+                for (let item of _data["treatmentProfiles"])
+                    (<any>this).treatmentProfiles.push(TreatmentProfile.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): Patient {
+        data = typeof data === 'object' ? data : {};
+        let result = new Patient();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["isDeleted"] = this.isDeleted;
+        data["deletedOnUtc"] = this.deletedOnUtc ? this.deletedOnUtc.toISOString() : <any>undefined;
+        data["deletedBy"] = this.deletedBy;
+        data["deletedReason"] = this.deletedReason;
+        data["title"] = this.title;
+        data["address"] = this.address ? this.address.toJSON() : <any>undefined;
+        data["email"] = this.email ? this.email.toJSON() : <any>undefined;
+        data["phone"] = this.phone ? this.phone.toJSON() : <any>undefined;
+        data["mobile"] = this.mobile ? this.mobile.toJSON() : <any>undefined;
+        data["patientStatus"] = this.patientStatus;
+        data["name"] = this.name ? this.name.toJSON() : <any>undefined;
+        data["dateOfBirth"] = this.dateOfBirth ? this.dateOfBirth.toJSON() : <any>undefined;
+        data["gender"] = this.gender;
+        data["medicareNumber"] = this.medicareNumber;
+        data["nationalHealthIndex"] = this.nationalHealthIndex;
+        data["userId"] = this.userId;
+        data["requiresSupportProgramResourceAccess"] = this.requiresSupportProgramResourceAccess;
+        data["supportProgramResourceAccessCode"] = this.supportProgramResourceAccessCode;
+        if (Array.isArray(this.treatmentProfiles)) {
+            data["treatmentProfiles"] = [];
+            for (let item of this.treatmentProfiles)
+                data["treatmentProfiles"].push(item.toJSON());
+        }
+        return data;
+    }
+
+    clone(): Patient {
+        const json = this.toJSON();
+        let result = new Patient();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IPatient {
+    id: string;
+    isDeleted: boolean;
+    deletedOnUtc: Date | undefined;
+    deletedBy: string | undefined;
+    deletedReason: DeletedReason;
+    title: Title;
+    address: Address;
+    email: EmailAddress;
+    phone: PhoneNumber;
+    mobile: MobileNumber;
+    patientStatus: PatientStatus;
+    name: PersonName;
+    dateOfBirth: DateOfBirth;
+    gender: Gender;
+    medicareNumber: string | undefined;
+    nationalHealthIndex: string | undefined;
+    userId: string | undefined;
+    requiresSupportProgramResourceAccess: boolean | undefined;
+    supportProgramResourceAccessCode: string | undefined;
+    treatmentProfiles: TreatmentProfile[] | undefined;
+}
+
+/** 1 = ApprovalRequired (Approval required) 2 = Approved (Approved) 3 = Inactive (Inactive) 4 = Reactivated (Reacivated) 5 = Archived (Archived) */
+export enum PatientStatus {
+    ApprovalRequired = 1,
+    Approved = 2,
+    Inactive = 3,
+    Reactivated = 4,
+    Archived = 5,
+}
+
+export class PersonName implements IPersonName {
+    firstName: string | undefined;
+    middleName: string | undefined;
+    lastName: string | undefined;
+    readonly name: string | undefined;
+
+    constructor(data?: IPersonName) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.firstName = _data["firstName"];
+            this.middleName = _data["middleName"];
+            this.lastName = _data["lastName"];
+            (<any>this).name = _data["name"];
+        }
+    }
+
+    static fromJS(data: any): PersonName {
+        data = typeof data === 'object' ? data : {};
+        let result = new PersonName();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["firstName"] = this.firstName;
+        data["middleName"] = this.middleName;
+        data["lastName"] = this.lastName;
+        data["name"] = this.name;
+        return data;
+    }
+
+    clone(): PersonName {
+        const json = this.toJSON();
+        let result = new PersonName();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IPersonName {
+    firstName: string | undefined;
+    middleName: string | undefined;
+    lastName: string | undefined;
+    name: string | undefined;
+}
+
+export class Pharmacist implements IPharmacist {
+    id: string;
+    readonly isDeleted: boolean;
+    readonly deletedOnUtc: Date | undefined;
+    readonly deletedBy: string | undefined;
+    deletedReason: DeletedReason;
+    title: Title;
+    name: PersonName;
+    email: EmailAddress;
+    ahpraNumber: AhpraNumber;
+    phone: PhoneNumber;
+    readonly dispensingRecords: DispensingRecord[] | undefined;
+
+    constructor(data?: IPharmacist) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            (<any>this).isDeleted = _data["isDeleted"];
+            (<any>this).deletedOnUtc = _data["deletedOnUtc"] ? new Date(_data["deletedOnUtc"].toString()) : <any>undefined;
+            (<any>this).deletedBy = _data["deletedBy"];
+            this.deletedReason = _data["deletedReason"];
+            this.title = _data["title"];
+            this.name = _data["name"] ? PersonName.fromJS(_data["name"]) : <any>undefined;
+            this.email = _data["email"] ? EmailAddress.fromJS(_data["email"]) : <any>undefined;
+            this.ahpraNumber = _data["ahpraNumber"] ? AhpraNumber.fromJS(_data["ahpraNumber"]) : <any>undefined;
+            this.phone = _data["phone"] ? PhoneNumber.fromJS(_data["phone"]) : <any>undefined;
+            if (Array.isArray(_data["dispensingRecords"])) {
+                (<any>this).dispensingRecords = [];
+                for (let item of _data["dispensingRecords"])
+                    (<any>this).dispensingRecords.push(DispensingRecord.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): Pharmacist {
+        data = typeof data === 'object' ? data : {};
+        let result = new Pharmacist();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["isDeleted"] = this.isDeleted;
+        data["deletedOnUtc"] = this.deletedOnUtc ? this.deletedOnUtc.toISOString() : <any>undefined;
+        data["deletedBy"] = this.deletedBy;
+        data["deletedReason"] = this.deletedReason;
+        data["title"] = this.title;
+        data["name"] = this.name ? this.name.toJSON() : <any>undefined;
+        data["email"] = this.email ? this.email.toJSON() : <any>undefined;
+        data["ahpraNumber"] = this.ahpraNumber ? this.ahpraNumber.toJSON() : <any>undefined;
+        data["phone"] = this.phone ? this.phone.toJSON() : <any>undefined;
+        if (Array.isArray(this.dispensingRecords)) {
+            data["dispensingRecords"] = [];
+            for (let item of this.dispensingRecords)
+                data["dispensingRecords"].push(item.toJSON());
+        }
+        return data;
+    }
+
+    clone(): Pharmacist {
+        const json = this.toJSON();
+        let result = new Pharmacist();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IPharmacist {
+    id: string;
+    isDeleted: boolean;
+    deletedOnUtc: Date | undefined;
+    deletedBy: string | undefined;
+    deletedReason: DeletedReason;
+    title: Title;
+    name: PersonName;
+    email: EmailAddress;
+    ahpraNumber: AhpraNumber;
+    phone: PhoneNumber;
+    dispensingRecords: DispensingRecord[] | undefined;
+}
+
+export class PharmacistProgramInviteResponse implements IPharmacistProgramInviteResponse {
+    id: string;
+    firstName: string | undefined;
+    lastName: string | undefined;
+    email: string | undefined;
+    phone: string | undefined;
+    mobile: string | undefined;
+    invitationStatus: InvitationStatus;
+
+    constructor(data?: IPharmacistProgramInviteResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.firstName = _data["firstName"];
+            this.lastName = _data["lastName"];
+            this.email = _data["email"];
+            this.phone = _data["phone"];
+            this.mobile = _data["mobile"];
+            this.invitationStatus = _data["invitationStatus"];
+        }
+    }
+
+    static fromJS(data: any): PharmacistProgramInviteResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new PharmacistProgramInviteResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["firstName"] = this.firstName;
+        data["lastName"] = this.lastName;
+        data["email"] = this.email;
+        data["phone"] = this.phone;
+        data["mobile"] = this.mobile;
+        data["invitationStatus"] = this.invitationStatus;
+        return data;
+    }
+
+    clone(): PharmacistProgramInviteResponse {
+        const json = this.toJSON();
+        let result = new PharmacistProgramInviteResponse();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IPharmacistProgramInviteResponse {
+    id: string;
+    firstName: string | undefined;
+    lastName: string | undefined;
+    email: string | undefined;
+    phone: string | undefined;
+    mobile: string | undefined;
+    invitationStatus: InvitationStatus;
+}
+
+export class PharmacistProgramInviteResponseApiResponse implements IPharmacistProgramInviteResponseApiResponse {
+    isSuccess: boolean;
+    resultObject: PharmacistProgramInviteResponse;
+    problemDetails: ProblemDetails;
+
+    constructor(data?: IPharmacistProgramInviteResponseApiResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.isSuccess = _data["isSuccess"];
+            this.resultObject = _data["resultObject"] ? PharmacistProgramInviteResponse.fromJS(_data["resultObject"]) : <any>undefined;
+            this.problemDetails = _data["problemDetails"] ? ProblemDetails.fromJS(_data["problemDetails"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): PharmacistProgramInviteResponseApiResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new PharmacistProgramInviteResponseApiResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["isSuccess"] = this.isSuccess;
+        data["resultObject"] = this.resultObject ? this.resultObject.toJSON() : <any>undefined;
+        data["problemDetails"] = this.problemDetails ? this.problemDetails.toJSON() : <any>undefined;
+        return data;
+    }
+
+    clone(): PharmacistProgramInviteResponseApiResponse {
+        const json = this.toJSON();
+        let result = new PharmacistProgramInviteResponseApiResponse();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IPharmacistProgramInviteResponseApiResponse {
+    isSuccess: boolean;
+    resultObject: PharmacistProgramInviteResponse;
+    problemDetails: ProblemDetails;
+}
+
+export class Pharmacy implements IPharmacy {
+    id: string;
+    readonly isDeleted: boolean;
+    readonly deletedOnUtc: Date | undefined;
+    readonly deletedBy: string | undefined;
+    deletedReason: DeletedReason;
+    readonly name: string | undefined;
+    businessAddress: Address;
+    phone: PhoneNumber;
+    email: EmailAddress;
+    readonly createdOnUtc: Date;
+    readonly createdBy: string | undefined;
+    readonly lastModifiedOnUtc: Date | undefined;
+    readonly modifiedBy: string | undefined;
+    bankAccount: BankAccount;
+    readonly dispensingRecords: DispensingRecord[] | undefined;
+    readonly treatmentProfiles: TreatmentProfile[] | undefined;
+
+    constructor(data?: IPharmacy) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            (<any>this).isDeleted = _data["isDeleted"];
+            (<any>this).deletedOnUtc = _data["deletedOnUtc"] ? new Date(_data["deletedOnUtc"].toString()) : <any>undefined;
+            (<any>this).deletedBy = _data["deletedBy"];
+            this.deletedReason = _data["deletedReason"];
+            (<any>this).name = _data["name"];
+            this.businessAddress = _data["businessAddress"] ? Address.fromJS(_data["businessAddress"]) : <any>undefined;
+            this.phone = _data["phone"] ? PhoneNumber.fromJS(_data["phone"]) : <any>undefined;
+            this.email = _data["email"] ? EmailAddress.fromJS(_data["email"]) : <any>undefined;
+            (<any>this).createdOnUtc = _data["createdOnUtc"] ? new Date(_data["createdOnUtc"].toString()) : <any>undefined;
+            (<any>this).createdBy = _data["createdBy"];
+            (<any>this).lastModifiedOnUtc = _data["lastModifiedOnUtc"] ? new Date(_data["lastModifiedOnUtc"].toString()) : <any>undefined;
+            (<any>this).modifiedBy = _data["modifiedBy"];
+            this.bankAccount = _data["bankAccount"] ? BankAccount.fromJS(_data["bankAccount"]) : <any>undefined;
+            if (Array.isArray(_data["dispensingRecords"])) {
+                (<any>this).dispensingRecords = [];
+                for (let item of _data["dispensingRecords"])
+                    (<any>this).dispensingRecords.push(DispensingRecord.fromJS(item));
+            }
+            if (Array.isArray(_data["treatmentProfiles"])) {
+                (<any>this).treatmentProfiles = [];
+                for (let item of _data["treatmentProfiles"])
+                    (<any>this).treatmentProfiles.push(TreatmentProfile.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): Pharmacy {
+        data = typeof data === 'object' ? data : {};
+        let result = new Pharmacy();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["isDeleted"] = this.isDeleted;
+        data["deletedOnUtc"] = this.deletedOnUtc ? this.deletedOnUtc.toISOString() : <any>undefined;
+        data["deletedBy"] = this.deletedBy;
+        data["deletedReason"] = this.deletedReason;
+        data["name"] = this.name;
+        data["businessAddress"] = this.businessAddress ? this.businessAddress.toJSON() : <any>undefined;
+        data["phone"] = this.phone ? this.phone.toJSON() : <any>undefined;
+        data["email"] = this.email ? this.email.toJSON() : <any>undefined;
+        data["createdOnUtc"] = this.createdOnUtc ? this.createdOnUtc.toISOString() : <any>undefined;
+        data["createdBy"] = this.createdBy;
+        data["lastModifiedOnUtc"] = this.lastModifiedOnUtc ? this.lastModifiedOnUtc.toISOString() : <any>undefined;
+        data["modifiedBy"] = this.modifiedBy;
+        data["bankAccount"] = this.bankAccount ? this.bankAccount.toJSON() : <any>undefined;
+        if (Array.isArray(this.dispensingRecords)) {
+            data["dispensingRecords"] = [];
+            for (let item of this.dispensingRecords)
+                data["dispensingRecords"].push(item.toJSON());
+        }
+        if (Array.isArray(this.treatmentProfiles)) {
+            data["treatmentProfiles"] = [];
+            for (let item of this.treatmentProfiles)
+                data["treatmentProfiles"].push(item.toJSON());
+        }
+        return data;
+    }
+
+    clone(): Pharmacy {
+        const json = this.toJSON();
+        let result = new Pharmacy();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IPharmacy {
+    id: string;
+    isDeleted: boolean;
+    deletedOnUtc: Date | undefined;
+    deletedBy: string | undefined;
+    deletedReason: DeletedReason;
+    name: string | undefined;
+    businessAddress: Address;
+    phone: PhoneNumber;
+    email: EmailAddress;
+    createdOnUtc: Date;
+    createdBy: string | undefined;
+    lastModifiedOnUtc: Date | undefined;
+    modifiedBy: string | undefined;
+    bankAccount: BankAccount;
+    dispensingRecords: DispensingRecord[] | undefined;
+    treatmentProfiles: TreatmentProfile[] | undefined;
+}
+
+/** 1 = SymbionEthicalAccount (Symbion Ethical Account) 2 = ChTwoAccount (CH2 Account) 3 = Other (Other) */
+export enum PharmacyAccountType {
+    SymbionEthicalAccount = 1,
+    ChTwoAccount = 2,
+    Other = 3,
+}
+
+export class PharmacyDto implements IPharmacyDto {
+    id: string | undefined;
+    accountName: string | undefined;
+    bsbNumber: string | undefined;
+    accountNumber: string | undefined;
+    name: string | undefined;
+    address: AddressDto;
+    latitude: number | undefined;
+    longitude: number | undefined;
+    phone: string | undefined;
+    email: string | undefined;
+
+    constructor(data?: IPharmacyDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.accountName = _data["accountName"];
+            this.bsbNumber = _data["bsbNumber"];
+            this.accountNumber = _data["accountNumber"];
+            this.name = _data["name"];
+            this.address = _data["address"] ? AddressDto.fromJS(_data["address"]) : <any>undefined;
+            this.latitude = _data["latitude"];
+            this.longitude = _data["longitude"];
+            this.phone = _data["phone"];
+            this.email = _data["email"];
+        }
+    }
+
+    static fromJS(data: any): PharmacyDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new PharmacyDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["accountName"] = this.accountName;
+        data["bsbNumber"] = this.bsbNumber;
+        data["accountNumber"] = this.accountNumber;
+        data["name"] = this.name;
+        data["address"] = this.address ? this.address.toJSON() : <any>undefined;
+        data["latitude"] = this.latitude;
+        data["longitude"] = this.longitude;
+        data["phone"] = this.phone;
+        data["email"] = this.email;
+        return data;
+    }
+
+    clone(): PharmacyDto {
+        const json = this.toJSON();
+        let result = new PharmacyDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IPharmacyDto {
+    id: string | undefined;
+    accountName: string | undefined;
+    bsbNumber: string | undefined;
+    accountNumber: string | undefined;
+    name: string | undefined;
+    address: AddressDto;
+    latitude: number | undefined;
+    longitude: number | undefined;
+    phone: string | undefined;
+    email: string | undefined;
+}
+
+export class PhoneNumber implements IPhoneNumber {
+    readonly value: string | undefined;
+
+    constructor(data?: IPhoneNumber) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            (<any>this).value = _data["value"];
+        }
+    }
+
+    static fromJS(data: any): PhoneNumber {
+        data = typeof data === 'object' ? data : {};
+        let result = new PhoneNumber();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["value"] = this.value;
+        return data;
+    }
+
+    clone(): PhoneNumber {
+        const json = this.toJSON();
+        let result = new PhoneNumber();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IPhoneNumber {
+    value: string | undefined;
+}
+
+export class PreEnrolPatientForPrescriberDto implements IPreEnrolPatientForPrescriberDto {
+    prescriberId: string;
+    registrationMethod: RegistrationMethod;
+    title: Title;
+    firstName: string | undefined;
+    middleName: string | undefined;
+    lastName: string | undefined;
+    dateOfBirth: Date;
+    birthDay: number | undefined;
+    birthMonth: number | undefined;
+    birthYear: number | undefined;
+    homeUnitNumber: string | undefined;
+    homeStreetAddress: string | undefined;
+    homeCity: string | undefined;
+    homeState: AddressState;
+    homePostcode: string | undefined;
+    clinicId: string;
+
+    constructor(data?: IPreEnrolPatientForPrescriberDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.prescriberId = _data["prescriberId"];
+            this.registrationMethod = _data["registrationMethod"];
+            this.title = _data["title"];
+            this.firstName = _data["firstName"];
+            this.middleName = _data["middleName"];
+            this.lastName = _data["lastName"];
+            this.dateOfBirth = _data["dateOfBirth"] ? new Date(_data["dateOfBirth"].toString()) : <any>undefined;
+            this.birthDay = _data["birthDay"];
+            this.birthMonth = _data["birthMonth"];
+            this.birthYear = _data["birthYear"];
+            this.homeUnitNumber = _data["homeUnitNumber"];
+            this.homeStreetAddress = _data["homeStreetAddress"];
+            this.homeCity = _data["homeCity"];
+            this.homeState = _data["homeState"];
+            this.homePostcode = _data["homePostcode"];
+            this.clinicId = _data["clinicId"];
+        }
+    }
+
+    static fromJS(data: any): PreEnrolPatientForPrescriberDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new PreEnrolPatientForPrescriberDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["prescriberId"] = this.prescriberId;
+        data["registrationMethod"] = this.registrationMethod;
+        data["title"] = this.title;
+        data["firstName"] = this.firstName;
+        data["middleName"] = this.middleName;
+        data["lastName"] = this.lastName;
+        data["dateOfBirth"] = this.dateOfBirth ? this.dateOfBirth.toISOString() : <any>undefined;
+        data["birthDay"] = this.birthDay;
+        data["birthMonth"] = this.birthMonth;
+        data["birthYear"] = this.birthYear;
+        data["homeUnitNumber"] = this.homeUnitNumber;
+        data["homeStreetAddress"] = this.homeStreetAddress;
+        data["homeCity"] = this.homeCity;
+        data["homeState"] = this.homeState;
+        data["homePostcode"] = this.homePostcode;
+        data["clinicId"] = this.clinicId;
+        return data;
+    }
+
+    clone(): PreEnrolPatientForPrescriberDto {
+        const json = this.toJSON();
+        let result = new PreEnrolPatientForPrescriberDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IPreEnrolPatientForPrescriberDto {
+    prescriberId: string;
+    registrationMethod: RegistrationMethod;
+    title: Title;
+    firstName: string | undefined;
+    middleName: string | undefined;
+    lastName: string | undefined;
+    dateOfBirth: Date;
+    birthDay: number | undefined;
+    birthMonth: number | undefined;
+    birthYear: number | undefined;
+    homeUnitNumber: string | undefined;
+    homeStreetAddress: string | undefined;
+    homeCity: string | undefined;
+    homeState: AddressState;
+    homePostcode: string | undefined;
+    clinicId: string;
+}
+
+/** 1 = Phone (Phone) 2 = Mobile (Mobile) 3 = Email (Email) 4 = Any (Any) */
+export enum PreferredContactMethod {
+    Phone = 1,
+    Mobile = 2,
+    Email = 3,
+    Any = 4,
+}
+
+export class Prescriber implements IPrescriber {
+    id: string;
+    readonly isDeleted: boolean;
+    readonly deletedOnUtc: Date | undefined;
+    readonly deletedBy: string | undefined;
+    deletedReason: DeletedReason;
+    title: Title;
+    name: PersonName;
+    ahpraNumber: AhpraNumber;
+    email: EmailAddress;
+    speciality: Specialty;
+    phone: PhoneNumber;
+    mobile: MobileNumber;
+    specialityOther: string | undefined;
+    prescriberNumber: string | undefined;
+    readonly prescriptions: Prescription[] | undefined;
+    readonly treatmentProfiles: TreatmentProfile[] | undefined;
+
+    constructor(data?: IPrescriber) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            (<any>this).isDeleted = _data["isDeleted"];
+            (<any>this).deletedOnUtc = _data["deletedOnUtc"] ? new Date(_data["deletedOnUtc"].toString()) : <any>undefined;
+            (<any>this).deletedBy = _data["deletedBy"];
+            this.deletedReason = _data["deletedReason"];
+            this.title = _data["title"];
+            this.name = _data["name"] ? PersonName.fromJS(_data["name"]) : <any>undefined;
+            this.ahpraNumber = _data["ahpraNumber"] ? AhpraNumber.fromJS(_data["ahpraNumber"]) : <any>undefined;
+            this.email = _data["email"] ? EmailAddress.fromJS(_data["email"]) : <any>undefined;
+            this.speciality = _data["speciality"];
+            this.phone = _data["phone"] ? PhoneNumber.fromJS(_data["phone"]) : <any>undefined;
+            this.mobile = _data["mobile"] ? MobileNumber.fromJS(_data["mobile"]) : <any>undefined;
+            this.specialityOther = _data["specialityOther"];
+            this.prescriberNumber = _data["prescriberNumber"];
+            if (Array.isArray(_data["prescriptions"])) {
+                (<any>this).prescriptions = [];
+                for (let item of _data["prescriptions"])
+                    (<any>this).prescriptions.push(Prescription.fromJS(item));
+            }
+            if (Array.isArray(_data["treatmentProfiles"])) {
+                (<any>this).treatmentProfiles = [];
+                for (let item of _data["treatmentProfiles"])
+                    (<any>this).treatmentProfiles.push(TreatmentProfile.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): Prescriber {
+        data = typeof data === 'object' ? data : {};
+        let result = new Prescriber();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["isDeleted"] = this.isDeleted;
+        data["deletedOnUtc"] = this.deletedOnUtc ? this.deletedOnUtc.toISOString() : <any>undefined;
+        data["deletedBy"] = this.deletedBy;
+        data["deletedReason"] = this.deletedReason;
+        data["title"] = this.title;
+        data["name"] = this.name ? this.name.toJSON() : <any>undefined;
+        data["ahpraNumber"] = this.ahpraNumber ? this.ahpraNumber.toJSON() : <any>undefined;
+        data["email"] = this.email ? this.email.toJSON() : <any>undefined;
+        data["speciality"] = this.speciality;
+        data["phone"] = this.phone ? this.phone.toJSON() : <any>undefined;
+        data["mobile"] = this.mobile ? this.mobile.toJSON() : <any>undefined;
+        data["specialityOther"] = this.specialityOther;
+        data["prescriberNumber"] = this.prescriberNumber;
+        if (Array.isArray(this.prescriptions)) {
+            data["prescriptions"] = [];
+            for (let item of this.prescriptions)
+                data["prescriptions"].push(item.toJSON());
+        }
+        if (Array.isArray(this.treatmentProfiles)) {
+            data["treatmentProfiles"] = [];
+            for (let item of this.treatmentProfiles)
+                data["treatmentProfiles"].push(item.toJSON());
+        }
+        return data;
+    }
+
+    clone(): Prescriber {
+        const json = this.toJSON();
+        let result = new Prescriber();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IPrescriber {
+    id: string;
+    isDeleted: boolean;
+    deletedOnUtc: Date | undefined;
+    deletedBy: string | undefined;
+    deletedReason: DeletedReason;
+    title: Title;
+    name: PersonName;
+    ahpraNumber: AhpraNumber;
+    email: EmailAddress;
+    speciality: Specialty;
+    phone: PhoneNumber;
+    mobile: MobileNumber;
+    specialityOther: string | undefined;
+    prescriberNumber: string | undefined;
+    prescriptions: Prescription[] | undefined;
+    treatmentProfiles: TreatmentProfile[] | undefined;
+}
+
+export class Prescription implements IPrescription {
+    id: string;
+    readonly isDeleted: boolean;
+    readonly deletedOnUtc: Date | undefined;
+    readonly deletedBy: string | undefined;
+    deletedReason: DeletedReason;
+    readonly domainEvents: DomainEventBase[] | undefined;
+    readonly portalProgramId: string;
+    treatmentProfile: TreatmentProfile;
+    treatmentProfileId: string;
+    readonly isFilled: boolean;
+    readonly issuedOnUtc: Date;
+    readonly prescriptionDate: Date | undefined;
+    readonly completedOn: Date | undefined;
+    expiryDate: DateOnly;
+    readonly dispensingRecords: DispensingRecord[] | undefined;
+    dosage: Dosage;
+    dosageId: number;
+    prescriber: Prescriber;
+    prescriberId: string;
+    homeDeliveryAddress: Address;
+    pharmacy: Pharmacy;
+    readonly pharmacyId: string | undefined;
+    clinic: Clinic;
+    clinicId: string | undefined;
+    instructions: string | undefined;
+    repeats: number;
+    readonly completedRepeats: number;
+
+    constructor(data?: IPrescription) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            (<any>this).isDeleted = _data["isDeleted"];
+            (<any>this).deletedOnUtc = _data["deletedOnUtc"] ? new Date(_data["deletedOnUtc"].toString()) : <any>undefined;
+            (<any>this).deletedBy = _data["deletedBy"];
+            this.deletedReason = _data["deletedReason"];
+            if (Array.isArray(_data["domainEvents"])) {
+                (<any>this).domainEvents = [];
+                for (let item of _data["domainEvents"])
+                    (<any>this).domainEvents.push(DomainEventBase.fromJS(item));
+            }
+            (<any>this).portalProgramId = _data["portalProgramId"];
+            this.treatmentProfile = _data["treatmentProfile"] ? TreatmentProfile.fromJS(_data["treatmentProfile"]) : <any>undefined;
+            this.treatmentProfileId = _data["treatmentProfileId"];
+            (<any>this).isFilled = _data["isFilled"];
+            (<any>this).issuedOnUtc = _data["issuedOnUtc"] ? new Date(_data["issuedOnUtc"].toString()) : <any>undefined;
+            (<any>this).prescriptionDate = _data["prescriptionDate"] ? new Date(_data["prescriptionDate"].toString()) : <any>undefined;
+            (<any>this).completedOn = _data["completedOn"] ? new Date(_data["completedOn"].toString()) : <any>undefined;
+            this.expiryDate = _data["expiryDate"] ? DateOnly.fromJS(_data["expiryDate"]) : <any>undefined;
+            if (Array.isArray(_data["dispensingRecords"])) {
+                (<any>this).dispensingRecords = [];
+                for (let item of _data["dispensingRecords"])
+                    (<any>this).dispensingRecords.push(DispensingRecord.fromJS(item));
+            }
+            this.dosage = _data["dosage"] ? Dosage.fromJS(_data["dosage"]) : <any>undefined;
+            this.dosageId = _data["dosageId"];
+            this.prescriber = _data["prescriber"] ? Prescriber.fromJS(_data["prescriber"]) : <any>undefined;
+            this.prescriberId = _data["prescriberId"];
+            this.homeDeliveryAddress = _data["homeDeliveryAddress"] ? Address.fromJS(_data["homeDeliveryAddress"]) : <any>undefined;
+            this.pharmacy = _data["pharmacy"] ? Pharmacy.fromJS(_data["pharmacy"]) : <any>undefined;
+            (<any>this).pharmacyId = _data["pharmacyId"];
+            this.clinic = _data["clinic"] ? Clinic.fromJS(_data["clinic"]) : <any>undefined;
+            this.clinicId = _data["clinicId"];
+            this.instructions = _data["instructions"];
+            this.repeats = _data["repeats"];
+            (<any>this).completedRepeats = _data["completedRepeats"];
+        }
+    }
+
+    static fromJS(data: any): Prescription {
+        data = typeof data === 'object' ? data : {};
+        let result = new Prescription();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["isDeleted"] = this.isDeleted;
+        data["deletedOnUtc"] = this.deletedOnUtc ? this.deletedOnUtc.toISOString() : <any>undefined;
+        data["deletedBy"] = this.deletedBy;
+        data["deletedReason"] = this.deletedReason;
+        if (Array.isArray(this.domainEvents)) {
+            data["domainEvents"] = [];
+            for (let item of this.domainEvents)
+                data["domainEvents"].push(item.toJSON());
+        }
+        data["portalProgramId"] = this.portalProgramId;
+        data["treatmentProfile"] = this.treatmentProfile ? this.treatmentProfile.toJSON() : <any>undefined;
+        data["treatmentProfileId"] = this.treatmentProfileId;
+        data["isFilled"] = this.isFilled;
+        data["issuedOnUtc"] = this.issuedOnUtc ? this.issuedOnUtc.toISOString() : <any>undefined;
+        data["prescriptionDate"] = this.prescriptionDate ? this.prescriptionDate.toISOString() : <any>undefined;
+        data["completedOn"] = this.completedOn ? this.completedOn.toISOString() : <any>undefined;
+        data["expiryDate"] = this.expiryDate ? this.expiryDate.toJSON() : <any>undefined;
+        if (Array.isArray(this.dispensingRecords)) {
+            data["dispensingRecords"] = [];
+            for (let item of this.dispensingRecords)
+                data["dispensingRecords"].push(item.toJSON());
+        }
+        data["dosage"] = this.dosage ? this.dosage.toJSON() : <any>undefined;
+        data["dosageId"] = this.dosageId;
+        data["prescriber"] = this.prescriber ? this.prescriber.toJSON() : <any>undefined;
+        data["prescriberId"] = this.prescriberId;
+        data["homeDeliveryAddress"] = this.homeDeliveryAddress ? this.homeDeliveryAddress.toJSON() : <any>undefined;
+        data["pharmacy"] = this.pharmacy ? this.pharmacy.toJSON() : <any>undefined;
+        data["pharmacyId"] = this.pharmacyId;
+        data["clinic"] = this.clinic ? this.clinic.toJSON() : <any>undefined;
+        data["clinicId"] = this.clinicId;
+        data["instructions"] = this.instructions;
+        data["repeats"] = this.repeats;
+        data["completedRepeats"] = this.completedRepeats;
+        return data;
+    }
+
+    clone(): Prescription {
+        const json = this.toJSON();
+        let result = new Prescription();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IPrescription {
+    id: string;
+    isDeleted: boolean;
+    deletedOnUtc: Date | undefined;
+    deletedBy: string | undefined;
+    deletedReason: DeletedReason;
+    domainEvents: DomainEventBase[] | undefined;
+    portalProgramId: string;
+    treatmentProfile: TreatmentProfile;
+    treatmentProfileId: string;
+    isFilled: boolean;
+    issuedOnUtc: Date;
+    prescriptionDate: Date | undefined;
+    completedOn: Date | undefined;
+    expiryDate: DateOnly;
+    dispensingRecords: DispensingRecord[] | undefined;
+    dosage: Dosage;
+    dosageId: number;
+    prescriber: Prescriber;
+    prescriberId: string;
+    homeDeliveryAddress: Address;
+    pharmacy: Pharmacy;
+    pharmacyId: string | undefined;
+    clinic: Clinic;
+    clinicId: string | undefined;
+    instructions: string | undefined;
+    repeats: number;
+    completedRepeats: number;
 }
 
 export class ProblemDetails implements IProblemDetails {
@@ -3256,6 +19502,97 @@ export enum Profession {
     Psychology = 16,
     Other = 17,
     Unknown = 18,
+}
+
+export class ProgramAccountDto implements IProgramAccountDto {
+    programAccountId: string;
+    pharmacyId: string;
+    assignedBy: string | undefined;
+    consentObtained: boolean | undefined;
+    consentObtainedFrom: string | undefined;
+    consentedDate: DateOnly;
+    consentDeclined: DateOnly;
+    programWithdrawalDate: DateOnly;
+    programWithdrawalBy: string | undefined;
+    pharmacyAccountType: PharmacyAccountType;
+    accountNumber: string | undefined;
+    referenceAccountNumber: string | undefined;
+    accountApproved: boolean;
+
+    constructor(data?: IProgramAccountDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.programAccountId = _data["programAccountId"];
+            this.pharmacyId = _data["pharmacyId"];
+            this.assignedBy = _data["assignedBy"];
+            this.consentObtained = _data["consentObtained"];
+            this.consentObtainedFrom = _data["consentObtainedFrom"];
+            this.consentedDate = _data["consentedDate"] ? DateOnly.fromJS(_data["consentedDate"]) : <any>undefined;
+            this.consentDeclined = _data["consentDeclined"] ? DateOnly.fromJS(_data["consentDeclined"]) : <any>undefined;
+            this.programWithdrawalDate = _data["programWithdrawalDate"] ? DateOnly.fromJS(_data["programWithdrawalDate"]) : <any>undefined;
+            this.programWithdrawalBy = _data["programWithdrawalBy"];
+            this.pharmacyAccountType = _data["pharmacyAccountType"];
+            this.accountNumber = _data["accountNumber"];
+            this.referenceAccountNumber = _data["referenceAccountNumber"];
+            this.accountApproved = _data["accountApproved"];
+        }
+    }
+
+    static fromJS(data: any): ProgramAccountDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new ProgramAccountDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["programAccountId"] = this.programAccountId;
+        data["pharmacyId"] = this.pharmacyId;
+        data["assignedBy"] = this.assignedBy;
+        data["consentObtained"] = this.consentObtained;
+        data["consentObtainedFrom"] = this.consentObtainedFrom;
+        data["consentedDate"] = this.consentedDate ? this.consentedDate.toJSON() : <any>undefined;
+        data["consentDeclined"] = this.consentDeclined ? this.consentDeclined.toJSON() : <any>undefined;
+        data["programWithdrawalDate"] = this.programWithdrawalDate ? this.programWithdrawalDate.toJSON() : <any>undefined;
+        data["programWithdrawalBy"] = this.programWithdrawalBy;
+        data["pharmacyAccountType"] = this.pharmacyAccountType;
+        data["accountNumber"] = this.accountNumber;
+        data["referenceAccountNumber"] = this.referenceAccountNumber;
+        data["accountApproved"] = this.accountApproved;
+        return data;
+    }
+
+    clone(): ProgramAccountDto {
+        const json = this.toJSON();
+        let result = new ProgramAccountDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IProgramAccountDto {
+    programAccountId: string;
+    pharmacyId: string;
+    assignedBy: string | undefined;
+    consentObtained: boolean | undefined;
+    consentObtainedFrom: string | undefined;
+    consentedDate: DateOnly;
+    consentDeclined: DateOnly;
+    programWithdrawalDate: DateOnly;
+    programWithdrawalBy: string | undefined;
+    pharmacyAccountType: PharmacyAccountType;
+    accountNumber: string | undefined;
+    referenceAccountNumber: string | undefined;
+    accountApproved: boolean;
 }
 
 /** 1 = PatientSupportProgram 2 = ProductAccessProgram 3 = ProductFamiliarisationProgram 4 = ClinicalAuditProgram */
@@ -3477,6 +19814,821 @@ export interface IRegisterPapPatientDto {
     clinicId: string | undefined;
 }
 
+export class RegisterPapPatientWithPharmacyDto implements IRegisterPapPatientWithPharmacyDto {
+    title: Title;
+    firstName: string | undefined;
+    middleName: string | undefined;
+    lastName: string | undefined;
+    dosageId: number;
+    repeats: number | undefined;
+    prescriptionInstructions: string | undefined;
+    privacyConsentProvided: boolean;
+    programTermsAgreed: boolean;
+    contactConsentProvided: boolean;
+    marketingCommunicationConsentProvided: boolean;
+    adverseEventContactConsentProvided: boolean;
+    email: string | undefined;
+    prescriberId: string;
+    prescriberNumber: string | undefined;
+    dateOfBirth: Date;
+    birthDay: number;
+    birthMonth: number;
+    birthYear: number;
+    gender: Gender;
+    phone: string | undefined;
+    mobile: string | undefined;
+    enrolledOn: Date | undefined;
+    treatmentStartedOn: Date | undefined;
+    supportProgramAccessRequested: boolean | undefined;
+    programEligibilityCriteriaConfirmed: boolean | undefined;
+    eligibilityCriteriaOptions: number[] | undefined;
+    programInformationReceived: boolean | undefined;
+    deliveryUnitNumber: string | undefined;
+    deliveryAddressLine1: string | undefined;
+    deliveryAddressLine2: string | undefined;
+    deliveryCity: string | undefined;
+    deliveryState: AddressState;
+    deliveryPostcode: string | undefined;
+    homeUnitNumber: string | undefined;
+    homeAddressLine1: string | undefined;
+    homeAddressLine2: string | undefined;
+    homeCity: string | undefined;
+    homeState: AddressState;
+    homePostcode: string | undefined;
+    pharmacyName: string | undefined;
+    pharmacyUnitNumber: string | undefined;
+    pharmacyStreetAddress: string | undefined;
+    pharmacyCity: string | undefined;
+    pharmacyState: AddressState;
+    pharmacyPostcode: string | undefined;
+    pharmacyPhone: string | undefined;
+    prescriptionDay: number | undefined;
+    prescriptionMonth: number | undefined;
+    prescriptionYear: number | undefined;
+
+    constructor(data?: IRegisterPapPatientWithPharmacyDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.title = _data["title"];
+            this.firstName = _data["firstName"];
+            this.middleName = _data["middleName"];
+            this.lastName = _data["lastName"];
+            this.dosageId = _data["dosageId"];
+            this.repeats = _data["repeats"];
+            this.prescriptionInstructions = _data["prescriptionInstructions"];
+            this.privacyConsentProvided = _data["privacyConsentProvided"];
+            this.programTermsAgreed = _data["programTermsAgreed"];
+            this.contactConsentProvided = _data["contactConsentProvided"];
+            this.marketingCommunicationConsentProvided = _data["marketingCommunicationConsentProvided"];
+            this.adverseEventContactConsentProvided = _data["adverseEventContactConsentProvided"];
+            this.email = _data["email"];
+            this.prescriberId = _data["prescriberId"];
+            this.prescriberNumber = _data["prescriberNumber"];
+            this.dateOfBirth = _data["dateOfBirth"] ? new Date(_data["dateOfBirth"].toString()) : <any>undefined;
+            this.birthDay = _data["birthDay"];
+            this.birthMonth = _data["birthMonth"];
+            this.birthYear = _data["birthYear"];
+            this.gender = _data["gender"];
+            this.phone = _data["phone"];
+            this.mobile = _data["mobile"];
+            this.enrolledOn = _data["enrolledOn"] ? new Date(_data["enrolledOn"].toString()) : <any>undefined;
+            this.treatmentStartedOn = _data["treatmentStartedOn"] ? new Date(_data["treatmentStartedOn"].toString()) : <any>undefined;
+            this.supportProgramAccessRequested = _data["supportProgramAccessRequested"];
+            this.programEligibilityCriteriaConfirmed = _data["programEligibilityCriteriaConfirmed"];
+            if (Array.isArray(_data["eligibilityCriteriaOptions"])) {
+                this.eligibilityCriteriaOptions = [];
+                for (let item of _data["eligibilityCriteriaOptions"])
+                    this.eligibilityCriteriaOptions.push(item);
+            }
+            this.programInformationReceived = _data["programInformationReceived"];
+            this.deliveryUnitNumber = _data["deliveryUnitNumber"];
+            this.deliveryAddressLine1 = _data["deliveryAddressLine1"];
+            this.deliveryAddressLine2 = _data["deliveryAddressLine2"];
+            this.deliveryCity = _data["deliveryCity"];
+            this.deliveryState = _data["deliveryState"];
+            this.deliveryPostcode = _data["deliveryPostcode"];
+            this.homeUnitNumber = _data["homeUnitNumber"];
+            this.homeAddressLine1 = _data["homeAddressLine1"];
+            this.homeAddressLine2 = _data["homeAddressLine2"];
+            this.homeCity = _data["homeCity"];
+            this.homeState = _data["homeState"];
+            this.homePostcode = _data["homePostcode"];
+            this.pharmacyName = _data["pharmacyName"];
+            this.pharmacyUnitNumber = _data["pharmacyUnitNumber"];
+            this.pharmacyStreetAddress = _data["pharmacyStreetAddress"];
+            this.pharmacyCity = _data["pharmacyCity"];
+            this.pharmacyState = _data["pharmacyState"];
+            this.pharmacyPostcode = _data["pharmacyPostcode"];
+            this.pharmacyPhone = _data["pharmacyPhone"];
+            this.prescriptionDay = _data["prescriptionDay"];
+            this.prescriptionMonth = _data["prescriptionMonth"];
+            this.prescriptionYear = _data["prescriptionYear"];
+        }
+    }
+
+    static fromJS(data: any): RegisterPapPatientWithPharmacyDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new RegisterPapPatientWithPharmacyDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["title"] = this.title;
+        data["firstName"] = this.firstName;
+        data["middleName"] = this.middleName;
+        data["lastName"] = this.lastName;
+        data["dosageId"] = this.dosageId;
+        data["repeats"] = this.repeats;
+        data["prescriptionInstructions"] = this.prescriptionInstructions;
+        data["privacyConsentProvided"] = this.privacyConsentProvided;
+        data["programTermsAgreed"] = this.programTermsAgreed;
+        data["contactConsentProvided"] = this.contactConsentProvided;
+        data["marketingCommunicationConsentProvided"] = this.marketingCommunicationConsentProvided;
+        data["adverseEventContactConsentProvided"] = this.adverseEventContactConsentProvided;
+        data["email"] = this.email;
+        data["prescriberId"] = this.prescriberId;
+        data["prescriberNumber"] = this.prescriberNumber;
+        data["dateOfBirth"] = this.dateOfBirth ? this.dateOfBirth.toISOString() : <any>undefined;
+        data["birthDay"] = this.birthDay;
+        data["birthMonth"] = this.birthMonth;
+        data["birthYear"] = this.birthYear;
+        data["gender"] = this.gender;
+        data["phone"] = this.phone;
+        data["mobile"] = this.mobile;
+        data["enrolledOn"] = this.enrolledOn ? this.enrolledOn.toISOString() : <any>undefined;
+        data["treatmentStartedOn"] = this.treatmentStartedOn ? this.treatmentStartedOn.toISOString() : <any>undefined;
+        data["supportProgramAccessRequested"] = this.supportProgramAccessRequested;
+        data["programEligibilityCriteriaConfirmed"] = this.programEligibilityCriteriaConfirmed;
+        if (Array.isArray(this.eligibilityCriteriaOptions)) {
+            data["eligibilityCriteriaOptions"] = [];
+            for (let item of this.eligibilityCriteriaOptions)
+                data["eligibilityCriteriaOptions"].push(item);
+        }
+        data["programInformationReceived"] = this.programInformationReceived;
+        data["deliveryUnitNumber"] = this.deliveryUnitNumber;
+        data["deliveryAddressLine1"] = this.deliveryAddressLine1;
+        data["deliveryAddressLine2"] = this.deliveryAddressLine2;
+        data["deliveryCity"] = this.deliveryCity;
+        data["deliveryState"] = this.deliveryState;
+        data["deliveryPostcode"] = this.deliveryPostcode;
+        data["homeUnitNumber"] = this.homeUnitNumber;
+        data["homeAddressLine1"] = this.homeAddressLine1;
+        data["homeAddressLine2"] = this.homeAddressLine2;
+        data["homeCity"] = this.homeCity;
+        data["homeState"] = this.homeState;
+        data["homePostcode"] = this.homePostcode;
+        data["pharmacyName"] = this.pharmacyName;
+        data["pharmacyUnitNumber"] = this.pharmacyUnitNumber;
+        data["pharmacyStreetAddress"] = this.pharmacyStreetAddress;
+        data["pharmacyCity"] = this.pharmacyCity;
+        data["pharmacyState"] = this.pharmacyState;
+        data["pharmacyPostcode"] = this.pharmacyPostcode;
+        data["pharmacyPhone"] = this.pharmacyPhone;
+        data["prescriptionDay"] = this.prescriptionDay;
+        data["prescriptionMonth"] = this.prescriptionMonth;
+        data["prescriptionYear"] = this.prescriptionYear;
+        return data;
+    }
+
+    clone(): RegisterPapPatientWithPharmacyDto {
+        const json = this.toJSON();
+        let result = new RegisterPapPatientWithPharmacyDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IRegisterPapPatientWithPharmacyDto {
+    title: Title;
+    firstName: string | undefined;
+    middleName: string | undefined;
+    lastName: string | undefined;
+    dosageId: number;
+    repeats: number | undefined;
+    prescriptionInstructions: string | undefined;
+    privacyConsentProvided: boolean;
+    programTermsAgreed: boolean;
+    contactConsentProvided: boolean;
+    marketingCommunicationConsentProvided: boolean;
+    adverseEventContactConsentProvided: boolean;
+    email: string | undefined;
+    prescriberId: string;
+    prescriberNumber: string | undefined;
+    dateOfBirth: Date;
+    birthDay: number;
+    birthMonth: number;
+    birthYear: number;
+    gender: Gender;
+    phone: string | undefined;
+    mobile: string | undefined;
+    enrolledOn: Date | undefined;
+    treatmentStartedOn: Date | undefined;
+    supportProgramAccessRequested: boolean | undefined;
+    programEligibilityCriteriaConfirmed: boolean | undefined;
+    eligibilityCriteriaOptions: number[] | undefined;
+    programInformationReceived: boolean | undefined;
+    deliveryUnitNumber: string | undefined;
+    deliveryAddressLine1: string | undefined;
+    deliveryAddressLine2: string | undefined;
+    deliveryCity: string | undefined;
+    deliveryState: AddressState;
+    deliveryPostcode: string | undefined;
+    homeUnitNumber: string | undefined;
+    homeAddressLine1: string | undefined;
+    homeAddressLine2: string | undefined;
+    homeCity: string | undefined;
+    homeState: AddressState;
+    homePostcode: string | undefined;
+    pharmacyName: string | undefined;
+    pharmacyUnitNumber: string | undefined;
+    pharmacyStreetAddress: string | undefined;
+    pharmacyCity: string | undefined;
+    pharmacyState: AddressState;
+    pharmacyPostcode: string | undefined;
+    pharmacyPhone: string | undefined;
+    prescriptionDay: number | undefined;
+    prescriptionMonth: number | undefined;
+    prescriptionYear: number | undefined;
+}
+
+export class RegisterPatientByAdminDto implements IRegisterPatientByAdminDto {
+    prescriberId: string | undefined;
+    prescriberNumber: string | undefined;
+    registrationMethod: RegistrationMethod;
+    programEligibilityCriteriaConfirmed: boolean;
+    eligibilityCriteriaOptions: number[] | undefined;
+    title: Title;
+    firstName: string | undefined;
+    middleName: string | undefined;
+    lastName: string | undefined;
+    email: string | undefined;
+    dateOfBirth: Date;
+    gender: Gender;
+    phone: string | undefined;
+    mobile: string | undefined;
+    enrolledOn: Date | undefined;
+    treatmentStartedOn: Date | undefined;
+    dosageId: number | undefined;
+    repeats: number | undefined;
+    prescriptionInstructions: string | undefined;
+    privacyConsentProvided: boolean;
+    programTermsAgreed: boolean;
+    contactConsentProvided: boolean;
+    marketingCommunicationConsentProvided: boolean;
+    adverseEventContactConsentProvided: boolean;
+    supportProgramAccessRequested: boolean | undefined;
+    programInformationReceived: boolean | undefined;
+    deliveryUnitNumber: string | undefined;
+    deliveryStreetAddress: string | undefined;
+    deliveryCity: string | undefined;
+    deliveryState: AddressState;
+    deliveryPostcode: string | undefined;
+    homeUnitNumber: string | undefined;
+    homeStreetAddress: string | undefined;
+    homeCity: string | undefined;
+    homeState: AddressState;
+    homePostcode: string | undefined;
+    pharmacyId: string | undefined;
+    clinicId: string | undefined;
+
+    constructor(data?: IRegisterPatientByAdminDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.prescriberId = _data["prescriberId"];
+            this.prescriberNumber = _data["prescriberNumber"];
+            this.registrationMethod = _data["registrationMethod"];
+            this.programEligibilityCriteriaConfirmed = _data["programEligibilityCriteriaConfirmed"];
+            if (Array.isArray(_data["eligibilityCriteriaOptions"])) {
+                this.eligibilityCriteriaOptions = [];
+                for (let item of _data["eligibilityCriteriaOptions"])
+                    this.eligibilityCriteriaOptions.push(item);
+            }
+            this.title = _data["title"];
+            this.firstName = _data["firstName"];
+            this.middleName = _data["middleName"];
+            this.lastName = _data["lastName"];
+            this.email = _data["email"];
+            this.dateOfBirth = _data["dateOfBirth"] ? new Date(_data["dateOfBirth"].toString()) : <any>undefined;
+            this.gender = _data["gender"];
+            this.phone = _data["phone"];
+            this.mobile = _data["mobile"];
+            this.enrolledOn = _data["enrolledOn"] ? new Date(_data["enrolledOn"].toString()) : <any>undefined;
+            this.treatmentStartedOn = _data["treatmentStartedOn"] ? new Date(_data["treatmentStartedOn"].toString()) : <any>undefined;
+            this.dosageId = _data["dosageId"];
+            this.repeats = _data["repeats"];
+            this.prescriptionInstructions = _data["prescriptionInstructions"];
+            this.privacyConsentProvided = _data["privacyConsentProvided"];
+            this.programTermsAgreed = _data["programTermsAgreed"];
+            this.contactConsentProvided = _data["contactConsentProvided"];
+            this.marketingCommunicationConsentProvided = _data["marketingCommunicationConsentProvided"];
+            this.adverseEventContactConsentProvided = _data["adverseEventContactConsentProvided"];
+            this.supportProgramAccessRequested = _data["supportProgramAccessRequested"];
+            this.programInformationReceived = _data["programInformationReceived"];
+            this.deliveryUnitNumber = _data["deliveryUnitNumber"];
+            this.deliveryStreetAddress = _data["deliveryStreetAddress"];
+            this.deliveryCity = _data["deliveryCity"];
+            this.deliveryState = _data["deliveryState"];
+            this.deliveryPostcode = _data["deliveryPostcode"];
+            this.homeUnitNumber = _data["homeUnitNumber"];
+            this.homeStreetAddress = _data["homeStreetAddress"];
+            this.homeCity = _data["homeCity"];
+            this.homeState = _data["homeState"];
+            this.homePostcode = _data["homePostcode"];
+            this.pharmacyId = _data["pharmacyId"];
+            this.clinicId = _data["clinicId"];
+        }
+    }
+
+    static fromJS(data: any): RegisterPatientByAdminDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new RegisterPatientByAdminDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["prescriberId"] = this.prescriberId;
+        data["prescriberNumber"] = this.prescriberNumber;
+        data["registrationMethod"] = this.registrationMethod;
+        data["programEligibilityCriteriaConfirmed"] = this.programEligibilityCriteriaConfirmed;
+        if (Array.isArray(this.eligibilityCriteriaOptions)) {
+            data["eligibilityCriteriaOptions"] = [];
+            for (let item of this.eligibilityCriteriaOptions)
+                data["eligibilityCriteriaOptions"].push(item);
+        }
+        data["title"] = this.title;
+        data["firstName"] = this.firstName;
+        data["middleName"] = this.middleName;
+        data["lastName"] = this.lastName;
+        data["email"] = this.email;
+        data["dateOfBirth"] = this.dateOfBirth ? this.dateOfBirth.toISOString() : <any>undefined;
+        data["gender"] = this.gender;
+        data["phone"] = this.phone;
+        data["mobile"] = this.mobile;
+        data["enrolledOn"] = this.enrolledOn ? this.enrolledOn.toISOString() : <any>undefined;
+        data["treatmentStartedOn"] = this.treatmentStartedOn ? this.treatmentStartedOn.toISOString() : <any>undefined;
+        data["dosageId"] = this.dosageId;
+        data["repeats"] = this.repeats;
+        data["prescriptionInstructions"] = this.prescriptionInstructions;
+        data["privacyConsentProvided"] = this.privacyConsentProvided;
+        data["programTermsAgreed"] = this.programTermsAgreed;
+        data["contactConsentProvided"] = this.contactConsentProvided;
+        data["marketingCommunicationConsentProvided"] = this.marketingCommunicationConsentProvided;
+        data["adverseEventContactConsentProvided"] = this.adverseEventContactConsentProvided;
+        data["supportProgramAccessRequested"] = this.supportProgramAccessRequested;
+        data["programInformationReceived"] = this.programInformationReceived;
+        data["deliveryUnitNumber"] = this.deliveryUnitNumber;
+        data["deliveryStreetAddress"] = this.deliveryStreetAddress;
+        data["deliveryCity"] = this.deliveryCity;
+        data["deliveryState"] = this.deliveryState;
+        data["deliveryPostcode"] = this.deliveryPostcode;
+        data["homeUnitNumber"] = this.homeUnitNumber;
+        data["homeStreetAddress"] = this.homeStreetAddress;
+        data["homeCity"] = this.homeCity;
+        data["homeState"] = this.homeState;
+        data["homePostcode"] = this.homePostcode;
+        data["pharmacyId"] = this.pharmacyId;
+        data["clinicId"] = this.clinicId;
+        return data;
+    }
+
+    clone(): RegisterPatientByAdminDto {
+        const json = this.toJSON();
+        let result = new RegisterPatientByAdminDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IRegisterPatientByAdminDto {
+    prescriberId: string | undefined;
+    prescriberNumber: string | undefined;
+    registrationMethod: RegistrationMethod;
+    programEligibilityCriteriaConfirmed: boolean;
+    eligibilityCriteriaOptions: number[] | undefined;
+    title: Title;
+    firstName: string | undefined;
+    middleName: string | undefined;
+    lastName: string | undefined;
+    email: string | undefined;
+    dateOfBirth: Date;
+    gender: Gender;
+    phone: string | undefined;
+    mobile: string | undefined;
+    enrolledOn: Date | undefined;
+    treatmentStartedOn: Date | undefined;
+    dosageId: number | undefined;
+    repeats: number | undefined;
+    prescriptionInstructions: string | undefined;
+    privacyConsentProvided: boolean;
+    programTermsAgreed: boolean;
+    contactConsentProvided: boolean;
+    marketingCommunicationConsentProvided: boolean;
+    adverseEventContactConsentProvided: boolean;
+    supportProgramAccessRequested: boolean | undefined;
+    programInformationReceived: boolean | undefined;
+    deliveryUnitNumber: string | undefined;
+    deliveryStreetAddress: string | undefined;
+    deliveryCity: string | undefined;
+    deliveryState: AddressState;
+    deliveryPostcode: string | undefined;
+    homeUnitNumber: string | undefined;
+    homeStreetAddress: string | undefined;
+    homeCity: string | undefined;
+    homeState: AddressState;
+    homePostcode: string | undefined;
+    pharmacyId: string | undefined;
+    clinicId: string | undefined;
+}
+
+export class RegisterPatientWithCategoryDto implements IRegisterPatientWithCategoryDto {
+    prescriberId: string | undefined;
+    registrationMethod: RegistrationMethod;
+    title: Title;
+    firstName: string | undefined;
+    middleName: string | undefined;
+    lastName: string | undefined;
+    email: string | undefined;
+    dateOfBirth: Date;
+    birthDay: number;
+    birthMonth: number;
+    birthYear: number;
+    gender: Gender;
+    phone: string | undefined;
+    mobile: string | undefined;
+    supportProgramAccessRequested: boolean | undefined;
+    homeUnitNumber: string | undefined;
+    homeStreetAddress: string | undefined;
+    homeCity: string | undefined;
+    homeState: AddressState;
+    homePostcode: string | undefined;
+    pharmacyId: string | undefined;
+    clinicId: string | undefined;
+    treatmentCategory: TreatmentCategory;
+    medicationId: number;
+
+    constructor(data?: IRegisterPatientWithCategoryDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.prescriberId = _data["prescriberId"];
+            this.registrationMethod = _data["registrationMethod"];
+            this.title = _data["title"];
+            this.firstName = _data["firstName"];
+            this.middleName = _data["middleName"];
+            this.lastName = _data["lastName"];
+            this.email = _data["email"];
+            this.dateOfBirth = _data["dateOfBirth"] ? new Date(_data["dateOfBirth"].toString()) : <any>undefined;
+            this.birthDay = _data["birthDay"];
+            this.birthMonth = _data["birthMonth"];
+            this.birthYear = _data["birthYear"];
+            this.gender = _data["gender"];
+            this.phone = _data["phone"];
+            this.mobile = _data["mobile"];
+            this.supportProgramAccessRequested = _data["supportProgramAccessRequested"];
+            this.homeUnitNumber = _data["homeUnitNumber"];
+            this.homeStreetAddress = _data["homeStreetAddress"];
+            this.homeCity = _data["homeCity"];
+            this.homeState = _data["homeState"];
+            this.homePostcode = _data["homePostcode"];
+            this.pharmacyId = _data["pharmacyId"];
+            this.clinicId = _data["clinicId"];
+            this.treatmentCategory = _data["treatmentCategory"];
+            this.medicationId = _data["medicationId"];
+        }
+    }
+
+    static fromJS(data: any): RegisterPatientWithCategoryDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new RegisterPatientWithCategoryDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["prescriberId"] = this.prescriberId;
+        data["registrationMethod"] = this.registrationMethod;
+        data["title"] = this.title;
+        data["firstName"] = this.firstName;
+        data["middleName"] = this.middleName;
+        data["lastName"] = this.lastName;
+        data["email"] = this.email;
+        data["dateOfBirth"] = this.dateOfBirth ? this.dateOfBirth.toISOString() : <any>undefined;
+        data["birthDay"] = this.birthDay;
+        data["birthMonth"] = this.birthMonth;
+        data["birthYear"] = this.birthYear;
+        data["gender"] = this.gender;
+        data["phone"] = this.phone;
+        data["mobile"] = this.mobile;
+        data["supportProgramAccessRequested"] = this.supportProgramAccessRequested;
+        data["homeUnitNumber"] = this.homeUnitNumber;
+        data["homeStreetAddress"] = this.homeStreetAddress;
+        data["homeCity"] = this.homeCity;
+        data["homeState"] = this.homeState;
+        data["homePostcode"] = this.homePostcode;
+        data["pharmacyId"] = this.pharmacyId;
+        data["clinicId"] = this.clinicId;
+        data["treatmentCategory"] = this.treatmentCategory;
+        data["medicationId"] = this.medicationId;
+        return data;
+    }
+
+    clone(): RegisterPatientWithCategoryDto {
+        const json = this.toJSON();
+        let result = new RegisterPatientWithCategoryDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IRegisterPatientWithCategoryDto {
+    prescriberId: string | undefined;
+    registrationMethod: RegistrationMethod;
+    title: Title;
+    firstName: string | undefined;
+    middleName: string | undefined;
+    lastName: string | undefined;
+    email: string | undefined;
+    dateOfBirth: Date;
+    birthDay: number;
+    birthMonth: number;
+    birthYear: number;
+    gender: Gender;
+    phone: string | undefined;
+    mobile: string | undefined;
+    supportProgramAccessRequested: boolean | undefined;
+    homeUnitNumber: string | undefined;
+    homeStreetAddress: string | undefined;
+    homeCity: string | undefined;
+    homeState: AddressState;
+    homePostcode: string | undefined;
+    pharmacyId: string | undefined;
+    clinicId: string | undefined;
+    treatmentCategory: TreatmentCategory;
+    medicationId: number;
+}
+
+export class RegisterPharmacistDto implements IRegisterPharmacistDto {
+    registrationMethod: RegistrationMethod;
+    title: Title;
+    firstName: string | undefined;
+    middleName: string | undefined;
+    lastName: string | undefined;
+    email: string | undefined;
+    password: string | undefined;
+    phone: string | undefined;
+    mobile: string | undefined;
+    ahpraNumber: string | undefined;
+    privacyConsentProvided: boolean;
+    programTermsAgreed: boolean;
+    contactConsentProvided: boolean;
+    marketingCommunicationConsentProvided: boolean;
+    adverseEventContactConsentProvided: boolean;
+    pharmacy: PharmacyDto;
+    pharmacyAccountType: PharmacyAccountType;
+    pharmacyReferenceAccountNumber: string | undefined;
+
+    constructor(data?: IRegisterPharmacistDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.registrationMethod = _data["registrationMethod"];
+            this.title = _data["title"];
+            this.firstName = _data["firstName"];
+            this.middleName = _data["middleName"];
+            this.lastName = _data["lastName"];
+            this.email = _data["email"];
+            this.password = _data["password"];
+            this.phone = _data["phone"];
+            this.mobile = _data["mobile"];
+            this.ahpraNumber = _data["ahpraNumber"];
+            this.privacyConsentProvided = _data["privacyConsentProvided"];
+            this.programTermsAgreed = _data["programTermsAgreed"];
+            this.contactConsentProvided = _data["contactConsentProvided"];
+            this.marketingCommunicationConsentProvided = _data["marketingCommunicationConsentProvided"];
+            this.adverseEventContactConsentProvided = _data["adverseEventContactConsentProvided"];
+            this.pharmacy = _data["pharmacy"] ? PharmacyDto.fromJS(_data["pharmacy"]) : <any>undefined;
+            this.pharmacyAccountType = _data["pharmacyAccountType"];
+            this.pharmacyReferenceAccountNumber = _data["pharmacyReferenceAccountNumber"];
+        }
+    }
+
+    static fromJS(data: any): RegisterPharmacistDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new RegisterPharmacistDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["registrationMethod"] = this.registrationMethod;
+        data["title"] = this.title;
+        data["firstName"] = this.firstName;
+        data["middleName"] = this.middleName;
+        data["lastName"] = this.lastName;
+        data["email"] = this.email;
+        data["password"] = this.password;
+        data["phone"] = this.phone;
+        data["mobile"] = this.mobile;
+        data["ahpraNumber"] = this.ahpraNumber;
+        data["privacyConsentProvided"] = this.privacyConsentProvided;
+        data["programTermsAgreed"] = this.programTermsAgreed;
+        data["contactConsentProvided"] = this.contactConsentProvided;
+        data["marketingCommunicationConsentProvided"] = this.marketingCommunicationConsentProvided;
+        data["adverseEventContactConsentProvided"] = this.adverseEventContactConsentProvided;
+        data["pharmacy"] = this.pharmacy ? this.pharmacy.toJSON() : <any>undefined;
+        data["pharmacyAccountType"] = this.pharmacyAccountType;
+        data["pharmacyReferenceAccountNumber"] = this.pharmacyReferenceAccountNumber;
+        return data;
+    }
+
+    clone(): RegisterPharmacistDto {
+        const json = this.toJSON();
+        let result = new RegisterPharmacistDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IRegisterPharmacistDto {
+    registrationMethod: RegistrationMethod;
+    title: Title;
+    firstName: string | undefined;
+    middleName: string | undefined;
+    lastName: string | undefined;
+    email: string | undefined;
+    password: string | undefined;
+    phone: string | undefined;
+    mobile: string | undefined;
+    ahpraNumber: string | undefined;
+    privacyConsentProvided: boolean;
+    programTermsAgreed: boolean;
+    contactConsentProvided: boolean;
+    marketingCommunicationConsentProvided: boolean;
+    adverseEventContactConsentProvided: boolean;
+    pharmacy: PharmacyDto;
+    pharmacyAccountType: PharmacyAccountType;
+    pharmacyReferenceAccountNumber: string | undefined;
+}
+
+export class RegisterPrescriberByAdminDto implements IRegisterPrescriberByAdminDto {
+    registrationMethod: RegistrationMethod;
+    title: Title;
+    firstName: string | undefined;
+    middleName: string | undefined;
+    lastName: string | undefined;
+    email: string | undefined;
+    username: string | undefined;
+    phone: string | undefined;
+    mobile: string | undefined;
+    ahpraNumber: string | undefined;
+    prescriberNumber: string | undefined;
+    specialty: Specialty;
+    specialtyOther: string | undefined;
+    registeredOn: Date | undefined;
+    privacyConsentProvided: boolean;
+    programTermsAgreed: boolean;
+    contactConsentProvided: boolean;
+    marketingCommunicationConsentProvided: boolean;
+    adverseEventContactConsentProvided: boolean;
+    clinic: ClinicDto;
+    location: AddressDto;
+
+    constructor(data?: IRegisterPrescriberByAdminDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.registrationMethod = _data["registrationMethod"];
+            this.title = _data["title"];
+            this.firstName = _data["firstName"];
+            this.middleName = _data["middleName"];
+            this.lastName = _data["lastName"];
+            this.email = _data["email"];
+            this.username = _data["username"];
+            this.phone = _data["phone"];
+            this.mobile = _data["mobile"];
+            this.ahpraNumber = _data["ahpraNumber"];
+            this.prescriberNumber = _data["prescriberNumber"];
+            this.specialty = _data["specialty"];
+            this.specialtyOther = _data["specialtyOther"];
+            this.registeredOn = _data["registeredOn"] ? new Date(_data["registeredOn"].toString()) : <any>undefined;
+            this.privacyConsentProvided = _data["privacyConsentProvided"];
+            this.programTermsAgreed = _data["programTermsAgreed"];
+            this.contactConsentProvided = _data["contactConsentProvided"];
+            this.marketingCommunicationConsentProvided = _data["marketingCommunicationConsentProvided"];
+            this.adverseEventContactConsentProvided = _data["adverseEventContactConsentProvided"];
+            this.clinic = _data["clinic"] ? ClinicDto.fromJS(_data["clinic"]) : <any>undefined;
+            this.location = _data["location"] ? AddressDto.fromJS(_data["location"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): RegisterPrescriberByAdminDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new RegisterPrescriberByAdminDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["registrationMethod"] = this.registrationMethod;
+        data["title"] = this.title;
+        data["firstName"] = this.firstName;
+        data["middleName"] = this.middleName;
+        data["lastName"] = this.lastName;
+        data["email"] = this.email;
+        data["username"] = this.username;
+        data["phone"] = this.phone;
+        data["mobile"] = this.mobile;
+        data["ahpraNumber"] = this.ahpraNumber;
+        data["prescriberNumber"] = this.prescriberNumber;
+        data["specialty"] = this.specialty;
+        data["specialtyOther"] = this.specialtyOther;
+        data["registeredOn"] = this.registeredOn ? this.registeredOn.toISOString() : <any>undefined;
+        data["privacyConsentProvided"] = this.privacyConsentProvided;
+        data["programTermsAgreed"] = this.programTermsAgreed;
+        data["contactConsentProvided"] = this.contactConsentProvided;
+        data["marketingCommunicationConsentProvided"] = this.marketingCommunicationConsentProvided;
+        data["adverseEventContactConsentProvided"] = this.adverseEventContactConsentProvided;
+        data["clinic"] = this.clinic ? this.clinic.toJSON() : <any>undefined;
+        data["location"] = this.location ? this.location.toJSON() : <any>undefined;
+        return data;
+    }
+
+    clone(): RegisterPrescriberByAdminDto {
+        const json = this.toJSON();
+        let result = new RegisterPrescriberByAdminDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IRegisterPrescriberByAdminDto {
+    registrationMethod: RegistrationMethod;
+    title: Title;
+    firstName: string | undefined;
+    middleName: string | undefined;
+    lastName: string | undefined;
+    email: string | undefined;
+    username: string | undefined;
+    phone: string | undefined;
+    mobile: string | undefined;
+    ahpraNumber: string | undefined;
+    prescriberNumber: string | undefined;
+    specialty: Specialty;
+    specialtyOther: string | undefined;
+    registeredOn: Date | undefined;
+    privacyConsentProvided: boolean;
+    programTermsAgreed: boolean;
+    contactConsentProvided: boolean;
+    marketingCommunicationConsentProvided: boolean;
+    adverseEventContactConsentProvided: boolean;
+    clinic: ClinicDto;
+    location: AddressDto;
+}
+
 export class RegisterPrescriberDto implements IRegisterPrescriberDto {
     registrationMethod: RegistrationMethod;
     title: Title;
@@ -3604,12 +20756,158 @@ export interface IRegisterPrescriberDto {
     location: AddressDto;
 }
 
-/** 1 = PortalWebForm (Portal web form) 2 = AdminWebForm (Admin web form) 3 = PaperForm (Paper form) 4 = Other (Other) */
+export class RegisterProgramAdministratorFromInviteDto implements IRegisterProgramAdministratorFromInviteDto {
+    invitationId: string;
+    title: Title;
+    firstName: string | undefined;
+    lastName: string | undefined;
+    userRole: UserRole;
+    acknowledgementOfContactPermission: boolean;
+    email: string | undefined;
+    password: string | undefined;
+
+    constructor(data?: IRegisterProgramAdministratorFromInviteDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.invitationId = _data["invitationId"];
+            this.title = _data["title"];
+            this.firstName = _data["firstName"];
+            this.lastName = _data["lastName"];
+            this.userRole = _data["userRole"];
+            this.acknowledgementOfContactPermission = _data["acknowledgementOfContactPermission"];
+            this.email = _data["email"];
+            this.password = _data["password"];
+        }
+    }
+
+    static fromJS(data: any): RegisterProgramAdministratorFromInviteDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new RegisterProgramAdministratorFromInviteDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["invitationId"] = this.invitationId;
+        data["title"] = this.title;
+        data["firstName"] = this.firstName;
+        data["lastName"] = this.lastName;
+        data["userRole"] = this.userRole;
+        data["acknowledgementOfContactPermission"] = this.acknowledgementOfContactPermission;
+        data["email"] = this.email;
+        data["password"] = this.password;
+        return data;
+    }
+
+    clone(): RegisterProgramAdministratorFromInviteDto {
+        const json = this.toJSON();
+        let result = new RegisterProgramAdministratorFromInviteDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IRegisterProgramAdministratorFromInviteDto {
+    invitationId: string;
+    title: Title;
+    firstName: string | undefined;
+    lastName: string | undefined;
+    userRole: UserRole;
+    acknowledgementOfContactPermission: boolean;
+    email: string | undefined;
+    password: string | undefined;
+}
+
+/** 1 = PortalWebForm (Portal web form) 2 = Emailed (Email to admin) 3 = PaperForm (Paper form) 4 = PackInsert (Pack insert) 5 = Other (Other) */
 export enum RegistrationMethod {
     PortalWebForm = 1,
-    AdminWebForm = 2,
+    Emailed = 2,
     PaperForm = 3,
-    Other = 4,
+    PackInsert = 4,
+    Other = 5,
+}
+
+/** 1 = Submitted (Submitted) 2 = Verified (Verified) 3 = Approved (Approved) 4 = Rejected (Rejected) 5 = Suspended (Suspended) 6 = Archived (Archived) 7 = Cancelled (Cancelled) 8 = AcknowledgementRequired (Acknowledgement required) */
+export enum RegistrationStatus {
+    Submitted = 1,
+    Verified = 2,
+    Approved = 3,
+    Rejected = 4,
+    Suspended = 5,
+    Archived = 6,
+    Cancelled = 7,
+    AcknowledgementRequired = 8,
+}
+
+export class RegistrationStatusApiResponse implements IRegistrationStatusApiResponse {
+    isSuccess: boolean;
+    resultObject: RegistrationStatus;
+    problemDetails: ProblemDetails;
+
+    constructor(data?: IRegistrationStatusApiResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.isSuccess = _data["isSuccess"];
+            this.resultObject = _data["resultObject"];
+            this.problemDetails = _data["problemDetails"] ? ProblemDetails.fromJS(_data["problemDetails"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): RegistrationStatusApiResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new RegistrationStatusApiResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["isSuccess"] = this.isSuccess;
+        data["resultObject"] = this.resultObject;
+        data["problemDetails"] = this.problemDetails ? this.problemDetails.toJSON() : <any>undefined;
+        return data;
+    }
+
+    clone(): RegistrationStatusApiResponse {
+        const json = this.toJSON();
+        let result = new RegistrationStatusApiResponse();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IRegistrationStatusApiResponse {
+    isSuccess: boolean;
+    resultObject: RegistrationStatus;
+    problemDetails: ProblemDetails;
+}
+
+/** 1 = Admin (Administration) 2 = Prescriber (Prescriber) 3 = Pharmacist (Pharmacist) 4 = Patient (Patient) 5 = Hcp (HCP) 6 = Vendor (Vendor) 7 = ProgramAdmin (Program admin) */
+export enum RegistrationType {
+    Admin = 1,
+    Prescriber = 2,
+    Pharmacist = 3,
+    Patient = 4,
+    Hcp = 5,
+    Vendor = 6,
+    ProgramAdmin = 7,
 }
 
 export class RequestPatientTranferToNewPrescriberDto implements IRequestPatientTranferToNewPrescriberDto {
@@ -3766,6 +21064,124 @@ export interface IResetPasswordDto {
     confirmPassword: string | undefined;
 }
 
+export class ResetPasswordWithoutAhpraDto implements IResetPasswordWithoutAhpraDto {
+    token: string | undefined;
+    email: string | undefined;
+    password: string | undefined;
+    confirmPassword: string | undefined;
+
+    constructor(data?: IResetPasswordWithoutAhpraDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.token = _data["token"];
+            this.email = _data["email"];
+            this.password = _data["password"];
+            this.confirmPassword = _data["confirmPassword"];
+        }
+    }
+
+    static fromJS(data: any): ResetPasswordWithoutAhpraDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new ResetPasswordWithoutAhpraDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["token"] = this.token;
+        data["email"] = this.email;
+        data["password"] = this.password;
+        data["confirmPassword"] = this.confirmPassword;
+        return data;
+    }
+
+    clone(): ResetPasswordWithoutAhpraDto {
+        const json = this.toJSON();
+        let result = new ResetPasswordWithoutAhpraDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IResetPasswordWithoutAhpraDto {
+    token: string | undefined;
+    email: string | undefined;
+    password: string | undefined;
+    confirmPassword: string | undefined;
+}
+
+export class RestartTreatmentByAdminDto implements IRestartTreatmentByAdminDto {
+    patientId: string;
+    dosageId: number;
+    repeats: number;
+    eligibilityCriterias: number[] | undefined;
+
+    constructor(data?: IRestartTreatmentByAdminDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.patientId = _data["patientId"];
+            this.dosageId = _data["dosageId"];
+            this.repeats = _data["repeats"];
+            if (Array.isArray(_data["eligibilityCriterias"])) {
+                this.eligibilityCriterias = [];
+                for (let item of _data["eligibilityCriterias"])
+                    this.eligibilityCriterias.push(item);
+            }
+        }
+    }
+
+    static fromJS(data: any): RestartTreatmentByAdminDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new RestartTreatmentByAdminDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["patientId"] = this.patientId;
+        data["dosageId"] = this.dosageId;
+        data["repeats"] = this.repeats;
+        if (Array.isArray(this.eligibilityCriterias)) {
+            data["eligibilityCriterias"] = [];
+            for (let item of this.eligibilityCriterias)
+                data["eligibilityCriterias"].push(item);
+        }
+        return data;
+    }
+
+    clone(): RestartTreatmentByAdminDto {
+        const json = this.toJSON();
+        let result = new RestartTreatmentByAdminDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IRestartTreatmentByAdminDto {
+    patientId: string;
+    dosageId: number;
+    repeats: number;
+    eligibilityCriterias: number[] | undefined;
+}
+
 export class ResupplyPatientDto implements IResupplyPatientDto {
     patientId: string;
     prescriberId: string;
@@ -3853,12 +21269,266 @@ export interface IResupplyPatientDto {
     programId: string;
 }
 
+/** 1 = Submitted (Submitted) 2 = Viewed (Viewed) 3 = Downloaded (Downloaded) 4 = Approved (Approved) 5 = UpdateRequired (Updated required) 6 = Rejected (Rejected) */
+export enum ReviewStatus {
+    Submitted = 1,
+    Viewed = 2,
+    Downloaded = 3,
+    Approved = 4,
+    UpdateRequired = 5,
+    Rejected = 6,
+}
+
+export class RevokeProgramAdminAccessDto implements IRevokeProgramAdminAccessDto {
+    programAdminId: string;
+
+    constructor(data?: IRevokeProgramAdminAccessDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.programAdminId = _data["programAdminId"];
+        }
+    }
+
+    static fromJS(data: any): RevokeProgramAdminAccessDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new RevokeProgramAdminAccessDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["programAdminId"] = this.programAdminId;
+        return data;
+    }
+
+    clone(): RevokeProgramAdminAccessDto {
+        const json = this.toJSON();
+        let result = new RevokeProgramAdminAccessDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IRevokeProgramAdminAccessDto {
+    programAdminId: string;
+}
+
+/** 1 = Positive (Positive) 2 = Negative (Negative) */
+export enum RiskAssessmentOutcome {
+    Positive = 1,
+    Negative = 2,
+}
+
+export class SearchContactsResponse implements ISearchContactsResponse {
+    id: string;
+    contactMethod: ContactMethod;
+    contactType: ContactType;
+    date: Date;
+    subject: string | undefined;
+    communicatedWithName: string | undefined;
+    communicatedWith: CommunicatedWith;
+    communicatedWithId: string | undefined;
+    contactNote: string | undefined;
+    adverseEventReported: boolean;
+    adverseEventReconciled: boolean;
+    adverseEventId: string | undefined;
+
+    constructor(data?: ISearchContactsResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.contactMethod = _data["contactMethod"];
+            this.contactType = _data["contactType"];
+            this.date = _data["date"] ? new Date(_data["date"].toString()) : <any>undefined;
+            this.subject = _data["subject"];
+            this.communicatedWithName = _data["communicatedWithName"];
+            this.communicatedWith = _data["communicatedWith"];
+            this.communicatedWithId = _data["communicatedWithId"];
+            this.contactNote = _data["contactNote"];
+            this.adverseEventReported = _data["adverseEventReported"];
+            this.adverseEventReconciled = _data["adverseEventReconciled"];
+            this.adverseEventId = _data["adverseEventId"];
+        }
+    }
+
+    static fromJS(data: any): SearchContactsResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new SearchContactsResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["contactMethod"] = this.contactMethod;
+        data["contactType"] = this.contactType;
+        data["date"] = this.date ? this.date.toISOString() : <any>undefined;
+        data["subject"] = this.subject;
+        data["communicatedWithName"] = this.communicatedWithName;
+        data["communicatedWith"] = this.communicatedWith;
+        data["communicatedWithId"] = this.communicatedWithId;
+        data["contactNote"] = this.contactNote;
+        data["adverseEventReported"] = this.adverseEventReported;
+        data["adverseEventReconciled"] = this.adverseEventReconciled;
+        data["adverseEventId"] = this.adverseEventId;
+        return data;
+    }
+
+    clone(): SearchContactsResponse {
+        const json = this.toJSON();
+        let result = new SearchContactsResponse();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface ISearchContactsResponse {
+    id: string;
+    contactMethod: ContactMethod;
+    contactType: ContactType;
+    date: Date;
+    subject: string | undefined;
+    communicatedWithName: string | undefined;
+    communicatedWith: CommunicatedWith;
+    communicatedWithId: string | undefined;
+    contactNote: string | undefined;
+    adverseEventReported: boolean;
+    adverseEventReconciled: boolean;
+    adverseEventId: string | undefined;
+}
+
+export class SearchContactsResponsePagedResultDto implements ISearchContactsResponsePagedResultDto {
+    totalCount: number;
+    items: SearchContactsResponse[] | undefined;
+
+    constructor(data?: ISearchContactsResponsePagedResultDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.totalCount = _data["totalCount"];
+            if (Array.isArray(_data["items"])) {
+                this.items = [];
+                for (let item of _data["items"])
+                    this.items.push(SearchContactsResponse.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): SearchContactsResponsePagedResultDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new SearchContactsResponsePagedResultDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["totalCount"] = this.totalCount;
+        if (Array.isArray(this.items)) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item.toJSON());
+        }
+        return data;
+    }
+
+    clone(): SearchContactsResponsePagedResultDto {
+        const json = this.toJSON();
+        let result = new SearchContactsResponsePagedResultDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface ISearchContactsResponsePagedResultDto {
+    totalCount: number;
+    items: SearchContactsResponse[] | undefined;
+}
+
+export class SearchContactsResponsePagedResultDtoApiResponse implements ISearchContactsResponsePagedResultDtoApiResponse {
+    isSuccess: boolean;
+    resultObject: SearchContactsResponsePagedResultDto;
+    problemDetails: ProblemDetails;
+
+    constructor(data?: ISearchContactsResponsePagedResultDtoApiResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.isSuccess = _data["isSuccess"];
+            this.resultObject = _data["resultObject"] ? SearchContactsResponsePagedResultDto.fromJS(_data["resultObject"]) : <any>undefined;
+            this.problemDetails = _data["problemDetails"] ? ProblemDetails.fromJS(_data["problemDetails"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): SearchContactsResponsePagedResultDtoApiResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new SearchContactsResponsePagedResultDtoApiResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["isSuccess"] = this.isSuccess;
+        data["resultObject"] = this.resultObject ? this.resultObject.toJSON() : <any>undefined;
+        data["problemDetails"] = this.problemDetails ? this.problemDetails.toJSON() : <any>undefined;
+        return data;
+    }
+
+    clone(): SearchContactsResponsePagedResultDtoApiResponse {
+        const json = this.toJSON();
+        let result = new SearchContactsResponsePagedResultDtoApiResponse();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface ISearchContactsResponsePagedResultDtoApiResponse {
+    isSuccess: boolean;
+    resultObject: SearchContactsResponsePagedResultDto;
+    problemDetails: ProblemDetails;
+}
+
 export class SearchPrescriberResponse implements ISearchPrescriberResponse {
     id: string;
     name: string | undefined;
     email: string | undefined;
     clinicName: string | undefined;
     clinicNumber: string | undefined;
+    ahpraNumber: string | undefined;
+    prescriberNumber: string | undefined;
 
     constructor(data?: ISearchPrescriberResponse) {
         if (data) {
@@ -3876,6 +21546,8 @@ export class SearchPrescriberResponse implements ISearchPrescriberResponse {
             this.email = _data["email"];
             this.clinicName = _data["clinicName"];
             this.clinicNumber = _data["clinicNumber"];
+            this.ahpraNumber = _data["ahpraNumber"];
+            this.prescriberNumber = _data["prescriberNumber"];
         }
     }
 
@@ -3893,6 +21565,8 @@ export class SearchPrescriberResponse implements ISearchPrescriberResponse {
         data["email"] = this.email;
         data["clinicName"] = this.clinicName;
         data["clinicNumber"] = this.clinicNumber;
+        data["ahpraNumber"] = this.ahpraNumber;
+        data["prescriberNumber"] = this.prescriberNumber;
         return data;
     }
 
@@ -3910,6 +21584,8 @@ export interface ISearchPrescriberResponse {
     email: string | undefined;
     clinicName: string | undefined;
     clinicNumber: string | undefined;
+    ahpraNumber: string | undefined;
+    prescriberNumber: string | undefined;
 }
 
 export class SearchPrescriberResponseIEnumerableApiResponse implements ISearchPrescriberResponseIEnumerableApiResponse {
@@ -3971,7 +21647,66 @@ export interface ISearchPrescriberResponseIEnumerableApiResponse {
     problemDetails: ProblemDetails;
 }
 
-/** 1 = Cardiologist (Cardiologist) 2 = Endocrinologist (Endocrinologist) 3 = GeneralPhysician (General Physician) 4 = GeneralPractitioner (General Practitioner) 5 = Pharmacist (Pharmacist) 6 = Other (Other) 7 = Unknown (Unknown) */
+export class SendSmsDto implements ISendSmsDto {
+    accountSid: string | undefined;
+    authToken: string | undefined;
+    from: string | undefined;
+    mobileNumber: string | undefined;
+    message: string | undefined;
+
+    constructor(data?: ISendSmsDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.accountSid = _data["accountSid"];
+            this.authToken = _data["authToken"];
+            this.from = _data["from"];
+            this.mobileNumber = _data["mobileNumber"];
+            this.message = _data["message"];
+        }
+    }
+
+    static fromJS(data: any): SendSmsDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new SendSmsDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["accountSid"] = this.accountSid;
+        data["authToken"] = this.authToken;
+        data["from"] = this.from;
+        data["mobileNumber"] = this.mobileNumber;
+        data["message"] = this.message;
+        return data;
+    }
+
+    clone(): SendSmsDto {
+        const json = this.toJSON();
+        let result = new SendSmsDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface ISendSmsDto {
+    accountSid: string | undefined;
+    authToken: string | undefined;
+    from: string | undefined;
+    mobileNumber: string | undefined;
+    message: string | undefined;
+}
+
+/** 1 = Cardiologist (Cardiologist) 2 = Endocrinologist (Endocrinologist) 3 = GeneralPhysician (General Physician) 4 = GeneralPractitioner (General Practitioner) 5 = Pharmacist (Pharmacist) 6 = Other (Other) 7 = Unknown (Unknown) 8 = Oncologist (Oncologist) 9 = Haematologist (Haematologist) */
 export enum Specialty {
     Cardiologist = 1,
     Endocrinologist = 2,
@@ -3980,6 +21715,8 @@ export enum Specialty {
     Pharmacist = 5,
     Other = 6,
     Unknown = 7,
+    Oncologist = 8,
+    Haematologist = 9,
 }
 
 export class StringApiResponse implements IStringApiResponse {
@@ -4033,9 +21770,214 @@ export interface IStringApiResponse {
     problemDetails: ProblemDetails;
 }
 
-export class TenantProgramDto implements ITenantProgramDto {
+export class Tenant implements ITenant {
+    readonly id: string;
+    readonly domain: string | undefined;
+    readonly connectionString: string | undefined;
+    readonly isDeleted: boolean;
+    readonly programs: TenantProgram[] | undefined;
+    readonly userTenants: UserTenant[] | undefined;
+
+    constructor(data?: ITenant) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            (<any>this).id = _data["id"];
+            (<any>this).domain = _data["domain"];
+            (<any>this).connectionString = _data["connectionString"];
+            (<any>this).isDeleted = _data["isDeleted"];
+            if (Array.isArray(_data["programs"])) {
+                (<any>this).programs = [];
+                for (let item of _data["programs"])
+                    (<any>this).programs.push(TenantProgram.fromJS(item));
+            }
+            if (Array.isArray(_data["userTenants"])) {
+                (<any>this).userTenants = [];
+                for (let item of _data["userTenants"])
+                    (<any>this).userTenants.push(UserTenant.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): Tenant {
+        data = typeof data === 'object' ? data : {};
+        let result = new Tenant();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["domain"] = this.domain;
+        data["connectionString"] = this.connectionString;
+        data["isDeleted"] = this.isDeleted;
+        if (Array.isArray(this.programs)) {
+            data["programs"] = [];
+            for (let item of this.programs)
+                data["programs"].push(item.toJSON());
+        }
+        if (Array.isArray(this.userTenants)) {
+            data["userTenants"] = [];
+            for (let item of this.userTenants)
+                data["userTenants"].push(item.toJSON());
+        }
+        return data;
+    }
+
+    clone(): Tenant {
+        const json = this.toJSON();
+        let result = new Tenant();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface ITenant {
+    id: string;
+    domain: string | undefined;
+    connectionString: string | undefined;
+    isDeleted: boolean;
+    programs: TenantProgram[] | undefined;
+    userTenants: UserTenant[] | undefined;
+}
+
+export class TenantIEnumerableApiResponse implements ITenantIEnumerableApiResponse {
+    isSuccess: boolean;
+    readonly resultObject: Tenant[] | undefined;
+    problemDetails: ProblemDetails;
+
+    constructor(data?: ITenantIEnumerableApiResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.isSuccess = _data["isSuccess"];
+            if (Array.isArray(_data["resultObject"])) {
+                (<any>this).resultObject = [];
+                for (let item of _data["resultObject"])
+                    (<any>this).resultObject.push(Tenant.fromJS(item));
+            }
+            this.problemDetails = _data["problemDetails"] ? ProblemDetails.fromJS(_data["problemDetails"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): TenantIEnumerableApiResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new TenantIEnumerableApiResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["isSuccess"] = this.isSuccess;
+        if (Array.isArray(this.resultObject)) {
+            data["resultObject"] = [];
+            for (let item of this.resultObject)
+                data["resultObject"].push(item.toJSON());
+        }
+        data["problemDetails"] = this.problemDetails ? this.problemDetails.toJSON() : <any>undefined;
+        return data;
+    }
+
+    clone(): TenantIEnumerableApiResponse {
+        const json = this.toJSON();
+        let result = new TenantIEnumerableApiResponse();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface ITenantIEnumerableApiResponse {
+    isSuccess: boolean;
+    resultObject: Tenant[] | undefined;
+    problemDetails: ProblemDetails;
+}
+
+export class TenantProgram implements ITenantProgram {
+    readonly id: string;
+    readonly name: string | undefined;
+    readonly adminEmail: string | undefined;
+    readonly subDomain: string | undefined;
+    tenant: Tenant;
+    readonly tenantId: string;
+    readonly isDeleted: boolean;
+
+    constructor(data?: ITenantProgram) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            (<any>this).id = _data["id"];
+            (<any>this).name = _data["name"];
+            (<any>this).adminEmail = _data["adminEmail"];
+            (<any>this).subDomain = _data["subDomain"];
+            this.tenant = _data["tenant"] ? Tenant.fromJS(_data["tenant"]) : <any>undefined;
+            (<any>this).tenantId = _data["tenantId"];
+            (<any>this).isDeleted = _data["isDeleted"];
+        }
+    }
+
+    static fromJS(data: any): TenantProgram {
+        data = typeof data === 'object' ? data : {};
+        let result = new TenantProgram();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["name"] = this.name;
+        data["adminEmail"] = this.adminEmail;
+        data["subDomain"] = this.subDomain;
+        data["tenant"] = this.tenant ? this.tenant.toJSON() : <any>undefined;
+        data["tenantId"] = this.tenantId;
+        data["isDeleted"] = this.isDeleted;
+        return data;
+    }
+
+    clone(): TenantProgram {
+        const json = this.toJSON();
+        let result = new TenantProgram();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface ITenantProgram {
+    id: string;
     name: string | undefined;
-    id: string | undefined;
+    adminEmail: string | undefined;
+    subDomain: string | undefined;
+    tenant: Tenant;
+    tenantId: string;
+    isDeleted: boolean;
+}
+
+export class TenantProgramDto implements ITenantProgramDto {
+    id: string;
+    name: string | undefined;
 
     constructor(data?: ITenantProgramDto) {
         if (data) {
@@ -4048,8 +21990,8 @@ export class TenantProgramDto implements ITenantProgramDto {
 
     init(_data?: any) {
         if (_data) {
-            this.name = _data["name"];
             this.id = _data["id"];
+            this.name = _data["name"];
         }
     }
 
@@ -4062,8 +22004,8 @@ export class TenantProgramDto implements ITenantProgramDto {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["name"] = this.name;
         data["id"] = this.id;
+        data["name"] = this.name;
         return data;
     }
 
@@ -4076,8 +22018,8 @@ export class TenantProgramDto implements ITenantProgramDto {
 }
 
 export interface ITenantProgramDto {
+    id: string;
     name: string | undefined;
-    id: string | undefined;
 }
 
 export class TenantProgramDtoIEnumerableApiResponse implements ITenantProgramDtoIEnumerableApiResponse {
@@ -4139,7 +22081,7 @@ export interface ITenantProgramDtoIEnumerableApiResponse {
     problemDetails: ProblemDetails;
 }
 
-/** 1 = AssocProf (Associate professor) 2 = Dr (Dr) 3 = Mr (Mr) 4 = Mrs (Mrs) 5 = Ms (Ms) 6 = Prof (Professor) 7 = Unknown (Unknown) 8 = Mx (Mx) */
+/** 1 = AssocProf (Associate professor) 2 = Dr (Dr) 3 = Mr (Mr) 4 = Mrs (Mrs) 5 = Ms (Ms) 6 = Prof (Professor) 7 = Unknown (Unknown) 8 = Mx (Mx) 9 = Miss (Miss) */
 export enum Title {
     AssocProf = 1,
     Dr = 2,
@@ -4149,9 +22091,192 @@ export enum Title {
     Prof = 6,
     Unknown = 7,
     Mx = 8,
+    Miss = 9,
 }
 
-/** 1 = ApprovalRequired (Approval required) 2 = Approved (Approved) 3 = EvaluationPending (Evaluation pending) 4 = Suspended (Suspended) 5 = Discontinued (Discontinued) 6 = OnContinuedSupply (On continued supply) 7 = Completed (Complete) 8 = TransferRequested (TransferRequested) */
+/** 1 = Male (Male) 2 = FemaleOfChildbearingPotential (Female of childbearing potential) 3 = FemaleOfNonChildbearingPotential (Female of non-childbearing potential) */
+export enum TreatmentCategory {
+    Male = 1,
+    FemaleOfChildbearingPotential = 2,
+    FemaleOfNonChildbearingPotential = 3,
+}
+
+export class TreatmentProfile implements ITreatmentProfile {
+    id: string;
+    readonly isDeleted: boolean;
+    readonly deletedOnUtc: Date | undefined;
+    readonly deletedBy: string | undefined;
+    deletedReason: DeletedReason;
+    readonly portalProgramId: string;
+    dosage: Dosage;
+    readonly dosageId: number | undefined;
+    readonly enrolledOn: Date | undefined;
+    readonly treatmentStartedOn: Date | undefined;
+    readonly treatmentEndedOn: Date | undefined;
+    discontinueDate: DateOnly;
+    readonly discontinuedBy: string | undefined;
+    treatmentStatus: TreatmentStatus;
+    patient: Patient;
+    readonly patientId: string;
+    pharmacy: Pharmacy;
+    readonly pharmacyId: string | undefined;
+    prescriber: Prescriber;
+    readonly prescriberId: string;
+    clinic: Clinic;
+    readonly clinicId: string | undefined;
+    treatmentCategory: TreatmentCategory;
+    readonly medicationId: number | undefined;
+    readonly createdOnUtc: Date;
+    readonly createdBy: string | undefined;
+    readonly lastModifiedOnUtc: Date | undefined;
+    readonly modifiedBy: string | undefined;
+    readonly prescriptions: Prescription[] | undefined;
+    readonly dispensingVerificationRecords: DispensingVerificationRecord[] | undefined;
+
+    constructor(data?: ITreatmentProfile) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            (<any>this).isDeleted = _data["isDeleted"];
+            (<any>this).deletedOnUtc = _data["deletedOnUtc"] ? new Date(_data["deletedOnUtc"].toString()) : <any>undefined;
+            (<any>this).deletedBy = _data["deletedBy"];
+            this.deletedReason = _data["deletedReason"];
+            (<any>this).portalProgramId = _data["portalProgramId"];
+            this.dosage = _data["dosage"] ? Dosage.fromJS(_data["dosage"]) : <any>undefined;
+            (<any>this).dosageId = _data["dosageId"];
+            (<any>this).enrolledOn = _data["enrolledOn"] ? new Date(_data["enrolledOn"].toString()) : <any>undefined;
+            (<any>this).treatmentStartedOn = _data["treatmentStartedOn"] ? new Date(_data["treatmentStartedOn"].toString()) : <any>undefined;
+            (<any>this).treatmentEndedOn = _data["treatmentEndedOn"] ? new Date(_data["treatmentEndedOn"].toString()) : <any>undefined;
+            this.discontinueDate = _data["discontinueDate"] ? DateOnly.fromJS(_data["discontinueDate"]) : <any>undefined;
+            (<any>this).discontinuedBy = _data["discontinuedBy"];
+            this.treatmentStatus = _data["treatmentStatus"];
+            this.patient = _data["patient"] ? Patient.fromJS(_data["patient"]) : <any>undefined;
+            (<any>this).patientId = _data["patientId"];
+            this.pharmacy = _data["pharmacy"] ? Pharmacy.fromJS(_data["pharmacy"]) : <any>undefined;
+            (<any>this).pharmacyId = _data["pharmacyId"];
+            this.prescriber = _data["prescriber"] ? Prescriber.fromJS(_data["prescriber"]) : <any>undefined;
+            (<any>this).prescriberId = _data["prescriberId"];
+            this.clinic = _data["clinic"] ? Clinic.fromJS(_data["clinic"]) : <any>undefined;
+            (<any>this).clinicId = _data["clinicId"];
+            this.treatmentCategory = _data["treatmentCategory"];
+            (<any>this).medicationId = _data["medicationId"];
+            (<any>this).createdOnUtc = _data["createdOnUtc"] ? new Date(_data["createdOnUtc"].toString()) : <any>undefined;
+            (<any>this).createdBy = _data["createdBy"];
+            (<any>this).lastModifiedOnUtc = _data["lastModifiedOnUtc"] ? new Date(_data["lastModifiedOnUtc"].toString()) : <any>undefined;
+            (<any>this).modifiedBy = _data["modifiedBy"];
+            if (Array.isArray(_data["prescriptions"])) {
+                (<any>this).prescriptions = [];
+                for (let item of _data["prescriptions"])
+                    (<any>this).prescriptions.push(Prescription.fromJS(item));
+            }
+            if (Array.isArray(_data["dispensingVerificationRecords"])) {
+                (<any>this).dispensingVerificationRecords = [];
+                for (let item of _data["dispensingVerificationRecords"])
+                    (<any>this).dispensingVerificationRecords.push(DispensingVerificationRecord.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): TreatmentProfile {
+        data = typeof data === 'object' ? data : {};
+        let result = new TreatmentProfile();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["isDeleted"] = this.isDeleted;
+        data["deletedOnUtc"] = this.deletedOnUtc ? this.deletedOnUtc.toISOString() : <any>undefined;
+        data["deletedBy"] = this.deletedBy;
+        data["deletedReason"] = this.deletedReason;
+        data["portalProgramId"] = this.portalProgramId;
+        data["dosage"] = this.dosage ? this.dosage.toJSON() : <any>undefined;
+        data["dosageId"] = this.dosageId;
+        data["enrolledOn"] = this.enrolledOn ? this.enrolledOn.toISOString() : <any>undefined;
+        data["treatmentStartedOn"] = this.treatmentStartedOn ? this.treatmentStartedOn.toISOString() : <any>undefined;
+        data["treatmentEndedOn"] = this.treatmentEndedOn ? this.treatmentEndedOn.toISOString() : <any>undefined;
+        data["discontinueDate"] = this.discontinueDate ? this.discontinueDate.toJSON() : <any>undefined;
+        data["discontinuedBy"] = this.discontinuedBy;
+        data["treatmentStatus"] = this.treatmentStatus;
+        data["patient"] = this.patient ? this.patient.toJSON() : <any>undefined;
+        data["patientId"] = this.patientId;
+        data["pharmacy"] = this.pharmacy ? this.pharmacy.toJSON() : <any>undefined;
+        data["pharmacyId"] = this.pharmacyId;
+        data["prescriber"] = this.prescriber ? this.prescriber.toJSON() : <any>undefined;
+        data["prescriberId"] = this.prescriberId;
+        data["clinic"] = this.clinic ? this.clinic.toJSON() : <any>undefined;
+        data["clinicId"] = this.clinicId;
+        data["treatmentCategory"] = this.treatmentCategory;
+        data["medicationId"] = this.medicationId;
+        data["createdOnUtc"] = this.createdOnUtc ? this.createdOnUtc.toISOString() : <any>undefined;
+        data["createdBy"] = this.createdBy;
+        data["lastModifiedOnUtc"] = this.lastModifiedOnUtc ? this.lastModifiedOnUtc.toISOString() : <any>undefined;
+        data["modifiedBy"] = this.modifiedBy;
+        if (Array.isArray(this.prescriptions)) {
+            data["prescriptions"] = [];
+            for (let item of this.prescriptions)
+                data["prescriptions"].push(item.toJSON());
+        }
+        if (Array.isArray(this.dispensingVerificationRecords)) {
+            data["dispensingVerificationRecords"] = [];
+            for (let item of this.dispensingVerificationRecords)
+                data["dispensingVerificationRecords"].push(item.toJSON());
+        }
+        return data;
+    }
+
+    clone(): TreatmentProfile {
+        const json = this.toJSON();
+        let result = new TreatmentProfile();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface ITreatmentProfile {
+    id: string;
+    isDeleted: boolean;
+    deletedOnUtc: Date | undefined;
+    deletedBy: string | undefined;
+    deletedReason: DeletedReason;
+    portalProgramId: string;
+    dosage: Dosage;
+    dosageId: number | undefined;
+    enrolledOn: Date | undefined;
+    treatmentStartedOn: Date | undefined;
+    treatmentEndedOn: Date | undefined;
+    discontinueDate: DateOnly;
+    discontinuedBy: string | undefined;
+    treatmentStatus: TreatmentStatus;
+    patient: Patient;
+    patientId: string;
+    pharmacy: Pharmacy;
+    pharmacyId: string | undefined;
+    prescriber: Prescriber;
+    prescriberId: string;
+    clinic: Clinic;
+    clinicId: string | undefined;
+    treatmentCategory: TreatmentCategory;
+    medicationId: number | undefined;
+    createdOnUtc: Date;
+    createdBy: string | undefined;
+    lastModifiedOnUtc: Date | undefined;
+    modifiedBy: string | undefined;
+    prescriptions: Prescription[] | undefined;
+    dispensingVerificationRecords: DispensingVerificationRecord[] | undefined;
+}
+
+/** 1 = ApprovalRequired (Approval required) 2 = Approved (Approved) 3 = EvaluationPending (Evaluation pending) 4 = Suspended (Suspended) 5 = Discontinued (Discontinued) 6 = OnContinuedSupply (On continued supply) 7 = Completed (Complete) 8 = TransferRequested (TransferRequested) 9 = Grandfathered (Grandfathered) */
 export enum TreatmentStatus {
     ApprovalRequired = 1,
     Approved = 2,
@@ -4161,6 +22286,315 @@ export enum TreatmentStatus {
     OnContinuedSupply = 6,
     Completed = 7,
     TransferRequested = 8,
+    Grandfathered = 9,
+}
+
+export class UpdateClinicDto implements IUpdateClinicDto {
+    name: string | undefined;
+    unitNumber: string | undefined;
+    streetAddress: string | undefined;
+    city: string | undefined;
+    state: AddressState;
+    postalCode: string | undefined;
+    phone: string | undefined;
+    email: string | undefined;
+    adminNotes: string | undefined;
+
+    constructor(data?: IUpdateClinicDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.name = _data["name"];
+            this.unitNumber = _data["unitNumber"];
+            this.streetAddress = _data["streetAddress"];
+            this.city = _data["city"];
+            this.state = _data["state"];
+            this.postalCode = _data["postalCode"];
+            this.phone = _data["phone"];
+            this.email = _data["email"];
+            this.adminNotes = _data["adminNotes"];
+        }
+    }
+
+    static fromJS(data: any): UpdateClinicDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new UpdateClinicDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["name"] = this.name;
+        data["unitNumber"] = this.unitNumber;
+        data["streetAddress"] = this.streetAddress;
+        data["city"] = this.city;
+        data["state"] = this.state;
+        data["postalCode"] = this.postalCode;
+        data["phone"] = this.phone;
+        data["email"] = this.email;
+        data["adminNotes"] = this.adminNotes;
+        return data;
+    }
+
+    clone(): UpdateClinicDto {
+        const json = this.toJSON();
+        let result = new UpdateClinicDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IUpdateClinicDto {
+    name: string | undefined;
+    unitNumber: string | undefined;
+    streetAddress: string | undefined;
+    city: string | undefined;
+    state: AddressState;
+    postalCode: string | undefined;
+    phone: string | undefined;
+    email: string | undefined;
+    adminNotes: string | undefined;
+}
+
+export class UpdateDeliveryAddressDto implements IUpdateDeliveryAddressDto {
+    patientId: string;
+    unitNumber: string | undefined;
+    streetAddress: string | undefined;
+    city: string | undefined;
+    state: AddressState;
+    postcode: string | undefined;
+
+    constructor(data?: IUpdateDeliveryAddressDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.patientId = _data["patientId"];
+            this.unitNumber = _data["unitNumber"];
+            this.streetAddress = _data["streetAddress"];
+            this.city = _data["city"];
+            this.state = _data["state"];
+            this.postcode = _data["postcode"];
+        }
+    }
+
+    static fromJS(data: any): UpdateDeliveryAddressDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new UpdateDeliveryAddressDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["patientId"] = this.patientId;
+        data["unitNumber"] = this.unitNumber;
+        data["streetAddress"] = this.streetAddress;
+        data["city"] = this.city;
+        data["state"] = this.state;
+        data["postcode"] = this.postcode;
+        return data;
+    }
+
+    clone(): UpdateDeliveryAddressDto {
+        const json = this.toJSON();
+        let result = new UpdateDeliveryAddressDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IUpdateDeliveryAddressDto {
+    patientId: string;
+    unitNumber: string | undefined;
+    streetAddress: string | undefined;
+    city: string | undefined;
+    state: AddressState;
+    postcode: string | undefined;
+}
+
+export class UpdatePatientAddressDto implements IUpdatePatientAddressDto {
+    patientId: string;
+    unitNumber: string | undefined;
+    streetAddress: string | undefined;
+    city: string | undefined;
+    state: AddressState;
+    postcode: string | undefined;
+
+    constructor(data?: IUpdatePatientAddressDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.patientId = _data["patientId"];
+            this.unitNumber = _data["unitNumber"];
+            this.streetAddress = _data["streetAddress"];
+            this.city = _data["city"];
+            this.state = _data["state"];
+            this.postcode = _data["postcode"];
+        }
+    }
+
+    static fromJS(data: any): UpdatePatientAddressDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new UpdatePatientAddressDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["patientId"] = this.patientId;
+        data["unitNumber"] = this.unitNumber;
+        data["streetAddress"] = this.streetAddress;
+        data["city"] = this.city;
+        data["state"] = this.state;
+        data["postcode"] = this.postcode;
+        return data;
+    }
+
+    clone(): UpdatePatientAddressDto {
+        const json = this.toJSON();
+        let result = new UpdatePatientAddressDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IUpdatePatientAddressDto {
+    patientId: string;
+    unitNumber: string | undefined;
+    streetAddress: string | undefined;
+    city: string | undefined;
+    state: AddressState;
+    postcode: string | undefined;
+}
+
+export class UpdatePatientDto implements IUpdatePatientDto {
+    treatmentProfileId: string;
+    prescriberId: string;
+    pharmacyId: string | undefined;
+    firstName: string | undefined;
+    middleName: string | undefined;
+    lastName: string | undefined;
+    birthDay: number | undefined;
+    birthMonth: number | undefined;
+    birthYear: number | undefined;
+    homeUnitNumber: string | undefined;
+    homeStreetAddress: string | undefined;
+    homeCity: string | undefined;
+    homeState: AddressState;
+    homePostcode: string | undefined;
+    medicationId: number | undefined;
+    treatmentCategory: TreatmentCategory;
+    email: string | undefined;
+
+    constructor(data?: IUpdatePatientDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.treatmentProfileId = _data["treatmentProfileId"];
+            this.prescriberId = _data["prescriberId"];
+            this.pharmacyId = _data["pharmacyId"];
+            this.firstName = _data["firstName"];
+            this.middleName = _data["middleName"];
+            this.lastName = _data["lastName"];
+            this.birthDay = _data["birthDay"];
+            this.birthMonth = _data["birthMonth"];
+            this.birthYear = _data["birthYear"];
+            this.homeUnitNumber = _data["homeUnitNumber"];
+            this.homeStreetAddress = _data["homeStreetAddress"];
+            this.homeCity = _data["homeCity"];
+            this.homeState = _data["homeState"];
+            this.homePostcode = _data["homePostcode"];
+            this.medicationId = _data["medicationId"];
+            this.treatmentCategory = _data["treatmentCategory"];
+            this.email = _data["email"];
+        }
+    }
+
+    static fromJS(data: any): UpdatePatientDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new UpdatePatientDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["treatmentProfileId"] = this.treatmentProfileId;
+        data["prescriberId"] = this.prescriberId;
+        data["pharmacyId"] = this.pharmacyId;
+        data["firstName"] = this.firstName;
+        data["middleName"] = this.middleName;
+        data["lastName"] = this.lastName;
+        data["birthDay"] = this.birthDay;
+        data["birthMonth"] = this.birthMonth;
+        data["birthYear"] = this.birthYear;
+        data["homeUnitNumber"] = this.homeUnitNumber;
+        data["homeStreetAddress"] = this.homeStreetAddress;
+        data["homeCity"] = this.homeCity;
+        data["homeState"] = this.homeState;
+        data["homePostcode"] = this.homePostcode;
+        data["medicationId"] = this.medicationId;
+        data["treatmentCategory"] = this.treatmentCategory;
+        data["email"] = this.email;
+        return data;
+    }
+
+    clone(): UpdatePatientDto {
+        const json = this.toJSON();
+        let result = new UpdatePatientDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IUpdatePatientDto {
+    treatmentProfileId: string;
+    prescriberId: string;
+    pharmacyId: string | undefined;
+    firstName: string | undefined;
+    middleName: string | undefined;
+    lastName: string | undefined;
+    birthDay: number | undefined;
+    birthMonth: number | undefined;
+    birthYear: number | undefined;
+    homeUnitNumber: string | undefined;
+    homeStreetAddress: string | undefined;
+    homeCity: string | undefined;
+    homeState: AddressState;
+    homePostcode: string | undefined;
+    medicationId: number | undefined;
+    treatmentCategory: TreatmentCategory;
+    email: string | undefined;
 }
 
 export class UpdatePatientProfileDto implements IUpdatePatientProfileDto {
@@ -4170,16 +22604,15 @@ export class UpdatePatientProfileDto implements IUpdatePatientProfileDto {
     middleName: string | undefined;
     lastName: string | undefined;
     email: string | undefined;
-    dateOfBirth: Date;
+    birthDay: number;
+    birthMonth: number;
+    birthYear: number;
     gender: Gender;
     phone: string | undefined;
     mobile: string | undefined;
-    unitNumber: string | undefined;
-    addressLine1: string | undefined;
-    addressLine2: string | undefined;
-    city: string | undefined;
-    state: AddressState;
-    postcode: string | undefined;
+    salesForceId: string | undefined;
+    medicareNumber: string | undefined;
+    nationalHealthIndex: string | undefined;
 
     constructor(data?: IUpdatePatientProfileDto) {
         if (data) {
@@ -4198,16 +22631,15 @@ export class UpdatePatientProfileDto implements IUpdatePatientProfileDto {
             this.middleName = _data["middleName"];
             this.lastName = _data["lastName"];
             this.email = _data["email"];
-            this.dateOfBirth = _data["dateOfBirth"] ? new Date(_data["dateOfBirth"].toString()) : <any>undefined;
+            this.birthDay = _data["birthDay"];
+            this.birthMonth = _data["birthMonth"];
+            this.birthYear = _data["birthYear"];
             this.gender = _data["gender"];
             this.phone = _data["phone"];
             this.mobile = _data["mobile"];
-            this.unitNumber = _data["unitNumber"];
-            this.addressLine1 = _data["addressLine1"];
-            this.addressLine2 = _data["addressLine2"];
-            this.city = _data["city"];
-            this.state = _data["state"];
-            this.postcode = _data["postcode"];
+            this.salesForceId = _data["salesForceId"];
+            this.medicareNumber = _data["medicareNumber"];
+            this.nationalHealthIndex = _data["nationalHealthIndex"];
         }
     }
 
@@ -4226,16 +22658,15 @@ export class UpdatePatientProfileDto implements IUpdatePatientProfileDto {
         data["middleName"] = this.middleName;
         data["lastName"] = this.lastName;
         data["email"] = this.email;
-        data["dateOfBirth"] = this.dateOfBirth ? this.dateOfBirth.toISOString() : <any>undefined;
+        data["birthDay"] = this.birthDay;
+        data["birthMonth"] = this.birthMonth;
+        data["birthYear"] = this.birthYear;
         data["gender"] = this.gender;
         data["phone"] = this.phone;
         data["mobile"] = this.mobile;
-        data["unitNumber"] = this.unitNumber;
-        data["addressLine1"] = this.addressLine1;
-        data["addressLine2"] = this.addressLine2;
-        data["city"] = this.city;
-        data["state"] = this.state;
-        data["postcode"] = this.postcode;
+        data["salesForceId"] = this.salesForceId;
+        data["medicareNumber"] = this.medicareNumber;
+        data["nationalHealthIndex"] = this.nationalHealthIndex;
         return data;
     }
 
@@ -4254,16 +22685,610 @@ export interface IUpdatePatientProfileDto {
     middleName: string | undefined;
     lastName: string | undefined;
     email: string | undefined;
-    dateOfBirth: Date;
+    birthDay: number;
+    birthMonth: number;
+    birthYear: number;
     gender: Gender;
     phone: string | undefined;
     mobile: string | undefined;
+    salesForceId: string | undefined;
+    medicareNumber: string | undefined;
+    nationalHealthIndex: string | undefined;
+}
+
+export class UpdatePatientProgramRegistrationDto implements IUpdatePatientProgramRegistrationDto {
+    registrationStatus: RegistrationStatus;
+    preferredContactMethod: PreferredContactMethod;
+    adminNotes: string | undefined;
+    privacyConsentProvided: boolean;
+    programTermsAgreed: boolean;
+    marketingCommunicationConsentProvided: boolean;
+    adverseEventContactConsentProvided: boolean;
+
+    constructor(data?: IUpdatePatientProgramRegistrationDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.registrationStatus = _data["registrationStatus"];
+            this.preferredContactMethod = _data["preferredContactMethod"];
+            this.adminNotes = _data["adminNotes"];
+            this.privacyConsentProvided = _data["privacyConsentProvided"];
+            this.programTermsAgreed = _data["programTermsAgreed"];
+            this.marketingCommunicationConsentProvided = _data["marketingCommunicationConsentProvided"];
+            this.adverseEventContactConsentProvided = _data["adverseEventContactConsentProvided"];
+        }
+    }
+
+    static fromJS(data: any): UpdatePatientProgramRegistrationDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new UpdatePatientProgramRegistrationDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["registrationStatus"] = this.registrationStatus;
+        data["preferredContactMethod"] = this.preferredContactMethod;
+        data["adminNotes"] = this.adminNotes;
+        data["privacyConsentProvided"] = this.privacyConsentProvided;
+        data["programTermsAgreed"] = this.programTermsAgreed;
+        data["marketingCommunicationConsentProvided"] = this.marketingCommunicationConsentProvided;
+        data["adverseEventContactConsentProvided"] = this.adverseEventContactConsentProvided;
+        return data;
+    }
+
+    clone(): UpdatePatientProgramRegistrationDto {
+        const json = this.toJSON();
+        let result = new UpdatePatientProgramRegistrationDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IUpdatePatientProgramRegistrationDto {
+    registrationStatus: RegistrationStatus;
+    preferredContactMethod: PreferredContactMethod;
+    adminNotes: string | undefined;
+    privacyConsentProvided: boolean;
+    programTermsAgreed: boolean;
+    marketingCommunicationConsentProvided: boolean;
+    adverseEventContactConsentProvided: boolean;
+}
+
+export class UpdatePharmacyDto implements IUpdatePharmacyDto {
+    name: string | undefined;
     unitNumber: string | undefined;
-    addressLine1: string | undefined;
-    addressLine2: string | undefined;
+    streetAddress: string | undefined;
     city: string | undefined;
     state: AddressState;
-    postcode: string | undefined;
+    postalCode: string | undefined;
+    phone: string | undefined;
+    email: string | undefined;
+    adminNotes: string | undefined;
+    programAccounts: ProgramAccountDto[] | undefined;
+
+    constructor(data?: IUpdatePharmacyDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.name = _data["name"];
+            this.unitNumber = _data["unitNumber"];
+            this.streetAddress = _data["streetAddress"];
+            this.city = _data["city"];
+            this.state = _data["state"];
+            this.postalCode = _data["postalCode"];
+            this.phone = _data["phone"];
+            this.email = _data["email"];
+            this.adminNotes = _data["adminNotes"];
+            if (Array.isArray(_data["programAccounts"])) {
+                this.programAccounts = [];
+                for (let item of _data["programAccounts"])
+                    this.programAccounts.push(ProgramAccountDto.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): UpdatePharmacyDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new UpdatePharmacyDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["name"] = this.name;
+        data["unitNumber"] = this.unitNumber;
+        data["streetAddress"] = this.streetAddress;
+        data["city"] = this.city;
+        data["state"] = this.state;
+        data["postalCode"] = this.postalCode;
+        data["phone"] = this.phone;
+        data["email"] = this.email;
+        data["adminNotes"] = this.adminNotes;
+        if (Array.isArray(this.programAccounts)) {
+            data["programAccounts"] = [];
+            for (let item of this.programAccounts)
+                data["programAccounts"].push(item.toJSON());
+        }
+        return data;
+    }
+
+    clone(): UpdatePharmacyDto {
+        const json = this.toJSON();
+        let result = new UpdatePharmacyDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IUpdatePharmacyDto {
+    name: string | undefined;
+    unitNumber: string | undefined;
+    streetAddress: string | undefined;
+    city: string | undefined;
+    state: AddressState;
+    postalCode: string | undefined;
+    phone: string | undefined;
+    email: string | undefined;
+    adminNotes: string | undefined;
+    programAccounts: ProgramAccountDto[] | undefined;
+}
+
+export class UpdatePrescriberProfileDto implements IUpdatePrescriberProfileDto {
+    title: Title;
+    firstName: string | undefined;
+    middleName: string | undefined;
+    lastName: string | undefined;
+    email: string | undefined;
+    specialty: Specialty;
+    specialtyOther: string | undefined;
+    phone: string | undefined;
+    mobile: string | undefined;
+    ahpraNumber: string | undefined;
+    prescriberNumber: string | undefined;
+    programReportingId: string | undefined;
+
+    constructor(data?: IUpdatePrescriberProfileDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.title = _data["title"];
+            this.firstName = _data["firstName"];
+            this.middleName = _data["middleName"];
+            this.lastName = _data["lastName"];
+            this.email = _data["email"];
+            this.specialty = _data["specialty"];
+            this.specialtyOther = _data["specialtyOther"];
+            this.phone = _data["phone"];
+            this.mobile = _data["mobile"];
+            this.ahpraNumber = _data["ahpraNumber"];
+            this.prescriberNumber = _data["prescriberNumber"];
+            this.programReportingId = _data["programReportingId"];
+        }
+    }
+
+    static fromJS(data: any): UpdatePrescriberProfileDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new UpdatePrescriberProfileDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["title"] = this.title;
+        data["firstName"] = this.firstName;
+        data["middleName"] = this.middleName;
+        data["lastName"] = this.lastName;
+        data["email"] = this.email;
+        data["specialty"] = this.specialty;
+        data["specialtyOther"] = this.specialtyOther;
+        data["phone"] = this.phone;
+        data["mobile"] = this.mobile;
+        data["ahpraNumber"] = this.ahpraNumber;
+        data["prescriberNumber"] = this.prescriberNumber;
+        data["programReportingId"] = this.programReportingId;
+        return data;
+    }
+
+    clone(): UpdatePrescriberProfileDto {
+        const json = this.toJSON();
+        let result = new UpdatePrescriberProfileDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IUpdatePrescriberProfileDto {
+    title: Title;
+    firstName: string | undefined;
+    middleName: string | undefined;
+    lastName: string | undefined;
+    email: string | undefined;
+    specialty: Specialty;
+    specialtyOther: string | undefined;
+    phone: string | undefined;
+    mobile: string | undefined;
+    ahpraNumber: string | undefined;
+    prescriberNumber: string | undefined;
+    programReportingId: string | undefined;
+}
+
+export class User implements IUser {
+    id: string;
+    readonly isDeleted: boolean;
+    readonly deletedOnUtc: Date | undefined;
+    readonly deletedBy: string | undefined;
+    deletedReason: DeletedReason;
+    readonly domainEvents: DomainEventBase[] | undefined;
+    readonly username: string | undefined;
+    readonly password: string | undefined;
+    readonly title: string | undefined;
+    name: PersonName;
+    email: EmailAddress;
+    mobile: MobileNumber;
+    readonly securityCode: string | undefined;
+    readonly securityCodeExpirationDate: Date | undefined;
+    readonly lastLoggedIn: Date | undefined;
+    status: UserStatus;
+    readonly subject: string | undefined;
+    concurrencyStamp: string | undefined;
+    readonly active: boolean;
+    readonly claims: UserClaim[] | undefined;
+    readonly userTenants: UserTenant[] | undefined;
+    readonly createdOn: Date | undefined;
+    createdBy: string;
+
+    constructor(data?: IUser) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            (<any>this).isDeleted = _data["isDeleted"];
+            (<any>this).deletedOnUtc = _data["deletedOnUtc"] ? new Date(_data["deletedOnUtc"].toString()) : <any>undefined;
+            (<any>this).deletedBy = _data["deletedBy"];
+            this.deletedReason = _data["deletedReason"];
+            if (Array.isArray(_data["domainEvents"])) {
+                (<any>this).domainEvents = [];
+                for (let item of _data["domainEvents"])
+                    (<any>this).domainEvents.push(DomainEventBase.fromJS(item));
+            }
+            (<any>this).username = _data["username"];
+            (<any>this).password = _data["password"];
+            (<any>this).title = _data["title"];
+            this.name = _data["name"] ? PersonName.fromJS(_data["name"]) : <any>undefined;
+            this.email = _data["email"] ? EmailAddress.fromJS(_data["email"]) : <any>undefined;
+            this.mobile = _data["mobile"] ? MobileNumber.fromJS(_data["mobile"]) : <any>undefined;
+            (<any>this).securityCode = _data["securityCode"];
+            (<any>this).securityCodeExpirationDate = _data["securityCodeExpirationDate"] ? new Date(_data["securityCodeExpirationDate"].toString()) : <any>undefined;
+            (<any>this).lastLoggedIn = _data["lastLoggedIn"] ? new Date(_data["lastLoggedIn"].toString()) : <any>undefined;
+            this.status = _data["status"];
+            (<any>this).subject = _data["subject"];
+            this.concurrencyStamp = _data["concurrencyStamp"];
+            (<any>this).active = _data["active"];
+            if (Array.isArray(_data["claims"])) {
+                (<any>this).claims = [];
+                for (let item of _data["claims"])
+                    (<any>this).claims.push(UserClaim.fromJS(item));
+            }
+            if (Array.isArray(_data["userTenants"])) {
+                (<any>this).userTenants = [];
+                for (let item of _data["userTenants"])
+                    (<any>this).userTenants.push(UserTenant.fromJS(item));
+            }
+            (<any>this).createdOn = _data["createdOn"] ? new Date(_data["createdOn"].toString()) : <any>undefined;
+            this.createdBy = _data["createdBy"];
+        }
+    }
+
+    static fromJS(data: any): User {
+        data = typeof data === 'object' ? data : {};
+        let result = new User();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["isDeleted"] = this.isDeleted;
+        data["deletedOnUtc"] = this.deletedOnUtc ? this.deletedOnUtc.toISOString() : <any>undefined;
+        data["deletedBy"] = this.deletedBy;
+        data["deletedReason"] = this.deletedReason;
+        if (Array.isArray(this.domainEvents)) {
+            data["domainEvents"] = [];
+            for (let item of this.domainEvents)
+                data["domainEvents"].push(item.toJSON());
+        }
+        data["username"] = this.username;
+        data["password"] = this.password;
+        data["title"] = this.title;
+        data["name"] = this.name ? this.name.toJSON() : <any>undefined;
+        data["email"] = this.email ? this.email.toJSON() : <any>undefined;
+        data["mobile"] = this.mobile ? this.mobile.toJSON() : <any>undefined;
+        data["securityCode"] = this.securityCode;
+        data["securityCodeExpirationDate"] = this.securityCodeExpirationDate ? this.securityCodeExpirationDate.toISOString() : <any>undefined;
+        data["lastLoggedIn"] = this.lastLoggedIn ? this.lastLoggedIn.toISOString() : <any>undefined;
+        data["status"] = this.status;
+        data["subject"] = this.subject;
+        data["concurrencyStamp"] = this.concurrencyStamp;
+        data["active"] = this.active;
+        if (Array.isArray(this.claims)) {
+            data["claims"] = [];
+            for (let item of this.claims)
+                data["claims"].push(item.toJSON());
+        }
+        if (Array.isArray(this.userTenants)) {
+            data["userTenants"] = [];
+            for (let item of this.userTenants)
+                data["userTenants"].push(item.toJSON());
+        }
+        data["createdOn"] = this.createdOn ? this.createdOn.toISOString() : <any>undefined;
+        data["createdBy"] = this.createdBy;
+        return data;
+    }
+
+    clone(): User {
+        const json = this.toJSON();
+        let result = new User();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IUser {
+    id: string;
+    isDeleted: boolean;
+    deletedOnUtc: Date | undefined;
+    deletedBy: string | undefined;
+    deletedReason: DeletedReason;
+    domainEvents: DomainEventBase[] | undefined;
+    username: string | undefined;
+    password: string | undefined;
+    title: string | undefined;
+    name: PersonName;
+    email: EmailAddress;
+    mobile: MobileNumber;
+    securityCode: string | undefined;
+    securityCodeExpirationDate: Date | undefined;
+    lastLoggedIn: Date | undefined;
+    status: UserStatus;
+    subject: string | undefined;
+    concurrencyStamp: string | undefined;
+    active: boolean;
+    claims: UserClaim[] | undefined;
+    userTenants: UserTenant[] | undefined;
+    createdOn: Date | undefined;
+    createdBy: string;
+}
+
+export class UserClaim implements IUserClaim {
+    id: string;
+    type: string | undefined;
+    value: string | undefined;
+    concurrencyStamp: string | undefined;
+    user: User;
+    userId: string;
+
+    constructor(data?: IUserClaim) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.type = _data["type"];
+            this.value = _data["value"];
+            this.concurrencyStamp = _data["concurrencyStamp"];
+            this.user = _data["user"] ? User.fromJS(_data["user"]) : <any>undefined;
+            this.userId = _data["userId"];
+        }
+    }
+
+    static fromJS(data: any): UserClaim {
+        data = typeof data === 'object' ? data : {};
+        let result = new UserClaim();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["type"] = this.type;
+        data["value"] = this.value;
+        data["concurrencyStamp"] = this.concurrencyStamp;
+        data["user"] = this.user ? this.user.toJSON() : <any>undefined;
+        data["userId"] = this.userId;
+        return data;
+    }
+
+    clone(): UserClaim {
+        const json = this.toJSON();
+        let result = new UserClaim();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IUserClaim {
+    id: string;
+    type: string | undefined;
+    value: string | undefined;
+    concurrencyStamp: string | undefined;
+    user: User;
+    userId: string;
+}
+
+/** 1 = SystemAdmin (System admimn) 2 = ProgramAdmin (Program admin) 3 = Prescriber (Prescriber) 4 = Pharmacist (Pharmacist) 5 = Nurse (Nurse) 6 = Hcp (HCP) 7 = Patient (Patient) 8 = Carer (Carer) 9 = ClinicManager (Clinic manager) */
+export enum UserRole {
+    SystemAdmin = 1,
+    ProgramAdmin = 2,
+    Prescriber = 3,
+    Pharmacist = 4,
+    Nurse = 5,
+    Hcp = 6,
+    Patient = 7,
+    Carer = 8,
+    ClinicManager = 9,
+}
+
+/** 1 = Unverified (Unverified) 2 = Approved (Approved) 3 = Locked (Locked out) 4 = Deactivated (Deactivated) 5 = Declined (Declined) */
+export enum UserStatus {
+    Unverified = 1,
+    Approved = 2,
+    Locked = 3,
+    Deactivated = 4,
+    Declined = 5,
+}
+
+export class UserTenant implements IUserTenant {
+    readonly id: string;
+    tenant: Tenant;
+    readonly tenantId: string;
+    user: User;
+    readonly userId: string;
+    readonly registrationId: string | undefined;
+    readonly isDeleted: boolean;
+
+    constructor(data?: IUserTenant) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            (<any>this).id = _data["id"];
+            this.tenant = _data["tenant"] ? Tenant.fromJS(_data["tenant"]) : <any>undefined;
+            (<any>this).tenantId = _data["tenantId"];
+            this.user = _data["user"] ? User.fromJS(_data["user"]) : <any>undefined;
+            (<any>this).userId = _data["userId"];
+            (<any>this).registrationId = _data["registrationId"];
+            (<any>this).isDeleted = _data["isDeleted"];
+        }
+    }
+
+    static fromJS(data: any): UserTenant {
+        data = typeof data === 'object' ? data : {};
+        let result = new UserTenant();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["tenant"] = this.tenant ? this.tenant.toJSON() : <any>undefined;
+        data["tenantId"] = this.tenantId;
+        data["user"] = this.user ? this.user.toJSON() : <any>undefined;
+        data["userId"] = this.userId;
+        data["registrationId"] = this.registrationId;
+        data["isDeleted"] = this.isDeleted;
+        return data;
+    }
+
+    clone(): UserTenant {
+        const json = this.toJSON();
+        let result = new UserTenant();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IUserTenant {
+    id: string;
+    tenant: Tenant;
+    tenantId: string;
+    user: User;
+    userId: string;
+    registrationId: string | undefined;
+    isDeleted: boolean;
+}
+
+export class ValidateEmailDto implements IValidateEmailDto {
+    email: string | undefined;
+    token: string | undefined;
+
+    constructor(data?: IValidateEmailDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.email = _data["email"];
+            this.token = _data["token"];
+        }
+    }
+
+    static fromJS(data: any): ValidateEmailDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new ValidateEmailDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["email"] = this.email;
+        data["token"] = this.token;
+        return data;
+    }
+
+    clone(): ValidateEmailDto {
+        const json = this.toJSON();
+        let result = new ValidateEmailDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IValidateEmailDto {
+    email: string | undefined;
+    token: string | undefined;
 }
 
 export interface FileResponse {

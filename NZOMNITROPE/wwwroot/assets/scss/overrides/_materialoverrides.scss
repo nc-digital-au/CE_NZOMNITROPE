@@ -19,7 +19,7 @@
     font-family: $font-family-text;
     border-radius: 0.125rem;
     border: none;
-    color: $theme-web-black;
+    color: $white;
     &:hover{
       background-color: $theme-accent-three;
     }
@@ -35,7 +35,7 @@
    }
 
    .secondary{
-    background-color: $theme-accent-one;
+    background-color: $theme-accent-two;
     color: white;
     &:hover{
       color: $theme-web-black;
@@ -52,5 +52,3 @@
     color: $theme-blue-one;
   }
 }
-
-

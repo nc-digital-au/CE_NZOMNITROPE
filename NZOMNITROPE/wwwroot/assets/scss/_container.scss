@@ -88,10 +88,10 @@ html .mat-drawer-container {
   a{
     font-weight: 800;
     cursor: pointer;
-    color: $primary;
+    color: #01206A;
     text-decoration: none;
     &:hover{
-      color: $theme-accent-one;
+      color: #01206A;
     }
   }
   a.mat-mdc-outlined-button{
@@ -104,52 +104,82 @@ html .mat-drawer-container {
 a.themed-link{
   font-weight: 800;
   cursor: pointer;
-  color: $primary;
+  color: #01206A;
   text-decoration: none;
   &:hover{
-    color: $theme-accent-one;
+    color: #01206A;
   }
 }
 
-footer{
+footer {
   background-color: $white;
-  color: $white;
+  color: #01206A;
   padding-top: 25px;
   padding-bottom: 25px;
   margin-top: 100px;
-  .footer-centered{
+
+  .footer-centered {
     margin: 0 auto;
-    &.maxWidth {
-      max-width: $boxedWidth;
-    }
-    ul{
-      display: block;
+    max-width: $boxedWidth;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    ul {
+      display: flex;
+      justify-content: center;
       text-align: center;
-      li{
+
+      li {
         display: inline-block;
         margin-right: 16px;
-        color: $white;
+        color: #01206A;
+
+        &:last-child {
+          margin-right: 0;
+        }
       }
     }
   }
-  a{
+
+  a {
     font-weight: 800;
     cursor: pointer;
-    color: $white;
+    color: #01206A !important;
     text-decoration: none;
-    &:hover{
-      color: $theme-accent-one;
-    }
 
+    &:hover {
+      color: $theme-accent-two;
+    }
   }
-  .forward-icon{
-    img{
+
+  .forward-icon {
+    img {
       width: 40%;
       position: absolute;
       bottom: 25px;
       right: 25px;
     }
   }
+}
+
+.footer-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.footer-content p {
+  flex: 1; 
+  margin: 0;
+}
+
+.footer-logo {
+  max-width: 150px; 
+  max-height: 100px;
+  margin-left: 20px;
 }
 
 // layout
@@ -254,6 +284,11 @@ footer{
     }
   }
   
+}
+
+.cancel-button {
+  color: #C81023 !important;
+  border: 2px solid #C81023 !important; 
 }
 
 
@@ -421,10 +456,10 @@ tr.expanded-row{
 #footer-menu{
   li{
     a{
-       color: $theme-accent-one;
-       cursor: pointer;
+      color: $theme-accent-two;
+      cursor: pointer;
        &:hover{
-        color: $theme-accent-four;
+        font-weight: bold;
        }
     }
   }
@@ -446,4 +481,110 @@ tr.expanded-row{
 
 .pal {
   color: #003366;
+}
+
+.logo {
+  width: 35%; 
+  height: 1%;
+}
+
+.full-width {
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+.half-width {
+  width: 50%;
+  margin-bottom: 16px;
+}
+
+.form-row {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.button-container {
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* Split Section */
+.split-section {
+  display: flex;
+  width: 100%;
+  height: 180px;
+  margin-bottom: 40px;
+}
+
+.split-section-left {
+  flex: 1;
+  background-color: $theme-accent-one;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.split-section-right {
+  flex: 1;
+  background-color: $theme-accent-two;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.action-card {
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 20%;
+  padding: 40px;
+  margin-top: 30px;
+}
+
+.card-title {
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.button-group {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+
+.information-button {
+  font-size: 16px;
+  font-weight: 600;
+  padding: 18px 40px;
+  color: #007bff;
+  border: 2px solid #007bff;
+  border-radius: 6px;
+  background-color: #ffffff;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.information-button:hover {
+  background-color: #007bff;
+  color: #ffffff;
+}
+
+.information-button:focus {
+  outline: 2px solid #003f7f;
+}
+
+// header menu style
+a.block-menu-item{
+  min-width: 150px;
+  border-right: solid 1px $theme-gray-six;
+  border-radius: 0 !important;
 }

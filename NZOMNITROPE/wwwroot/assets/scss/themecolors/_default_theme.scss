@@ -3,7 +3,7 @@
 $font-family-text: 'ForwardText', sans-serif;
 $font-family-head: 'ForwardHead', sans-serif;
 
-$theme-accent-one: #01206A; 
+$theme-accent-one: #00c0f3; 
 $theme-accent-two: #006bb1; 
 $theme-accent-three: #5bb2d9; 
 $theme-accent-four: #a8d6ef;
@@ -17,10 +17,10 @@ $theme-gray-six: #898885;
 $theme-gray-seven: #5C5B59;
 $theme-gray-eight: #2E2D2C;
 
-$theme-blue-one: #0A2742;
-$theme-blue-two: #031525;
-$theme-blue-three: #567A91;
-$theme-blue-four: #A2C4D5;
+$theme-blue-one: #08312A;
+$theme-blue-two: #051D19;
+$theme-blue-three: #6B8375;
+$theme-blue-four: #B6CDBF;
 
 $theme-success-one: #1EAD1B;
 $theme-success-two: #0C490C;
@@ -44,18 +44,18 @@ $theme-yellow-yellow: #FFE667;
 
 $mat-primary: (
   100: white,
-  500: $theme-accent-one,
+  500: $theme-accent-two,
   700: $theme-accent-two,
   contrast: (
     100: white,
-    500: $theme-web-black,
-    700: $theme-web-black,
+    500: white,
+    700: white,
   ),
 );
 $mat-secondary: (
   100: white,
-  500: $theme-blue-one,
-  700: $theme-blue-two,
+  500: $theme-accent-one,
+  700: $theme-accent-one,
   contrast: (
     100: white,
     500: white,
@@ -146,11 +146,11 @@ $darkbluetheme: mat.define-dark-theme(
 .horizontal-navbar .parentBox.pactive > a,
 .horizontal-navbar .parentBox.pactive > a:hover,
 .horizontal-navbar .parentBox.pactive:hover > a {
-  background-color: mat.get-color-from-palette($theme-primary, 500) !important;
+  background-color: #E9F4FE !important;
 }
 
 .activeMenu {
-  background-color: mat.get-color-from-palette($theme-primary, 500) !important;
+  background-color: #E9F4FE !important;
 }
 
 outline button border
