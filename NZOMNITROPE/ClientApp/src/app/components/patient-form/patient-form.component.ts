@@ -7,6 +7,7 @@ import { SelectFormInputElement } from 'src/app/components/dynamic-form/models/f
 import { TextFormInputElement } from 'src/app/components/dynamic-form/models/form-elements/text-form-input-element.model';
 import { TitleFormElement } from 'src/app/components/dynamic-form/models/form-elements/title-form-element.model';
 import { DateFormInputElement } from '../dynamic-form/models/form-elements/date-form-input-element.model';
+import { ValidateMobile } from 'src/app/utils/validators/mobile.validator';
 
 @Component({
   selector: 'app-patient-form',
@@ -64,7 +65,7 @@ export class PatientFormComponent implements OnInit {
         label: 'Mobile Phone',
         validation: {
           required: true,
-          // pattern: /^\d{10}$/, // Example: 10-digit number
+          custom: [ValidateMobile]
         },
       }),
       new DateFormInputElement({
