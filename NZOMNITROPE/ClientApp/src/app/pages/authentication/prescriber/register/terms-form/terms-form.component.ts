@@ -17,7 +17,7 @@ import { TermsOfUseComponent } from 'src/app/components/terms-of-use/terms-of-us
   templateUrl: './terms-form.component.html',
   styleUrl: './terms-form.component.scss'
 })
-export class TermsFormComponent implements AfterViewInit {
+export class TermsFormComponent{
   @Output()
   formCreated = new EventEmitter<FormGroup>();
 
@@ -29,25 +29,25 @@ export class TermsFormComponent implements AfterViewInit {
     this.buildForm();
   }
 
-  ngAfterViewInit(): void {
-    setTimeout(() => {
-      document.getElementsByClassName("terms-of-use")[0].addEventListener("click", (ev) => {
-        ev.preventDefault();
-        ev.stopPropagation();
-        this._dialog.open(TermsOfUseComponent);
-      });
+  // ngAfterViewInit(): void {
+  //   setTimeout(() => {
+  //     document.getElementsByClassName("terms-of-use")[0].addEventListener("click", (ev) => {
+  //       ev.preventDefault();
+  //       ev.stopPropagation();
+  //       this._dialog.open(TermsOfUseComponent);
+  //     });
       
-      document.getElementsByClassName("privacy-policy")[0].addEventListener("click", (ev) => {
-        ev.preventDefault();
-        ev.stopPropagation();
-        this._dialog.open(LeavingSiteDialog, {
-          data: {
-            url: 'https://www.boehringer-ingelheim.com/au/data-privacy',
-          }
-        })
-      });
-    });
-  }
+  //     document.getElementsByClassName("privacy-policy")[0].addEventListener("click", (ev) => {
+  //       ev.preventDefault();
+  //       ev.stopPropagation();
+  //       this._dialog.open(LeavingSiteDialog, {
+  //         data: {
+  //           url: 'https://www.boehringer-ingelheim.com/au/data-privacy',
+  //         }
+  //       })
+  //     });
+  //   });
+  // }
 
   onFormCreated(form: FormGroup): void {
     this.formCreated.emit(form);

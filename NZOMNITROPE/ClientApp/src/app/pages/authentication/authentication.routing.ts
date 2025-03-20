@@ -12,6 +12,7 @@ import { AppSideRegisterComponent } from './side-register/side-register.componen
 import { AppSideTwoStepsComponent } from './side-two-steps/side-two-steps.component';
 import { routeNames } from 'src/app/utils/routes';
 import { AuthenticationComponent } from './authentication.component';
+import { PatientRegistrationComponent } from './patient-registration/patient-registration/patient-registration.component';
 
 export const AuthenticationRoutes: Routes = [
   {
@@ -57,6 +58,10 @@ export const AuthenticationRoutes: Routes = [
       {
         path: 'side-two-steps',
         component: AppSideTwoStepsComponent,
+      },
+      {
+        path: 'register',
+        component: PatientRegistrationComponent
       },
       {
         path: routeNames.prescriber,

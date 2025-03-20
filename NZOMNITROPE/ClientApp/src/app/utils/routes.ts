@@ -28,6 +28,7 @@ export const routeLinks = {
     account: {
       forgotPassword: `/${routeNames.authentication}/${routeNames.account}/${routeNames.forgotPassword}`,
       resetPassword: `/${routeNames.authentication}/${routeNames.account}/${routeNames.resetPassword}`,
+      register: `/${routeNames.authentication}/${routeNames.account}/${routeNames.register}`,
     },
   },
   landing: `/${routeNames.landing}`,

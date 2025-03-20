@@ -11,8 +11,12 @@
         <mat-step [stepControl]="patientForm">
           <ng-template matStepLabel>Patient Details</ng-template>
           <app-patient-form (formCreated)="patientForm = $event"></app-patient-form>
-          <app-address title="Please provide a physical address for the delivery of your SurePal® Pen or consumables kit. You can choose to have your delivery sent to your home, work/office or local community pharmacy for collection."
-          [establishmentOnly]="false" [hiddenFields]="['name', 'phone', 'mobile', 'state']">
+          <div class="p-16 bg-light-secondary rounded m-y-20">
+            <h5 class="mat-subtitle-2 text-secondary align-items-center f-w-600">
+              Please provide a physical address for the delivery of your SurePal<sup>®</sup> Pen or consumables kit. You can choose to have your delivery sent to your home, work/office or local community pharmacy for collection.
+            </h5>
+          </div>
+          <app-address [establishmentOnly]="false" [hiddenFields]="['name', 'phone', 'mobile', 'state']">
             <div class="d-flex align-items-center justify-content-between">
               <button mat-stroked-button class="cancel-button" [routerLink]="[routeLinks.patients.dashboard]" type="button">Cancel</button>
               <button mat-flat-button color="primary" type="submit" (click)="onPatientFormNext()">Next</button>

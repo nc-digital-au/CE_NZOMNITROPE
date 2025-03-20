@@ -68,13 +68,13 @@ export class PatientFormComponent implements OnInit {
           custom: [ValidateMobile]
         },
       }),
-      new DateFormInputElement({
-        name: 'dateOfBirth',
-        label: 'Date Of Birth',
-        validation: {
-          required: true,
-        },
-      }),
+      // new DateFormInputElement({
+      //   name: 'dateOfBirth',
+      //   label: 'Date Of Birth',
+      //   validation: {
+      //     required: true,
+      //   },
+      // }),
       new TextFormInputElement({
         name: 'nhiNumber',
         label: 'NHI Number (if known)',

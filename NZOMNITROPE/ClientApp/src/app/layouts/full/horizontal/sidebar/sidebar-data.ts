@@ -31,19 +31,19 @@ export const navItems: NavItem[] = [
         route: 'resources/how-to-inject',
       },
       {
-        displayName: 'PDF Guide 1',
+        displayName: 'SurePal 5mg How to use guide',
         iconName: '',
         route: 'https://rss.medsinfo.com.au/by/pi.cfm?product=bypofevc',
         target: '_blank',
       },
       {
-        displayName: 'PDF Guide 2',
+        displayName: 'SurePal 10mg How to use guide',
         iconName: '',
         route: 'https://rss.medsinfo.com.au/by/pi.cfm?product=bypofevc',
         target: '_blank',
       },
       {
-        displayName: 'PDF Guide 3',
+        displayName: 'SurePal 15mg How to use guide',
         iconName: '',
         route: 'https://rss.medsinfo.com.au/by/pi.cfm?product=bypofevc',
         target: '_blank',

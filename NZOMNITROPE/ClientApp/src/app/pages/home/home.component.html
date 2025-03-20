@@ -16,7 +16,7 @@
   <!-- Device and Training Section -->
   <div class="grid-item action-buttons">
     <button class="custom-button" (click)="onOrderDeviceClick()">
-      Order SurePal® Device and Consumables
+      Order SurePal<sup>®</sup> Device and Consumables
     </button>
     <button class="custom-button" (click)="onScheduleTrainingClick()">
       Schedule an Injection Training Session
@@ -26,7 +26,7 @@
 <!-- Video Section -->
 <div class="grid-item video-box">
   <h1>Watch: How to Inject Video</h1>
-  <button class="primary-button">
+  <button class="primary-button" (click)="onWatchVideoClick()">
     <mat-icon>play_arrow</mat-icon>
   </button>
 </div>
@@ -34,9 +34,9 @@
 <!-- Resources Section -->
 <div class="grid-item resources-box">
   <ul class="resource-list">
-    <li class="resource-item">SurePal 5mg How to use guide</li>
-    <li class="resource-item">SurePal 10mg How to use guide</li>
-    <li class="resource-item">SurePal 15mg How to use guide</li>
+    <li class="resource-item"><a href="../../../assets/files/Omnitrope5.pdf" target="_blank">SurePal 5mg How to use guide</a></li>
+    <li class="resource-item"><a href="../../../assets/files/Omnitrope10.pdf" target="_blank">SurePal 10mg How to use guide</a></li>
+    <li class="resource-item"><a href="../../../assets/files/Omnitrope15.pdf" target="_blank">SurePal 15mg How to use guide</a></li>
     <li class="resource-item">
       <a [href]="CONTACT_VALUES.CMI_LINK" target="_blank" rel="noopener noreferrer">
           Consumer Medicine Information
