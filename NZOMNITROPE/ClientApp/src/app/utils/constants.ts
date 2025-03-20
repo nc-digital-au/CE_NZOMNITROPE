@@ -8,6 +8,9 @@ export const CONTACT_VALUES = {
     CMI_LINK: 'https://www.medsafe.govt.nz/Consumers/CMI/o/omnitrope.pdf',
     TERMS_OF_USE: 'https://www.sandoz.com.au/terms-use-and-conditions/',
     PRIVACY_POLICY: 'https://www.sandoz.com.au/Website-privacy-policy/',
+    surePal5mgGuide: 'https://rss.medsinfo.com.au/by/pi.cfm?product=bypofevc',
+    surePal10mgGuide: 'https://rss.medsinfo.com.au/by/pi.cfm?product=bypofevc',
+    surePal15mgGuide: 'https://rss.medsinfo.com.au/by/pi.cfm?product=bypofevc',
 }
 
 export const UI_DEFAULTS = {

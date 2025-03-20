@@ -21,6 +21,9 @@ import { Loader } from '@googlemaps/js-api-loader';
 import { UserSessionComponent } from './user-session/user-session.component';
 import { CsrfHeaderInterceptor } from './interceptors/csrf-header.interceptor';
 import { ErrorInterceptor } from './interceptors/error.interceptor';
+import { registerLicense } from '@syncfusion/ej2-base';
+
+registerLicense('Ngo9BigBOggjHTQxAR8/V1NMaF5cXmBCf1FpRmJGdld5fUVHYVZUTXxaS00DNHVRdkdmWX5cdnRUQmFZWEBwXEE=');
 
 @NgModule({
   declarations: [

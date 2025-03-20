@@ -1,0 +1,19 @@
+@if (!timeFormElement.hidden) {
+    <mat-form-field appearance="outline" class="w-100" [formGroup]="form">
+      <mat-label>Pick a Time</mat-label>
+  
+      <ejs-timepicker id="timepicker" width="100%" formControlName="{{ timeFormElement.name }}" 
+          format="hh:mm a" placeholder="Select Time">
+      </ejs-timepicker>
+  
+      <mat-error>
+        {{ setErrorMessage(form, timeFormElement.name, timeFormElement.errorLabel) }}
+      </mat-error>
+    </mat-form-field>
+  }
+  @else {
+    <ng-container [formGroup]="form">
+      <input type="hidden" [formControlName]="timeFormElement.name" />
+    </ng-container>
+  }
+  

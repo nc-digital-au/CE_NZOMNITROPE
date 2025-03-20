@@ -8,6 +8,11 @@ import { SvgIconComponent } from 'angular-svg-icon';
 import { PatientFormComponent } from 'src/app/components/patient-form/patient-form.component';
 import { routeLinks } from 'src/app/utils/routes';
 import { GuardianFormComponent } from 'src/app/components/guardian-form/guardian-form.component';
+import { DynamicFormComponent } from 'src/app/components/dynamic-form/dynamic-form.component';
+import { DynamicForm } from 'src/app/components/dynamic-form/models/dynamic-form.model';
+import { TitleFormElement } from 'src/app/components/dynamic-form/models/form-elements/title-form-element.model';
+import { DateFormInputElement } from 'src/app/components/dynamic-form/models/form-elements/date-form-input-element.model';
+import { TimeFormInputElement } from 'src/app/components/dynamic-form/models/form-elements/time-form-element.model';
 
 @Component({
   selector: 'app-schedule-injection-training',
@@ -19,16 +24,18 @@ import { GuardianFormComponent } from 'src/app/components/guardian-form/guardian
     MaterialModule,
     RouterLink,
     SvgIconComponent,
-    ReactiveFormsModule,
     GuardianFormComponent,
-    PatientFormComponent
+    PatientFormComponent,
+    DynamicFormComponent,
+    ReactiveFormsModule,
   ],
 })
 export class ScheduleInjectionTrainingComponent {
   routeLinks = routeLinks;
   submitting = false;
   enrolmentSuccess = false;
-  injectionTrainingForm: FormGroup;
+  injectionTrainingForm!: FormGroup;
+  injectionSessionFormDefinition!: DynamicForm;
 
   constructor(
     private readonly fb: FormBuilder,
@@ -36,10 +43,10 @@ export class ScheduleInjectionTrainingComponent {
   ) {}
 
   ngOnInit(): void {
-    // Initialize the FormGroup dynamically
+    this.buildForm();
     this.injectionTrainingForm = this.fb.group({
       patientDetails: this.buildPatientDetailsForm(),
-      injectionSession: this.buildInjectionSessionForm(),
+      injectionSession: this.fb.group({}), // Dynamic form will be set here
     });
   }
 
@@ -53,12 +60,26 @@ export class ScheduleInjectionTrainingComponent {
     });
   }
 
-  private buildInjectionSessionForm(): FormGroup {
-    return this.fb.group({
-      sessionDate: ['', Validators.required],
-      sessionTime: ['', Validators.required],
-      confirmDeviceReceived: [false, Validators.requiredTrue],
-    });
+  private buildForm(): void {
+    this.injectionSessionFormDefinition = new DynamicForm([
+      new TitleFormElement({
+        label: 'Injection Training Session',
+      }),
+      new DateFormInputElement({
+        name: 'sessionDate',
+        label: 'Date of Training',
+        validation: {
+          required: true,
+        },
+      }),
+      new TimeFormInputElement({
+        name: 'sessionTime',
+        label: 'Session Time',
+        validation: {
+          required: true,
+        },
+      }),
+    ]);
   }
 
   onSubmit(): void {
