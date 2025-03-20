@@ -582,9 +582,13 @@ tr.expanded-row{
   outline: 2px solid #003f7f;
 }
 
-// header menu style
 a.block-menu-item{
   min-width: 150px;
   border-right: solid 1px $theme-gray-six;
   border-radius: 0 !important;
+  text-align: center !important; 
+}
+
+.ddmenu {
+  min-width: 225px !important;
 }

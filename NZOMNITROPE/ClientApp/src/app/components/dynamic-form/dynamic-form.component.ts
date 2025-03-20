@@ -40,7 +40,9 @@ export class DynamicFormComponent implements OnChanges {
   constructor(
     private _fb: FormBuilder,
     private _cd: ChangeDetectorRef,
-  ) { }
+  ) { 
+    this.form = new FormGroup({});
+  }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['formDefinition']) {

@@ -33,8 +33,9 @@ export const navItems: NavItem[] = [
       {
         displayName: 'SurePal 5mg How to use guide',
         iconName: '',
-        route: 'https://rss.medsinfo.com.au/by/pi.cfm?product=bypofevc',
+        route: '/assets/pdfs/Omnitrope5.pdf',
         target: '_blank',
+        isPdf: true, 
       },
       {
         displayName: 'SurePal 10mg How to use guide',

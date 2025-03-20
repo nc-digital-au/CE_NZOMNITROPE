@@ -14,4 +14,5 @@ export interface NavItem {
     route?: string;
     children?: NavItem[];
     ddType?: string;
+    isPdf?: boolean;
 }

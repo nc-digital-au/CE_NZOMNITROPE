@@ -1,0 +1,48 @@
+/* ✅ Match the Material Date Picker styling */
+.custom-timepicker-container {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 16px;
+  }
+  
+  .custom-timepicker-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: rgba(0, 0, 0, 0.87);
+    margin-bottom: 4px;
+  }
+  
+  .required {
+    color: red;
+  }
+  
+  .custom-timepicker-wrapper {
+    position: relative;
+    width: 100%;
+  }
+  
+  ::ng-deep .custom-timepicker {
+    width: 100%;
+  }
+  
+  /* ✅ Border and padding to match Material */
+  ::ng-deep .e-input-group {
+    border: 1px solid rgba(0, 0, 0, 0.42);
+    border-radius: 4px;
+    padding: 12px;
+    font-size: 16px;
+    width: 100%;
+  }
+  
+  ::ng-deep .e-input-group input {
+    font-size: 16px;
+    padding: 10px;
+  }
+
+  /* ✅ Error message styling */
+  .custom-timepicker-error {
+    color: red;
+    font-size: 12px;
+    margin-top: 4px;
+  }
+  

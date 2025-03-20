@@ -1,19 +1,24 @@
 @if (!timeFormElement.hidden) {
-    <mat-form-field appearance="outline" class="w-100" [formGroup]="form">
-      <mat-label>Pick a Time</mat-label>
-  
-      <ejs-timepicker id="timepicker" width="100%" formControlName="{{ timeFormElement.name }}" 
-          format="hh:mm a" placeholder="Select Time">
+  <div [formGroup]="form" class="custom-timepicker-container">
+
+      <ejs-timepicker id="timepicker"
+          width="100%" 
+          [formControlName]="timeFormElement.name" 
+          format="hh:mm a"
+          placeholder="Select Time"
+          cssClass="custom-timepicker"
+          [step]="45"  
+          [min]="startTimeVariable"
+          >
       </ejs-timepicker>
-  
-      <mat-error>
+
+      <mat-error *ngIf="form.get(timeFormElement.name)?.invalid && form.get(timeFormElement.name)?.touched">
         {{ setErrorMessage(form, timeFormElement.name, timeFormElement.errorLabel) }}
       </mat-error>
-    </mat-form-field>
-  }
-  @else {
-    <ng-container [formGroup]="form">
+  </div>
+}
+@else {
+  <ng-container [formGroup]="form">
       <input type="hidden" [formControlName]="timeFormElement.name" />
-    </ng-container>
-  }
-  
+  </ng-container>
+}

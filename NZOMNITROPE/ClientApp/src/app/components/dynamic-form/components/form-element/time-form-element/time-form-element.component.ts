@@ -25,9 +25,11 @@ import { MaterialModule } from 'src/app/material.module';
   styleUrl: './time-form-element.component.scss'
 })
 export class TimeFormElementComponent extends DynamicFormComponentBase {
+  startTimeVariable: Date = new Date();
   @Input()
   set formElement(value: FormElement) {
     this.timeFormElement = value as any;
+    this.startTimeVariable.setHours(9, 0, 0);
   }
 
   @Input() form: FormGroup;
