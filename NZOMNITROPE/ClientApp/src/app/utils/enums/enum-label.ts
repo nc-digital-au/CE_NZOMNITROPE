@@ -9,6 +9,7 @@ export const TreatmentStatusLabel: { [key in TreatmentStatus]: string } = {
   [TreatmentStatus.OnContinuedSupply]: "Re-approved",
   [TreatmentStatus.Completed]: "Completed",
   [TreatmentStatus.TransferRequested]: "Transfer Requested",
+  [TreatmentStatus.Grandfathered]: "Grandfathered",
 };
 
 export const GenderLabel: { [key in Gender]: string } = {
@@ -32,6 +33,7 @@ export const TitleLabel: { [key in Title]: string } = {
   [Title.Prof]: "Prof",
   [Title.Unknown]: "Uknown",
   [Title.Mx]: "Mx",
+  [Title.Miss]: "Miss",
 };
 
 export const ProfessionLabel: { [key in Profession]: string } = {
@@ -63,6 +65,8 @@ export const SpecialtyLabel: { [key in Specialty]: string } = {
   [Specialty.Pharmacist]: "Pharmacist",
   [Specialty.Other]: "Other",
   [Specialty.Unknown]: "Unknown",
+  [Specialty.Haematologist]: "Haematologist",
+  [Specialty.Oncologist]: "Onocologist",
 };
 
 export const AddressStateLabel: { [key in AddressState]: string } = {

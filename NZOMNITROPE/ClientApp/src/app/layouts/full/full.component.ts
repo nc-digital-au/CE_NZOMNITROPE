@@ -5,10 +5,7 @@ import { MatSidenav } from '@angular/material/sidenav';
 import { CoreService } from 'src/app/services/core.service';
 import { NavService } from '../../services/nav.service';
 import { NgScrollbarModule } from 'ngx-scrollbar';
-import {
-  AppSearchDialogComponent,
-  HeaderComponent,
-} from './vertical/header/header.component';
+import { HeaderComponent } from './vertical/header/header.component';
 import { AppHorizontalHeaderComponent } from './horizontal/header/header.component';
 import { AppHorizontalSidebarComponent } from './horizontal/sidebar/sidebar.component';
 import { SidebarComponent } from './vertical/sidebar/sidebar.component';
@@ -52,7 +49,6 @@ const BELOWMONITOR = 'screen and (max-width: 1023px)';
 })
 export class FullComponent implements OnInit {
 
-   // BFF
    public username$ = this.auth.getUsername();
    public authenticated$ = this.auth.getIsAuthenticated();
    public anonymous$ = this.auth.getIsAnonymous();

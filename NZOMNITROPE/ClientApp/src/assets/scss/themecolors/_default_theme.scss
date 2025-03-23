@@ -1,8 +1,4 @@
 
-// font
-$font-family-text: 'ForwardText', sans-serif;
-$font-family-head: 'ForwardHead', sans-serif;
-
 $theme-accent-one: #00c0f3; 
 $theme-accent-two: #006bb1; 
 $theme-accent-three: #5bb2d9; 
@@ -121,7 +117,7 @@ $darkbluetheme: mat.define-dark-theme(
     ),
     typography:
       mat.define-typography-config(
-        $font-family: "Poppins",
+        $font-family: "Jost",
         $subtitle-2: mat.define-typography-level(14px, 14px, 400),
         $subtitle-1: mat.define-typography-level(21px, 26px, 500),
          $headline-6: mat.define-typography-level(18px, 26px, 500),

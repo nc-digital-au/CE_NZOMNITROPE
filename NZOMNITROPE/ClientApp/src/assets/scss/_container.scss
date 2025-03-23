@@ -75,6 +75,18 @@ html .mat-drawer-container {
   height: 100%;
 }
 
+.container {
+  max-width: $boxedWidth;
+  padding-left: 24px;
+  padding-right: 24px;
+  margin: 0 auto;
+  &.full-width {
+    display: flex;
+    align-items: center;
+    width: 100%;
+  }
+}
+
 .pageWrapper {
   padding:24px;
   margin: 0 auto;

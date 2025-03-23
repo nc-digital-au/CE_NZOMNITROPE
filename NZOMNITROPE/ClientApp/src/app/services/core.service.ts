@@ -23,12 +23,4 @@ export class CoreService {
 
   private options = defaults;
 
-  getLanguage() {
-    return this.options.language;
-  }
-
-  setLanguage(lang: string) {
-    this.options.language = lang;
-    this.notify$.next({ lang });
-  }
 }
