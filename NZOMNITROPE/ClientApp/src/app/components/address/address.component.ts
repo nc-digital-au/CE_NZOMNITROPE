@@ -65,11 +65,11 @@ export class AddressComponent implements OnInit {
 
     const stateOptions: SelectOption[] = [];
     const stateKeys = Object.keys(AddressState).filter(key => isNaN(Number(key)));
-    stateKeys.forEach((key, i) => {
+    stateKeys.forEach((key,i) => {
       stateOptions.push({
         label: key,
-        value: AddressState[key],
-      })
+        value: AddressState[i],
+      });
     });
 
     this.addressFormDefinition = new DynamicForm([
@@ -90,8 +90,7 @@ export class AddressComponent implements OnInit {
             validation: {
               maxLength: UI_DEFAULTS.TEXT_INPUT_LIMIT,
             },
-          }),
-          undefined,
+          })
         ],
       }),
       new TextFormInputElement({
@@ -193,7 +192,7 @@ export class AddressComponent implements OnInit {
           break;
 
         case "administrative_area_level_1": {
-          this.dynamicForm.setValue('state', AddressState[component.short_name]);
+          this.dynamicForm.setValue('state', AddressState[component.short_name as keyof typeof AddressState]);
           break;
         }
       }

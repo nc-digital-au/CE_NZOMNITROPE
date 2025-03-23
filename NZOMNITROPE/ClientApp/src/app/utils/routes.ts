@@ -1,3 +1,5 @@
+import { resource } from "@angular/core";
+
 export const routeNames = {
   default: 'home',
   authentication: 'authentication',
@@ -22,19 +24,15 @@ export const routeNames = {
 export const routeLinks = {
   authentication: {
     error: `/${routeNames.authentication}/${routeNames.error}`,
-    prescriber: {
-      register: `/${routeNames.authentication}/${routeNames.prescriber}/${routeNames.register}`,
-    },
-    account: {
-      forgotPassword: `/${routeNames.authentication}/${routeNames.account}/${routeNames.forgotPassword}`,
-      resetPassword: `/${routeNames.authentication}/${routeNames.account}/${routeNames.resetPassword}`,
-      register: `/${routeNames.authentication}/${routeNames.account}/${routeNames.register}`,
-    },
+    register: `/${routeNames.authentication}/${routeNames.register}`,
+    forgotPassword: `/${routeNames.authentication}/${routeNames.forgotPassword}`,
+    resetPassword: `/${routeNames.authentication}/${routeNames.resetPassword}`,
   },
   landing: `/${routeNames.landing}`,
-  patients: {
-    dashboard: `/${routeNames.patients}/${routeNames.dashboard}`,
-    enrol: `/${routeNames.patients}/${routeNames.enrol}`,
-    reapprove: `/${routeNames.patients}/${routeNames.reapprove}`,
+  home: `/${routeNames.home}`,
+  resources: {
+    howToInject: `/${routeNames.resources}/how-to-inject`,
   },
+  order: `/${routeNames.order}`,
+  schedule: `/${routeNames.schedule}`,
 };

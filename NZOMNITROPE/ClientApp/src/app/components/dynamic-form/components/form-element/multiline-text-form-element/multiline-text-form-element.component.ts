@@ -22,10 +22,22 @@ export class MultilineTextFormElementComponent extends DynamicFormComponentBase 
   @Input()
   set formElement(value: FormElement) {
     this.multilineTextFormElement = value as any;
-  }
+    
+    if (this.multilineTextFormElement.hidden) {
+      this.inputType = 'hidden';
+    }
+    if(this.multilineTextFormElement.placeholder !== undefined) {
+      this.placeholder = this.multilineTextFormElement.placeholder;
+    }
+    else{
+      this.multilineTextFormElement.placeholder = '';
+    }
+  }  
 
   @Input()
   form: FormGroup;
 
   multilineTextFormElement: MultilineTextFormInputElement;
+  inputType: string;
+  placeholder: string = '';
 }

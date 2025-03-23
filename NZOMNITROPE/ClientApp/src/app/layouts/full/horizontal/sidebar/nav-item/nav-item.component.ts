@@ -5,48 +5,36 @@ import {
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { NavService } from '../../../../../services/nav.service';
-import { MaterialModule } from 'src/app/material.module';
 import { TablerIconsModule } from 'angular-tabler-icons';
 import { CommonModule } from '@angular/common';
-import { NavItem } from '../../../vertical/sidebar/nav-item/nav-item';
-import { MatDialog } from '@angular/material/dialog';
-import { LeavingSiteDialog } from 'src/app/components/leaving-site/leaving-site.component';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
-  selector: 'app-horizontal-nav-item',
-  standalone: true,
-  imports: [MaterialModule, TablerIconsModule, CommonModule],
-  templateUrl: './nav-item.component.html',
+    selector: 'app-horizontal-nav-item',
+    standalone: true,
+    imports: [TablerIconsModule, CommonModule, MatIconModule],
+    templateUrl: './nav-item.component.html'
 })
 export class AppHorizontalNavItemComponent implements OnInit {
   @Input() depth: any;
-  @Input() item: NavItem;
+  @Input() item: any;
 
-  constructor(
-    public navService: NavService,
-    public router: Router,
-    private _dialog: MatDialog
-  ) {
+  constructor(public navService: NavService, public router: Router) {
     if (this.depth === undefined) {
       this.depth = 0;
     }
   }
 
-  ngOnInit() {}
-
-  onItemSelected(item: NavItem) {
-    if (!item.external) {
-      if (!item.children || !item.children.length) {
+  ngOnInit() { }
+  onItemSelected(item: any) {
+    if (!item.children || !item.children.length) {
+      if(item.isPdf) {
+        window
+          .open(item.route, '_blank');
+      } 
+      else {
         this.router.navigate([item.route]);
       }
-    } else if (item.target === '_blank') {
-      window.open(item.route, '_blank');
-    } else {
-      this._dialog.open(LeavingSiteDialog, {
-        data: {
-          url: item.route,
-        },
-      });
     }
   }
 }

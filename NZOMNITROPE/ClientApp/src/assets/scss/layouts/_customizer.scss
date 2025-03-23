@@ -1,6 +1,9 @@
-.fixed-customizer {
+@use "../variables" as *;
+
+html .customizer-fixed {
   position: fixed !important;
-  z-index: 9 !important;
+  top: $header-height !important;
+  bottom: unset;
 }
 
 .customizer-button-group {
@@ -33,14 +36,14 @@
         .theme-circle {
           .theme-icon {
             display: flex;
-            color: white;
+            color: $white;
           }
         }
       }
       .theme-circle {
         width: 25px;
         height: 25px;
-        border-radius: 100%;
+        border-radius: var(--mat-sys-corner-full);
         color: $white;
         display: flex;
         align-items: center;
@@ -71,23 +74,19 @@
   }
   .mat-button-toggle-appearance-standard {
     padding: 9px;
-    border: 0;
-    box-shadow: $cardshadow;
+    border: 1px solid var(--mat-sys-outline-variant) !important;
+    box-shadow: none;
     border-radius: $border-radius;
-    border-left: 0 !important;
-
     transition: all 0.1s ease-in 0s;
-
     &:hover {
       transform: scale(1.05);
     }
 
     &.mat-button-toggle-checked {
-      background-color: transparent;
-      color: $textPrimary;
+      background-color: var(--mat-sys-primary-fixed-dim);
       i-tabler.fill-icon {
-        color: $primary;
-        fill: $light-primary;
+        color: var(--mat-sys-primary);
+        fill: var(--mat-sys-on-primary);
       }
     }
   }
@@ -101,19 +100,4 @@
   &.mat-button-toggle-group-appearance-standard {
     border: 0 !important;
   }
-}
-
-.mat-expansion-panel-header.mat-expanded:focus, .mat-expansion-panel-header.mat-expanded:hover {
-  background: $theme-gray-three !important;
-  border-radius: 0;
-}
-
-
-.mat-stepper-horizontal{
-  background-color: $theme-blue-two;
-}
-
-/// forms
-label{
-  display: block;
 }

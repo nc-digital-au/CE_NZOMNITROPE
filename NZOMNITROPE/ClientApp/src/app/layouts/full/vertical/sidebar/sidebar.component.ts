@@ -1,35 +1,17 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-
-import { NavService } from '../../../../services/nav.service';
-import { NgScrollbarModule } from 'ngx-scrollbar';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { TablerIconsModule } from 'angular-tabler-icons';
 import { MaterialModule } from 'src/app/material.module';
-import { RouterModule } from '@angular/router';
-import { AppNavItemComponent } from './nav-item/nav-item.component';
-import { AuthenticationService } from 'src/app/services/authentication.service';
-
 
 @Component({
-  selector: 'app-sidebar', 
-  standalone: true,
-  imports: [
-    NgScrollbarModule,
-    TablerIconsModule,
-    MaterialModule,
-    RouterModule,
-    AppNavItemComponent, CommonModule
-  ],
+  selector: 'app-sidebar',
+  imports: [TablerIconsModule, MaterialModule],
   templateUrl: './sidebar.component.html',
 })
 export class SidebarComponent implements OnInit {
-  navopt = this.navService.showClass;
-  logoutUrl$ = this._auth.getLogoutUrl();
-
-  constructor(
-    public navService: NavService,
-    private _auth: AuthenticationService,
-  ) {}
+  constructor() {}
+  @Input() showToggle = true;
+  @Output() toggleMobileNav = new EventEmitter<void>();
+  @Output() toggleCollapsed = new EventEmitter<void>();
 
   ngOnInit(): void {}
 }

@@ -1,3 +1,5 @@
+@use "variables" as *;
+
 *,
 :after,
 :before {
@@ -5,7 +7,7 @@
 }
 
 body {
-  font-family: $font-family-text;
+  font-family: $font-family;
   color: $textPrimary;
   font-size: 14px;
   line-height: 1.334rem;
@@ -13,7 +15,7 @@ body {
   background-color: $white;
 
   h1, h2, h3 {
-    font-family: $font-family-head;
+    font-family: $font-family;
     line-height: normal;
   }
 
@@ -603,4 +605,20 @@ a.block-menu-item{
 
 .ddmenu {
   min-width: 225px !important;
+}
+
+.bg-primary,
+.topbar {
+  background: $white !important;
+}
+
+.topbar .mat-mdc-icon-button,
+.topbar .mat-mdc-button {
+  color: $white !important;
+}
+
+.horizontal-navbar .parentBox.pactive > a,
+.horizontal-navbar .parentBox.pactive > a:hover,
+.horizontal-navbar .parentBox.pactive:hover > a {
+  background-color: #E9F4FE !important;
 }

@@ -1,33 +1,31 @@
 import { Component } from '@angular/core';
 import { CoreService } from 'src/app/services/core.service';
-import { RouterModule } from '@angular/router';
+import { AppSettings } from 'src/app/config';
 import { CommonModule } from '@angular/common';
-import { CONTACT_VALUES } from 'src/app/utils/constants';
+import { RouterOutlet } from '@angular/router';
 import { LeavingSiteComponent } from 'src/app/components/leaving-site/leaving-site.component';
 import { HeaderComponent } from '../full/vertical/header/header.component';
-import { MatSidenav } from '@angular/material/sidenav';
 import { AppHorizontalHeaderComponent } from '../full/horizontal/header/header.component';
-import { ContactUsComponent } from 'src/app/components/contact-us/contact-us.component';
+import { MatSidenav } from '@angular/material/sidenav';
 import { MatDialog } from '@angular/material/dialog';
+import { ContactUsComponent } from 'src/app/components/contact-us/contact-us.component';
+import { CONTACT_VALUES } from 'src/app/utils/constants';
 
 @Component({
   selector: 'app-blank',
-  standalone: true,
+  templateUrl: './blank.component.html',
+  styleUrls: [],
   imports: [
-    RouterModule, 
+    RouterOutlet, 
     CommonModule,
     LeavingSiteComponent,
     HeaderComponent,
-    AppHorizontalHeaderComponent,
+    AppHorizontalHeaderComponent
   ],
-  templateUrl: './blank.component.html',
-  styleUrls: [],
 })
-
 export class BlankComponent {
   private htmlElement!: HTMLHtmlElement;
-
-  contactValue = CONTACT_VALUES; 
+  contactValue = CONTACT_VALUES;
   options = this.settings.getOptions();
   isContentWidthFixed: boolean;
   isCollapsedWidthFixed: boolean;
@@ -35,12 +33,9 @@ export class BlankComponent {
 
   public sidenav: MatSidenav;
 
-  constructor(
-    private settings: CoreService,
-    private dialog: MatDialog,
-    
-  ) {
+  constructor(private settings: CoreService, private dialog: MatDialog) {
     this.htmlElement = document.querySelector('html')!;
+    // Initialize project theme with options
   }
 
   openContactUs(){

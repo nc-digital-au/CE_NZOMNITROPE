@@ -4,7 +4,6 @@ import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MaterialModule } from 'src/app/material.module';
 import { RouterLink } from '@angular/router';
-import { SvgIconComponent } from 'angular-svg-icon';
 import { PatientFormComponent } from 'src/app/components/patient-form/patient-form.component';
 import { routeLinks } from 'src/app/utils/routes';
 import { GuardianFormComponent } from 'src/app/components/guardian-form/guardian-form.component';
@@ -12,7 +11,11 @@ import { DynamicFormComponent } from 'src/app/components/dynamic-form/dynamic-fo
 import { DynamicForm } from 'src/app/components/dynamic-form/models/dynamic-form.model';
 import { TitleFormElement } from 'src/app/components/dynamic-form/models/form-elements/title-form-element.model';
 import { DateFormInputElement } from 'src/app/components/dynamic-form/models/form-elements/date-form-input-element.model';
-import { TimeFormInputElement } from 'src/app/components/dynamic-form/models/form-elements/time-form-element.model';
+import { MatTimepickerModule } from '@angular/material/timepicker';
+import { MatFormField } from '@angular/material/form-field';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE, provideNativeDateAdapter } from '@angular/material/core';
+import { CustomDateAdaptor } from 'src/app/utils/helpers/custom-date-adaptor';
+import { DATE_FORMAT } from 'src/app/utils/constants';
 
 @Component({
   selector: 'app-schedule-injection-training',
@@ -23,12 +26,13 @@ import { TimeFormInputElement } from 'src/app/components/dynamic-form/models/for
     CommonModule,
     MaterialModule,
     RouterLink,
-    SvgIconComponent,
     GuardianFormComponent,
     PatientFormComponent,
     DynamicFormComponent,
     ReactiveFormsModule,
-  ],
+    MatFormField,
+    MatTimepickerModule,
+  ]
 })
 export class ScheduleInjectionTrainingComponent {
   routeLinks = routeLinks;
@@ -68,13 +72,6 @@ export class ScheduleInjectionTrainingComponent {
       new DateFormInputElement({
         name: 'sessionDate',
         label: 'Date of Training',
-        validation: {
-          required: true,
-        },
-      }),
-      new TimeFormInputElement({
-        name: 'sessionTime',
-        label: 'Session Time',
         validation: {
           required: true,
         },

@@ -7,10 +7,10 @@ import { FormElement } from './models/form-elements/form-element.model';
 import { GroupFormElement } from './models/form-elements/group-form-element.model';
 import { ageValidator } from 'src/app/utils/validators/age.validator';
 import { oneRequired } from 'src/app/utils/validators/one-required.validator';
-import { requiredLengthValidator } from 'src/app/utils/validators/required-length.validator';
-import { CheckboxFormInputElement } from './models/form-elements/checkbox-form-input-element.model';
 import { ValidatePhone } from 'src/app/utils/validators/phone.validator';
 import { ValidateMobile } from 'src/app/utils/validators/mobile.validator';
+import { CheckboxFormInputElement } from './models/form-elements/checkbox-form-input-element.model';
+import { requiredLength } from 'src/app/utils/validators/required-length.validator';
 
 @Component({
   selector: 'app-dynamic-form',
@@ -40,9 +40,7 @@ export class DynamicFormComponent implements OnChanges {
   constructor(
     private _fb: FormBuilder,
     private _cd: ChangeDetectorRef,
-  ) { 
-    this.form = new FormGroup({});
-  }
+  ) { }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['formDefinition']) {
@@ -80,28 +78,28 @@ export class DynamicFormComponent implements OnChanges {
               validations.push(Validators.required);
             }
           }
-          if ('maxLength' in formElement.validation) {
+          if (formElement.validation?.maxLength !== undefined) {
             validations.push(Validators.maxLength(+formElement.validation.maxLength));
           }
-          if ('minLength' in formElement.validation) {
+          if (formElement.validation?.minLength !== undefined) {
             validations.push(Validators.minLength(+formElement.validation.minLength));
           }
-          if ('requiredLength' in formElement.validation) {
-            validations.push(requiredLengthValidator(+formElement.validation.requiredLength));
+          if (formElement.validation?.requiredLength !== undefined) {
+            validations.push(requiredLength(+formElement.validation.requiredLength));
           }
-          if ('age' in formElement.validation) {
+          if (formElement.validation?.age !== undefined) {
             validations.push(ageValidator(+formElement.validation.age));
           }
-          if ('numbersOnly' in formElement.validation) {
+          if (formElement.validation?.numbersOnly !== undefined) {
             validations.push(Validators.pattern('^[0-9]*$'));
           }
-          if ('email' in formElement.validation) {
+          if (formElement.validation?.email !== undefined) {
             validations.push(Validators.email);
           }
-          if ('phone' in formElement.validation) {
+          if (formElement.validation?.phone !== undefined) {
             validations.push(ValidatePhone);
           }
-          if ('mobile' in formElement.validation) {
+          if (formElement.validation?.mobile !== undefined) {
             validations.push(ValidateMobile);
           }
 

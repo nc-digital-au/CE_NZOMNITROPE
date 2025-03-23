@@ -1,4 +1,4 @@
-@import '../../../assets/scss/variables';
+@use 'src/assets/scss/variables' as *;
 
 .blank-layout-container {
   display: flex;

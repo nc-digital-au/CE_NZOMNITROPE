@@ -1,45 +1,45 @@
 <div class="blank-layout-container justify-content-center">
-  <div class="main-panel">
-    <h1 class="omni-logo">
-      Welcome to
-      <span class="omni-pal">
-        <span class="omni red">Omni</span>
-        <span class="pal blue">Pal</span>
-      </span>
-      Patient Support Program
-    </h1>        
-    <div class="grid-container">
-      <div class="grid-box first-box">
-        <p>If you are returning, please re-enter your details to login.</p>
-        <a mat-flat-button class="login-button" href="/bff/login">LOGIN</a>
-        <div class="forgot-password">
-          <span>Forgot your password?</span>
-          <a [routerLink]="[routeLinks.authentication.account.forgotPassword]" class="text-decoration-none f-w-500 f-s-14">
-            Click here
-          </a>
+    <div class="main-panel">
+      <h1 class="omni-logo">
+        Welcome to
+        <span class="omni-pal">
+          <span class="omni red">Omni</span>
+          <span class="pal blue">Pal</span>
+        </span>
+        Patient Support Program
+      </h1>        
+      <div class="grid-container">
+        <div class="grid-box first-box">
+          <p>If you are returning, please re-enter your details to login.</p>
+          <a mat-flat-button class="login-button" href="/bff/login">LOGIN</a>
+          <div class="forgot-password">
+            <span>Forgot your password?</span>
+            <a [routerLink]="[routeLinks.authentication.forgotPassword]" class="text-decoration-none f-w-500 f-s-14">
+              Click here
+            </a>
+          </div>
         </div>
-      </div>
-      <div class="grid-box">
-        <p>
-          This site is intended for an audience in New Zealand. Access to this site is subject to the following 
-          <!-- <app-leaving-site [linkUrl]="contactValues.TERMS_OF_USE" linkLocation="Terms of Use"></app-leaving-site> -->
-          <a [href]="contactValues.TERMS_OF_USE" target="_blank" rel="noopener noreferrer">Terms of Use</a>, and by registering for access to this site, 
-          you agree to be bound by its 
-          <!-- <app-leaving-site [linkUrl]="contactValues.TERMS_OF_USE" linkLocation="Terms of Use"></app-leaving-site> -->
-          <a [href]="contactValues.TERMS_OF_USE" target="_blank" rel="noopener noreferrer">Terms of Use</a>.
-        </p>               
-      </div>
-      <div class="grid-box">
-        <p>
-          If you have any questions about the Program or need help registering, please contact the Program Administrator on {{ contactValues.PROGRAM_PHONE }}.
-        </p>        
-      </div>
-      <div class="grid-box last-box">
-        <p>If you are new to the OmniPal Program Website, please register.</p>
-        <button mat-flat-button class="register-button m-t-6" [routerLink]="[routeLinks.authentication.prescriber.register]">
-          REGISTER
-        </button>        
+        <div class="grid-box">
+          <p>
+            This site is intended for an audience in New Zealand. Access to this site is subject to the following 
+            <!-- <app-leaving-site [linkUrl]="contactValues.TERMS_OF_USE" linkLocation="Terms of Use"></app-leaving-site> -->
+            <a [href]="contactValues.TERMS_OF_USE" target="_blank" rel="noopener noreferrer">Terms of Use</a>, and by registering for access to this site, 
+            you agree to be bound by its 
+            <!-- <app-leaving-site [linkUrl]="contactValues.TERMS_OF_USE" linkLocation="Terms of Use"></app-leaving-site> -->
+            <a [href]="contactValues.TERMS_OF_USE" target="_blank" rel="noopener noreferrer">Terms of Use</a>.
+          </p>               
+        </div>
+        <div class="grid-box">
+          <p>
+            If you have any questions about the Program or need help registering, please contact the Program Administrator on {{ contactValues.PROGRAM_PHONE }}.
+          </p>        
+        </div>
+        <div class="grid-box last-box">
+          <p>If you are new to the OmniPal Program Website, please register.</p>
+          <button mat-flat-button class="register-button m-t-6" [routerLink]="[routeLinks.authentication.register]">
+            REGISTER
+          </button>        
+        </div>
       </div>
     </div>
   </div>
-</div>

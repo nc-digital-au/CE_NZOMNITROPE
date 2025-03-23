@@ -1,3 +1,5 @@
+@use "../variables" as *;
+
 .blank-layout-container {
   height: 100vh;
   display: flex;
@@ -63,7 +65,7 @@
     content: "";
     position: absolute;
     left: 0;
-    width: 180px;
+    width: 100px;
     top: 50%;
     height: 1px;
     background: $borderColor;
@@ -72,7 +74,7 @@
     content: "";
     position: absolute;
     right: 0;
-    width: 180px;
+    width: 100px;
     top: 50%;
     height: 1px;
     background: $borderColor;

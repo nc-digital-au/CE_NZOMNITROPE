@@ -1,5 +1,5 @@
 @for (formElement of groupFormElement.children; track formElement) {
-  <app-form-element [formElement]="formElement" [form]="form" [formClass]="formClass"></app-form-element>
+  <app-form-element [formElement]="formElement" [form]="form" [tempForm]="tempForm" [formClass]="formClass"></app-form-element>
 }
 @if (groupFormElement.options) {
   @if (groupFormElement.options.requireAtLeastOne && tempForm.submitted && form.errors && form.errors['oneRequired']) {

@@ -1,11 +1,9 @@
 import { Component, Input } from '@angular/core';
-import { SvgIconComponent } from 'angular-svg-icon';
 
 @Component({
   selector: 'app-inline-alert',
   standalone: true,
   imports: [
-    SvgIconComponent,
   ],
   templateUrl: './inline-alert.component.html',
   styleUrl: './inline-alert.component.scss'

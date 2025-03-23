@@ -14,13 +14,12 @@
         </div>
 
         <app-guardian-form></app-guardian-form>
-
         <app-dynamic-form [formDefinition]="injectionSessionFormDefinition"></app-dynamic-form>
 
         <p>NOTE: Please ensure that you have received your SurePal® device prior to the training session.</p>
 
         <div class="d-flex align-items-center justify-content-between m-t-20">
-          <button mat-stroked-button class="cancel-button" [routerLink]="[routeLinks.patients.dashboard]" type="button">
+          <button mat-stroked-button class="cancel-button" [routerLink]="[routeLinks.home]" type="button">
             Cancel
           </button>
           <button mat-flat-button color="primary" type="submit">Submit Training Request</button>
@@ -37,7 +36,6 @@
         </h4>
         <div class="p-16 bg-light-info rounded m-y-20 text-info">
           <div class="icon-block">
-            <svg-icon src="assets/images/svgs/information-mark-circle.svg" svgClass="icon-block-image"></svg-icon>
             <div class="icon-block-content" style="max-width: 100%;">
               Thank you, your injection training request has been submitted. The Program Administrator will contact you to confirm the date and time for your training session. Should you have any queries, please contact the Program Administrator on 0800 666 487.
             </div>

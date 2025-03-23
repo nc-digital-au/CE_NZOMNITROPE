@@ -18,7 +18,7 @@
           </div>
           <app-address [establishmentOnly]="false" [hiddenFields]="['name', 'phone', 'mobile', 'state']">
             <div class="d-flex align-items-center justify-content-between">
-              <button mat-stroked-button class="cancel-button" [routerLink]="[routeLinks.patients.dashboard]" type="button">Cancel</button>
+              <button mat-stroked-button class="cancel-button" [routerLink]="[routeLinks.home]" type="button">Cancel</button>
               <button mat-flat-button color="primary" type="submit" (click)="onPatientFormNext()">Next</button>
             </div>
         </app-address>
@@ -29,7 +29,7 @@
         <app-order-form></app-order-form>
             <div class="d-flex align-items-center justify-content-between">
               <div>
-                <button mat-stroked-button class="cancel-button" [routerLink]="[routeLinks.patients.dashboard]" type="button">Cancel</button>
+                <button mat-stroked-button class="cancel-button" [routerLink]="[routeLinks.home]" type="button">Cancel</button>
                 <button mat-flat-button color="accent" class="m-l-10" matStepperPrevious>Back</button>
               </div>
               <button mat-flat-button color="primary" type="submit" (click)="onFormSubmit()">Submit</button>
@@ -48,7 +48,6 @@
       </h4>
       <div class="p-16 bg-light-info rounded m-y-20 text-info">
         <div class="icon-block">
-          <svg-icon src="assets/images/svgs/information-mark-circle.svg" svgClass="icon-block-image"></svg-icon>
           <div class="icon-block-content" style="max-width: 100%;">
             Thank you, your order has been placed and will be delivered within 10 working days. Please note that if you have nominated to have your order delivered to your local community pharmacy, you will need to collect your order directly from there.
             Should you have any queries please contact the Program Administrator on 0800 666 487.            

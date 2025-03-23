@@ -5,8 +5,6 @@ import { StepperOrientation } from '@angular/cdk/stepper';
 import { Observable, finalize, map } from 'rxjs';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { CommonModule } from '@angular/common';
-import { SvgIconComponent } from 'angular-svg-icon';
-import { PrescriptionComponent } from '../prescription/prescription.component';
 import { AddressComponent } from "../../../components/address/address.component";
 import { PatientServiceProxy, RegisterPapPatientDto, RegistrationMethod } from 'src/app/services/service-proxies/service-proxies';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -17,6 +15,8 @@ import { Router, RouterLink } from '@angular/router';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { OrderFormComponent } from './order-form/order-form.component';
 import { PatientFormComponent } from 'src/app/components/patient-form/patient-form.component';
+import { MatFormField } from '@angular/material/form-field';
+import {MatTimepickerModule} from '@angular/material/timepicker';
 
 @Component({
   selector: 'app-order-surepal-device',
@@ -25,11 +25,9 @@ import { PatientFormComponent } from 'src/app/components/patient-form/patient-fo
     CommonModule,
     MaterialModule,
     RouterLink,
-    SvgIconComponent,
-    PrescriptionComponent,
     AddressComponent,
     PatientFormComponent,
-    OrderFormComponent
+    OrderFormComponent,
   ],
   templateUrl: './order-surepal-device.component.html',
   styleUrl: './order-surepal-device.component.scss'
@@ -49,18 +47,6 @@ export class OrderSurepalDeviceComponent {
   patientForm = this._fb.group({});
   orderForm = this._fb.group({});
 
-  get patientAge(): number {
-    if (this.patientForm && this.patientForm.controls['dateOfBirth']) {
-      const dateOfBirthControl = this.patientForm.controls['dateOfBirth'];
-      if (dateOfBirthControl.value) {
-        const dateOfBirth = dateOfBirthControl.value as Date;
-        const age = new Date().getFullYear() - dateOfBirth.getFullYear();
-        return age;
-      }
-    }
-    return 0;
-  }
-
   constructor(
     private readonly _fb: FormBuilder,
     private readonly _breakpointObserver: BreakpointObserver,
@@ -71,10 +57,6 @@ export class OrderSurepalDeviceComponent {
     this.stepperOrientation = this._breakpointObserver
       .observe('(min-width: 800px)')
       .pipe(map(({ matches }) => (matches ? 'horizontal' : 'vertical')));
-  }
-
-  onPrescriptionDownloaded(): void {
-    this._router.navigate([routeLinks.patients.dashboard]);
   }
 
   onPatientFormNext() {

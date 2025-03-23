@@ -5,7 +5,7 @@ export class DynamicForm implements IParentElement {
   children: FormElement[];
 
   constructor(
-    children?: FormElement[],
+    children: FormElement[]  = [],
   ) {
     this.children = children;
   }

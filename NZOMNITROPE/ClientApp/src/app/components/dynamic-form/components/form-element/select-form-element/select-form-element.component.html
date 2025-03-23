@@ -1,19 +1,12 @@
-@if (!selectFormElement.hidden) {
-  <mat-form-field appearance="outline" class="w-100" [formGroup]="form">
-    <mat-select [formControlName]="selectFormElement.name">
-      @for (option of selectFormElement.options; track option) {
-        <mat-option [value]="option.value">
-          {{ option.label }}
-        </mat-option>
-      }
-    </mat-select>
-    <mat-error>
-      {{ setErrorMessage(form, selectFormElement.name, selectFormElement.errorLabel) }}
-    </mat-error>
-  </mat-form-field>
-}
-@else {
-  <ng-container [formGroup]="form">
-    <input type="hidden" [formControlName]="selectFormElement.name" />
-  </ng-container>
-}
+<mat-form-field appearance="outline" class="w-100" [formGroup]="form">
+  <mat-select [formControlName]="selectFormElement.name">
+    @for (option of selectFormElement.options; track option) {
+      <mat-option [value]="option.value">
+        {{ option.label }}
+      </mat-option>
+    }
+  </mat-select>
+  <mat-error>
+    {{ setErrorMessage(form, selectFormElement.name, selectFormElement.label) }}
+  </mat-error>
+</mat-form-field>

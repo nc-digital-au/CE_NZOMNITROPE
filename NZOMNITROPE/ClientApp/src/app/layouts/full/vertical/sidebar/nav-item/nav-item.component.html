@@ -1,12 +1,14 @@
-@if(item.navCap) {
+@if(item.navCap){
 <div mat-subheader class="nav-caption">
-  {{ item.navCap }}
+  <i-tabler name="dots" class="icon-18 caption-icon"></i-tabler>
+  <span class="caption-text">{{ item.navCap }}</span>
 </div>
 } @if(!item.navCap && !item.external && !item.twoLines) {
-<mat-list-item
+<a
+  mat-list-item
   (click)="onItemSelected(item)"
   [ngClass]="{
-    'mat-toolbar mat-accent activeMenu': item.route
+    'mat-toolbar mat-primary activeMenu': item.route
       ? router.isActive(item.route, true)
       : false,
     expanded: expanded,
@@ -15,11 +17,11 @@
   class="menu-list-item"
 >
   <i-tabler
-    name="{{ item.iconName }}"
     class="routeIcon"
+    name="{{ item.iconName }}"
     matListItemIcon
   ></i-tabler>
-  <span class="hide-menu">{{ item.displayName }}</span>
+  <span class="hide-menu">{{ item.displayName | translate }}</span>
   @if(item.children && item.children.length) {
   <span class="arrow-icon" fxFlex>
     <span fxFlex></span>
@@ -35,13 +37,14 @@
     >
   </span>
   }
-</mat-list-item>
+</a>
 }
 
 <!-- external Link -->
+
 @if(!item.navCap && item.external) {
 <mat-list-item
-  onClick="window.open('//google.com')"
+  onClick="window.open(item.route, '_blank')"
   class="menu-list-item"
   target="_blank"
 >
@@ -50,20 +53,16 @@
     name="{{ item.iconName }}"
     matListItemIcon
   ></i-tabler>
-  <span class="hide-menu">{{ item.displayName }}</span>
+  <span class="hide-menu">{{ item.displayName | translate }}</span>
 </mat-list-item>
 }
 
 <!-- children -->
-@if(expanded) {
-<div>
-  @for(child of item.children; track child) {
-  <app-nav-item
-    [item]="child"
-    (click)="onSubItemSelected(child)"
-    [depth]="depth + 1"
-  >
-  </app-nav-item>
-  }
-</div>
-}
+@if(expanded) { @for(child of item.children; track child) {
+<app-nav-item
+  [item]="child"
+  (click)="onSubItemSelected(child)"
+  [depth]="depth + 1"
+>
+</app-nav-item>
+} }

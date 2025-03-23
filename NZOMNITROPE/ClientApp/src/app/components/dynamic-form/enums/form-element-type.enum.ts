@@ -5,8 +5,9 @@ export enum FormElementType {
   MultilineText,
   Select,
   Date,
-  Checkbox,
+  ToggleButton,
+  Autocomplete,
   Display,
+  Checkbox,
   Radio,
-  Time
 }

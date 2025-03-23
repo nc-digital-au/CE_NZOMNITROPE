@@ -1,7 +1,9 @@
+import { GetDiscontinueReasonsResponse, GetPatientEligibilityCriteriaResponse } from "src/app/services/service-proxies/service-proxies";
+import { RadioFormInputElement } from "../form-elements/radio-form-input-element.model";
 import { SelectOption } from "../form-elements/select-form-input-element.model";
 
 export class DynamicFormHelper {
-  static enumToSelectOptions(enumToTransform: any, enumLabel: any): SelectOption[] {
+  static enumToOptions(enumToTransform: any, enumLabel: any): SelectOption[] {
     const options: SelectOption[] = [];
     Object.keys(enumToTransform).filter(key => isNaN(Number(key))).forEach((key, i) => {
       options.push({
@@ -10,6 +12,55 @@ export class DynamicFormHelper {
       });
     });
     return options;
+  }
+
+  static criteriaToOptions(criteriaToTransform: GetPatientEligibilityCriteriaResponse[]): any[] {
+    const options: any[] = [];
+    criteriaToTransform.forEach(element => {
+      options.push({
+        label: element.optionDescription,
+        value: element.id
+      })
+    });
+    return options;
+  }
+
+  static discontinueReasonsToOptions(reasonsToTransform: GetDiscontinueReasonsResponse[]): any[] {
+    const options: any[] = [];
+    reasonsToTransform.forEach(element => {
+      options.push({
+        label: element.description,
+        value: element.id
+      })
+    });
+    return options;
+  }
+
+  static patientEligibilityToRadioButtonElements(criteriaToTransform: GetPatientEligibilityCriteriaResponse[]): RadioFormInputElement[] {
+    const radioFormElements: RadioFormInputElement[] = [];
+    const criteriaOptions: any[] = [
+      {
+        label: 'Yes',
+        value: true,
+      },
+      {
+        label: 'No',
+        value: false,
+      },
+    ];
+    criteriaToTransform.forEach(element => {
+      radioFormElements.push(
+        new RadioFormInputElement({
+          name: element.optionName,
+          label: element.optionDescription,
+          options: criteriaOptions,
+          validation: {
+            required: element.optionCriteria,
+            },
+          })
+      )
+    });
+    return radioFormElements;
   }
 
   static formatDate(date: Date): string {

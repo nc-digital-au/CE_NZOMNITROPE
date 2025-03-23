@@ -1,17 +1,17 @@
 @font-face {
-  font-family: 'Jost';
-  src: url('../fonts/Jost-Black.ttf') format("ttf");
-  font-display: block;
-}
-@font-face {
-  font-family: 'Jost';
-  src: url('../fonts/Jost-Black.ttf') format("ttf");
-  font-display: block;
-}  
-// font
-$font-family-text: 'Jost', arial;
-$font-family-head: 'Jost', arial;
-
+    font-family: 'Jost';
+    src: url('../fonts/Jost-Black.ttf') format("ttf");
+    font-display: block;
+  }
+  @font-face {
+    font-family: 'Jost';
+    src: url('../fonts/Jost-Black.ttf') format("ttf");
+    font-display: block;
+  }  
+  // font
+  $font-family: 'Jost', arial;
+  $font-family-text: 'Jost', serif;
+  $font-family-head: 'Jost', serif;
 
 // ======================================================
 // Branding guideline colors
@@ -123,3 +123,8 @@ $border-radius: 0.125rem;
 
 // text color
 $textPrimary: $theme-web-black;
+$text-color: $theme-web-black;
+$secondary: $theme-accent-one;
+$dark-text-secondary: $theme-accent-one;
+
+$card-spacer: 16px;

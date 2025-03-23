@@ -1,17 +1,19 @@
 import { Component, Input } from '@angular/core';
 import { FormElement } from '../../../models/form-elements/form-element.model';
 import { DynamicFormComponentBase } from '../../dynamic-form-component-base.model';
-import { DisplayFormElement } from '../../../models/form-elements/display-form-element.model';
+import { DisplayFormat, DisplayFormElement } from '../../../models/form-elements/display-form-element.model';
 import { MatLabel } from '@angular/material/form-field';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-display-form-element',
   standalone: true,
   imports: [
+    DatePipe,
     MatLabel,
   ],
   templateUrl: './display-form-element.component.html',
-  styleUrl: './display-form-element.component.scss'
+  styleUrl: './display-form-element.component.scss',
 })
 export class DisplayFormElementComponent extends DynamicFormComponentBase {
   @Input()
@@ -20,4 +22,6 @@ export class DisplayFormElementComponent extends DynamicFormComponentBase {
   }
 
   displayFormElement: DisplayFormElement;
+
+  DisplayFormat = DisplayFormat;
 }

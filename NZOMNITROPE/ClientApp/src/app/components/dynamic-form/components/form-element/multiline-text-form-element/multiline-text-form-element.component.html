@@ -1,7 +1,17 @@
-<mat-form-field appearance="outline" class="w-100" [formGroup]="form">
-  <textarea matInput [formControlName]="multilineTextFormElement.name" [rows]="5" [placeholder]="multilineTextFormElement.placeholder">
-  </textarea>
-  <mat-error>
-    {{ setErrorMessage(form, multilineTextFormElement.name, multilineTextFormElement.errorLabel) }}
-  </mat-error>
-</mat-form-field>
+@if (!multilineTextFormElement.hidden) {
+  <mat-form-field appearance="outline" class="w-100" [formGroup]="form">
+    <textarea matInput 
+              [formControlName]="multilineTextFormElement.name" 
+              [rows]="5" 
+              [placeholder]="placeholder">
+    </textarea>
+    <mat-error>
+      {{ setErrorMessage(form, multilineTextFormElement.name, multilineTextFormElement.label) }}
+    </mat-error>
+  </mat-form-field>
+}
+@else {
+  <ng-container [formGroup]="form">
+    <input type="hidden" [formControlName]="multilineTextFormElement.name" />
+  </ng-container>
+}

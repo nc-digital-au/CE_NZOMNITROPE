@@ -8,12 +8,12 @@ import { SelectFormElementComponent } from './select-form-element/select-form-el
 import { GroupFormElementComponent } from './group-form-element/group-form-element.component';
 import { DateFormElementComponent } from './date-form-element/date-form-element.component';
 import { MultilineTextFormElementComponent } from './multiline-text-form-element/multiline-text-form-element.component';
-import { FormInputElement } from '../../models/form-elements/form-input-element.model';
-import { CheckboxFormElementComponent } from './checkbox-form-element/checkbox-form-element.component';
+import { ToggleButtonFormElementComponent } from './toggle-button-form-element/toggle-button-form-element.component';
 import { DisplayFormElementComponent } from './display-form-element/display-form-element.component';
+import { CheckboxFormElementComponent } from './checkbox-form-element/checkbox-form-element.component';
+import { FormInputElement } from '../../models/form-elements/form-input-element.model';
 import { RadioFormElementComponent } from './radio-form-element/radio-form-element.component';
-import { TimeFormElementComponent } from './time-form-element/time-form-element.component';
-
+import { IFormValidation } from '../../interfaces/form-validation.interface';
 
 @Component({
   selector: 'app-form-element',
@@ -25,10 +25,10 @@ import { TimeFormElementComponent } from './time-form-element/time-form-element.
     SelectFormElementComponent,
     DateFormElementComponent,
     MultilineTextFormElementComponent,
-    CheckboxFormElementComponent,
+    ToggleButtonFormElementComponent,
     DisplayFormElementComponent,
+    CheckboxFormElementComponent,
     RadioFormElementComponent,
-    TimeFormElementComponent
   ],
   templateUrl: './form-element.component.html',
   styleUrl: './form-element.component.scss'
@@ -48,8 +48,14 @@ export class FormElementComponent implements AfterViewInit {
 
   FormElementType = FormElementType;
   hidden = false;
+  label: string = '';
+  validation?: IFormValidation = undefined;
 
   ngAfterViewInit(): void {
+    if(this.formElement instanceof FormInputElement) {
+      this.label = this.formElement.label;
+      this.validation = this.formElement.validation;
+    }
     if (this.formElement instanceof FormInputElement && this.formElement.hidden) {
       setTimeout(() => {
         this.hidden = true;

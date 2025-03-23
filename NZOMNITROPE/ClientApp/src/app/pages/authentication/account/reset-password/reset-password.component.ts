@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormGroup } from '@angular/forms';
 import { MatButton } from '@angular/material/button';
@@ -13,7 +13,6 @@ import { ValidationProblemDetail } from 'src/app/interceptors/error.interceptor'
 import { AccountServiceProxy, ResetPasswordDto } from 'src/app/services/service-proxies/service-proxies';
 import { routeLinks } from 'src/app/utils/routes';
 import { equalValidator } from 'src/app/utils/validators/equal.validator';
-import { PrescriberValidator } from 'src/app/utils/validators/prescriber.validator';
 
 @Component({
   selector: 'app-reset-password',
@@ -33,7 +32,7 @@ import { PrescriberValidator } from 'src/app/utils/validators/prescriber.validat
   templateUrl: './reset-password.component.html',
   styleUrl: './reset-password.component.scss',
 })
-export class ResetPasswordComponent {
+export class ResetPasswordComponent implements OnInit {
   formDefinition: DynamicForm;
   token: string;
   destroyRef = inject(DestroyRef);
@@ -48,12 +47,22 @@ export class ResetPasswordComponent {
     private readonly route: ActivatedRoute,
     private readonly _accountService: AccountServiceProxy,
   ) {
+    // this.route.queryParamMap.subscribe(paramMap => {
+    //   if (paramMap.has('token')) {
+    //     this.token = paramMap.get('token').replaceAll(' ', '+');
+    //     this.buildForm();
+    //   }
+    // })
+  }
+
+  ngOnInit(): void {
     this.route.queryParamMap.subscribe(paramMap => {
-      if (paramMap.has('token')) {
-        this.token = paramMap.get('token').replaceAll(' ', '+');
+      const token = paramMap.get('token');
+      if (token) {
+        this.token = token.replaceAll(' ', '+');
         this.buildForm();
       }
-    })
+    });
   }
 
   onFormSubmit(): void {
@@ -92,17 +101,6 @@ export class ResetPasswordComponent {
         validation: {
           required: true,
           email: true,
-        },
-      }),
-      new TextFormInputElement({
-        name: 'ahpraNumber',
-        label: 'AHPRA number',
-        validation: {
-          required: true,
-          maxLength: 13,
-          custom: [
-            PrescriberValidator.ahpraNumberFormat,
-          ],
         },
       }),
       new TextFormInputElement({

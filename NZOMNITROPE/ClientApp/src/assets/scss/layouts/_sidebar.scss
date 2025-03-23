@@ -1,3 +1,5 @@
+@use "../variables" as *;
+
 .mat-drawer.sidebarNav {
   width: $sidenav-desktop;
   flex-shrink: 0;
@@ -5,42 +7,30 @@
   position: fixed !important;
   top: $header-height !important;
   overflow-x: hidden;
+  border-right: 0;
+  border-radius: 0px !important;
+  box-shadow: 0 3px 4px 0 rgba(0, 0, 0, .03), 0 0 1px 0 rgba(0, 0, 0, .1);
+  background-color: var(--mdc-elevated-card-container-color);
+
   .mat-drawer-inner-container {
     overflow: hidden;
   }
-}
 
-.program-logo{
-  display: inline-block;
-  img{
-    width: 120px;
-    vertical-align: middle;
-    padding-left: 16px;;
+  .ng-scroll-content {
+    display: block;
   }
 }
 
-.program-logo-menu{
-  display: inline-block;
-}
 
 // user profile
 .user-profile {
   position: relative;
-  background-image: url(/assets/images/svgs/Boehringer_Standalone_Lung_RGB_Accent-Green.svg);
-  background-color: #051D19;
-  background-repeat: no-repeat;
-  background-origin: content-box;
-  background-size: 50%;
-  background-position: center;
-
-  .profile-img-placeholder{
-    height: 120px;
-  }
+  background-size: cover !important;
 
   .profile-img {
     width: 50px;
     margin-left: 30px;
-    padding: 31px 0;
+    padding: 32px 0;
     border-radius: 100%;
 
     &::before {
@@ -65,10 +55,12 @@
   .profile-text {
     position: relative;
     cursor: pointer;
-    > a {
-      padding: 6px 30px;
+
+    >a {
+      padding: 6px 20px;
       background: rgba(0, 0, 0, 0.5);
       white-space: nowrap;
+
       &:after {
         position: absolute;
         right: 20px;
@@ -82,74 +74,128 @@
   margin-left: 26px !important;
 }
 
-// minisidebar
+
+// .branding {
+//   padding: 20px;
+// }
+
 .sidebarNav-mini {
   .mini-scroll {
     height: calc(100vh - 70px) !important;
   }
+
   .branding {
     justify-content: center;
+
     a {
       width: 45px;
       overflow: hidden;
     }
   }
+
   .sidebarNav {
     width: $sidenav-mini;
-    
-    .profile-bar {
-      display: none;
+
+    .user-profile {
+      .profile-text {
+        display: none;
+      }
     }
+
+    .user-profile {
+      .profile-img {
+        margin-left: 9px;
+      }
+    }
+
     .sidebar-list {
+      .mdc-list-group__subheader {
+        .caption-icon {
+          display: inline-block;
+        }
+
+        .caption-text {
+          display: none;
+        }
+      }
+
       .menu-list-item {
-        padding: 8px 17px;
+        padding: 11px 11px;
+        justify-content: center;
+
         .mdc-list-item__content {
           display: none;
         }
-        .mdc-list-item__start {
-          margin-left: 6px !important;
-          margin-right: 8px !important;
-        }
+
       }
     }
+
     &:hover {
       width: $sidenav-desktop;
+
       .mini-scroll {
         height: calc(100vh - 230px) !important;
       }
+
       .hide-menu {
         overflow: hidden;
         width: $sidenav-desktop;
       }
-      .profile-bar {
-        display: block;
+
+      .user-profile {
+        .profile-text {
+          display: block;
+        }
       }
+
+      .user-profile {
+        .profile-img {
+          margin-left: 30px;
+        }
+      }
+
       .sidebar-list {
         .menu-list-item {
           padding: 8px 10px;
+
           .mdc-list-item__content {
             display: inline-block;
           }
+
           .mdc-list-item__start {
             margin-left: 0 !important;
-          
           }
         }
+
         &.mdc-list {
           padding: 0 24px;
           width: $sidenav-desktop;
+
           .mdc-list-group__subheader {
             text-align: left;
+
+            .caption-icon {
+              display: none;
+            }
+
+            .caption-text {
+              display: inline-block;
+            }
           }
         }
       }
     }
   }
 
-  .hide-menu {
+  .hideMenu {
     overflow: hidden;
     width: $sidenav-mini;
   }
+
+  // .branding {
+  //   width: $sidenav-mini - 15px;
+  //   overflow: hidden;
+  // }
 
   .sidebar-list {
     &.mdc-list {
@@ -165,7 +211,6 @@
     transition: swift-ease-out(width);
   }
 }
-
 
 @media (min-width: 1024px) {
   .sidebarNav-mini {
@@ -184,28 +229,63 @@
 
 .sidebar-list {
   &.mdc-list {
-    padding: 0 24px;
+    padding: 0 15px;
 
     .mdc-list-group__subheader {
-      margin: 12px 0;
-      font-size: 0.75rem;
-      font-weight: 500;
-      margin-top: 24px;
+      margin: 24px 0 0;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 0px 0px 8px;
+      line-height: 19px;
+      text-transform: uppercase;
+
+      .caption-icon {
+        display: none;
+      }
+
+      .caption-text {
+        display: inline-block;
+      }
+
     }
 
     .menu-list-item {
-      border-radius: 7px;
-      height: 45px;
-      padding: 8px 10px !important;
-      margin-bottom: 2px;
+
+      height: 47px;
+      display: flex;
+      font-size: 15px;
+      white-space: nowrap;
+      align-items: center;
+      line-height: 25px;
+      position: relative;
+      padding: 12px 16px;
+      text-decoration: none;
+      font-weight: 400;
+      border-radius: 26px;
+      gap: 12px;
+
+      &:hover::before {
+        background-color: transparent !important;
+      }
+
+      &:hover {
+
+        .mdc-list-item__start,
+        .mdc-list-item__primary-text {
+          color: $secondary;
+        }
+      }
+
       &.twoline {
         height: 60px;
         align-items: center;
       }
+
       &:before,
       &:focus {
         z-index: -1;
       }
+
       &.disabled {
         opacity: 0.38;
       }
@@ -217,7 +297,10 @@
         justify-content: center;
         font-size: 12px;
       }
+
       &.activeMenu {
+        background-color: var(--mat-sys-secondary);
+
         .mdc-list-item__primary-text {
           color: $white !important;
         }
@@ -228,12 +311,12 @@
       }
 
       .mdc-list-item__start {
-        margin-right: 14px;
-        margin-left: 0 !important;
-        width: 20px;
-        height: 20px;
+        margin-right: 0;
+        margin-left: 0;
+        width: 22px;
+        height: 22px;
         fill: transparent !important;
-        color: $textPrimary;
+        // color: $primary;
       }
 
       .mdc-list-item__primary-text {
@@ -243,6 +326,7 @@
 
         .arrow-icon {
           display: flex;
+
           .mat-icon {
             font-size: 18px;
             width: 18px;
