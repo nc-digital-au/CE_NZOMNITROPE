@@ -1,3 +1,4 @@
+@use 'sass:color';
 @use 'src/assets/scss/variables' as *;
 
 .blank-layout-container {
@@ -61,7 +62,7 @@
     color: #ffffff;
   }
 
-  .f-w-500{
+  .f-w-500 {
     color: white;
   }
 
@@ -76,16 +77,17 @@
     min-height: 50px;
     margin-left: 50px;
     margin-right: 50px;
+
     &:hover {
-      background-color: darken(#0661AB, 10%);
-      border-color: darken(#ffffff, 10%);
+      background-color: color.adjust(#0661AB, $lightness: -10%);
+      border-color: color.adjust(#ffffff, $lightness: -10%);
     }
-  
+
     &:focus {
-      outline: 2px solid lighten(#0661AB, 10%);
+      outline: 2px solid color.adjust(#0661AB, $lightness: 10%);
     }
   }
-  
+
   .register-button {
     background-color: $theme-accent-one;
     color: #ffffff;
@@ -95,18 +97,15 @@
     padding: 10px 20px;
     border-radius: 5px;
     min-height: 50px;
-    margin-left: 50px;
-    margin-right: 50px;
-    margin-bottom: 50px;
-  
+    margin: 0 50px 50px 50px;
+
     &:hover {
-      background-color: darken($theme-accent-one, 10%);
-      border-color: darken(#ffffff, 10%);
+      background-color: color.adjust($theme-accent-one, $lightness: -10%);
+      border-color: color.adjust(#ffffff, $lightness: -10%);
     }
-  
+
     &:focus {
-      outline: 2px solid lighten($theme-accent-one, 10%);
+      outline: 2px solid color.adjust($theme-accent-one, $lightness: 10%);
     }
   }
-  
 }

@@ -4,8 +4,8 @@
   @if (submitting) {
   <mat-progress-bar mode="indeterminate"></mat-progress-bar>
   }
-  <mat-card class="cardWithShadow theme-card">
-    <mat-card-content class="b-t-1">
+  <mat-card>
+    <mat-card-content>
       <mat-stepper #stepper [orientation]="(stepperOrientation | async)!" [linear]="false">
 
         <mat-step [stepControl]="patientForm">
@@ -41,7 +41,7 @@
   </mat-card>
 </div>
 <div *ngIf="enrolmentSuccess">
-  <mat-card class="cardWithShadow theme-card">
+  <mat-card>
     <mat-card-content class="b-t-1">
       <h4 class="mat-subtitle-2 d-flex align-items-center f-w-600">
         Order Submitted

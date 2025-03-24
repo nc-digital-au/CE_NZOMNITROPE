@@ -45,7 +45,6 @@ const BELOWMONITOR = 'screen and (max-width: 1023px)';
     HeaderComponent,
     AppHorizontalHeaderComponent,
     AppHorizontalSidebarComponent,
-    AppBreadcrumbComponent,
     AppAuthBrandingComponent,
     LeavingSiteComponent
   ],

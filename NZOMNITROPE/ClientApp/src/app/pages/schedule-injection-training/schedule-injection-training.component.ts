@@ -30,7 +30,6 @@ import { DATE_FORMAT } from 'src/app/utils/constants';
     PatientFormComponent,
     DynamicFormComponent,
     ReactiveFormsModule,
-    MatFormField,
     MatTimepickerModule,
   ]
 })

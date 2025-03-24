@@ -3,18 +3,14 @@ import { Component, EventEmitter, Input, Output, ViewEncapsulation } from '@angu
 import { CoreService } from 'src/app/services/core.service';
 import { routeLinks } from 'src/app/utils/routes';
 import { CONTACT_VALUES } from 'src/app/utils/constants';
-import { LeavingSiteComponent, LeavingSiteDialog } from 'src/app/components/leaving-site/leaving-site.component';
-import { RouterLink, RouterOutlet } from '@angular/router';
+import { RouterLink } from '@angular/router';
 
 
 @Component({
   selector: 'app-landing',
   standalone: true,
   imports: [
-    LeavingSiteComponent,
-    LeavingSiteDialog,
-    RouterLink,
-    RouterOutlet
+    RouterLink
   ],
   templateUrl: './landing.component.html',
   styleUrls: ['./landing.component.scss'],

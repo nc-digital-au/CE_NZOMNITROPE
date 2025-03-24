@@ -324,36 +324,6 @@ footer {
   padding: 0 24px 24px 24px;
 }
 
-#ofevScript{
-  border: solid 1px $theme-gray-six;
-  .program-header{
-    padding: 16px;
-    background-color: $theme-blue-one;
-    color: $theme-accent-one;
-    border: 1px solid $theme-blue-one;
-  }
-  label{
-    display: inline-block;
-    font-weight: 600;
-  }
-  #programTerms{
-      .mat-mdc-checkbox .mdc-form-field.mat-internal-form-field{
-          .mdc-label{
-              font-size: 14px;
-              font-weight: 300 !important;
-          }
-      }
-  }
-  #scriptFooter{
-    background-color: $theme-blue-one;
-    color:white;
-    padding: 48px;
-    text-align: center;
-    font-size: 14px;
-    font-weight: normal;
-  }
-}
-
 .highlight-gray{
   background-color: $theme-gray-three;
 }
@@ -361,11 +331,6 @@ footer {
   background-color: $theme-gray-three;
 }
 
-.mat-mdc-card.dark-green-card{
-  border: 1px solid;
-  border-color: $theme-blue-three;
-  padding-top: 16px;
-}
 ///// table /////
 tr.expanded-row{
   background-color: $theme-accent-four;

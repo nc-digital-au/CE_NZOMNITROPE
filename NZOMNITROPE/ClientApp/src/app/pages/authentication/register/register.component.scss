@@ -1,7 +1,7 @@
-@use "/src/assets/scss/variables";
+@use '/src/assets/scss/variables' as *;
 
 .headers {
-  color: variables.$white;
+  color: $white;
 }
 
 .register-form {
@@ -9,5 +9,5 @@
 }
 
 .auth-register {
-  background: variables.$theme-accent-two;
+  background: $theme-accent-two;
 }

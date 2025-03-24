@@ -1,5 +1,5 @@
-@use "sass:map";
 @use "@angular/material" as mat;
+@use "../variables" as *;
 
 @include mat.form-field-overrides(
   (
@@ -9,13 +9,13 @@
   )
 );
 
-// forms
 html {
   .hide-hint {
     .mat-mdc-form-field-subscript-wrapper {
       display: none;
     }
   }
+
   .mat-mdc-text-field-wrapper .mat-mdc-form-field-flex .mat-mdc-floating-label {
     top: calc(var(--mat-form-field-container-height) / 2.15);
   }
@@ -24,10 +24,27 @@ html {
     width: 300px;
   }
 
-  // switch
   .mat-mdc-slide-toggle
     .mdc-switch--selected
     .mdc-switch__handle:has(.mdc-switch__icons) {
     margin: 0 26px;
+  }
+
+  .mat-stepper-horizontal,
+  .mat-stepper-vertical {
+    background-color: $white !important;
+  }
+
+  .mat-step-header {
+    background-color: $white !important;
+  }
+
+  .mat-step-label {
+    color: $textPrimary;
+  }
+
+  .mat-step-content {
+    background-color: $white !important;
+    padding: 24px;
   }
 }
