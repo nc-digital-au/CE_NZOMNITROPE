@@ -15,6 +15,15 @@
               Please provide a physical address for the delivery of your SurePal<sup>®</sup> Pen or consumables kit. You can choose to have your delivery sent to your home, work/office or local community pharmacy for collection.
             </h5>
           </div>
+
+          <mat-label>Delivery Address Type</mat-label>
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-select [(value)]="establishmentOnly" (selectionChange)="onEstablishmentOnlyChange($event)">
+              <mat-option [value]="true">Place of business</mat-option>
+              <mat-option [value]="false">Private address</mat-option>
+            </mat-select>
+          </mat-form-field>
+
           <app-address [establishmentOnly]="false" [hiddenFields]="['name', 'phone', 'mobile', 'state']">
             <div class="d-flex align-items-center justify-content-between">
               <button mat-stroked-button class="cancel-button" [routerLink]="[routeLinks.home]" type="button">Cancel</button>

@@ -42,6 +42,7 @@ export class OrderSurepalDeviceComponent {
   patientId: string;
   routeLinks = routeLinks;
   submitting = false;
+  establishmentOnly = false;
 
   // forms
   patientForm = this._fb.group({});
@@ -57,6 +58,10 @@ export class OrderSurepalDeviceComponent {
     this.stepperOrientation = this._breakpointObserver
       .observe('(min-width: 800px)')
       .pipe(map(({ matches }) => (matches ? 'horizontal' : 'vertical')));
+  }
+
+  onEstablishmentOnlyChange(event: any): void {
+    this.establishmentOnly = event.value;
   }
 
   onPatientFormNext() {
