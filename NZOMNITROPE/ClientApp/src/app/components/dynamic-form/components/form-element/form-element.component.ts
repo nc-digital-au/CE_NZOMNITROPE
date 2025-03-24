@@ -15,6 +15,7 @@ import { FormInputElement } from '../../models/form-elements/form-input-element.
 import { RadioFormElementComponent } from './radio-form-element/radio-form-element.component';
 import { IFormValidation } from '../../interfaces/form-validation.interface';
 import { TitleFormElement } from '../../models/form-elements/title-form-element.model';
+import { TimeFormElementComponent } from './time-form-element/time-form-element.component';
 
 @Component({
   selector: 'app-form-element',
@@ -30,6 +31,7 @@ import { TitleFormElement } from '../../models/form-elements/title-form-element.
     DisplayFormElementComponent,
     CheckboxFormElementComponent,
     RadioFormElementComponent,
+    TimeFormElementComponent
   ],
   templateUrl: './form-element.component.html',
   styleUrl: './form-element.component.scss'

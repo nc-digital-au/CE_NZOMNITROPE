@@ -12,10 +12,7 @@ import { DynamicForm } from 'src/app/components/dynamic-form/models/dynamic-form
 import { TitleFormElement } from 'src/app/components/dynamic-form/models/form-elements/title-form-element.model';
 import { DateFormInputElement } from 'src/app/components/dynamic-form/models/form-elements/date-form-input-element.model';
 import { MatTimepickerModule } from '@angular/material/timepicker';
-import { MatFormField } from '@angular/material/form-field';
-import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE, provideNativeDateAdapter } from '@angular/material/core';
-import { CustomDateAdaptor } from 'src/app/utils/helpers/custom-date-adaptor';
-import { DATE_FORMAT } from 'src/app/utils/constants';
+import { TimeFormInputElement } from 'src/app/components/dynamic-form/models/form-elements/time-form-input-element.model';
 
 @Component({
   selector: 'app-schedule-injection-training',
@@ -71,6 +68,13 @@ export class ScheduleInjectionTrainingComponent {
       new DateFormInputElement({
         name: 'sessionDate',
         label: 'Date of Training',
+        validation: {
+          required: true,
+        },
+      }),
+      new TimeFormInputElement({
+        name: 'sessionTime',
+        label: 'Select Time',
         validation: {
           required: true,
         },

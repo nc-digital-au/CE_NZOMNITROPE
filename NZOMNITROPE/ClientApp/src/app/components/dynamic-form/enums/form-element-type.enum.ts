@@ -10,4 +10,5 @@ export enum FormElementType {
   Display,
   Checkbox,
   Radio,
+  Time,
 }
