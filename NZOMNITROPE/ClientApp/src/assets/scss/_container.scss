@@ -35,7 +35,7 @@ html .mat-drawer-container {
   background-color: $white;
   .mat-mdc-button-base{
     border-width: 2px;
-    border-radius: 0.125rem;
+    border-radius: 0 !important;
   }
   .mat-mdc-outlined-button:not(:disabled){
     border-color: $theme-gray-eight;

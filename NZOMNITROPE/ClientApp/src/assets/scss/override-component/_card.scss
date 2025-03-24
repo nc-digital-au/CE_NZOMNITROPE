@@ -8,6 +8,7 @@ html {
     .mat-mdc-card-content {
       background-color: $white !important;
       padding: $card-spacer !important;
+      border-radius: 5px !important;
     }
 
     .mat-mdc-card-header {

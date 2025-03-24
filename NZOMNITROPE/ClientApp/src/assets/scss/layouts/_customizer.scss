@@ -43,7 +43,7 @@ html .customizer-fixed {
       .theme-circle {
         width: 25px;
         height: 25px;
-        border-radius: var(--mat-sys-corner-full);
+        border-radius: 0 !important;
         color: $white;
         display: flex;
         align-items: center;
@@ -76,7 +76,7 @@ html .customizer-fixed {
     padding: 9px;
     border: 1px solid var(--mat-sys-outline-variant) !important;
     box-shadow: none;
-    border-radius: $border-radius;
+    border-radius: 0 !important;
     transition: all 0.1s ease-in 0s;
     &:hover {
       transform: scale(1.05);
