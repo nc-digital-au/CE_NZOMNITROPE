@@ -27,7 +27,7 @@
           </mat-card-content>
           <div class="d-flex align-items-center justify-content-between">
             <button mat-stroked-button class="cancel-button" [routerLink]="[routeLinks.landing]" type="button">Cancel</button>
-            <button mat-flat-button color="primary" type="submit" matStepperNext>Next</button>
+            <button mat-flat-button color="primary" type="submit" (click)="submitBarcodeValidation()">Next</button>
           </div>
         </mat-step>
 

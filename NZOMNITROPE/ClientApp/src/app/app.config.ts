@@ -4,6 +4,7 @@ import {
   importProvidersFrom,
 } from '@angular/core';
 import {
+  HTTP_INTERCEPTORS,
   HttpClient,
   provideHttpClient,
   withInterceptorsFromDi,
@@ -29,10 +30,17 @@ import { NgScrollbarModule } from 'ngx-scrollbar';
 //Import all material modules
 import { MaterialModule } from './material.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { CsrfHeaderInterceptor } from './interceptors/csrf-header.interceptor';
+import { ErrorInterceptor } from './interceptors/error.interceptor';
 
 export function HttpLoaderFactory(http: HttpClient): any {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
+
+export const httpInterceptorProviders = [
+  { provide: HTTP_INTERCEPTORS, useClass: CsrfHeaderInterceptor, multi: true },
+  { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor , multi: true },
+];
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -54,6 +62,7 @@ export const appConfig: ApplicationConfig = {
       MaterialModule,
       TablerIconsModule.pick(TablerIcons),
       NgScrollbarModule,
+      
       TranslateModule.forRoot({
         loader: {
           provide: TranslateLoader,
@@ -62,5 +71,6 @@ export const appConfig: ApplicationConfig = {
         },
       })
     ),
+    httpInterceptorProviders,
   ],
 };

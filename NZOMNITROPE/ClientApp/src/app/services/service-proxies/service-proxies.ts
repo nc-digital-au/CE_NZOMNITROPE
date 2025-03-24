@@ -8241,7 +8241,7 @@ export class RegistrationServiceProxy {
      * @return Success
      */
     validateProductBarcode(barcode?: string | undefined): Observable<BooleanApiResponse> {
-        let url_ = this.baseUrl + "/api/register/validate-product-barcode?";
+        let url_ = this.baseUrl + "/api/register/validate-barcode?";
         if (barcode === null)
             throw new Error("The parameter 'barcode' cannot be null.");
         else if (barcode !== undefined)

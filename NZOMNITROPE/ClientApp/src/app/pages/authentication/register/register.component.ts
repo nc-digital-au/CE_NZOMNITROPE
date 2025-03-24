@@ -1,10 +1,10 @@
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { AsyncPipe, CommonModule } from '@angular/common';
-import { Component, DestroyRef, inject, OnInit, ViewChild } from '@angular/core';
+import { Component, DestroyRef, EventEmitter, inject, OnInit, Output, ViewChild } from '@angular/core';
 import { ControlContainer, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatCard, MatCardContent, MatCardHeader, MatCardTitle } from '@angular/material/card';
 import { MatStep, MatStepLabel, MatStepper, MatStepperNext, MatStepperPrevious, StepperOrientation } from '@angular/material/stepper';
-import { map, Observable } from 'rxjs';
+import { map, Observable, tap } from 'rxjs';
 import { MatButton } from '@angular/material/button';
 import { TermsFormComponent } from './terms-form/terms-form.component';
 import { RouterLink } from '@angular/router';
@@ -25,6 +25,7 @@ import { ValidateMobile } from 'src/app/utils/validators/mobile.validator';
 import { GroupFormElement } from 'src/app/components/dynamic-form/models/form-elements/group-form-element.model';
 import { CheckboxFormInputElement } from 'src/app/components/dynamic-form/models/form-elements/checkbox-form-input-element.model';
 import { DynamicFormComponent } from 'src/app/components/dynamic-form/dynamic-form.component';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-register',
@@ -66,22 +67,13 @@ import { DynamicFormComponent } from 'src/app/components/dynamic-form/dynamic-fo
   ],
 })
 export class RegisterComponent implements OnInit {
+
   @ViewChild('stepper')
   stepper: MatStepper;
 
   routeLinks = routeLinks;
   stepperOrientation$: Observable<StepperOrientation>;
 
-  // barcodeForm = this._fb.group({
-  //   barcode: [
-  //     '',
-  //     [
-  //       Validators.required,
-  //       Validators.pattern(/^\d{4}$/), // Ensure it's exactly 4 digits
-  //     ],
-  //   ],
-  //   consent: [false, Validators.requiredTrue], // Checkbox for consent
-  // });
   barcodeForm = this._fb.group({});
   barcodeFormDefinition: DynamicForm;
   patientForm = this._fb.group({});
@@ -89,6 +81,8 @@ export class RegisterComponent implements OnInit {
   collectingForm = this._fb.group({});
   addressForm = this._fb.group({});
   termsForm = this._fb.group({});
+
+  isBarcodeValid: boolean = false;
 
   registrationSuccess: boolean;
   registrationProblem: ValidationProblemDetail;
@@ -133,6 +127,28 @@ export class RegisterComponent implements OnInit {
       }),
     ]);
   }
+
+  submitBarcodeValidation() {
+    this.barcodeForm.markAllAsTouched();
+    const barcodeFormData = this.barcodeForm.value as any;
+    if (this.barcodeForm.valid) {
+      const barcode = barcodeFormData.barcode;
+      console.log('Barcode:', barcode);
+      this._registrationService.validateProductBarcode(barcode)
+        .pipe(
+          takeUntilDestroyed(this._destroyRef),
+        )
+        .subscribe((response) => {
+           if (response.isSuccess && response.resultObject === true) {
+            this.isBarcodeValid = true;
+            this.stepper.next();
+           } else {
+            this.barcodeForm.setErrors({ invalid: true });
+           }
+        }
+      );
+    }
+}
   
   onRegisterClick(): void {
     // if (this.profileForm.valid && this.contactForm.valid && this.termsForm.valid) {
