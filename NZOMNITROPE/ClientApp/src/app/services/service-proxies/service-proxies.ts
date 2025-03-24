@@ -12924,7 +12924,7 @@ export class DeliveryModelDto implements IDeliveryModelDto {
     unitNumber!: string | undefined;
     streetAddress!: string | undefined;
     city!: string | undefined;
-    state!: string | undefined;
+    state!: AddressState;
     postCode!: string | undefined;
     deliveryInstructions!: string | undefined;
     phone!: string | undefined;
@@ -12987,7 +12987,7 @@ export interface IDeliveryModelDto {
     unitNumber: string | undefined;
     streetAddress: string | undefined;
     city: string | undefined;
-    state: string | undefined;
+    state: AddressState;
     postCode: string | undefined;
     deliveryInstructions: string | undefined;
     phone: string | undefined;

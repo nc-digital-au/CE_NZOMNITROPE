@@ -10,7 +10,7 @@ import { TermsFormComponent } from './terms-form/terms-form.component';
 import { RouterLink } from '@angular/router';
 import { routeLinks } from 'src/app/utils/routes';
 import { AddressComponent } from 'src/app/components/address/address.component';
-import { RegisterPspPatientWithDeliveryRequiredDto, RegistrationServiceProxy, Title } from 'src/app/services/service-proxies/service-proxies';
+import { AddressState, CarerModelDto, DeliveryModelDto, PatientModelDto, ProgramTermsAndConditionsModelDto, RegisterPspPatientWithDeliveryRequiredDto, RegistrationServiceProxy, Title } from 'src/app/services/service-proxies/service-proxies';
 import { InlineAlertComponent } from 'src/app/components/inline-alert/inline-alert.component';
 import { ValidationProblemDetail } from 'src/app/interceptors/error.interceptor';
 import { GuardianFormComponent } from './guardian-form/guardian-form.component';
@@ -145,7 +145,6 @@ export class RegisterComponent implements OnInit {
 
   submitGuardianForm(){
     const guardianFormData = this.guardianForm.value as any;
-    console.log(guardianFormData);
     this.guardianForm.markAllAsTouched();
     if (this.guardianForm.valid) {
       this.stepper.next();
@@ -154,119 +153,87 @@ export class RegisterComponent implements OnInit {
 
   submitDeliveryForm(){
     const collectingFormData = this.collectingForm.value as any;
-    console.log(collectingFormData);
+    const addressFormData = this.addressForm.value as any;
+    console.log('collecting form', collectingFormData);
+    console.log('address form', addressFormData);
     this.collectingForm.markAllAsTouched();
     if (this.collectingForm.valid) {
       this.stepper.next();
     }
   }
   onRegisterClick(): void {
-    // const dto = this.createDto();
-    // if (this.patientForm.valid && this.guardianForm.valid && this.addressForm.valid && this.termsForm.valid) {
-    //   this._registrationService.registerPatientPspWithDelivery(new RegisterPrescriberDto({
-    //     registrationMethod: RegistrationMethod.PortalWebForm,
-    //     title: profileData.title,
-    //     firstName: profileData.firstName,
-    //     lastName: profileData.lastName,
-    //     email: profileData.email,
-    //     username: profileData.email,
-    //     ahpraNumber: profileData.ahpraNumber,
-    //     specialty: Specialty.Other,
-    //     specialtyOther: profileData.specialty,
-    //     password: profileData.password,
-    //     clinic: new ClinicDto({
-    //       name: contactData.name,
-    //       phone: contactData.phone,
-    //       address: new AddressDto({
-    //         unitNumber: contactData.unitNumber,
-    //         city: contactData.city,
-    //         addressLine1: contactData.streetAddress,
-    //         addressLine2: undefined,
-    //         postcode: contactData.postcode,
-    //         state: contactData.state,
-    //       }),
-    //       email: undefined,
-    //       fax: undefined,
-    //       id: undefined,
-    //       latitude: undefined,
-    //       longitude: undefined,
-    //     }),
-    //     programTermsAgreed: termsData.programTerms,
-    //     privacyConsentProvided: termsData.privacyConsent,
-    //     adverseEventContactConsentProvided: termsData.adverseEventContactConsent,
-    //     contactConsentProvided: termsData.contactConsent,
-    //     marketingCommunicationConsentProvided: termsData.marketingCommunicationConsent,
-    //     location: undefined,
-    //     middleName: undefined,
-    //     mobile: undefined,
-    //     phone: undefined,
-    //     prescriberNumber: undefined,
-    //     registeredOn: undefined,
-    //   })).pipe(
-    //     takeUntilDestroyed(this._destroyRef),
-    //   ).subscribe({
-    //     next: (res) => {
-    //       this.registrationSuccess = res.isSuccess;
-    //       this.stepper.next();
-    //     },
-    //     error: (err) => {
-    //       this.registrationSuccess = false;
-    //       this.registrationProblem = err.problemDetails;
-    //       this.stepper.next();
-    //     },
-    //   });
-    // }
+    const dto = this.createDto();
+    if (this.patientForm.valid && this.guardianForm.valid && this.addressForm.valid && this.termsForm.valid) {
+      this._registrationService.registerPatientPspWithDelivery(dto).pipe(
+        takeUntilDestroyed(this._destroyRef),
+      ).subscribe({
+        next: (res) => {
+          this.registrationSuccess = res.isSuccess;
+          this.stepper.next();
+        },
+        error: (err) => {
+          this.registrationSuccess = false;
+          this.registrationProblem = err.problemDetails;
+          this.stepper.next();
+        },
+      });
+    }
   }
 
-  // private createDto(): RegisterPspPatientWithDeliveryRequiredDto {
-  //   const patientData = this.patientForm.value as any;
-  //   const guardianData = this.guardianForm.value as any;
-  //   const collectingFormData = this.collectingForm.value as any;
-  //   const addressData = this.addressForm.value as any;
-  //   const termsData = this.termsForm.value as any;
-  //   const barcodeData = this.barcodeForm.value as any;
-  //   const dto = new RegisterPspPatientWithDeliveryRequiredDto({
-  //     patientModel: {
-  //       barcode: barcodeData.barcode,
-  //       isPrescriptionConfirmed: true,
-  //       title: Title.Unknown,
-  //       firstName: patientData.firstName,
-  //       lastName: patientData.lastName,
-  //       middleName: undefined,
-  //       birthDay: undefined,
-  //       birthYear: undefined,
-  //       birthMonth: undefined,
-  //       medicalReferenceNumber: patientData.nhiNumber,
-  //       email: patientData.email,
-  //       mobile: patientData.mobilePhone,
-  //       password: patientData.password,
-  //       phone: undefined,
-  //     },
-  //     carerModel: {
-  //       firstName: guardianData.firstName,
-  //       lastName: guardianData.lastName,
-  //       email: guardianData.email,
-  //       mobile: guardianData.mobilePhone,
-  //       middleName: undefined,
-  //       phone: undefined,
-  //     },
-  //     deliveryModel: {
-  //       delivetToName: collectingFormData.firstName + ' ' + collectingFormData.lastName,
-  //       deliveryContactNumber: collectingFormData.mobilePhone,
-  //       unitNumber: addressData.unitNumber,
-  //       streetAddress: addressData.streetAddress,
-  //       city: addressData.city,
-  //       postCode: addressData.postcode,
-  //       state: addressData.state,
-  //       deliveryInstructions: undefined,
-  //       phone: collectingFormData.phone,
-  //     },
-  //     programTerms: termsData.programTerms,
-  //     privacyConsent: termsData.privacyConsent,
-  //     adverseEventContactConsent: termsData.adverseEventContactConsent,
-  //     contactConsent: termsData.contactConsent,
-  //     marketingCommunicationConsent: termsData.marketingCommunicationConsent,
-  //   });
-  //   return dto;
-  // }
+  private createDto(): RegisterPspPatientWithDeliveryRequiredDto {
+    const patientData = this.patientForm.value as any;
+    const guardianData = this.guardianForm.value as any;
+    const collectingFormData = this.collectingForm.value as any;
+    const addressData = this.addressForm.value as any;
+    const termsData = this.termsForm.value as any;
+    const barcodeData = this.barcodeForm.value as any;
+    const patientDto = new PatientModelDto({
+      barcode: barcodeData.barcode,
+      isPrescriptionConfirmed: termsData.treatmentConfirmed,
+      title: Title.Unknown,
+      firstName: patientData.firstName,
+      lastName: patientData.lastName,
+      middleName: undefined,
+      birthDay: undefined,
+      birthYear: undefined,
+      birthMonth: undefined,
+      medicalReferenceNumber: patientData.nhiNumber,
+      email: patientData.email,
+      mobile: patientData.mobilePhone,
+      password: patientData.password,
+      phone: undefined,
+    });
+    const carerDto = new CarerModelDto({
+      firstName: guardianData.firstName,
+      lastName: guardianData.lastName,
+      email: guardianData.email,
+      mobile: guardianData.mobilePhone,
+      middleName: undefined,
+      phone: undefined,
+    });
+    const addressDto = new DeliveryModelDto({
+      delivetToName: collectingFormData.nameOfPersonCollecting,
+      deliveryContactNumber: collectingFormData.contactNumber,
+      unitNumber: addressData.unitNumber,
+      streetAddress: addressData.streetAddress,
+      city: addressData.city,
+      postCode: addressData.postcode,
+      state: AddressState.NA,
+      deliveryInstructions: undefined,
+      phone: collectingFormData.phone,
+    }); 
+    const termsDto = new ProgramTermsAndConditionsModelDto({
+      privacyConsentProvided: termsData.privacyConsent,
+      programTermsAgreed: termsData.termsAccepted,
+      adverseEventContactConsentProvided: termsData.contactConsent,
+      marketingCommunicationConsentProvided: false,
+    });
+    const dto = new RegisterPspPatientWithDeliveryRequiredDto({
+      patientModel: patientDto,
+      carerModel: carerDto,
+      deliveryModel: addressDto,
+      programTermsAndConditionsModel: termsDto,
+    });
+    return dto;
+  }
 }

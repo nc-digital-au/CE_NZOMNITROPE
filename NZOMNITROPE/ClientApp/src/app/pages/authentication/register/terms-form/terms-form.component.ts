@@ -28,26 +28,6 @@ export class TermsFormComponent{
     this.buildForm();
   }
 
-  // ngAfterViewInit(): void {
-  //   setTimeout(() => {
-  //     document.getElementsByClassName("terms-of-use")[0].addEventListener("click", (ev) => {
-  //       ev.preventDefault();
-  //       ev.stopPropagation();
-  //       this._dialog.open(TermsOfUseComponent);
-  //     });
-      
-  //     document.getElementsByClassName("privacy-policy")[0].addEventListener("click", (ev) => {
-  //       ev.preventDefault();
-  //       ev.stopPropagation();
-  //       this._dialog.open(LeavingSiteDialog, {
-  //         data: {
-  //           url: 'https://www.boehringer-ingelheim.com/au/data-privacy',
-  //         }
-  //       })
-  //     });
-  //   });
-  // }
-
   onFormCreated(form: FormGroup): void {
     this.formCreated.emit(form);
   }
@@ -58,7 +38,7 @@ export class TermsFormComponent{
         label: 'Agree to terms',
       }),
       new CheckboxFormInputElement({
-        name: 'receiveConset',
+        name: 'treatmentConfirmed',
         label: 'You are receiving Omnitrope® (somatropin) treatment in New Zealand.',
         errorLabel: 'Receive Policy acceptance',
         validation: {
@@ -66,7 +46,7 @@ export class TermsFormComponent{
         },
       }),
       new CheckboxFormInputElement({
-        name: 'withdrawConset',
+        name: 'termsAccepted',
         label: 'You understand that you may withdraw from the program at any time. ',
         errorLabel: 'Withdraw Policy acceptance',
         validation: {
