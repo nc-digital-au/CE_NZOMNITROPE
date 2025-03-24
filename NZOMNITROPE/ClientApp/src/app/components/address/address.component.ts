@@ -1,5 +1,5 @@
 import { NgxGpAutocompleteModule, NgxGpAutocompleteOptions } from '@angular-magic/ngx-gp-autocomplete';
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { DynamicFormComponent } from '../dynamic-form/dynamic-form.component';
 import { DynamicForm } from '../dynamic-form/models/dynamic-form.model';
@@ -43,6 +43,8 @@ export class AddressComponent implements OnInit {
   hiddenFields: string[] = [];
   @Input()
   searchHint: string;
+  @Input()
+  disabledFields: string[] = [];
 
   @Output()
   formCreated = new EventEmitter<FormGroup>();
@@ -58,15 +60,24 @@ export class AddressComponent implements OnInit {
   };
 
   ngOnInit(): void {
-    this.options.types = [this.establishmentOnly ? 'establishment' : 'address'];
+    this.buildForm();
+  }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['establishmentOnly'] || changes['disabledFields']) {
+      this.buildForm();
+    }
+  }
+
+  private buildForm(): void {
     this.addressFormDefinition = new DynamicForm([
       new TextFormInputElement({
         name: 'name',
-        label: 'Pharmacist name',
+        label: 'Business name',
         hidden: this.hiddenFields.includes('name'),
+        disabled: this.disabledFields.includes('name'),
         validation: {
-          required: !this.hiddenFields.includes('name'),
+          required: !this.hiddenFields.includes('name') && !this.disabledFields.includes('name'),
         }
       }),
       new GroupFormElement({

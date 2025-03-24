@@ -23,6 +23,9 @@ import { requiredLength } from 'src/app/utils/validators/required-length.validat
   styleUrl: './dynamic-form.component.scss',
 })
 export class DynamicFormComponent implements OnChanges {
+  formGroup(formGroup: any) {
+    throw new Error('Method not implemented.');
+  }
   @Input()
   formDefinition: DynamicForm;
 

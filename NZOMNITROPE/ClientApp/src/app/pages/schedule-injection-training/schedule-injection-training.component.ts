@@ -16,6 +16,7 @@ import { TimeFormInputElement } from 'src/app/components/dynamic-form/models/for
 import { GetPatientInformationWithCarerResponse, PatientServiceProxy } from 'src/app/services/service-proxies/service-proxies';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { tap } from 'rxjs';
+import { GroupFormElement } from 'src/app/components/dynamic-form/models/form-elements/group-form-element.model';
 
 @Component({
   selector: 'app-schedule-injection-training',
@@ -87,19 +88,23 @@ export class ScheduleInjectionTrainingComponent {
       new TitleFormElement({
         label: 'Injection Training Session',
       }),
-      new DateFormInputElement({
-        name: 'sessionDate',
-        label: 'Date of Training',
-        validation: {
-          required: true,
-        },
-      }),
-      new TimeFormInputElement({
-        name: 'sessionTime',
-        label: 'Select Time',
-        validation: {
-          required: true,
-        },
+      new GroupFormElement({
+        children: [
+          new DateFormInputElement({
+            name: 'sessionDate',
+            label: 'Date of Training',
+            validation: {
+              required: true,
+            },
+          }),
+          new TimeFormInputElement({
+            name: 'sessionTime',
+            label: 'Select Time',
+            validation: {
+              required: true,
+            },
+          }),
+        ],
       }),
     ]);
   }

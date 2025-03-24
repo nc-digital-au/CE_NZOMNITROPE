@@ -25454,7 +25454,8 @@ export class PatientModelDto implements IPatientModelDto {
     lastName!: string | undefined;
     middleName!: string | undefined;
     title!: Title;
-    medicalReferenceNumber!: string | undefined;
+    nationalHealthIndex!: string | undefined;
+    medicareNumber!: string | undefined;
     birthDay!: number | undefined;
     birthMonth!: number | undefined;
     birthYear!: number | undefined;
@@ -25462,6 +25463,7 @@ export class PatientModelDto implements IPatientModelDto {
     phone!: string | undefined;
     mobile!: string | undefined;
     password!: string | undefined;
+    gender!: Gender;
 
     constructor(data?: IPatientModelDto) {
         if (data) {
@@ -25480,7 +25482,8 @@ export class PatientModelDto implements IPatientModelDto {
             this.lastName = _data["lastName"];
             this.middleName = _data["middleName"];
             this.title = _data["title"];
-            this.medicalReferenceNumber = _data["medicalReferenceNumber"];
+            this.nationalHealthIndex = _data["nationalHealthIndex"];
+            this.medicareNumber = _data["medicareNumber"];
             this.birthDay = _data["birthDay"];
             this.birthMonth = _data["birthMonth"];
             this.birthYear = _data["birthYear"];
@@ -25488,6 +25491,7 @@ export class PatientModelDto implements IPatientModelDto {
             this.phone = _data["phone"];
             this.mobile = _data["mobile"];
             this.password = _data["password"];
+            this.gender = _data["gender"];
         }
     }
 
@@ -25506,7 +25510,8 @@ export class PatientModelDto implements IPatientModelDto {
         data["lastName"] = this.lastName;
         data["middleName"] = this.middleName;
         data["title"] = this.title;
-        data["medicalReferenceNumber"] = this.medicalReferenceNumber;
+        data["nationalHealthIndex"] = this.nationalHealthIndex;
+        data["medicareNumber"] = this.medicareNumber;
         data["birthDay"] = this.birthDay;
         data["birthMonth"] = this.birthMonth;
         data["birthYear"] = this.birthYear;
@@ -25514,6 +25519,7 @@ export class PatientModelDto implements IPatientModelDto {
         data["phone"] = this.phone;
         data["mobile"] = this.mobile;
         data["password"] = this.password;
+        data["gender"] = this.gender;
         return data;
     }
 
@@ -25532,7 +25538,8 @@ export interface IPatientModelDto {
     lastName: string | undefined;
     middleName: string | undefined;
     title: Title;
-    medicalReferenceNumber: string | undefined;
+    nationalHealthIndex: string | undefined;
+    medicareNumber: string | undefined;
     birthDay: number | undefined;
     birthMonth: number | undefined;
     birthYear: number | undefined;
@@ -25540,6 +25547,7 @@ export interface IPatientModelDto {
     phone: string | undefined;
     mobile: string | undefined;
     password: string | undefined;
+    gender: Gender;
 }
 
 /** 1 = ApprovalRequired (Approval required) 2 = Approved (Approved) 3 = Inactive (Inactive) 4 = Reactivated (Reacivated) 5 = Archived (Archived) */
@@ -28093,6 +28101,8 @@ export class RegisterPspPatientWithDeliveryRequiredDto implements IRegisterPspPa
     carerModel!: CarerModelDto;
     deliveryModel!: DeliveryModelDto;
     programTermsAndConditionsModel!: ProgramTermsAndConditionsModelDto;
+    prescriberId!: string | undefined;
+    registrationMethod!: RegistrationMethod;
 
     constructor(data?: IRegisterPspPatientWithDeliveryRequiredDto) {
         if (data) {
@@ -28109,6 +28119,8 @@ export class RegisterPspPatientWithDeliveryRequiredDto implements IRegisterPspPa
             this.carerModel = _data["carerModel"] ? CarerModelDto.fromJS(_data["carerModel"]) : <any>undefined;
             this.deliveryModel = _data["deliveryModel"] ? DeliveryModelDto.fromJS(_data["deliveryModel"]) : <any>undefined;
             this.programTermsAndConditionsModel = _data["programTermsAndConditionsModel"] ? ProgramTermsAndConditionsModelDto.fromJS(_data["programTermsAndConditionsModel"]) : <any>undefined;
+            this.prescriberId = _data["prescriberId"];
+            this.registrationMethod = _data["registrationMethod"];
         }
     }
 
@@ -28125,6 +28137,8 @@ export class RegisterPspPatientWithDeliveryRequiredDto implements IRegisterPspPa
         data["carerModel"] = this.carerModel ? this.carerModel.toJSON() : <any>undefined;
         data["deliveryModel"] = this.deliveryModel ? this.deliveryModel.toJSON() : <any>undefined;
         data["programTermsAndConditionsModel"] = this.programTermsAndConditionsModel ? this.programTermsAndConditionsModel.toJSON() : <any>undefined;
+        data["prescriberId"] = this.prescriberId;
+        data["registrationMethod"] = this.registrationMethod;
         return data;
     }
 
@@ -28141,6 +28155,8 @@ export interface IRegisterPspPatientWithDeliveryRequiredDto {
     carerModel: CarerModelDto;
     deliveryModel: DeliveryModelDto;
     programTermsAndConditionsModel: ProgramTermsAndConditionsModelDto;
+    prescriberId: string | undefined;
+    registrationMethod: RegistrationMethod;
 }
 
 /** 1 = PortalWebForm (Portal web form) 2 = Emailed (Email to admin) 3 = PaperForm (Paper form) 4 = PackInsert (Pack insert) 5 = Other (Other) */

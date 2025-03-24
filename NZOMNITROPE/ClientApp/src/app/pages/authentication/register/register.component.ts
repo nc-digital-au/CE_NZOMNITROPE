@@ -10,7 +10,7 @@ import { TermsFormComponent } from './terms-form/terms-form.component';
 import { RouterLink } from '@angular/router';
 import { routeLinks } from 'src/app/utils/routes';
 import { AddressComponent } from 'src/app/components/address/address.component';
-import { AddressState, CarerModelDto, DeliveryModelDto, PatientModelDto, ProgramTermsAndConditionsModelDto, RegisterPspPatientWithDeliveryRequiredDto, RegistrationServiceProxy, Title } from 'src/app/services/service-proxies/service-proxies';
+import { AddressState, CarerModelDto, DeliveryModelDto, Gender, PatientModelDto, ProgramTermsAndConditionsModelDto, RegisterPspPatientWithDeliveryRequiredDto, RegistrationMethod, RegistrationServiceProxy, Title } from 'src/app/services/service-proxies/service-proxies';
 import { InlineAlertComponent } from 'src/app/components/inline-alert/inline-alert.component';
 import { ValidationProblemDetail } from 'src/app/interceptors/error.interceptor';
 import { GuardianFormComponent } from './guardian-form/guardian-form.component';
@@ -197,11 +197,13 @@ export class RegisterComponent implements OnInit {
       birthDay: undefined,
       birthYear: undefined,
       birthMonth: undefined,
-      medicalReferenceNumber: patientData.nhiNumber,
+      nationalHealthIndex: patientData.nhiNumber,
+      medicareNumber: undefined,
       email: patientData.email,
       mobile: patientData.mobilePhone,
       password: patientData.password,
       phone: undefined,
+      gender: Gender.NotSpecified
     });
     const carerDto = new CarerModelDto({
       firstName: guardianData.firstName,
@@ -229,10 +231,12 @@ export class RegisterComponent implements OnInit {
       marketingCommunicationConsentProvided: false,
     });
     const dto = new RegisterPspPatientWithDeliveryRequiredDto({
+      prescriberId: undefined,
       patientModel: patientDto,
       carerModel: carerDto,
       deliveryModel: addressDto,
       programTermsAndConditionsModel: termsDto,
+      registrationMethod: RegistrationMethod.PortalWebForm,
     });
     return dto;
   }
