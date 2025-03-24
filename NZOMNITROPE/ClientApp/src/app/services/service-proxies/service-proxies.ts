@@ -8291,6 +8291,62 @@ export class RegistrationServiceProxy {
         }
         return _observableOf(null as any);
     }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    registerPatientPspWithDelivery(body?: RegisterPspPatientWithDeliveryRequiredDto | undefined): Observable<GuidApiResponse> {
+        let url_ = this.baseUrl + "/api/register/patient-psp-with-delivery";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json-patch+json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processRegisterPatientPspWithDelivery(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processRegisterPatientPspWithDelivery(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<GuidApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<GuidApiResponse>;
+        }));
+    }
+
+    protected processRegisterPatientPspWithDelivery(response: HttpResponseBase): Observable<GuidApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = GuidApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
 }
 
 @Injectable({
@@ -11105,6 +11161,69 @@ export interface ICancelPatientPreEnrolmentDto {
     isCancelledByAdmin: boolean;
 }
 
+export class CarerModelDto implements ICarerModelDto {
+    firstName!: string | undefined;
+    lastName!: string | undefined;
+    middleName!: string | undefined;
+    email!: string | undefined;
+    phone!: string | undefined;
+    mobile!: string | undefined;
+
+    constructor(data?: ICarerModelDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.firstName = _data["firstName"];
+            this.lastName = _data["lastName"];
+            this.middleName = _data["middleName"];
+            this.email = _data["email"];
+            this.phone = _data["phone"];
+            this.mobile = _data["mobile"];
+        }
+    }
+
+    static fromJS(data: any): CarerModelDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new CarerModelDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["firstName"] = this.firstName;
+        data["lastName"] = this.lastName;
+        data["middleName"] = this.middleName;
+        data["email"] = this.email;
+        data["phone"] = this.phone;
+        data["mobile"] = this.mobile;
+        return data;
+    }
+
+    clone(): CarerModelDto {
+        const json = this.toJSON();
+        let result = new CarerModelDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface ICarerModelDto {
+    firstName: string | undefined;
+    lastName: string | undefined;
+    middleName: string | undefined;
+    email: string | undefined;
+    phone: string | undefined;
+    mobile: string | undefined;
+}
+
 export class Clinic implements IClinic {
     id!: string;
     readonly isDeleted!: boolean;
@@ -12797,6 +12916,81 @@ export enum DeletedReason {
     RecordDuplicated = 2,
     EnteredInError = 3,
     Archived = 4,
+}
+
+export class DeliveryModelDto implements IDeliveryModelDto {
+    delivetToName!: string | undefined;
+    deliveryContactNumber!: string | undefined;
+    unitNumber!: string | undefined;
+    streetAddress!: string | undefined;
+    city!: string | undefined;
+    state!: string | undefined;
+    postCode!: string | undefined;
+    deliveryInstructions!: string | undefined;
+    phone!: string | undefined;
+
+    constructor(data?: IDeliveryModelDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.delivetToName = _data["delivetToName"];
+            this.deliveryContactNumber = _data["deliveryContactNumber"];
+            this.unitNumber = _data["unitNumber"];
+            this.streetAddress = _data["streetAddress"];
+            this.city = _data["city"];
+            this.state = _data["state"];
+            this.postCode = _data["postCode"];
+            this.deliveryInstructions = _data["deliveryInstructions"];
+            this.phone = _data["phone"];
+        }
+    }
+
+    static fromJS(data: any): DeliveryModelDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new DeliveryModelDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["delivetToName"] = this.delivetToName;
+        data["deliveryContactNumber"] = this.deliveryContactNumber;
+        data["unitNumber"] = this.unitNumber;
+        data["streetAddress"] = this.streetAddress;
+        data["city"] = this.city;
+        data["state"] = this.state;
+        data["postCode"] = this.postCode;
+        data["deliveryInstructions"] = this.deliveryInstructions;
+        data["phone"] = this.phone;
+        return data;
+    }
+
+    clone(): DeliveryModelDto {
+        const json = this.toJSON();
+        let result = new DeliveryModelDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IDeliveryModelDto {
+    delivetToName: string | undefined;
+    deliveryContactNumber: string | undefined;
+    unitNumber: string | undefined;
+    streetAddress: string | undefined;
+    city: string | undefined;
+    state: string | undefined;
+    postCode: string | undefined;
+    deliveryInstructions: string | undefined;
+    phone: string | undefined;
 }
 
 export class DiscontinuePatientTreatmentByAdminDto implements IDiscontinuePatientTreatmentByAdminDto {
@@ -24953,6 +25147,101 @@ export interface IPatient {
     treatmentProfiles: TreatmentProfile[] | undefined;
 }
 
+export class PatientModelDto implements IPatientModelDto {
+    barcode!: string | undefined;
+    isPrescriptionConfirmed!: boolean;
+    firstName!: string | undefined;
+    lastName!: string | undefined;
+    middleName!: string | undefined;
+    title!: Title;
+    medicalReferenceNumber!: string | undefined;
+    birthDay!: number | undefined;
+    birthMonth!: number | undefined;
+    birthYear!: number | undefined;
+    email!: string | undefined;
+    phone!: string | undefined;
+    mobile!: string | undefined;
+    password!: string | undefined;
+
+    constructor(data?: IPatientModelDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.barcode = _data["barcode"];
+            this.isPrescriptionConfirmed = _data["isPrescriptionConfirmed"];
+            this.firstName = _data["firstName"];
+            this.lastName = _data["lastName"];
+            this.middleName = _data["middleName"];
+            this.title = _data["title"];
+            this.medicalReferenceNumber = _data["medicalReferenceNumber"];
+            this.birthDay = _data["birthDay"];
+            this.birthMonth = _data["birthMonth"];
+            this.birthYear = _data["birthYear"];
+            this.email = _data["email"];
+            this.phone = _data["phone"];
+            this.mobile = _data["mobile"];
+            this.password = _data["password"];
+        }
+    }
+
+    static fromJS(data: any): PatientModelDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new PatientModelDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["barcode"] = this.barcode;
+        data["isPrescriptionConfirmed"] = this.isPrescriptionConfirmed;
+        data["firstName"] = this.firstName;
+        data["lastName"] = this.lastName;
+        data["middleName"] = this.middleName;
+        data["title"] = this.title;
+        data["medicalReferenceNumber"] = this.medicalReferenceNumber;
+        data["birthDay"] = this.birthDay;
+        data["birthMonth"] = this.birthMonth;
+        data["birthYear"] = this.birthYear;
+        data["email"] = this.email;
+        data["phone"] = this.phone;
+        data["mobile"] = this.mobile;
+        data["password"] = this.password;
+        return data;
+    }
+
+    clone(): PatientModelDto {
+        const json = this.toJSON();
+        let result = new PatientModelDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IPatientModelDto {
+    barcode: string | undefined;
+    isPrescriptionConfirmed: boolean;
+    firstName: string | undefined;
+    lastName: string | undefined;
+    middleName: string | undefined;
+    title: Title;
+    medicalReferenceNumber: string | undefined;
+    birthDay: number | undefined;
+    birthMonth: number | undefined;
+    birthYear: number | undefined;
+    email: string | undefined;
+    phone: string | undefined;
+    mobile: string | undefined;
+    password: string | undefined;
+}
+
 /** 1 = ApprovalRequired (Approval required) 2 = Approved (Approved) 3 = Inactive (Inactive) 4 = Reactivated (Reacivated) 5 = Archived (Archived) */
 export enum PatientStatus {
     ApprovalRequired = 1,
@@ -26212,6 +26501,61 @@ export enum ProgramTaskStatus {
     Cancelled = 5,
 }
 
+export class ProgramTermsAndConditionsModelDto implements IProgramTermsAndConditionsModelDto {
+    privacyConsentProvided!: boolean;
+    programTermsAgreed!: boolean;
+    marketingCommunicationConsentProvided!: boolean;
+    adverseEventContactConsentProvided!: boolean;
+
+    constructor(data?: IProgramTermsAndConditionsModelDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.privacyConsentProvided = _data["privacyConsentProvided"];
+            this.programTermsAgreed = _data["programTermsAgreed"];
+            this.marketingCommunicationConsentProvided = _data["marketingCommunicationConsentProvided"];
+            this.adverseEventContactConsentProvided = _data["adverseEventContactConsentProvided"];
+        }
+    }
+
+    static fromJS(data: any): ProgramTermsAndConditionsModelDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new ProgramTermsAndConditionsModelDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["privacyConsentProvided"] = this.privacyConsentProvided;
+        data["programTermsAgreed"] = this.programTermsAgreed;
+        data["marketingCommunicationConsentProvided"] = this.marketingCommunicationConsentProvided;
+        data["adverseEventContactConsentProvided"] = this.adverseEventContactConsentProvided;
+        return data;
+    }
+
+    clone(): ProgramTermsAndConditionsModelDto {
+        const json = this.toJSON();
+        let result = new ProgramTermsAndConditionsModelDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IProgramTermsAndConditionsModelDto {
+    privacyConsentProvided: boolean;
+    programTermsAgreed: boolean;
+    marketingCommunicationConsentProvided: boolean;
+    adverseEventContactConsentProvided: boolean;
+}
+
 /** 1 = PatientSupportProgram 2 = ProductAccessProgram 3 = ProductFamiliarisationProgram 4 = ClinicalAuditProgram */
 export enum ProgramType {
     PatientSupportProgram = 1,
@@ -27442,6 +27786,61 @@ export interface IRegisterProgramAdministratorFromInviteDto {
     acknowledgementOfContactPermission: boolean;
     email: string | undefined;
     password: string | undefined;
+}
+
+export class RegisterPspPatientWithDeliveryRequiredDto implements IRegisterPspPatientWithDeliveryRequiredDto {
+    patientModel!: PatientModelDto;
+    carerModel!: CarerModelDto;
+    deliveryModel!: DeliveryModelDto;
+    programTermsAndConditionsModel!: ProgramTermsAndConditionsModelDto;
+
+    constructor(data?: IRegisterPspPatientWithDeliveryRequiredDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.patientModel = _data["patientModel"] ? PatientModelDto.fromJS(_data["patientModel"]) : <any>undefined;
+            this.carerModel = _data["carerModel"] ? CarerModelDto.fromJS(_data["carerModel"]) : <any>undefined;
+            this.deliveryModel = _data["deliveryModel"] ? DeliveryModelDto.fromJS(_data["deliveryModel"]) : <any>undefined;
+            this.programTermsAndConditionsModel = _data["programTermsAndConditionsModel"] ? ProgramTermsAndConditionsModelDto.fromJS(_data["programTermsAndConditionsModel"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): RegisterPspPatientWithDeliveryRequiredDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new RegisterPspPatientWithDeliveryRequiredDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["patientModel"] = this.patientModel ? this.patientModel.toJSON() : <any>undefined;
+        data["carerModel"] = this.carerModel ? this.carerModel.toJSON() : <any>undefined;
+        data["deliveryModel"] = this.deliveryModel ? this.deliveryModel.toJSON() : <any>undefined;
+        data["programTermsAndConditionsModel"] = this.programTermsAndConditionsModel ? this.programTermsAndConditionsModel.toJSON() : <any>undefined;
+        return data;
+    }
+
+    clone(): RegisterPspPatientWithDeliveryRequiredDto {
+        const json = this.toJSON();
+        let result = new RegisterPspPatientWithDeliveryRequiredDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IRegisterPspPatientWithDeliveryRequiredDto {
+    patientModel: PatientModelDto;
+    carerModel: CarerModelDto;
+    deliveryModel: DeliveryModelDto;
+    programTermsAndConditionsModel: ProgramTermsAndConditionsModelDto;
 }
 
 /** 1 = PortalWebForm (Portal web form) 2 = Emailed (Email to admin) 3 = PaperForm (Paper form) 4 = PackInsert (Pack insert) 5 = Other (Other) */

@@ -10,22 +10,16 @@ import { TermsFormComponent } from './terms-form/terms-form.component';
 import { RouterLink } from '@angular/router';
 import { routeLinks } from 'src/app/utils/routes';
 import { AddressComponent } from 'src/app/components/address/address.component';
-import { GetRegistrationStatusRepsonse, RegistrationServiceProxy } from 'src/app/services/service-proxies/service-proxies';
+import { RegisterPspPatientWithDeliveryRequiredDto, RegistrationServiceProxy, Title } from 'src/app/services/service-proxies/service-proxies';
 import { InlineAlertComponent } from 'src/app/components/inline-alert/inline-alert.component';
 import { ValidationProblemDetail } from 'src/app/interceptors/error.interceptor';
-import { PatientFormComponent } from './patient-form/patient-form.component';
 import { GuardianFormComponent } from './guardian-form/guardian-form.component';
 import { PersonCollectingFormComponent } from './person-collecting-form/person-collecting-form.component';
-import { MatError, MatFormField, MatFormFieldModule, MatLabel } from '@angular/material/form-field';
-import { MatCheckbox } from '@angular/material/checkbox';
-import { DynamicForm } from 'src/app/components/dynamic-form/models/dynamic-form.model';
-import { TextFormInputElement } from 'src/app/components/dynamic-form/models/form-elements/text-form-input-element.model';
-import { TitleFormElement } from 'src/app/components/dynamic-form/models/form-elements/title-form-element.model';
-import { ValidateMobile } from 'src/app/utils/validators/mobile.validator';
-import { GroupFormElement } from 'src/app/components/dynamic-form/models/form-elements/group-form-element.model';
-import { CheckboxFormInputElement } from 'src/app/components/dynamic-form/models/form-elements/checkbox-form-input-element.model';
-import { DynamicFormComponent } from 'src/app/components/dynamic-form/dynamic-form.component';
+import { MatError, MatFormFieldModule, MatLabel } from '@angular/material/form-field';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { MatInputModule } from '@angular/material/input';
+import { RegisterPatientDetailsComponent } from './register-patient-details/register-patient-details.component';
 
 @Component({
   selector: 'app-register',
@@ -44,19 +38,19 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
     TermsFormComponent,
     AddressComponent,
     InlineAlertComponent,
-    PatientFormComponent,
     GuardianFormComponent,
     PersonCollectingFormComponent,
     MatError,
-    MatCheckbox,
+    MatCheckboxModule,
+    MatInputModule,
     MatLabel,
     MatFormFieldModule,
     MatCardHeader,
     MatCardTitle,
     ReactiveFormsModule,
     CommonModule,
-    DynamicFormComponent
-],
+    RegisterPatientDetailsComponent
+  ],
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss',
   viewProviders: [
@@ -73,17 +67,16 @@ export class RegisterComponent implements OnInit {
 
   routeLinks = routeLinks;
   stepperOrientation$: Observable<StepperOrientation>;
+  barcodeFormSubmitted: boolean = false;
+  barcodeInvalid: boolean = false;
 
-  barcodeForm = this._fb.group({});
-  barcodeFormDefinition: DynamicForm;
   patientForm = this._fb.group({});
   guardianForm = this._fb.group({});
   collectingForm = this._fb.group({});
   addressForm = this._fb.group({});
   termsForm = this._fb.group({});
-
-  isBarcodeValid: boolean = false;
-
+  barcodeForm: FormGroup;
+  
   registrationSuccess: boolean;
   registrationProblem: ValidationProblemDetail;
   
@@ -104,28 +97,16 @@ export class RegisterComponent implements OnInit {
   }
 
   private buildBarcodeForm(): void {
-    this.barcodeFormDefinition = new DynamicForm([
-      new GroupFormElement({
-        children: [
-          new TextFormInputElement({
-            name: 'barcode',
-            label: 'Barcode',
-            validation: {
-              required: true,
-              pattern: '/^\d{4}$/',
-            },
-          }),
-        ]
-      }),
-      new CheckboxFormInputElement({
-        name: 'confirm',
-        label: `I confirm that I have been prescribed Omnitrope® (somatropin).`,
-        errorLabel: 'Confirmation',
-        validation: {
-          required: true, 
-        },
-      }),
-    ]);
+    this.barcodeForm = this._fb.group({
+      barcode: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern(/^\d{4}$/), // Ensure it's exactly 4 digits
+        ],
+      ],
+      consent: [false, Validators.requiredTrue], // Checkbox for consent
+    });
   }
 
   submitBarcodeValidation() {
@@ -133,30 +114,56 @@ export class RegisterComponent implements OnInit {
     const barcodeFormData = this.barcodeForm.value as any;
     if (this.barcodeForm.valid) {
       const barcode = barcodeFormData.barcode;
-      console.log('Barcode:', barcode);
       this._registrationService.validateProductBarcode(barcode)
         .pipe(
           takeUntilDestroyed(this._destroyRef),
         )
-        .subscribe((response) => {
-           if (response.isSuccess && response.resultObject === true) {
-            this.isBarcodeValid = true;
-            this.stepper.next();
+        .subscribe((response) => 
+          {
+           if (response.isSuccess) {
+            const validBarcode = response.resultObject;
+            this.barcodeInvalid = !validBarcode;
+            if (validBarcode){
+              this.stepper.next();
+            }
            } else {
             this.barcodeForm.setErrors({ invalid: true });
            }
+           this.barcodeFormSubmitted = true;
         }
       );
     }
-}
-  
+  }
+
+  submitPatientDetailsForm(){
+    const patientFormData = this.patientForm.value as any;
+    this.patientForm.markAllAsTouched();
+    if (this.patientForm.valid) {
+      this.stepper.next();
+    }
+  }
+
+  submitGuardianForm(){
+    const guardianFormData = this.guardianForm.value as any;
+    console.log(guardianFormData);
+    this.guardianForm.markAllAsTouched();
+    if (this.guardianForm.valid) {
+      this.stepper.next();
+    }
+  }
+
+  submitDeliveryForm(){
+    const collectingFormData = this.collectingForm.value as any;
+    console.log(collectingFormData);
+    this.collectingForm.markAllAsTouched();
+    if (this.collectingForm.valid) {
+      this.stepper.next();
+    }
+  }
   onRegisterClick(): void {
-    // if (this.profileForm.valid && this.contactForm.valid && this.termsForm.valid) {
-    //   const profileData = this.profileForm.value as any;
-    //   const contactData = this.contactForm.value as any;
-    //   const termsData = this.termsForm.value as any;
-      
-    //   this._registrationService.prescriber(new RegisterPrescriberDto({
+    // const dto = this.createDto();
+    // if (this.patientForm.valid && this.guardianForm.valid && this.addressForm.valid && this.termsForm.valid) {
+    //   this._registrationService.registerPatientPspWithDelivery(new RegisterPrescriberDto({
     //     registrationMethod: RegistrationMethod.PortalWebForm,
     //     title: profileData.title,
     //     firstName: profileData.firstName,
@@ -210,4 +217,56 @@ export class RegisterComponent implements OnInit {
     //   });
     // }
   }
+
+  // private createDto(): RegisterPspPatientWithDeliveryRequiredDto {
+  //   const patientData = this.patientForm.value as any;
+  //   const guardianData = this.guardianForm.value as any;
+  //   const collectingFormData = this.collectingForm.value as any;
+  //   const addressData = this.addressForm.value as any;
+  //   const termsData = this.termsForm.value as any;
+  //   const barcodeData = this.barcodeForm.value as any;
+  //   const dto = new RegisterPspPatientWithDeliveryRequiredDto({
+  //     patientModel: {
+  //       barcode: barcodeData.barcode,
+  //       isPrescriptionConfirmed: true,
+  //       title: Title.Unknown,
+  //       firstName: patientData.firstName,
+  //       lastName: patientData.lastName,
+  //       middleName: undefined,
+  //       birthDay: undefined,
+  //       birthYear: undefined,
+  //       birthMonth: undefined,
+  //       medicalReferenceNumber: patientData.nhiNumber,
+  //       email: patientData.email,
+  //       mobile: patientData.mobilePhone,
+  //       password: patientData.password,
+  //       phone: undefined,
+  //     },
+  //     carerModel: {
+  //       firstName: guardianData.firstName,
+  //       lastName: guardianData.lastName,
+  //       email: guardianData.email,
+  //       mobile: guardianData.mobilePhone,
+  //       middleName: undefined,
+  //       phone: undefined,
+  //     },
+  //     deliveryModel: {
+  //       delivetToName: collectingFormData.firstName + ' ' + collectingFormData.lastName,
+  //       deliveryContactNumber: collectingFormData.mobilePhone,
+  //       unitNumber: addressData.unitNumber,
+  //       streetAddress: addressData.streetAddress,
+  //       city: addressData.city,
+  //       postCode: addressData.postcode,
+  //       state: addressData.state,
+  //       deliveryInstructions: undefined,
+  //       phone: collectingFormData.phone,
+  //     },
+  //     programTerms: termsData.programTerms,
+  //     privacyConsent: termsData.privacyConsent,
+  //     adverseEventContactConsent: termsData.adverseEventContactConsent,
+  //     contactConsent: termsData.contactConsent,
+  //     marketingCommunicationConsent: termsData.marketingCommunicationConsent,
+  //   });
+  //   return dto;
+  // }
 }

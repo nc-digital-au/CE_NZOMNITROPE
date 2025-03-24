@@ -4,9 +4,9 @@
 
 export const environment = {
   production: false,
-  programId: 'be2e7704-2ca2-4209-b304-1a31efd16077',
-  // googleApiKey: 'AIzaSyABT1mFCXB5TEm4_aPRvwLj4ZRFMgWAltk',
-  googleApiKey: 'AIzaSyCU-xrj6qLt4JijYTt9GPy8JJ1IyTTVpAY'
+  programId: '2b8753ae-e823-4033-aef7-c4e102b463a1',
+  googleApiKey: 'AIzaSyCU-xrj6qLt4JijYTt9GPy8JJ1IyTTVpAY',
+  resourceRequestEmail: 'testprogamadmin@nc-digital.com.au'
 };
 
 /*

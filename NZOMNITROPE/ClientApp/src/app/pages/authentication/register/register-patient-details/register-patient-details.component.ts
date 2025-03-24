@@ -1,24 +1,19 @@
-import { Component, EventEmitter, Output, OnInit } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { DynamicForm } from 'src/app/components/dynamic-form/models/dynamic-form.model';
 import { DynamicFormComponent } from 'src/app/components/dynamic-form/dynamic-form.component';
-import { GroupFormElement } from 'src/app/components/dynamic-form/models/form-elements/group-form-element.model';
-import { SelectFormInputElement } from 'src/app/components/dynamic-form/models/form-elements/select-form-input-element.model';
+import { DynamicForm } from 'src/app/components/dynamic-form/models/dynamic-form.model';
 import { TextFormInputElement } from 'src/app/components/dynamic-form/models/form-elements/text-form-input-element.model';
 import { TitleFormElement } from 'src/app/components/dynamic-form/models/form-elements/title-form-element.model';
-import { CheckboxFormInputElement } from 'src/app/components/dynamic-form/models/form-elements/checkbox-form-input-element.model';
 import { ValidateMobile } from 'src/app/utils/validators/mobile.validator';
 
 @Component({
-  selector: 'app-patient-form',
+  selector: 'app-register-patient-details',
   standalone: true,
-  imports: [
-    DynamicFormComponent,
-  ],
-  templateUrl: './patient-form.component.html',
-  styleUrls: ['./patient-form.component.scss'],
+  imports: [DynamicFormComponent],
+  templateUrl: './register-patient-details.component.html',
+  styleUrl: './register-patient-details.component.scss'
 })
-export class PatientFormComponent implements OnInit {
+export class RegisterPatientDetailsComponent {
   @Output() formCreated = new EventEmitter<FormGroup>();
 
   patientFormDefinition: DynamicForm;
