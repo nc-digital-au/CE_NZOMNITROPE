@@ -22,11 +22,13 @@ import { DynamicFormComponentBase } from '../../dynamic-form-component-base.mode
 export class SelectFormElementComponent extends DynamicFormComponentBase {
   @Input()
   set formElement(value: FormElement) {
-    this.selectFormElement = value as any;
+    this.selectFormElement = value as SelectFormInputElement;
+    this.hidden = this.selectFormElement.hidden ?? false;
   }
 
   @Input()
   form: FormGroup;
 
   selectFormElement: SelectFormInputElement;
+  hidden = false;
 }

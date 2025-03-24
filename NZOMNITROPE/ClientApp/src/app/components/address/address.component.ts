@@ -56,7 +56,7 @@ export class AddressComponent implements OnInit {
   addressFormDefinition: DynamicForm;
 
   options: NgxGpAutocompleteOptions = {
-    componentRestrictions: { country: ['au'] },
+    componentRestrictions: { country: ['nz'] },
     fields: ['name', 'address_components', 'geometry'],
   };
 
@@ -113,19 +113,6 @@ export class AddressComponent implements OnInit {
       }),
       new GroupFormElement({
         children: [
-          new SelectFormInputElement({
-            name: 'state',
-            label: 'State',
-            hidden: true,
-            options: stateOptions,
-            validation: {
-              required: !this.hiddenFields.includes('state'),
-            },
-          }),
-        ],
-      }),
-      new GroupFormElement({
-        children: [
           new TextFormInputElement({
             name: 'postcode',
             label: 'Post code',
@@ -142,6 +129,19 @@ export class AddressComponent implements OnInit {
             validation: {
               phone: true,
               required: !this.hiddenFields.includes('phone'),
+            },
+          }),
+        ],
+      }),
+      new GroupFormElement({
+        children: [
+          new SelectFormInputElement({
+            name: 'state',
+            label: 'State',
+            hidden: true,
+            options: stateOptions,
+            validation: {
+              required: !this.hiddenFields.includes('state'),
             },
           }),
           // new TextFormInputElement({
