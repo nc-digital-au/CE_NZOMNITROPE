@@ -3097,6 +3097,57 @@ export class PatientServiceProxy {
     }
 
     /**
+     * @return Success
+     */
+    getPatientInformationWithCarer(): Observable<GetPatientInformationWithCarerResponseApiResponse> {
+        let url_ = this.baseUrl + "/api/patient/Get-Profile-With-Carer";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetPatientInformationWithCarer(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetPatientInformationWithCarer(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<GetPatientInformationWithCarerResponseApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<GetPatientInformationWithCarerResponseApiResponse>;
+        }));
+    }
+
+    protected processGetPatientInformationWithCarer(response: HttpResponseBase): Observable<GetPatientInformationWithCarerResponseApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = GetPatientInformationWithCarerResponseApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
      * @param searchFilter (optional) 
      * @param sortField (optional) 
      * @param sortDescending (optional) 
@@ -11161,6 +11212,77 @@ export interface ICancelPatientPreEnrolmentDto {
     isCancelledByAdmin: boolean;
 }
 
+export class CarerModel implements ICarerModel {
+    carerId!: string;
+    title!: Title;
+    firstName!: string | undefined;
+    lastName!: string | undefined;
+    middleName!: string | undefined;
+    email!: string | undefined;
+    mobile!: string | undefined;
+    phone!: string | undefined;
+
+    constructor(data?: ICarerModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.carerId = _data["carerId"];
+            this.title = _data["title"];
+            this.firstName = _data["firstName"];
+            this.lastName = _data["lastName"];
+            this.middleName = _data["middleName"];
+            this.email = _data["email"];
+            this.mobile = _data["mobile"];
+            this.phone = _data["phone"];
+        }
+    }
+
+    static fromJS(data: any): CarerModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new CarerModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["carerId"] = this.carerId;
+        data["title"] = this.title;
+        data["firstName"] = this.firstName;
+        data["lastName"] = this.lastName;
+        data["middleName"] = this.middleName;
+        data["email"] = this.email;
+        data["mobile"] = this.mobile;
+        data["phone"] = this.phone;
+        return data;
+    }
+
+    clone(): CarerModel {
+        const json = this.toJSON();
+        let result = new CarerModel();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface ICarerModel {
+    carerId: string;
+    title: Title;
+    firstName: string | undefined;
+    lastName: string | undefined;
+    middleName: string | undefined;
+    email: string | undefined;
+    mobile: string | undefined;
+    phone: string | undefined;
+}
+
 export class CarerModelDto implements ICarerModelDto {
     firstName!: string | undefined;
     lastName!: string | undefined;
@@ -18695,6 +18817,184 @@ export class GetPatientEligibilityCriteriaResponseIEnumerableApiResponse impleme
 export interface IGetPatientEligibilityCriteriaResponseIEnumerableApiResponse {
     isSuccess: boolean;
     resultObject: GetPatientEligibilityCriteriaResponse[] | undefined;
+    problemDetails: ProblemDetails;
+}
+
+export class GetPatientInformationWithCarerResponse implements IGetPatientInformationWithCarerResponse {
+    patientId!: string;
+    title!: Title;
+    firstName!: string | undefined;
+    lastName!: string | undefined;
+    middleName!: string | undefined;
+    dateOfBirth!: Date | undefined;
+    birthDay!: number | undefined;
+    birthMonth!: number | undefined;
+    birthYear!: number | undefined;
+    gender!: Gender;
+    medicareNumber!: string | undefined;
+    nationalHealthIndex!: string | undefined;
+    supportProgramAccessCode!: string | undefined;
+    email!: string | undefined;
+    phoneNumber!: string | undefined;
+    mobileNumber!: string | undefined;
+    homeUnitNumber!: string | undefined;
+    homeStreetAddress!: string | undefined;
+    homeCity!: string | undefined;
+    homeState!: AddressState;
+    homePostcode!: string | undefined;
+    carer!: CarerModel;
+
+    constructor(data?: IGetPatientInformationWithCarerResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.patientId = _data["patientId"];
+            this.title = _data["title"];
+            this.firstName = _data["firstName"];
+            this.lastName = _data["lastName"];
+            this.middleName = _data["middleName"];
+            this.dateOfBirth = _data["dateOfBirth"] ? new Date(_data["dateOfBirth"].toString()) : <any>undefined;
+            this.birthDay = _data["birthDay"];
+            this.birthMonth = _data["birthMonth"];
+            this.birthYear = _data["birthYear"];
+            this.gender = _data["gender"];
+            this.medicareNumber = _data["medicareNumber"];
+            this.nationalHealthIndex = _data["nationalHealthIndex"];
+            this.supportProgramAccessCode = _data["supportProgramAccessCode"];
+            this.email = _data["email"];
+            this.phoneNumber = _data["phoneNumber"];
+            this.mobileNumber = _data["mobileNumber"];
+            this.homeUnitNumber = _data["homeUnitNumber"];
+            this.homeStreetAddress = _data["homeStreetAddress"];
+            this.homeCity = _data["homeCity"];
+            this.homeState = _data["homeState"];
+            this.homePostcode = _data["homePostcode"];
+            this.carer = _data["carer"] ? CarerModel.fromJS(_data["carer"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): GetPatientInformationWithCarerResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetPatientInformationWithCarerResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["patientId"] = this.patientId;
+        data["title"] = this.title;
+        data["firstName"] = this.firstName;
+        data["lastName"] = this.lastName;
+        data["middleName"] = this.middleName;
+        data["dateOfBirth"] = this.dateOfBirth ? this.dateOfBirth.toISOString() : <any>undefined;
+        data["birthDay"] = this.birthDay;
+        data["birthMonth"] = this.birthMonth;
+        data["birthYear"] = this.birthYear;
+        data["gender"] = this.gender;
+        data["medicareNumber"] = this.medicareNumber;
+        data["nationalHealthIndex"] = this.nationalHealthIndex;
+        data["supportProgramAccessCode"] = this.supportProgramAccessCode;
+        data["email"] = this.email;
+        data["phoneNumber"] = this.phoneNumber;
+        data["mobileNumber"] = this.mobileNumber;
+        data["homeUnitNumber"] = this.homeUnitNumber;
+        data["homeStreetAddress"] = this.homeStreetAddress;
+        data["homeCity"] = this.homeCity;
+        data["homeState"] = this.homeState;
+        data["homePostcode"] = this.homePostcode;
+        data["carer"] = this.carer ? this.carer.toJSON() : <any>undefined;
+        return data;
+    }
+
+    clone(): GetPatientInformationWithCarerResponse {
+        const json = this.toJSON();
+        let result = new GetPatientInformationWithCarerResponse();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetPatientInformationWithCarerResponse {
+    patientId: string;
+    title: Title;
+    firstName: string | undefined;
+    lastName: string | undefined;
+    middleName: string | undefined;
+    dateOfBirth: Date | undefined;
+    birthDay: number | undefined;
+    birthMonth: number | undefined;
+    birthYear: number | undefined;
+    gender: Gender;
+    medicareNumber: string | undefined;
+    nationalHealthIndex: string | undefined;
+    supportProgramAccessCode: string | undefined;
+    email: string | undefined;
+    phoneNumber: string | undefined;
+    mobileNumber: string | undefined;
+    homeUnitNumber: string | undefined;
+    homeStreetAddress: string | undefined;
+    homeCity: string | undefined;
+    homeState: AddressState;
+    homePostcode: string | undefined;
+    carer: CarerModel;
+}
+
+export class GetPatientInformationWithCarerResponseApiResponse implements IGetPatientInformationWithCarerResponseApiResponse {
+    isSuccess!: boolean;
+    resultObject!: GetPatientInformationWithCarerResponse;
+    problemDetails!: ProblemDetails;
+
+    constructor(data?: IGetPatientInformationWithCarerResponseApiResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.isSuccess = _data["isSuccess"];
+            this.resultObject = _data["resultObject"] ? GetPatientInformationWithCarerResponse.fromJS(_data["resultObject"]) : <any>undefined;
+            this.problemDetails = _data["problemDetails"] ? ProblemDetails.fromJS(_data["problemDetails"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): GetPatientInformationWithCarerResponseApiResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetPatientInformationWithCarerResponseApiResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["isSuccess"] = this.isSuccess;
+        data["resultObject"] = this.resultObject ? this.resultObject.toJSON() : <any>undefined;
+        data["problemDetails"] = this.problemDetails ? this.problemDetails.toJSON() : <any>undefined;
+        return data;
+    }
+
+    clone(): GetPatientInformationWithCarerResponseApiResponse {
+        const json = this.toJSON();
+        let result = new GetPatientInformationWithCarerResponseApiResponse();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetPatientInformationWithCarerResponseApiResponse {
+    isSuccess: boolean;
+    resultObject: GetPatientInformationWithCarerResponse;
     problemDetails: ProblemDetails;
 }
 

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output, OnInit } from '@angular/core';
+import { Component, EventEmitter, Output, OnInit, Input } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { DynamicForm } from 'src/app/components/dynamic-form/models/dynamic-form.model';
 import { DynamicFormComponent } from 'src/app/components/dynamic-form/dynamic-form.component';
@@ -61,7 +61,7 @@ export class PatientFormComponent implements OnInit {
         },
       }),
       new TextFormInputElement({
-        name: 'mobilePhone',
+        name: 'mobile',
         label: 'Mobile Phone',
         validation: {
           required: true,

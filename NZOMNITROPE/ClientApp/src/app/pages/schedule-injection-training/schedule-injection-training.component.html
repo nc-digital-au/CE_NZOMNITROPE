@@ -10,10 +10,10 @@
       <mat-card-content class="b-t-1">
         <!-- Patient Details Section -->
         <div formGroupName="patientDetails">
-          <app-patient-form></app-patient-form>
+          <app-patient-form (formCreated)="patientForm = $event"></app-patient-form>
         </div>
 
-        <app-guardian-form></app-guardian-form>
+        <app-guardian-form (formCreated)="guardianForm = $event"></app-guardian-form>
         <app-dynamic-form [formDefinition]="injectionSessionFormDefinition"></app-dynamic-form>
 
         <p>NOTE: Please ensure that you have received your SurePal® device prior to the training session.</p>

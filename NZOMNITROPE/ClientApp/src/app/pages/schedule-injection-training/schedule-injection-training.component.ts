@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, DestroyRef, inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -13,6 +13,9 @@ import { TitleFormElement } from 'src/app/components/dynamic-form/models/form-el
 import { DateFormInputElement } from 'src/app/components/dynamic-form/models/form-elements/date-form-input-element.model';
 import { MatTimepickerModule } from '@angular/material/timepicker';
 import { TimeFormInputElement } from 'src/app/components/dynamic-form/models/form-elements/time-form-input-element.model';
+import { GetPatientInformationWithCarerResponse, PatientServiceProxy } from 'src/app/services/service-proxies/service-proxies';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { tap } from 'rxjs';
 
 @Component({
   selector: 'app-schedule-injection-training',
@@ -36,28 +39,47 @@ export class ScheduleInjectionTrainingComponent {
   enrolmentSuccess = false;
   injectionTrainingForm!: FormGroup;
   injectionSessionFormDefinition!: DynamicForm;
+  patientForm  = this.fb.group({});
+  guardianForm = this.fb.group({});
+  _destroyRef = inject(DestroyRef);
+  patientModel: GetPatientInformationWithCarerResponse;
 
   constructor(
     private readonly fb: FormBuilder,
-    private readonly router: Router
+    private readonly router: Router,
+    private readonly patientService: PatientServiceProxy
   ) {}
 
   ngOnInit(): void {
+
     this.buildForm();
     this.injectionTrainingForm = this.fb.group({
-      patientDetails: this.buildPatientDetailsForm(),
       injectionSession: this.fb.group({}), 
     });
   }
 
-  private buildPatientDetailsForm(): FormGroup {
-    return this.fb.group({
-      addressLine1: ['', Validators.required],
-      addressLine2: [''],
-      suburb: ['', Validators.required],
-      state: ['', Validators.required],
-      postcode: ['', Validators.required],
-    });
+  private getPatientInformation(): void {
+    this.patientService.getPatientInformationWithCarer()
+      .pipe(
+        takeUntilDestroyed(this._destroyRef),
+        tap((response) => {
+          if(response.isSuccess){
+            this.patientModel = response.resultObject;
+            this.updatePatientForm(this.patientModel);
+            this.updateGuardianForm(this.patientModel);
+          }
+        })
+      )
+      .subscribe(({
+        next: (result) => {
+          if(result.isSuccess){
+            this.patientModel = result.resultObject;
+          }
+        },
+        error: (error) => {
+          console.error('Error fetching patient information:', error);
+        }
+      }));
   }
 
   private buildForm(): void {
@@ -80,6 +102,30 @@ export class ScheduleInjectionTrainingComponent {
         },
       }),
     ]);
+  }
+
+  private updatePatientForm(data: GetPatientInformationWithCarerResponse): void {
+    const patientFormData = {
+      firstName: data.firstName,
+      lastName: data.lastName,
+      nhiNumber: data.nationalHealthIndex,
+      email: data.email,
+      mobile: data.mobileNumber,
+    }
+    this.patientForm.patchValue(patientFormData);
+  }
+
+  private updateGuardianForm(data: GetPatientInformationWithCarerResponse): void {
+    if(!data.carer){
+      return;
+    }
+    const guardianFormData = {
+      firstName: data.carer.firstName,
+      lastName: data.carer.lastName,
+      email: data.carer.email,
+      mobile: data.carer.mobile
+    }
+    this.guardianForm.patchValue(guardianFormData);
   }
 
   onSubmit(): void {
