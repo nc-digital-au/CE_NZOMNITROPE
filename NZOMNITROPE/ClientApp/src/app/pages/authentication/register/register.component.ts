@@ -1,22 +1,30 @@
 import { BreakpointObserver } from '@angular/cdk/layout';
-import { AsyncPipe } from '@angular/common';
-import { Component, DestroyRef, inject, ViewChild } from '@angular/core';
-import { ControlContainer, FormBuilder } from '@angular/forms';
-import { MatCard, MatCardContent } from '@angular/material/card';
+import { AsyncPipe, CommonModule } from '@angular/common';
+import { Component, DestroyRef, inject, OnInit, ViewChild } from '@angular/core';
+import { ControlContainer, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { MatCard, MatCardContent, MatCardHeader, MatCardTitle } from '@angular/material/card';
 import { MatStep, MatStepLabel, MatStepper, MatStepperNext, MatStepperPrevious, StepperOrientation } from '@angular/material/stepper';
 import { map, Observable } from 'rxjs';
-import { WelcomeFormComponent } from './welcome-form/welcome-form.component';
 import { MatButton } from '@angular/material/button';
 import { TermsFormComponent } from './terms-form/terms-form.component';
-import { RouterLink, RouterOutlet } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import { routeLinks } from 'src/app/utils/routes';
 import { AddressComponent } from 'src/app/components/address/address.component';
-import { RegistrationServiceProxy } from 'src/app/services/service-proxies/service-proxies';
+import { GetRegistrationStatusRepsonse, RegistrationServiceProxy } from 'src/app/services/service-proxies/service-proxies';
 import { InlineAlertComponent } from 'src/app/components/inline-alert/inline-alert.component';
 import { ValidationProblemDetail } from 'src/app/interceptors/error.interceptor';
 import { PatientFormComponent } from './patient-form/patient-form.component';
 import { GuardianFormComponent } from './guardian-form/guardian-form.component';
 import { PersonCollectingFormComponent } from './person-collecting-form/person-collecting-form.component';
+import { MatError, MatFormField, MatFormFieldModule, MatLabel } from '@angular/material/form-field';
+import { MatCheckbox } from '@angular/material/checkbox';
+import { DynamicForm } from 'src/app/components/dynamic-form/models/dynamic-form.model';
+import { TextFormInputElement } from 'src/app/components/dynamic-form/models/form-elements/text-form-input-element.model';
+import { TitleFormElement } from 'src/app/components/dynamic-form/models/form-elements/title-form-element.model';
+import { ValidateMobile } from 'src/app/utils/validators/mobile.validator';
+import { GroupFormElement } from 'src/app/components/dynamic-form/models/form-elements/group-form-element.model';
+import { CheckboxFormInputElement } from 'src/app/components/dynamic-form/models/form-elements/checkbox-form-input-element.model';
+import { DynamicFormComponent } from 'src/app/components/dynamic-form/dynamic-form.component';
 
 @Component({
   selector: 'app-register',
@@ -32,15 +40,22 @@ import { PersonCollectingFormComponent } from './person-collecting-form/person-c
     MatButton,
     AsyncPipe,
     RouterLink,
-    WelcomeFormComponent,
     TermsFormComponent,
     AddressComponent,
     InlineAlertComponent,
     PatientFormComponent,
     GuardianFormComponent,
     PersonCollectingFormComponent,
-    RouterOutlet
-  ],
+    MatError,
+    MatCheckbox,
+    MatLabel,
+    MatFormFieldModule,
+    MatCardHeader,
+    MatCardTitle,
+    ReactiveFormsModule,
+    CommonModule,
+    DynamicFormComponent
+],
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss',
   viewProviders: [
@@ -50,14 +65,25 @@ import { PersonCollectingFormComponent } from './person-collecting-form/person-c
     },
   ],
 })
-export class RegisterComponent {
+export class RegisterComponent implements OnInit {
   @ViewChild('stepper')
   stepper: MatStepper;
 
   routeLinks = routeLinks;
   stepperOrientation$: Observable<StepperOrientation>;
 
-  welcomeForm = this._fb.group({});
+  // barcodeForm = this._fb.group({
+  //   barcode: [
+  //     '',
+  //     [
+  //       Validators.required,
+  //       Validators.pattern(/^\d{4}$/), // Ensure it's exactly 4 digits
+  //     ],
+  //   ],
+  //   consent: [false, Validators.requiredTrue], // Checkbox for consent
+  // });
+  barcodeForm = this._fb.group({});
+  barcodeFormDefinition: DynamicForm;
   patientForm = this._fb.group({});
   guardianForm = this._fb.group({});
   collectingForm = this._fb.group({});
@@ -77,6 +103,35 @@ export class RegisterComponent {
     this.stepperOrientation$ = this._breakpointObserver
       .observe('(min-width: 800px)')
       .pipe(map(({ matches }) => (matches ? 'horizontal' : 'vertical')));
+  }
+
+  ngOnInit(): void {
+    this.buildBarcodeForm();
+  }
+
+  private buildBarcodeForm(): void {
+    this.barcodeFormDefinition = new DynamicForm([
+      new GroupFormElement({
+        children: [
+          new TextFormInputElement({
+            name: 'barcode',
+            label: 'Barcode',
+            validation: {
+              required: true,
+              pattern: '/^\d{4}$/',
+            },
+          }),
+        ]
+      }),
+      new CheckboxFormInputElement({
+        name: 'confirm',
+        label: `I confirm that I have been prescribed Omnitrope® (somatropin).`,
+        errorLabel: 'Confirmation',
+        validation: {
+          required: true, 
+        },
+      }),
+    ]);
   }
   
   onRegisterClick(): void {

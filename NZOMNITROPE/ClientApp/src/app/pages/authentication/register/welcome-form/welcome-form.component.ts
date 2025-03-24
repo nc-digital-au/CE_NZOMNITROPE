@@ -15,7 +15,7 @@ import { MaterialModule } from 'src/app/material.module';
   ],
 })
 export class WelcomeFormComponent {
-  @Output() formCreated = new EventEmitter<FormGroup>();
+  @Output() formCreated = new EventEmitter
 
   welcomeForm: FormGroup;
 

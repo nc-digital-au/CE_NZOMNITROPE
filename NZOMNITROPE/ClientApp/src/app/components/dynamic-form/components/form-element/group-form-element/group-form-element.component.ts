@@ -37,7 +37,7 @@ export class GroupFormElementComponent implements OnInit {
     if (this.groupFormElement?.children && this.groupFormElement.children.length) {
       // minimum 2 children
       const totalChildren = this.groupFormElement.children.length < 2 ? 2 : this.groupFormElement.children.length;
-      const cols = this.totalColumns / this.groupFormElement.children.length;
+      const cols = this.totalColumns / totalChildren;
       this.formClass = `col-lg-${cols} col-sm-12`;
     }
   }

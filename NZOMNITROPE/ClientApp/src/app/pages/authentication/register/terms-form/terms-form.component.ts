@@ -6,7 +6,6 @@ import { DynamicForm } from 'src/app/components/dynamic-form/models/dynamic-form
 import { CheckboxFormInputElement } from 'src/app/components/dynamic-form/models/form-elements/checkbox-form-input-element.model';
 import { TitleFormElement } from 'src/app/components/dynamic-form/models/form-elements/title-form-element.model';
 import { LeavingSiteDialog } from 'src/app/components/leaving-site/leaving-site.component';
-import { TermsOfUseComponent } from 'src/app/components/terms-of-use/terms-of-use.component';
 
 @Component({
   selector: 'app-terms-form',

@@ -3,10 +3,28 @@
   <mat-card class="cardWithShadow theme-card register-form">
     <mat-card-content>
       <mat-stepper #stepper [linear]="false" [orientation]="(stepperOrientation$ | async)!">
-        <mat-step [stepControl]="welcomeForm">
+        <mat-step [stepControl]="barcodeForm">
           <ng-template matStepLabel>Welcome</ng-template>
-          <app-welcome-form (formCreated)="welcomeForm = $event">
-          </app-welcome-form>
+            <mat-card-header>
+              <mat-card-title>
+                Welcome to OmniPal<sup>®</sup>, the Omnitrope<sup>®</sup> Patient Support Program.
+              </mat-card-title>
+            </mat-card-header>
+          
+            <mat-card-content>
+              <p>
+                You have been directed here because you have been prescribed somatropin by your healthcare professional.
+                To complete your enrolment, you will be required to provide some information so that you can access the services
+                you require.
+              </p>
+              <p>
+                <strong>*Please note:</strong> You will need to collect your prescription before you can register.
+              </p>
+            
+              <app-dynamic-form [formDefinition]="barcodeFormDefinition" (formCreated)="barcodeForm = $event">
+              </app-dynamic-form>
+              
+          </mat-card-content>
           <div class="d-flex align-items-center justify-content-between">
             <button mat-stroked-button class="cancel-button" [routerLink]="[routeLinks.landing]" type="button">Cancel</button>
             <button mat-flat-button color="primary" type="submit" matStepperNext>Next</button>

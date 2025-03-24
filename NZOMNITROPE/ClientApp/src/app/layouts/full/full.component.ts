@@ -22,7 +22,6 @@ import { AppBreadcrumbComponent } from './shared/breadcrumb/breadcrumb.component
 import { AppAuthBrandingComponent } from './vertical/sidebar/auth-branding.component';
 import { LeavingSiteComponent } from 'src/app/components/leaving-site/leaving-site.component';
 import { AuthenticationService } from 'src/app/services/authentication.service';
-import { TermsOfUseComponent } from 'src/app/components/terms-of-use/terms-of-use.component';
 import { ContactUsComponent } from 'src/app/components/contact-us/contact-us.component';
 import { MatDialog } from '@angular/material/dialog';
 import { CONTACT_VALUES } from 'src/app/utils/constants';
@@ -143,10 +142,6 @@ export class FullComponent implements OnInit {
     this.isCollapsedWidthFixed = !this.isOver;
     this.options.sidenavOpened = isOpened;
     this.settings.setOptions(this.options);
-  }
-
-  openTermsOfUse(){
-    this.dialog.open(TermsOfUseComponent);
   }
 
   openContactUs(){
