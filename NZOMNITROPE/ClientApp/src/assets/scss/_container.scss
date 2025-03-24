@@ -23,6 +23,7 @@ body {
     font-size: 16px;
     line-height: 16px;
     margin:0;
+    color: $white;
   }
 
   .title{
@@ -262,6 +263,10 @@ footer {
 
 .bg-light-blue{
   background-color: $theme-blue-light;
+}
+
+.bg-dark-blue{
+  background-color: $theme-blue-one;
 }
 
 .summary-block{

@@ -53,10 +53,10 @@ export class OrderFormComponent {
   private buildForm(): void {
     this.form = this.fb.group(
       {
-        needleKit: [null], // No required validator here
-        penReplacement: [null], // No required validator here
+        needleKit: [null],
+        penReplacement: [null], 
       },
-      { validators: this.atLeastOneSelected } // Custom validator for at least one selection
+      { validators: this.atLeastOneSelected }
     );
 
     this.formDefinition = new DynamicForm([

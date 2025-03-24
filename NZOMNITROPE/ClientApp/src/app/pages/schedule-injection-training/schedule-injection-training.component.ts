@@ -49,7 +49,7 @@ export class ScheduleInjectionTrainingComponent {
     this.buildForm();
     this.injectionTrainingForm = this.fb.group({
       patientDetails: this.buildPatientDetailsForm(),
-      injectionSession: this.fb.group({}), // Dynamic form will be set here
+      injectionSession: this.fb.group({}), 
     });
   }
 
