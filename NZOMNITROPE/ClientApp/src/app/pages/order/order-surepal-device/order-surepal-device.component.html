@@ -24,16 +24,15 @@
             </mat-select>
           </mat-form-field>
 
-          <!-- <app-address 
+          <app-address 
           [establishmentOnly]="establishmentOnly" 
           [hiddenFields]="['phone', 'mobile', 'state']"
           [disabledFields]="establishmentOnly ? ['name'] : []">
-          <div class="d-flex align-items-center justify-content-between"
-          (formCreated)="onAddressFormCreated($event)">
+          <div class="d-flex align-items-center justify-content-between">
             <button mat-stroked-button class="cancel-button" [routerLink]="[routeLinks.home]" type="button">Cancel</button>
             <button mat-flat-button color="primary" type="submit" (click)="onPatientFormNext()">Next</button>
           </div>
-        </app-address> -->
+        </app-address>
         </mat-step>
 
         <mat-step [stepControl]="orderForm">
