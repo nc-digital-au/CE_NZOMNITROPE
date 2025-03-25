@@ -1,12 +1,12 @@
 import { Component, DestroyRef, inject, ViewChild } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { MaterialModule } from 'src/app/material.module';
 import { StepperOrientation } from '@angular/cdk/stepper';
-import { Observable, finalize, map } from 'rxjs';
+import { Observable, finalize, map, tap } from 'rxjs';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { CommonModule } from '@angular/common';
 import { AddressComponent } from "../../../components/address/address.component";
-import { PatientServiceProxy, RegisterPapPatientDto, RegistrationMethod } from 'src/app/services/service-proxies/service-proxies';
+import { GetPatientInformationWithCarerResponse, PatientServiceProxy, RegisterPapPatientDto, RegistrationMethod } from 'src/app/services/service-proxies/service-proxies';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatStepper } from '@angular/material/stepper';
 import { RepeatOption } from 'src/app/utils/enums/ofev-data';
@@ -15,8 +15,6 @@ import { Router, RouterLink } from '@angular/router';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { OrderFormComponent } from './order-form/order-form.component';
 import { PatientFormComponent } from 'src/app/components/patient-form/patient-form.component';
-import { MatFormField } from '@angular/material/form-field';
-import {MatTimepickerModule} from '@angular/material/timepicker';
 
 @Component({
   selector: 'app-order-surepal-device',
@@ -43,15 +41,18 @@ export class OrderSurepalDeviceComponent {
   routeLinks = routeLinks;
   submitting = false;
   establishmentOnly = false;
+  _destroyRef = inject(DestroyRef);
+  patientModel: GetPatientInformationWithCarerResponse;
 
   // forms
   patientForm = this._fb.group({});
+  addressForm = this._fb.group({});
   orderForm = this._fb.group({});
 
   constructor(
     private readonly _fb: FormBuilder,
     private readonly _breakpointObserver: BreakpointObserver,
-    private readonly _patientService: PatientServiceProxy,
+    private readonly patientService: PatientServiceProxy,
     private readonly _authService: AuthenticationService,
     private readonly _router: Router,
   ) {
@@ -64,79 +65,56 @@ export class OrderSurepalDeviceComponent {
     this.establishmentOnly = event.value;
   }
 
+  onAddressFormCreated(form: FormGroup): void {
+    this.addressForm = form;
+  }
+
+    private getPatientInformation(): void {
+      this.patientService.getPatientInformationWithCarer()
+        .pipe(
+          takeUntilDestroyed(this._destroyRef),
+          tap((response) => {
+            if(response.isSuccess){
+              this.patientModel = response.resultObject;
+              this.updatePatientForm(this.patientModel);
+            }
+          })
+        )
+        .subscribe(({
+          next: (result) => {
+            if(result.isSuccess){
+              this.patientModel = result.resultObject;
+            }
+          },
+          error: (error) => {
+            console.error('Error fetching patient information:', error);
+          }
+        }));
+    }
+
+    private updatePatientForm(data: GetPatientInformationWithCarerResponse): void {
+      const patientFormData = {
+        firstName: data.firstName,
+        lastName: data.lastName,
+        nhiNumber: data.nationalHealthIndex,
+        email: data.email,
+        mobile: data.mobileNumber,
+      }
+      this.patientForm.patchValue(patientFormData);
+    }
+
   onPatientFormNext() {
-    this.stepper.next();
+    const patientFormData = this.patientForm.value as any;
+    this.patientForm.markAllAsTouched();
+    this.addressForm.markAllAsTouched();
+    if (this.patientForm.valid) {
+      this.stepper.next();
+    }  
   }
 
   onFormSubmit() {
-    // if (this.eligibilityForm.valid && this.patientForm.valid && this.prescriptionForm.valid && this.deliveryForm.valid && this.termsForm.valid) {
-    //   const patientData = this.patientForm.value as any;
-    //   const prescriptionData = this.prescriptionForm.value as any;
-    //   const deliveryData = this.deliveryForm.value as any;
-    //   const termsData = this.termsForm.value as any;
-
-    //   this.submitting = true;
-    //   this._patientService.patient(new RegisterPapPatientDto({
-    //     registrationMethod: RegistrationMethod.PortalWebForm,
-
-    //     programEligibilityCriteriaConfirmed: true,
-    //     eligibilityCriteriaOptions: [1, 2, 3, 4],
-
-    //     prescriberNumber: patientData.prescriberNumber,
-    //     prescriberId: undefined,
-    //     title: patientData.title,
-    //     firstName: patientData.firstName,
-    //     lastName: patientData.lastName,
-    //     dateOfBirth: patientData.dateOfBirth,
-    //     gender: patientData.gender,
-    //     phone: patientData.phone,
-    //     mobile: patientData.mobile,
-    //     enrolledOn: new Date(),
-
-    //     dosageId: prescriptionData.dose,
-    //     repeats: RepeatOption.Five,
-    //     prescriptionInstructions: prescriptionData.instructions,
-
-    //     deliveryUnitNumber: deliveryData.unitNumber,
-    //     deliveryAddressLine1: deliveryData.streetAddress,
-    //     deliveryCity: deliveryData.city,
-    //     deliveryState: deliveryData.state,
-    //     deliveryPostcode: deliveryData.postcode,
-
-    //     privacyConsentProvided: termsData.privacyConsent,
-    //     programTermsAgreed: termsData.carerConsent,
-    //     contactConsentProvided: false,
-    //     marketingCommunicationConsentProvided: false,
-    //     adverseEventContactConsentProvided: false,
-
-    //     // ignore
-    //     deliveryAddressLine2: undefined,
-    //     middleName: undefined,
-    //     email: undefined,
-    //     homeUnitNumber: undefined,
-    //     homeAddressLine1: undefined,
-    //     homeAddressLine2: undefined,
-    //     homeCity: undefined,
-    //     homeState: undefined,
-    //     homePostcode: undefined,
-    //     currentUserId: undefined,
-    //     pharmacyId: undefined,
-    //     clinicId: undefined,
-    //     programInformationReceived: undefined,
-    //     supportProgramAccessRequested: undefined,
-    //     treatmentStartedOn: undefined,
-    //   })).pipe(
-    //     takeUntilDestroyed(this.destroyRef),
-    //     finalize(() => {
-    //       this.submitting = false;
-    //     }),
-    //   ).subscribe({
-    //     next: (result) => {
-    //       this.patientId = result.resultObject;
-    //       this.enrolmentSuccess = result.isSuccess;
-    //       this._authService.currentUser?.storePrescriberNumber(patientData.prescriberNumber);
-    //     },
-    //   });
-    // }
+    this.submitting = true;
+    const orderFormData = this.orderForm.value as any;
+    const patientFormData = this.patientForm.value as any;
   }
 }

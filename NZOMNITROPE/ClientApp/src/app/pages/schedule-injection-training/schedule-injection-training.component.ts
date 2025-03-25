@@ -52,7 +52,6 @@ export class ScheduleInjectionTrainingComponent {
   ) {}
 
   ngOnInit(): void {
-
     this.buildForm();
     this.injectionTrainingForm = this.fb.group({
       injectionSession: this.fb.group({}), 

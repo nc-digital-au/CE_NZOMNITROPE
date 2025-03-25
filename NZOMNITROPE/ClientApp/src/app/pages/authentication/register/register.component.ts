@@ -102,10 +102,10 @@ export class RegisterComponent implements OnInit {
         '',
         [
           Validators.required,
-          Validators.pattern(/^\d{4}$/), // Ensure it's exactly 4 digits
+          Validators.pattern(/^\d{4}$/),
         ],
       ],
-      consent: [false, Validators.requiredTrue], // Checkbox for consent
+      consent: [false, Validators.requiredTrue],
     });
   }
 
