@@ -10,6 +10,7 @@ import { HowToInjectComponent } from './pages/resources/how-to-inject.component'
 import { OrderFormComponent } from './pages/order/order-surepal-device/order-form/order-form.component';
 import { OrderSurepalDeviceComponent } from './pages/order/order-surepal-device/order-surepal-device.component';
 import { ScheduleInjectionTrainingComponent } from './pages/schedule-injection-training/schedule-injection-training.component';
+import { authenticatedGuard } from './guards/authenticated.guard';
 
 export const routes: Routes = [
   {
@@ -37,8 +38,8 @@ export const routes: Routes = [
   {
     path: '',
     component: FullComponent,
-    canActivate: [unauthenticatedGuard],
-    canActivateChild: [unauthenticatedGuard],
+    canActivate: [authenticatedGuard],
+    canActivateChild: [authenticatedGuard],
     children: [
       {
         path: routeNames.home,

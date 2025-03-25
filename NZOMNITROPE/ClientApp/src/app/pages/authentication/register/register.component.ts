@@ -163,6 +163,7 @@ export class RegisterComponent implements OnInit {
   }
   onRegisterClick(): void {
     const dto = this.createDto();
+    console.log('dto', dto);
     if (this.patientForm.valid && this.guardianForm.valid && this.addressForm.valid && this.termsForm.valid) {
       this._registrationService.registerPatientPspWithDelivery(dto).pipe(
         takeUntilDestroyed(this._destroyRef),
@@ -186,6 +187,7 @@ export class RegisterComponent implements OnInit {
     const collectingFormData = this.collectingForm.value as any;
     const addressData = this.addressForm.value as any;
     const termsData = this.termsForm.value as any;
+
     const barcodeData = this.barcodeForm.value as any;
     const patientDto = new PatientModelDto({
       barcode: barcodeData.barcode,
