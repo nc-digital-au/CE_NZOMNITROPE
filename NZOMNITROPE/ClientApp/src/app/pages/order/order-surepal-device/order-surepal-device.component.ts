@@ -6,10 +6,9 @@ import { Observable, finalize, map, tap } from 'rxjs';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { CommonModule } from '@angular/common';
 import { AddressComponent } from "../../../components/address/address.component";
-import { GetPatientInformationWithCarerResponse, PatientServiceProxy, RegisterPapPatientDto, RegistrationMethod } from 'src/app/services/service-proxies/service-proxies';
+import { ConsumableOrderItemDto, CreateOrderForConsumableProductsForPatientDto, GetPatientInformationWithCarerResponse, OrderServiceProxy, PatientServiceProxy } from 'src/app/services/service-proxies/service-proxies';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatStepper } from '@angular/material/stepper';
-import { RepeatOption } from 'src/app/utils/enums/ofev-data';
 import { routeLinks } from 'src/app/utils/routes';
 import { Router, RouterLink } from '@angular/router';
 import { AuthenticationService } from 'src/app/services/authentication.service';
@@ -40,6 +39,8 @@ export class OrderSurepalDeviceComponent {
   patientId: string;
   routeLinks = routeLinks;
   submitting = false;
+  submitted = true;
+  orderSuccess: boolean = false;
   establishmentOnly = false;
   _destroyRef = inject(DestroyRef);
   patientModel: GetPatientInformationWithCarerResponse;
@@ -52,13 +53,18 @@ export class OrderSurepalDeviceComponent {
   constructor(
     private readonly _fb: FormBuilder,
     private readonly _breakpointObserver: BreakpointObserver,
-    private readonly patientService: PatientServiceProxy,
+    private readonly _patientService: PatientServiceProxy,
+    private readonly _orderService: OrderServiceProxy,
     private readonly _authService: AuthenticationService,
     private readonly _router: Router,
   ) {
     this.stepperOrientation = this._breakpointObserver
       .observe('(min-width: 800px)')
       .pipe(map(({ matches }) => (matches ? 'horizontal' : 'vertical')));
+  }
+
+  ngOnInit(): void {
+    this.getPatientInformation();
   }
 
   onEstablishmentOnlyChange(event: any): void {
@@ -69,39 +75,50 @@ export class OrderSurepalDeviceComponent {
     this.addressForm = form;
   }
 
-    private getPatientInformation(): void {
-      this.patientService.getPatientInformationWithCarer()
-        .pipe(
-          takeUntilDestroyed(this._destroyRef),
-          tap((response) => {
-            if(response.isSuccess){
-              this.patientModel = response.resultObject;
-              this.updatePatientForm(this.patientModel);
-            }
-          })
-        )
-        .subscribe(({
-          next: (result) => {
-            if(result.isSuccess){
-              this.patientModel = result.resultObject;
-            }
-          },
-          error: (error) => {
-            console.error('Error fetching patient information:', error);
+  private getPatientInformation(): void {
+    this._patientService.getPatientInformationWithCarer()
+      .pipe(
+        takeUntilDestroyed(this._destroyRef),
+        tap((response) => {
+          if(response.isSuccess){
+            this.patientModel = response.resultObject;
+            this.updatePatientForm(this.patientModel);
+            this.updateAddressForm(this.patientModel);
           }
-        }));
-    }
+        })
+      )
+      .subscribe({
+        next: (result) => {
+          if(result.isSuccess){
+            this.patientModel = result.resultObject;
+          }
+        },
+        error: (error) => {
+          console.error('Error fetching patient information:', error);
+        }
+      });
+  }
 
-    private updatePatientForm(data: GetPatientInformationWithCarerResponse): void {
-      const patientFormData = {
-        firstName: data.firstName,
-        lastName: data.lastName,
-        nhiNumber: data.nationalHealthIndex,
-        email: data.email,
-        mobile: data.mobileNumber,
-      }
-      this.patientForm.patchValue(patientFormData);
+  private updatePatientForm(data: GetPatientInformationWithCarerResponse): void {
+    const patientFormData = {
+      firstName: data.firstName,
+      lastName: data.lastName,
+      nhiNumber: data.nationalHealthIndex,
+      email: data.email,
+      mobile: data.mobileNumber,
     }
+    this.patientForm.patchValue(patientFormData);
+  }
+
+  private updateAddressForm(data: GetPatientInformationWithCarerResponse): void {
+    const addressFormData = {
+      unitNumber: data.homeUnitNumber,
+      streetAddress: data.homeStreetAddress,
+      city: data.homeCity,
+      postcode: data.homePostcode,
+    }
+    this.addressForm.patchValue(addressFormData);
+  }
 
   onPatientFormNext() {
     const patientFormData = this.patientForm.value as any;
@@ -112,9 +129,69 @@ export class OrderSurepalDeviceComponent {
     }  
   }
 
-  onFormSubmit() {
-    this.submitting = true;
+  private createOrderFormDto(): CreateOrderForConsumableProductsForPatientDto {
     const orderFormData = this.orderForm.value as any;
     const patientFormData = this.patientForm.value as any;
+    const addressFormData = this.addressForm.value as any;
+  
+    const consumableOrderItems = orderFormData.product.map((product: any) => {
+      return new ConsumableOrderItemDto({
+        productId: product.itemId,
+        sku: product.sku,
+        quantity: product.quantity
+      });
+    });
+  
+    const orderDto = new CreateOrderForConsumableProductsForPatientDto({
+      patientId: this.patientModel.patientId,
+      firstName: patientFormData.firstName,
+      lastName: patientFormData.lastName,
+      email: this.patientModel.email,
+      mobile: this.patientModel.mobileNumber,
+      patientReferenceNumber: this.patientModel.nationalHealthIndex,
+      deliveryInstitutionName: addressFormData.deliveryInstitutionName,
+      deliveryUnitNumber: addressFormData.deliveryUnitNumber,
+      deliveryStreetAddress: addressFormData.deliveryStreetAddress,
+      deliveryCity: addressFormData.deliveryCity,
+      deliveryPostCode: addressFormData.deliveryPostcode,
+      deliveryState: 9, 
+      deliverTo: addressFormData.deliverTo,
+      consumableOrderItems: consumableOrderItems
+    });
+
+  console.log('Order DTO:', orderDto);
+
+  return orderDto;
+  }
+
+  onFormSubmit(): void {
+   this.orderForm.markAllAsTouched();
+  if (this.patientForm.valid && this.addressForm.valid && this.orderForm.valid) {
+    this.submitting = true;
+      const orderDto = this.createOrderFormDto();
+      this._orderService.createOrderForPatient(orderDto)
+      .pipe(
+        takeUntilDestroyed(this._destroyRef),
+          finalize(() => {
+            this.submitting = false;
+            this.submitted = true;
+      }),
+      ).subscribe({
+        next: (result) => {
+          if(result.isSuccess){
+            this.orderSuccess = result.isSuccess;
+            this.submitting = false;
+          }
+          else{
+            console.error('Error updating patient profile', result);
+            this.submitting = false;
+          } 
+        },
+        error: (err) => {
+          console.error('Error updating patient profile', err);
+          this.submitting = false;
+        },
+      });
+    }
   }
 }

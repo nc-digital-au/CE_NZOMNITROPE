@@ -2,7 +2,7 @@
 <div class="d-flex align-items-center justify-content-center">
   <mat-card class="cardWithShadow theme-card register-form">
     <mat-card-content>
-      <mat-stepper #stepper [linear]="true" [orientation]="(stepperOrientation$ | async)!">
+      <mat-stepper #stepper [linear]="false" [orientation]="(stepperOrientation$ | async)!">
         <mat-step [stepControl]="barcodeForm">
           <ng-template matStepLabel>Welcome</ng-template>
             <mat-card-header>

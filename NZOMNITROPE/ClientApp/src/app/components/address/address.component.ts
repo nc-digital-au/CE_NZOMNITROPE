@@ -77,7 +77,7 @@ export class AddressComponent implements OnInit {
         hidden: this.hiddenFields.includes('name'),
         disabled: this.disabledFields.includes('name'),
         validation: {
-          required: !this.hiddenFields.includes('name') && !this.disabledFields.includes('name'),
+          required: this.hiddenFields.includes('name') && this.disabledFields.includes('name'),
         }
       }),
       new GroupFormElement({

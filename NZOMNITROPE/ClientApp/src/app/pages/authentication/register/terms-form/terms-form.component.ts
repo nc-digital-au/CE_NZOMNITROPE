@@ -14,11 +14,10 @@ import { LeavingSiteDialog } from 'src/app/components/leaving-site/leaving-site.
     DynamicFormComponent,
   ],
   templateUrl: './terms-form.component.html',
-  styleUrl: './terms-form.component.scss'
+  styleUrls: ['./terms-form.component.scss']  
 })
-export class TermsFormComponent{
-  @Output()
-  formCreated = new EventEmitter<FormGroup>();
+export class TermsFormComponent implements AfterViewInit {  
+  @Output() formCreated = new EventEmitter<FormGroup>();
 
   profileFormDefinition: DynamicForm;
 
@@ -26,6 +25,24 @@ export class TermsFormComponent{
     private _dialog: MatDialog,
   ) {
     this.buildForm();
+  }
+
+  ngAfterViewInit(): void {
+    setTimeout(() => {  
+      const privacyPolicyLink = document.getElementsByClassName("privacy-policy")[0];
+      if (privacyPolicyLink) {
+        privacyPolicyLink.addEventListener("click", (ev) => {
+          ev.preventDefault();
+          ev.stopPropagation();
+          this._dialog.open(LeavingSiteDialog, {
+            data: {
+              location: 'Privacy Policy',
+              url: 'https://www.sandoz.com.au/Website-privacy-policy/'
+            }
+          });
+        });
+      }
+    });
   }
 
   onFormCreated(form: FormGroup): void {
@@ -55,7 +72,7 @@ export class TermsFormComponent{
       }),
       new CheckboxFormInputElement({
         name: 'informationConsent',
-        label: 'You understand that to manage the program, your personal information will be accessed by the Program Administrators who will collect and store your information in accordance with the <a class="privacy-policy" href="#privacy-policy">privacy policy</a>.',
+        label: 'You understand that to manage the program, your personal information will be accessed by the Program Administrators who will collect and store your information in accordance with the <a class="privacy-policy" href="https://www.sandoz.com.au/Website-privacy-policy/">privacy policy</a>.',
         errorLabel: 'Privacy Policy acceptance',
         validation: {
           required: true,
@@ -63,7 +80,7 @@ export class TermsFormComponent{
       }),
       new CheckboxFormInputElement({
         name: 'privacyConsent',
-        label: 'You have read, understand and agree to the <a class="privacy-policy" href="#privacy-policy">privacy policy</a>.',
+        label: 'You have read, understand and agree to the <a class="privacy-policy" href="https://www.sandoz.com.au/Website-privacy-policy/">privacy policy</a>.',
         errorLabel: 'Privacy Policy acceptance',
         validation: {
           required: true,
@@ -71,7 +88,7 @@ export class TermsFormComponent{
       }),
       new CheckboxFormInputElement({
         name: 'contactConsent',
-        label: 'You consent to the Program Administrator contacting you with program reminders via email, or phone or SMS .',
+        label: 'You consent to the Program Administrator contacting you with program reminders via email, or phone or SMS.',
         errorLabel: 'Contact Consent acceptance',
         validation: {
           required: true,
