@@ -12,7 +12,7 @@ export const routeNames = {
   register: 'register',
   account: 'account',
   forgotPassword: 'forgot-password',
-  resetPassword: 'reset-password',
+  resetPassword: 'account/reset-password',
   dashboard: 'dashboard',
   enrol: 'enrol',
   reapprove: 'reapprove',

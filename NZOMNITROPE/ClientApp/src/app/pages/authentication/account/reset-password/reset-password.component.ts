@@ -10,7 +10,7 @@ import { DynamicForm } from 'src/app/components/dynamic-form/models/dynamic-form
 import { TextFormInputElement } from 'src/app/components/dynamic-form/models/form-elements/text-form-input-element.model';
 import { InlineAlertComponent } from 'src/app/components/inline-alert/inline-alert.component';
 import { ValidationProblemDetail } from 'src/app/interceptors/error.interceptor';
-import { AccountServiceProxy, ResetPasswordDto } from 'src/app/services/service-proxies/service-proxies';
+import { AccountServiceProxy, ResetPasswordDto, ResetPasswordWithoutAhpraDto } from 'src/app/services/service-proxies/service-proxies';
 import { routeLinks } from 'src/app/utils/routes';
 import { equalValidator } from 'src/app/utils/validators/equal.validator';
 
@@ -47,12 +47,7 @@ export class ResetPasswordComponent implements OnInit {
     private readonly route: ActivatedRoute,
     private readonly _accountService: AccountServiceProxy,
   ) {
-    // this.route.queryParamMap.subscribe(paramMap => {
-    //   if (paramMap.has('token')) {
-    //     this.token = paramMap.get('token').replaceAll(' ', '+');
-    //     this.buildForm();
-    //   }
-    // })
+
   }
 
   ngOnInit(): void {
@@ -68,10 +63,9 @@ export class ResetPasswordComponent implements OnInit {
   onFormSubmit(): void {
     if (this.form.valid) {
       const formValue = this.form.value as any;
-      this._accountService.resetPassword(new ResetPasswordDto({
+      this._accountService.resetPasswordWithoutAhpra(new ResetPasswordWithoutAhpraDto({
         token: this.token,
         email: formValue.email,
-        ahpraNumber: formValue.ahpraNumber,
         password: formValue.password,
         confirmPassword: formValue.confirmPassword,
       }))
