@@ -62,7 +62,8 @@ export const navItems: NavItem[] = [
   },
   {
     displayName: 'Logout',
-    route: '',
+    route: 'logout',
     ddType: '',
+    logout: true,
   },
 ];

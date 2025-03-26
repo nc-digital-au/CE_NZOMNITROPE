@@ -11,15 +11,5 @@
     src="../../../../../assets/images/logos/OmnitropeSurePalLogo.png" 
     alt="OmniPal" 
     class="logo"  />
-    
-    @if (authenticated$ | async) {
-      @if (logoutUrl$ | async; as logoutUrl) {
-        <div class="nav-item d-none d-sm-flex">
-          <a mat-flat-button [href]="logoutUrl + '&returnUrl=/landing'" color="primary" class="nav-link" (click)="onSignoutClick()">
-            Signout
-          </a>
-        </div>
-      }
-    }
   </div>
 </mat-toolbar>

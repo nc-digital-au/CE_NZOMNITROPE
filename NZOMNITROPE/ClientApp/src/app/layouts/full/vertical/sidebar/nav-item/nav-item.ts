@@ -15,4 +15,5 @@ export interface NavItem {
     displayNameLine2?: string;
     target?: string;
     isPdf?: boolean;
+    logout?: boolean;
 }
