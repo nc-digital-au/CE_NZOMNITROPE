@@ -56,6 +56,7 @@ export class ScheduleInjectionTrainingComponent {
     this.injectionTrainingForm = this.fb.group({
       injectionSession: this.fb.group({}), 
     });
+    this.getPatientInformation();
   }
 
   private getPatientInformation(): void {
@@ -136,7 +137,6 @@ export class ScheduleInjectionTrainingComponent {
     if (this.injectionTrainingForm.valid) {
       this.submitting = true;
 
-      // Simulate form submission
       console.log('Submitting form data:', this.injectionTrainingForm.value);
 
       setTimeout(() => {

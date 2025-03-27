@@ -33,6 +33,9 @@ export class OrderSurepalDeviceComponent {
   @ViewChild('stepper')
   stepper: MatStepper;
 
+  @ViewChild(OrderFormComponent)
+  orderFormComponent!: OrderFormComponent;
+
   destroyRef = inject(DestroyRef);
   enrolmentSuccess = false;
   stepperOrientation: Observable<StepperOrientation>;
@@ -74,6 +77,10 @@ export class OrderSurepalDeviceComponent {
   onAddressFormCreated(form: FormGroup): void {
     this.addressForm = form;
   }
+
+  onOrderFormCreated(form: FormGroup): void {
+    this.orderForm = form;
+  }  
 
   private getPatientInformation(): void {
     this._patientService.getPatientInformationWithCarer()
@@ -133,14 +140,20 @@ export class OrderSurepalDeviceComponent {
     const orderFormData = this.orderForm.value as any;
     const patientFormData = this.patientForm.value as any;
     const addressFormData = this.addressForm.value as any;
-  
-    const consumableOrderItems = orderFormData.product.map((product: any) => {
+    const selectedProducts = this.orderFormComponent.getSelectedProducts();
+    console.log('Selected Products:', selectedProducts);
+    
+    console.log('orderFormData:', orderFormData);
+    console.log('orderFormData.product:', orderFormData.product);
+    console.log('form group keys:', Object.keys(this.orderForm.controls));
+
+    const consumableOrderItems = (orderFormData.product || []).map((product: any) => {
       return new ConsumableOrderItemDto({
         productId: product.itemId,
         sku: product.sku,
         quantity: product.quantity
       });
-    });
+    });    
   
     const orderDto = new CreateOrderForConsumableProductsForPatientDto({
       patientId: this.patientModel.patientId,

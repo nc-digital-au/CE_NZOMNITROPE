@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
+import { Component, EventEmitter, Output } from '@angular/core';
+import { FormBuilder, FormGroup, AbstractControl } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MaterialModule } from 'src/app/material.module';
 import { DynamicFormComponent } from 'src/app/components/dynamic-form/dynamic-form.component';
@@ -46,15 +46,19 @@ export class OrderFormComponent {
   formDefinition: DynamicForm;
   form: FormGroup;
 
+  @Output() formCreated = new EventEmitter<FormGroup>();
+
   constructor(private fb: FormBuilder) {
     this.buildForm();
+    this.formCreated.emit(this.form);
   }
 
   private buildForm(): void {
     this.form = this.fb.group(
       {
+        product: this.fb.array([]),
         needleKit: [null],
-        penReplacement: [null], 
+        penReplacement: [null],
       },
       { validators: this.atLeastOneSelected }
     );
@@ -86,9 +90,31 @@ export class OrderFormComponent {
   private atLeastOneSelected(control: AbstractControl) {
     const needleKit = control.get('needleKit')?.value;
     const penReplacement = control.get('penReplacement')?.value;
-
     return needleKit || penReplacement ? null : { atLeastOneRequired: true };
   }
+
+  getSelectedProducts(): { productId: string, sku: string, quantity: number }[] {
+    const selected: any[] = [];
+    const formValue = this.form.value;
+  
+    if (formValue.needleKit) {
+      selected.push({
+        productId: 1, // <-- comes from radio selection
+        sku: NeedleKitLabels[formValue.needleKit as NeedleKit], // <-- mapped label
+        quantity: 300 // <-- hardcoded for needle kits
+      });
+    }
+  
+    if (formValue.penReplacement) {
+      selected.push({
+        productId: undefined,
+        sku: PenReplacementLabels[formValue.penReplacement as PenReplacement],
+        quantity: 1
+      });
+    }
+  
+    return selected;
+  }  
 
   onFormCreated(form: FormGroup): void {
     this.form = form;

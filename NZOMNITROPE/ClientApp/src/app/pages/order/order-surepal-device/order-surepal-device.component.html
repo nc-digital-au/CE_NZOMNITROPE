@@ -39,8 +39,8 @@
 
         <mat-step [stepControl]="orderForm">
         <ng-template matStepLabel>Order Form</ng-template>
-        <app-order-form></app-order-form>
-            <div class="d-flex align-items-center justify-content-between">
+        <app-order-form (formCreated)="onOrderFormCreated($event)"></app-order-form>
+        <div class="d-flex align-items-center justify-content-between">
               <div>
                 <button mat-stroked-button class="cancel-button" [routerLink]="[routeLinks.home]" type="button">Cancel</button>
                 <button mat-flat-button color="accent" class="m-l-10" matStepperPrevious>Back</button>
