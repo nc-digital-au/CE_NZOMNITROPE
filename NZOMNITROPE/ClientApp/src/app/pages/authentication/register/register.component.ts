@@ -237,7 +237,7 @@ export class RegisterComponent implements OnInit {
       patientModel: patientDto,
       carerModel: carerDto,
       deliveryModel: addressDto,
-      programTermsAndConditionsModel: termsDto,
+      programTermsAndCondtionsModel: termsDto,
       registrationMethod: RegistrationMethod.PortalWebForm,
     });
     return dto;

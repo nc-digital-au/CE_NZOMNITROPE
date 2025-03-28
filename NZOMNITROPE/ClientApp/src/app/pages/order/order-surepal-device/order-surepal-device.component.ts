@@ -6,7 +6,7 @@ import { Observable, finalize, map, tap } from 'rxjs';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { CommonModule } from '@angular/common';
 import { AddressComponent } from "../../../components/address/address.component";
-import { ConsumableOrderItemDto, CreateOrderForConsumableProductsForPatientDto, GetPatientInformationWithCarerResponse, OrderServiceProxy, PatientServiceProxy } from 'src/app/services/service-proxies/service-proxies';
+import { AddressState, ConsumableOrderItemDto, CreateOrderForConsumableProductsForPatientDto, GetPatientInformationWithCarerResponse, OrderServiceProxy, PatientServiceProxy } from 'src/app/services/service-proxies/service-proxies';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatStepper } from '@angular/material/stepper';
 import { routeLinks } from 'src/app/utils/routes';
@@ -14,6 +14,7 @@ import { Router, RouterLink } from '@angular/router';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { OrderFormComponent } from './order-form/order-form.component';
 import { PatientFormComponent } from 'src/app/components/patient-form/patient-form.component';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-order-surepal-device',
@@ -47,6 +48,7 @@ export class OrderSurepalDeviceComponent {
   establishmentOnly = false;
   _destroyRef = inject(DestroyRef);
   patientModel: GetPatientInformationWithCarerResponse;
+  productsRequested: ConsumableOrderItemDto[] = [];
 
   // forms
   patientForm = this._fb.group({});
@@ -73,14 +75,6 @@ export class OrderSurepalDeviceComponent {
   onEstablishmentOnlyChange(event: any): void {
     this.establishmentOnly = event.value;
   }
-
-  onAddressFormCreated(form: FormGroup): void {
-    this.addressForm = form;
-  }
-
-  onOrderFormCreated(form: FormGroup): void {
-    this.orderForm = form;
-  }  
 
   private getPatientInformation(): void {
     this._patientService.getPatientInformationWithCarer()
@@ -137,24 +131,10 @@ export class OrderSurepalDeviceComponent {
   }
 
   private createOrderFormDto(): CreateOrderForConsumableProductsForPatientDto {
-    const orderFormData = this.orderForm.value as any;
     const patientFormData = this.patientForm.value as any;
-    const addressFormData = this.addressForm.value as any;
-    const selectedProducts = this.orderFormComponent.getSelectedProducts();
-    console.log('Selected Products:', selectedProducts);
-    
-    console.log('orderFormData:', orderFormData);
-    console.log('orderFormData.product:', orderFormData.product);
-    console.log('form group keys:', Object.keys(this.orderForm.controls));
-
-    const consumableOrderItems = (orderFormData.product || []).map((product: any) => {
-      return new ConsumableOrderItemDto({
-        productId: product.itemId,
-        sku: product.sku,
-        quantity: product.quantity
-      });
-    });    
-  
+    const addressFormData = this.addressForm.value as any;    
+    this.GetOrderProducts();
+    const adminNotificationEmail = environment.orderAdminEmail;
     const orderDto = new CreateOrderForConsumableProductsForPatientDto({
       patientId: this.patientModel.patientId,
       firstName: patientFormData.firstName,
@@ -162,14 +142,15 @@ export class OrderSurepalDeviceComponent {
       email: this.patientModel.email,
       mobile: this.patientModel.mobileNumber,
       patientReferenceNumber: this.patientModel.nationalHealthIndex,
-      deliveryInstitutionName: addressFormData.deliveryInstitutionName,
-      deliveryUnitNumber: addressFormData.deliveryUnitNumber,
-      deliveryStreetAddress: addressFormData.deliveryStreetAddress,
-      deliveryCity: addressFormData.deliveryCity,
-      deliveryPostCode: addressFormData.deliveryPostcode,
-      deliveryState: 9, 
-      deliverTo: addressFormData.deliverTo,
-      consumableOrderItems: consumableOrderItems
+      deliveryInstitutionName: addressFormData.name,
+      deliveryUnitNumber: addressFormData.unitNumber,
+      deliveryStreetAddress: addressFormData.streetAddress,
+      deliveryCity: addressFormData.city,
+      deliveryPostCode: addressFormData.postcode,
+      deliveryState: AddressState.NA, 
+      deliverTo: undefined,
+      consumableOrderItems: this.productsRequested,
+      adminNotificationEmail:adminNotificationEmail,
     });
 
   console.log('Order DTO:', orderDto);
@@ -205,6 +186,25 @@ export class OrderSurepalDeviceComponent {
           this.submitting = false;
         },
       });
+    }
+  }
+
+  private GetOrderProducts(): void {
+    const orderFormData = this.orderForm.value as any;
+    console.log('Order Form Data:', orderFormData);
+    if(orderFormData.needleKit){
+      this.productsRequested.push(new ConsumableOrderItemDto({
+        productId: undefined,
+        sku: orderFormData.needleKit,
+        quantity: 1
+      }));
+    }
+    if(orderFormData.penReplacement){
+      this.productsRequested.push(new ConsumableOrderItemDto({
+        productId: undefined,
+        sku: orderFormData.penReplacement,
+        quantity: 1
+      }));
     }
   }
 }

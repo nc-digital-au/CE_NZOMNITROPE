@@ -9,10 +9,7 @@
     <mat-card class="cardWithShadow theme-card">
       <mat-card-content class="b-t-1">
         <!-- Patient Details Section -->
-        <div formGroupName="patientDetails">
-          <app-patient-form (formCreated)="patientForm = $event"></app-patient-form>
-        </div>
-
+        <app-patient-form (formCreated)="patientForm = $event"></app-patient-form>
         <app-guardian-form (formCreated)="guardianForm = $event"></app-guardian-form>
         <app-dynamic-form [formDefinition]="injectionSessionFormDefinition"></app-dynamic-form>
 

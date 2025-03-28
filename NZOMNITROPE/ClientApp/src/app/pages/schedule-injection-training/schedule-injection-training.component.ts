@@ -148,6 +148,10 @@ export class ScheduleInjectionTrainingComponent {
     }
   }
 
+  private GetSubmitDto(): any {
+    
+  }
+
   onCancel(): void {
     this.router.navigate(['/']);
   }

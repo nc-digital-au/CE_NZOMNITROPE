@@ -12557,7 +12557,8 @@ export class CreateOrderForConsumableProductsForPatientDto implements ICreateOrd
     deliveryState!: AddressState;
     deliveryPostCode!: string | undefined;
     deliverTo!: string | undefined;
-    consumableOrderItems!: ConsumableOrderDto[] | undefined;
+    adminNotificationEmail!: string | undefined;
+    consumableOrderItems!: ConsumableOrderItemDto[] | undefined;
 
     constructor(data?: ICreateOrderForConsumableProductsForPatientDto) {
         if (data) {
@@ -12583,10 +12584,11 @@ export class CreateOrderForConsumableProductsForPatientDto implements ICreateOrd
             this.deliveryState = _data["deliveryState"];
             this.deliveryPostCode = _data["deliveryPostCode"];
             this.deliverTo = _data["deliverTo"];
+            this.adminNotificationEmail = _data["adminNotificationEmail"];
             if (Array.isArray(_data["consumableOrderItems"])) {
                 this.consumableOrderItems = [];
                 for (let item of _data["consumableOrderItems"])
-                    this.consumableOrderItems!.push(ConsumableOrderDto.fromJS(item));
+                    this.consumableOrderItems!.push(ConsumableOrderItemDto.fromJS(item));
             }
         }
     }
@@ -12613,6 +12615,7 @@ export class CreateOrderForConsumableProductsForPatientDto implements ICreateOrd
         data["deliveryState"] = this.deliveryState;
         data["deliveryPostCode"] = this.deliveryPostCode;
         data["deliverTo"] = this.deliverTo;
+        data["adminNotificationEmail"] = this.adminNotificationEmail;
         if (Array.isArray(this.consumableOrderItems)) {
             data["consumableOrderItems"] = [];
             for (let item of this.consumableOrderItems)
@@ -12643,7 +12646,8 @@ export interface ICreateOrderForConsumableProductsForPatientDto {
     deliveryState: AddressState;
     deliveryPostCode: string | undefined;
     deliverTo: string | undefined;
-    consumableOrderItems: ConsumableOrderDto[] | undefined;
+    adminNotificationEmail: string | undefined;
+    consumableOrderItems: ConsumableOrderItemDto[] | undefined;
 }
 
 export class CreateOtpDto implements ICreateOtpDto {
@@ -28100,7 +28104,7 @@ export class RegisterPspPatientWithDeliveryRequiredDto implements IRegisterPspPa
     patientModel!: PatientModelDto;
     carerModel!: CarerModelDto;
     deliveryModel!: DeliveryModelDto;
-    programTermsAndConditionsModel!: ProgramTermsAndConditionsModelDto;
+    programTermsAndCondtionsModel!: ProgramTermsAndConditionsModelDto;
     prescriberId!: string | undefined;
     registrationMethod!: RegistrationMethod;
 
@@ -28118,7 +28122,7 @@ export class RegisterPspPatientWithDeliveryRequiredDto implements IRegisterPspPa
             this.patientModel = _data["patientModel"] ? PatientModelDto.fromJS(_data["patientModel"]) : <any>undefined;
             this.carerModel = _data["carerModel"] ? CarerModelDto.fromJS(_data["carerModel"]) : <any>undefined;
             this.deliveryModel = _data["deliveryModel"] ? DeliveryModelDto.fromJS(_data["deliveryModel"]) : <any>undefined;
-            this.programTermsAndConditionsModel = _data["programTermsAndConditionsModel"] ? ProgramTermsAndConditionsModelDto.fromJS(_data["programTermsAndConditionsModel"]) : <any>undefined;
+            this.programTermsAndCondtionsModel = _data["programTermsAndCondtionsModel"] ? ProgramTermsAndConditionsModelDto.fromJS(_data["programTermsAndCondtionsModel"]) : <any>undefined;
             this.prescriberId = _data["prescriberId"];
             this.registrationMethod = _data["registrationMethod"];
         }
@@ -28136,7 +28140,7 @@ export class RegisterPspPatientWithDeliveryRequiredDto implements IRegisterPspPa
         data["patientModel"] = this.patientModel ? this.patientModel.toJSON() : <any>undefined;
         data["carerModel"] = this.carerModel ? this.carerModel.toJSON() : <any>undefined;
         data["deliveryModel"] = this.deliveryModel ? this.deliveryModel.toJSON() : <any>undefined;
-        data["programTermsAndConditionsModel"] = this.programTermsAndConditionsModel ? this.programTermsAndConditionsModel.toJSON() : <any>undefined;
+        data["programTermsAndCondtionsModel"] = this.programTermsAndCondtionsModel ? this.programTermsAndCondtionsModel.toJSON() : <any>undefined;
         data["prescriberId"] = this.prescriberId;
         data["registrationMethod"] = this.registrationMethod;
         return data;
@@ -28154,7 +28158,7 @@ export interface IRegisterPspPatientWithDeliveryRequiredDto {
     patientModel: PatientModelDto;
     carerModel: CarerModelDto;
     deliveryModel: DeliveryModelDto;
-    programTermsAndConditionsModel: ProgramTermsAndConditionsModelDto;
+    programTermsAndCondtionsModel: ProgramTermsAndConditionsModelDto;
     prescriberId: string | undefined;
     registrationMethod: RegistrationMethod;
 }
@@ -29592,7 +29596,7 @@ export enum TreatmentCategory {
     FemaleOfNonChildbearingPotential = 3,
 }
 
-/** 1 = TreatmentApproved (Approved) 2 = TreatmentStarted (Started) 3 = TreatmentSuspended (Suspended) 4 = TreatmentRestarted (Restarted) 5 = MedicationDoseChanged (Dose changed) 6 = EvaluationCompleted (Evaluation completed) 7 = PrescriberChanged (Prescriber changed) 8 = TreatmentDiscontinued (Discontinued) 9 = TreatmentStopped (Stopped) 10 = RegisteredForTreatment (Registered) 11 = PrescriptionIssued (Prescription issued) 12 = TransferRequested (Transfer requested) 13 = Misc (Treatment profile updated) 14 = MedicationChanged (Medication changed) 15 = NominatedPharmacyChanged (Nominated pharmacy changed) 16 = TreatingClinicChanged (Treating clinic changed) 17 = PatientOrderDispatched (Patient order dispatched) 18 = PatientOrderReceived (Patient order received) 19 = PatientOrderReturned (Patient order returned) 20 = PatientOrderCancelled (Patient order cancelled) 21 = PatientOrderUpdated (Patient order updated) 22 = EvaluationCreated (Treatment evaluation created) 23 = EvaluationUpdated (Treatment evaluation updated) 24 = EvaluationReminderPushed (Treatment evaluation reminder pushed) 25 = PreEnrolled (Pre-enrolled) */
+/** 1 = TreatmentApproved (Approved) 2 = TreatmentStarted (Started) 3 = TreatmentSuspended (Suspended) 4 = TreatmentRestarted (Restarted) 5 = MedicationDoseChanged (Dose changed) 6 = EvaluationCompleted (Evaluation completed) 7 = PrescriberChanged (Prescriber changed) 8 = TreatmentDiscontinued (Discontinued) 9 = TreatmentStopped (Stopped) 10 = RegisteredForTreatment (Registered) 11 = PrescriptionIssued (Prescription issued) 12 = TransferRequested (Transfer requested) 13 = Misc (Treatment profile updated) 14 = MedicationChanged (Medication changed) 15 = NominatedPharmacyChanged (Nominated pharmacy changed) 16 = TreatingClinicChanged (Treating clinic changed) 17 = PatientOrderDispatched (Patient order dispatched) 18 = PatientOrderReceived (Patient order received) 19 = PatientOrderReturned (Patient order returned) 20 = PatientOrderCancelled (Patient order cancelled) 21 = PatientOrderUpdated (Patient order updated) 22 = EvaluationCreated (Treatment evaluation created) 23 = EvaluationUpdated (Treatment evaluation updated) 24 = EvaluationReminderPushed (Treatment evaluation reminder pushed) 25 = PreEnrolled (Pre-enrolled) 26 = OrderSubmitted (Order submitted) */
 export enum TreatmentMilestone {
     TreatmentApproved = 1,
     TreatmentStarted = 2,
@@ -29619,6 +29623,7 @@ export enum TreatmentMilestone {
     EvaluationUpdated = 23,
     EvaluationReminderPushed = 24,
     PreEnrolled = 25,
+    OrderSubmitted = 26,
 }
 
 export class TreatmentProfile implements ITreatmentProfile {
