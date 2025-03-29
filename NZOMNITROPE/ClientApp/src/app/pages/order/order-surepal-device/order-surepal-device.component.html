@@ -1,8 +1,8 @@
 <h1>Order SurePal<sup>®</sup> Device and Consumables Form</h1>
 <div *ngIf="!enrolmentSuccess">
   <p>*Indicates mandatory field</p>
-  @if (submitting) {
-  <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+  @if (loading) {
+    <mat-progress-bar mode="query"></mat-progress-bar>
   }
   <mat-card>
     <mat-card-content>
@@ -45,7 +45,13 @@
                 <button mat-stroked-button class="cancel-button" [routerLink]="[routeLinks.home]" type="button">Cancel</button>
                 <button mat-flat-button color="accent" class="m-l-10" matStepperPrevious>Back</button>
               </div>
-              <button mat-flat-button color="primary" type="submit" (click)="onFormSubmit()">Submit</button>
+              <button mat-flat-button color="primary" type="submit" (click)="onFormSubmit()">
+                @if(!submitting) {
+                  Order
+                }@else {
+                  <mat-spinner diameter="20" mode="indeterminate"></mat-spinner>
+                }
+              </button>
             </div>
         </mat-step>
 

@@ -37,6 +37,7 @@ import { GroupFormElement } from 'src/app/components/dynamic-form/models/form-el
 export class ScheduleInjectionTrainingComponent {
   routeLinks = routeLinks;
   submitting = false;
+  loading = true
   enrolmentSuccess = false;
   injectionTrainingForm!: FormGroup;
   injectionSessionFormDefinition!: DynamicForm;
@@ -52,7 +53,6 @@ export class ScheduleInjectionTrainingComponent {
   ) {}
 
   ngOnInit(): void {
-    this.buildForm();
     this.injectionTrainingForm = this.fb.group({
       injectionSession: this.fb.group({}), 
     });
@@ -66,8 +66,10 @@ export class ScheduleInjectionTrainingComponent {
         tap((response) => {
           if(response.isSuccess){
             this.patientModel = response.resultObject;
+            this.buildForm();
             this.updatePatientForm(this.patientModel);
             this.updateGuardianForm(this.patientModel);
+            this.loading = false;
           }
         })
       )
@@ -149,7 +151,7 @@ export class ScheduleInjectionTrainingComponent {
   }
 
   private GetSubmitDto(): any {
-    
+
   }
 
   onCancel(): void {

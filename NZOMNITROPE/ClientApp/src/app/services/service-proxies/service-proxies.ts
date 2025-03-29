@@ -7563,6 +7563,132 @@ export class ProgramAdministratorServiceProxy {
 @Injectable({
     providedIn: 'root'
 })
+export class ProgramServicesServiceProxy {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl ?? "";
+    }
+
+    /**
+     * @param serviceName (optional) 
+     * @return Success
+     */
+    getService(serviceName?: string | undefined): Observable<GetProgramServiceResponseApiResponse> {
+        let url_ = this.baseUrl + "/api/program/services/get-service?";
+        if (serviceName === null)
+            throw new Error("The parameter 'serviceName' cannot be null.");
+        else if (serviceName !== undefined)
+            url_ += "serviceName=" + encodeURIComponent("" + serviceName) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetService(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetService(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<GetProgramServiceResponseApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<GetProgramServiceResponseApiResponse>;
+        }));
+    }
+
+    protected processGetService(response: HttpResponseBase): Observable<GetProgramServiceResponseApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = GetProgramServiceResponseApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    bookService(body?: CreateServiceBookingDto | undefined): Observable<Int32ApiResponse> {
+        let url_ = this.baseUrl + "/api/program/services/book-service";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json-patch+json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processBookService(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processBookService(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<Int32ApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<Int32ApiResponse>;
+        }));
+    }
+
+    protected processBookService(response: HttpResponseBase): Observable<Int32ApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = Int32ApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+}
+
+@Injectable({
+    providedIn: 'root'
+})
 export class ProgramTasksServiceProxy {
     private http: HttpClient;
     private baseUrl: string;
@@ -11212,6 +11338,77 @@ export interface ICancelPatientPreEnrolmentDto {
     isCancelledByAdmin: boolean;
 }
 
+export class CarerDto implements ICarerDto {
+    id!: string;
+    title!: Title;
+    firstName!: string | undefined;
+    lastName!: string | undefined;
+    middleName!: string | undefined;
+    mobile!: string | undefined;
+    email!: string | undefined;
+    gender!: Gender;
+
+    constructor(data?: ICarerDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.title = _data["title"];
+            this.firstName = _data["firstName"];
+            this.lastName = _data["lastName"];
+            this.middleName = _data["middleName"];
+            this.mobile = _data["mobile"];
+            this.email = _data["email"];
+            this.gender = _data["gender"];
+        }
+    }
+
+    static fromJS(data: any): CarerDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new CarerDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["title"] = this.title;
+        data["firstName"] = this.firstName;
+        data["lastName"] = this.lastName;
+        data["middleName"] = this.middleName;
+        data["mobile"] = this.mobile;
+        data["email"] = this.email;
+        data["gender"] = this.gender;
+        return data;
+    }
+
+    clone(): CarerDto {
+        const json = this.toJSON();
+        let result = new CarerDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface ICarerDto {
+    id: string;
+    title: Title;
+    firstName: string | undefined;
+    lastName: string | undefined;
+    middleName: string | undefined;
+    mobile: string | undefined;
+    email: string | undefined;
+    gender: Gender;
+}
+
 export class CarerModel implements ICarerModel {
     carerId!: string;
     title!: Title;
@@ -12892,6 +13089,81 @@ export interface ICreateProgramDto {
     programBaseUri: string | undefined;
     programType: ProgramType;
     startDate: Date | undefined;
+}
+
+export class CreateServiceBookingDto implements ICreateServiceBookingDto {
+    serviceId!: string;
+    bookingDay!: number;
+    bookingMonth!: number;
+    bookingYear!: number;
+    bookingHour!: number;
+    bookingMinute!: number;
+    adminNotificationEmail!: string | undefined;
+    patient!: PatientDto;
+    carer!: CarerDto;
+
+    constructor(data?: ICreateServiceBookingDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.serviceId = _data["serviceId"];
+            this.bookingDay = _data["bookingDay"];
+            this.bookingMonth = _data["bookingMonth"];
+            this.bookingYear = _data["bookingYear"];
+            this.bookingHour = _data["bookingHour"];
+            this.bookingMinute = _data["bookingMinute"];
+            this.adminNotificationEmail = _data["adminNotificationEmail"];
+            this.patient = _data["patient"] ? PatientDto.fromJS(_data["patient"]) : <any>undefined;
+            this.carer = _data["carer"] ? CarerDto.fromJS(_data["carer"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): CreateServiceBookingDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new CreateServiceBookingDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["serviceId"] = this.serviceId;
+        data["bookingDay"] = this.bookingDay;
+        data["bookingMonth"] = this.bookingMonth;
+        data["bookingYear"] = this.bookingYear;
+        data["bookingHour"] = this.bookingHour;
+        data["bookingMinute"] = this.bookingMinute;
+        data["adminNotificationEmail"] = this.adminNotificationEmail;
+        data["patient"] = this.patient ? this.patient.toJSON() : <any>undefined;
+        data["carer"] = this.carer ? this.carer.toJSON() : <any>undefined;
+        return data;
+    }
+
+    clone(): CreateServiceBookingDto {
+        const json = this.toJSON();
+        let result = new CreateServiceBookingDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface ICreateServiceBookingDto {
+    serviceId: string;
+    bookingDay: number;
+    bookingMonth: number;
+    bookingYear: number;
+    bookingHour: number;
+    bookingMinute: number;
+    adminNotificationEmail: string | undefined;
+    patient: PatientDto;
+    carer: CarerDto;
 }
 
 /** 1 = Pharmacist (Pharmacist) 2 = Pharmacy (Pharmacy) 3 = Patient (Patient) 4 = Prescriber (Prescriber) 5 = ProgramAdministrator (Program Administrator) */
@@ -23927,6 +24199,108 @@ export interface IGetProgramMedicationInformationResponseIEnumerableApiResponse 
     problemDetails: ProblemDetails;
 }
 
+export class GetProgramServiceResponse implements IGetProgramServiceResponse {
+    programServiceName!: string | undefined;
+    programServiceDescription!: string | undefined;
+    programServiceId!: string;
+
+    constructor(data?: IGetProgramServiceResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.programServiceName = _data["programServiceName"];
+            this.programServiceDescription = _data["programServiceDescription"];
+            this.programServiceId = _data["programServiceId"];
+        }
+    }
+
+    static fromJS(data: any): GetProgramServiceResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetProgramServiceResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["programServiceName"] = this.programServiceName;
+        data["programServiceDescription"] = this.programServiceDescription;
+        data["programServiceId"] = this.programServiceId;
+        return data;
+    }
+
+    clone(): GetProgramServiceResponse {
+        const json = this.toJSON();
+        let result = new GetProgramServiceResponse();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetProgramServiceResponse {
+    programServiceName: string | undefined;
+    programServiceDescription: string | undefined;
+    programServiceId: string;
+}
+
+export class GetProgramServiceResponseApiResponse implements IGetProgramServiceResponseApiResponse {
+    isSuccess!: boolean;
+    resultObject!: GetProgramServiceResponse;
+    problemDetails!: ProblemDetails;
+
+    constructor(data?: IGetProgramServiceResponseApiResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.isSuccess = _data["isSuccess"];
+            this.resultObject = _data["resultObject"] ? GetProgramServiceResponse.fromJS(_data["resultObject"]) : <any>undefined;
+            this.problemDetails = _data["problemDetails"] ? ProblemDetails.fromJS(_data["problemDetails"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): GetProgramServiceResponseApiResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetProgramServiceResponseApiResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["isSuccess"] = this.isSuccess;
+        data["resultObject"] = this.resultObject ? this.resultObject.toJSON() : <any>undefined;
+        data["problemDetails"] = this.problemDetails ? this.problemDetails.toJSON() : <any>undefined;
+        return data;
+    }
+
+    clone(): GetProgramServiceResponseApiResponse {
+        const json = this.toJSON();
+        let result = new GetProgramServiceResponseApiResponse();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetProgramServiceResponseApiResponse {
+    isSuccess: boolean;
+    resultObject: GetProgramServiceResponse;
+    problemDetails: ProblemDetails;
+}
+
 export class GetPspMaterialsAccessDto implements IGetPspMaterialsAccessDto {
     accessCode!: string | undefined;
 
@@ -25449,6 +25823,93 @@ export interface IPatient {
     requiresSupportProgramResourceAccess: boolean | undefined;
     supportProgramResourceAccessCode: string | undefined;
     treatmentProfiles: TreatmentProfile[] | undefined;
+}
+
+export class PatientDto implements IPatientDto {
+    id!: string;
+    title!: Title;
+    firstName!: string | undefined;
+    lastName!: string | undefined;
+    middleName!: string | undefined;
+    medicalReferenceNumber!: string | undefined;
+    mobile!: string | undefined;
+    email!: string | undefined;
+    birthDay!: number | undefined;
+    birthMonth!: number | undefined;
+    birthYear!: number | undefined;
+    gender!: Gender;
+
+    constructor(data?: IPatientDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.title = _data["title"];
+            this.firstName = _data["firstName"];
+            this.lastName = _data["lastName"];
+            this.middleName = _data["middleName"];
+            this.medicalReferenceNumber = _data["medicalReferenceNumber"];
+            this.mobile = _data["mobile"];
+            this.email = _data["email"];
+            this.birthDay = _data["birthDay"];
+            this.birthMonth = _data["birthMonth"];
+            this.birthYear = _data["birthYear"];
+            this.gender = _data["gender"];
+        }
+    }
+
+    static fromJS(data: any): PatientDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new PatientDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["title"] = this.title;
+        data["firstName"] = this.firstName;
+        data["lastName"] = this.lastName;
+        data["middleName"] = this.middleName;
+        data["medicalReferenceNumber"] = this.medicalReferenceNumber;
+        data["mobile"] = this.mobile;
+        data["email"] = this.email;
+        data["birthDay"] = this.birthDay;
+        data["birthMonth"] = this.birthMonth;
+        data["birthYear"] = this.birthYear;
+        data["gender"] = this.gender;
+        return data;
+    }
+
+    clone(): PatientDto {
+        const json = this.toJSON();
+        let result = new PatientDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IPatientDto {
+    id: string;
+    title: Title;
+    firstName: string | undefined;
+    lastName: string | undefined;
+    middleName: string | undefined;
+    medicalReferenceNumber: string | undefined;
+    mobile: string | undefined;
+    email: string | undefined;
+    birthDay: number | undefined;
+    birthMonth: number | undefined;
+    birthYear: number | undefined;
+    gender: Gender;
 }
 
 export class PatientModelDto implements IPatientModelDto {

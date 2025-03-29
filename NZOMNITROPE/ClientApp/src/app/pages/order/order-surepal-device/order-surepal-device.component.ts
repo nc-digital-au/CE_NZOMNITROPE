@@ -44,6 +44,7 @@ export class OrderSurepalDeviceComponent {
   routeLinks = routeLinks;
   submitting = false;
   submitted = true;
+  loading = true;
   orderSuccess: boolean = false;
   establishmentOnly = false;
   _destroyRef = inject(DestroyRef);
@@ -92,6 +93,7 @@ export class OrderSurepalDeviceComponent {
         next: (result) => {
           if(result.isSuccess){
             this.patientModel = result.resultObject;
+            this.loading = false;
           }
         },
         error: (error) => {

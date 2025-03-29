@@ -2,24 +2,28 @@
 <form [formGroup]="injectionTrainingForm" (ngSubmit)="onSubmit()">
   <div *ngIf="!enrolmentSuccess">
     <p>*Indicates mandatory field</p>
-    <div *ngIf="submitting">
-      <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+    <div *ngIf="loading">
+      <mat-progress-bar mode="query"></mat-progress-bar>
     </div>
-
     <mat-card class="cardWithShadow theme-card">
       <mat-card-content class="b-t-1">
         <!-- Patient Details Section -->
         <app-patient-form (formCreated)="patientForm = $event"></app-patient-form>
         <app-guardian-form (formCreated)="guardianForm = $event"></app-guardian-form>
         <app-dynamic-form [formDefinition]="injectionSessionFormDefinition"></app-dynamic-form>
-
         <p>NOTE: Please ensure that you have received your SurePal® device prior to the training session.</p>
 
         <div class="d-flex align-items-center justify-content-between m-t-20">
           <button mat-stroked-button class="cancel-button" [routerLink]="[routeLinks.home]" type="button">
             Cancel
           </button>
-          <button mat-flat-button color="primary" type="submit">Submit Training Request</button>
+          <button mat-flat-button color="primary" type="submit">
+            @if(!submitting) {
+              Submit Training Request
+            }@else {
+              <mat-spinner diameter="20" mode="indeterminate"></mat-spinner>
+            }
+          </button>
         </div>
       </mat-card-content>
     </mat-card>
