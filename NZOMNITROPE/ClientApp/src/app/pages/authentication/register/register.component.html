@@ -2,148 +2,148 @@
 <div class="d-flex align-items-center justify-content-center">
   <mat-card class="cardWithShadow theme-card register-form">
     <mat-card-content>
-      <mat-stepper #stepper [linear]="false" [orientation]="(stepperOrientation$ | async)!">
-        <mat-step [stepControl]="barcodeForm">
-          <ng-template matStepLabel>Welcome</ng-template>
-            <mat-card-header>
-              <mat-card-title>
-                Welcome to OmniPal<sup>®</sup>, the Omnitrope<sup>®</sup> Patient Support Program.
-              </mat-card-title>
-            </mat-card-header>
-          
-            <mat-card-content>
-              <p>
-                You have been directed here because you have been prescribed somatropin by your healthcare professional.
-                To complete your enrolment, you will be required to provide some information so that you can access the services
-                you require.
-              </p>
-              <p>
-                <strong>*Please note:</strong> You will need to collect your prescription before you can register.
-              </p>
-              <form [formGroup]="barcodeForm" (ngSubmit)="submitBarcodeValidation()" class="form-container">
-                <div class="form-row">
-                  <mat-form-field appearance="fill" class="full-width">
-                    <mat-label>Barcode – Last 4 Digits</mat-label>
-                    <input matInput type="text" placeholder="Enter last 4 digits" formControlName="barcode"/>
-                    @if(barcodeForm.get('barcode')?.hasError('required')){
+      @if(registrationSuccess){
+        <app-inline-alert>
+            Thank you for registering, your account is now active. If you have not received your confirmation email, please check your spam/junk email folder or contact the Program Administrator on 0800 666 487.
+        </app-inline-alert>
+      }
+      @else{
+        <mat-stepper #stepper [linear]="false" [orientation]="(stepperOrientation$ | async)!">
+          <mat-step [stepControl]="barcodeForm">
+            <ng-template matStepLabel>Welcome</ng-template>
+              <mat-card-header>
+                <mat-card-title>
+                  Welcome to OmniPal<sup>®</sup>, the Omnitrope<sup>®</sup> Patient Support Program.
+                </mat-card-title>
+              </mat-card-header>
+            
+              <mat-card-content>
+                <p>
+                  You have been directed here because you have been prescribed somatropin by your healthcare professional.
+                  To complete your enrolment, you will be required to provide some information so that you can access the services
+                  you require.
+                </p>
+                <p>
+                  <strong>*Please note:</strong> You will need to collect your prescription before you can register.
+                </p>
+                <form [formGroup]="barcodeForm" (ngSubmit)="submitBarcodeValidation()" class="form-container">
+                  <div class="form-row">
+                    <mat-form-field appearance="fill" class="full-width">
+                      <mat-label>Barcode – Last 4 Digits</mat-label>
+                      <input matInput type="text" placeholder="Enter last 4 digits" formControlName="barcode"/>
+                      @if(barcodeForm.get('barcode')?.hasError('required'))
+                      {
+                        <mat-error>
+                          Barcode is required.
+                        </mat-error>
+                      }
+                      @if(barcodeForm.get('barcode')?.hasError('pattern'))
+                      {
+                        <mat-error>
+                          Enter exactly 4 digits.
+                        </mat-error>
+                      }
+                      @if(barcodeFormSubmitted && barcodeInvalid)
+                      {
+                        <mat-error>
+                          Invalid barcode.
+                        </mat-error>
+                      }
+                    </mat-form-field>
+                  </div>
+                  <div class="form-row">
+                    <mat-checkbox formControlName="consent">
+                      I confirm that I have been prescribed Omnitrope<sup>®</sup> (somatropin).*
+                    </mat-checkbox>
+                    @if(barcodeForm.get('consent')?.hasError('requiredTrue')){
                       <mat-error>
-                        Barcode is required.
+                        Please confirm to proceed.
                       </mat-error>
                     }
-                    @if(barcodeForm.get('barcode')?.hasError('pattern')){
-                      <mat-error>
-                        Enter exactly 4 digits.
-                      </mat-error>
-                    }
-                    @if(barcodeFormSubmitted && barcodeInvalid){
-                      <mat-error>
-                        Invalid barcode.
-                      </mat-error>
-                    }
-                  </mat-form-field>
-                </div>
-                <div class="form-row">
-                  <mat-checkbox formControlName="consent">
-                    I confirm that I have been prescribed Omnitrope<sup>®</sup> (somatropin).*
-                  </mat-checkbox>
-                  @if(barcodeForm.get('consent')?.hasError('requiredTrue')){
-                    <mat-error>
-                      Please confirm to proceed.
-                    </mat-error>
-                  }
-                </div>
-              </form>    
-          </mat-card-content>
-          <div class="d-flex align-items-center justify-content-between">
-            <button mat-stroked-button class="cancel-button" [routerLink]="[routeLinks.landing]" type="button">Cancel</button>
-            <button mat-flat-button color="primary" type="submit" (click)="submitBarcodeValidation()">Next</button>
-          </div>
-        </mat-step>
-
-        <mat-step [stepControl]="patientForm">
-          <ng-template matStepLabel>Patient Details</ng-template>
-          <app-register-patient-details (formCreated)="patientForm = $event"></app-register-patient-details>
-          <div class="d-flex align-items-center justify-content-between">
-            <div>
+                  </div>
+                </form>    
+            </mat-card-content>
+            <div class="d-flex align-items-center justify-content-between">
               <button mat-stroked-button class="cancel-button" [routerLink]="[routeLinks.landing]" type="button">Cancel</button>
-              <button mat-flat-button color="accent" class="m-l-10" matStepperPrevious>Back</button>
+              <button mat-flat-button color="primary" type="submit" (click)="submitBarcodeValidation()">Next</button>
             </div>
-            <button mat-flat-button color="primary" type="submit" (click)="submitPatientDetailsForm()">Next</button>
-          </div>
-        </mat-step>
-
-        <mat-step [stepControl]="guardianForm" optional="true">
-          <ng-template matStepLabel>Guardian Details</ng-template>
-          <app-guardian-form (formCreated)="guardianForm = $event"></app-guardian-form>
-          <div class="d-flex align-items-center justify-content-between">
-            <div>
-              <button mat-stroked-button class="cancel-button" [routerLink]="[routeLinks.landing]" type="button">Cancel</button>
-              <button mat-flat-button color="accent" class="m-l-10" matStepperPrevious>Back</button>
-            </div>
-            <button mat-flat-button color="primary" type="submit" (click)="submitGuardianForm()">Next</button>
-          </div>
-        </mat-step>
-
-        <mat-step [stepControl]="addressForm">
-          <ng-template matStepLabel>Delivery</ng-template>
-          <app-person-collecting-form (formCreated)="collectingForm = $event"></app-person-collecting-form>
-          <app-address (formCreated)="addressForm = $event" title="Delivery Address"
-            searchHint="Enter your delivery address to search"
-            [hiddenFields]="[ 'mobile','search', 'name']"
-            [establishmentOnly]="false"
-            >
-          </app-address>
-          <div class="d-flex align-items-center justify-content-between">
-            <div>
-              <button mat-stroked-button class="cancel-button" [routerLink]="[routeLinks.landing]" type="button">Cancel</button>
-              <button mat-flat-button color="accent" class="m-l-10" matStepperPrevious>Back</button>
-            </div>
-            <button mat-flat-button color="primary" type="submit" (click)="submitDeliveryForm()">Next</button>
-          </div>
-        </mat-step>
-
-        <mat-step [stepControl]="termsForm">
-          <ng-template matStepLabel>Terms</ng-template>
-          <app-terms-form (formCreated)="termsForm = $event">
+          </mat-step>
+  
+          <mat-step [stepControl]="patientForm">
+            <ng-template matStepLabel>Patient Details</ng-template>
+            <app-register-patient-details (formCreated)="patientForm = $event"></app-register-patient-details>
             <div class="d-flex align-items-center justify-content-between">
               <div>
                 <button mat-stroked-button class="cancel-button" [routerLink]="[routeLinks.landing]" type="button">Cancel</button>
                 <button mat-flat-button color="accent" class="m-l-10" matStepperPrevious>Back</button>
               </div>
-              <button mat-flat-button color="primary" type="submit" (click)="onRegisterClick()">Register</button>
+              <button mat-flat-button color="primary" type="submit" (click)="submitPatientDetailsForm()">Next</button>
             </div>
-
-            <ng-template matStepLabel>Submit</ng-template>
-            <div class="p-16 bg-dark-blue rounded m-y-20">
-              <h5 class="white">
-                Registration Submission
-                @if (registrationSuccess) {
-                Successful
-                }
-                @else {
-                Failed
-                }
-              </h5>
-            </div>
-            <app-inline-alert>
-              @if (registrationSuccess) {
-                Thank you for registering, your account is now active. If you have not received your confirmation email, please check your spam/junk email folder or contact the Program Administrator on 0800 666 487.
-              }
-              @else {
-              Registration failed. Please check the following fields and then try to submit again.
+          </mat-step>
   
-              @if (registrationProblem && registrationProblem.errors) {
-              <ul>
-                @for (problem of registrationProblem.errors; track problem.propertyName) {
-                <li>{{ problem.message }}</li>
-                }
-              </ul>
+          <mat-step [stepControl]="guardianForm" optional="true">
+            <ng-template matStepLabel>Guardian Details</ng-template>
+            <app-guardian-form (formCreated)="guardianForm = $event"></app-guardian-form>
+            <div class="d-flex align-items-center justify-content-between">
+              <div>
+                <button mat-stroked-button class="cancel-button" [routerLink]="[routeLinks.landing]" type="button">Cancel</button>
+                <button mat-flat-button color="accent" class="m-l-10" matStepperPrevious>Back</button>
+              </div>
+              <button mat-flat-button color="primary" type="submit" (click)="submitGuardianForm()">Next</button>
+            </div>
+          </mat-step>
+  
+          <mat-step [stepControl]="addressForm">
+            <ng-template matStepLabel>Delivery</ng-template>
+            <app-person-collecting-form (formCreated)="collectingForm = $event"></app-person-collecting-form>
+            <app-address (formCreated)="addressForm = $event" title="Delivery Address"
+              searchHint="Enter your delivery address to search"
+              [hiddenFields]="[ 'mobile','search', 'name']"
+              [establishmentOnly]="false"
+              >
+            </app-address>
+            <div class="d-flex align-items-center justify-content-between">
+              <div>
+                <button mat-stroked-button class="cancel-button" [routerLink]="[routeLinks.landing]" type="button">Cancel</button>
+                <button mat-flat-button color="accent" class="m-l-10" matStepperPrevious>Back</button>
+              </div>
+              <button mat-flat-button color="primary" type="submit" (click)="submitDeliveryForm()">Next</button>
+            </div>
+          </mat-step>
+  
+          <mat-step [stepControl]="termsForm">
+            <ng-template matStepLabel>Terms</ng-template>
+            <app-terms-form (formCreated)="termsForm = $event">
+              <div class="d-flex align-items-center justify-content-between">
+                <div>
+                  <button mat-stroked-button class="cancel-button" [routerLink]="[routeLinks.landing]" type="button">Cancel</button>
+                  <button mat-flat-button color="accent" class="m-l-10" matStepperPrevious>Back</button>
+                </div>
+                <button mat-flat-button color="primary" type="submit" (click)="onRegisterClick()">
+                  @if(!submitting) {
+                    Submit
+                  }@else {
+                    <mat-spinner diameter="20" mode="indeterminate"></mat-spinner>
+                  }
+                </button>
+              </div>
+              @if(registrationSubmitted && !registrationSuccess){
+                <app-inline-alert>
+                  Registration failed. Please check the following fields and then try to submit again.
+      
+                  @if (registrationProblem && registrationProblem.errors) {
+                    <ul>
+                      @for (problem of registrationProblem.errors; track problem.propertyName) {
+                      <li>{{ problem.message }}</li>
+                      }
+                    </ul>
+                  }
+                </app-inline-alert>
               }
-              }
-            </app-inline-alert>
-          </app-terms-form>
-        </mat-step>
-      </mat-stepper>
+            </app-terms-form>
+          </mat-step>
+        </mat-stepper>
+      }
     </mat-card-content>
   </mat-card>
 </div>

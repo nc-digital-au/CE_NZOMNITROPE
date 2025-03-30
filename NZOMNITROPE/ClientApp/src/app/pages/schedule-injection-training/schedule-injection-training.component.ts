@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, DestroyRef, EventEmitter, inject, OnInit, Output, output } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -7,16 +7,10 @@ import { RouterLink } from '@angular/router';
 import { PatientFormComponent } from 'src/app/components/patient-form/patient-form.component';
 import { routeLinks } from 'src/app/utils/routes';
 import { GuardianFormComponent } from 'src/app/components/guardian-form/guardian-form.component';
-import { DynamicFormComponent } from 'src/app/components/dynamic-form/dynamic-form.component';
-import { DynamicForm } from 'src/app/components/dynamic-form/models/dynamic-form.model';
-import { TitleFormElement } from 'src/app/components/dynamic-form/models/form-elements/title-form-element.model';
-import { DateFormInputElement } from 'src/app/components/dynamic-form/models/form-elements/date-form-input-element.model';
 import { MatTimepickerModule } from '@angular/material/timepicker';
-import { TimeFormInputElement } from 'src/app/components/dynamic-form/models/form-elements/time-form-input-element.model';
 import { CarerDto, CreateServiceBookingDto, Gender, GetPatientInformationWithCarerResponse, PatientDto, PatientServiceProxy, ProgramServicesServiceProxy, Title } from 'src/app/services/service-proxies/service-proxies';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { tap } from 'rxjs';
-import { GroupFormElement } from 'src/app/components/dynamic-form/models/form-elements/group-form-element.model';
 import { environment } from 'src/environments/environment';
 import { SessionBookingComponent } from './session-booking/session-booking.component';
 

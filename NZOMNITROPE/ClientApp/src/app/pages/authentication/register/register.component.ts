@@ -20,6 +20,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatInputModule } from '@angular/material/input';
 import { RegisterPatientDetailsComponent } from './register-patient-details/register-patient-details.component';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-register',
@@ -49,7 +50,8 @@ import { RegisterPatientDetailsComponent } from './register-patient-details/regi
     MatCardTitle,
     ReactiveFormsModule,
     CommonModule,
-    RegisterPatientDetailsComponent
+    RegisterPatientDetailsComponent,
+    MatProgressSpinner
   ],
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss',
@@ -69,6 +71,8 @@ export class RegisterComponent implements OnInit {
   stepperOrientation$: Observable<StepperOrientation>;
   barcodeFormSubmitted: boolean = false;
   barcodeInvalid: boolean = false;
+  registrationSubmitted: boolean = false;
+  submitting: boolean = false;
 
   patientForm = this._fb.group({});
   guardianForm = this._fb.group({});
@@ -154,28 +158,29 @@ export class RegisterComponent implements OnInit {
   submitDeliveryForm(){
     const collectingFormData = this.collectingForm.value as any;
     const addressFormData = this.addressForm.value as any;
-    console.log('collecting form', collectingFormData);
-    console.log('address form', addressFormData);
     this.collectingForm.markAllAsTouched();
-    if (this.collectingForm.valid) {
+    if (this.collectingForm.valid && this.addressForm.valid) {
       this.stepper.next();
     }
   }
   onRegisterClick(): void {
     const dto = this.createDto();
-    console.log('dto', dto);
     if (this.patientForm.valid && this.guardianForm.valid && this.addressForm.valid && this.termsForm.valid) {
-      this._registrationService.registerPatientPspWithDelivery(dto).pipe(
+      this.submitting = true;
+      this._registrationService.registerPatientPspWithDelivery(dto)
+      .pipe(
         takeUntilDestroyed(this._destroyRef),
       ).subscribe({
         next: (res) => {
           this.registrationSuccess = res.isSuccess;
-          this.stepper.next();
+          this.submitting = false;
+          this.registrationSubmitted = true;
         },
         error: (err) => {
           this.registrationSuccess = false;
           this.registrationProblem = err.problemDetails;
-          this.stepper.next();
+          this.submitting = false;
+          this.registrationSubmitted = true;
         },
       });
     }
