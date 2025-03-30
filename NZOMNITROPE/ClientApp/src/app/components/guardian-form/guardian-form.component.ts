@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { DynamicForm } from 'src/app/components/dynamic-form/models/dynamic-form.model';
 import { DynamicFormComponent } from 'src/app/components/dynamic-form/dynamic-form.component';
@@ -14,13 +14,16 @@ import { TitleFormElement } from 'src/app/components/dynamic-form/models/form-el
   templateUrl: './guardian-form.component.html',
   styleUrls: ['./guardian-form.component.scss'],
 })
-export class GuardianFormComponent {
+export class GuardianFormComponent implements OnInit {
   @Output() formCreated = new EventEmitter<FormGroup>();
   
   guardianFormDefinition: DynamicForm;
 
   constructor() {
     this.buildForm();
+  }
+  ngOnInit(): void {
+    
   }
 
   onFormCreated(form: FormGroup): void {

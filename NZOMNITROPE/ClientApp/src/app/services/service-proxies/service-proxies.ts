@@ -1944,6 +1944,57 @@ export class OrderServiceProxy {
     }
 
     /**
+     * @return Success
+     */
+    getLastConsumableOrderForPatient(): Observable<GetPatientLastConsumableOrderResponseApiResponse> {
+        let url_ = this.baseUrl + "/api/order/get/consumable/patient";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetLastConsumableOrderForPatient(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetLastConsumableOrderForPatient(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<GetPatientLastConsumableOrderResponseApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<GetPatientLastConsumableOrderResponseApiResponse>;
+        }));
+    }
+
+    protected processGetLastConsumableOrderForPatient(response: HttpResponseBase): Observable<GetPatientLastConsumableOrderResponseApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = GetPatientLastConsumableOrderResponseApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
      * @param searchFilter (optional) 
      * @param sortField (optional) 
      * @param sortDescending (optional) 
@@ -11339,7 +11390,7 @@ export interface ICancelPatientPreEnrolmentDto {
 }
 
 export class CarerDto implements ICarerDto {
-    id!: string;
+    id!: string | undefined;
     title!: Title;
     firstName!: string | undefined;
     lastName!: string | undefined;
@@ -11399,7 +11450,7 @@ export class CarerDto implements ICarerDto {
 }
 
 export interface ICarerDto {
-    id: string;
+    id: string | undefined;
     title: Title;
     firstName: string | undefined;
     lastName: string | undefined;
@@ -13092,7 +13143,7 @@ export interface ICreateProgramDto {
 }
 
 export class CreateServiceBookingDto implements ICreateServiceBookingDto {
-    serviceId!: string;
+    serviceName!: string | undefined;
     bookingDay!: number;
     bookingMonth!: number;
     bookingYear!: number;
@@ -13113,7 +13164,7 @@ export class CreateServiceBookingDto implements ICreateServiceBookingDto {
 
     init(_data?: any) {
         if (_data) {
-            this.serviceId = _data["serviceId"];
+            this.serviceName = _data["serviceName"];
             this.bookingDay = _data["bookingDay"];
             this.bookingMonth = _data["bookingMonth"];
             this.bookingYear = _data["bookingYear"];
@@ -13134,7 +13185,7 @@ export class CreateServiceBookingDto implements ICreateServiceBookingDto {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["serviceId"] = this.serviceId;
+        data["serviceName"] = this.serviceName;
         data["bookingDay"] = this.bookingDay;
         data["bookingMonth"] = this.bookingMonth;
         data["bookingYear"] = this.bookingYear;
@@ -13155,7 +13206,7 @@ export class CreateServiceBookingDto implements ICreateServiceBookingDto {
 }
 
 export interface ICreateServiceBookingDto {
-    serviceId: string;
+    serviceName: string | undefined;
     bookingDay: number;
     bookingMonth: number;
     bookingYear: number;
@@ -19271,6 +19322,164 @@ export class GetPatientInformationWithCarerResponseApiResponse implements IGetPa
 export interface IGetPatientInformationWithCarerResponseApiResponse {
     isSuccess: boolean;
     resultObject: GetPatientInformationWithCarerResponse;
+    problemDetails: ProblemDetails;
+}
+
+export class GetPatientLastConsumableOrderResponse implements IGetPatientLastConsumableOrderResponse {
+    orderId!: string;
+    orderedDate!: Date;
+    firstName!: string | undefined;
+    lastName!: string | undefined;
+    email!: string | undefined;
+    mobile!: string | undefined;
+    patientReferenceNumber!: string | undefined;
+    deliveryInstitutionName!: string | undefined;
+    deliveryUnitNumber!: string | undefined;
+    deliveryStreetAddress!: string | undefined;
+    deliveryCity!: string | undefined;
+    deliveryState!: AddressState;
+    deliveryPostCode!: string | undefined;
+    deliverTo!: string | undefined;
+    consumableOrderItems!: OrderItemModel[] | undefined;
+
+    constructor(data?: IGetPatientLastConsumableOrderResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.orderId = _data["orderId"];
+            this.orderedDate = _data["orderedDate"] ? new Date(_data["orderedDate"].toString()) : <any>undefined;
+            this.firstName = _data["firstName"];
+            this.lastName = _data["lastName"];
+            this.email = _data["email"];
+            this.mobile = _data["mobile"];
+            this.patientReferenceNumber = _data["patientReferenceNumber"];
+            this.deliveryInstitutionName = _data["deliveryInstitutionName"];
+            this.deliveryUnitNumber = _data["deliveryUnitNumber"];
+            this.deliveryStreetAddress = _data["deliveryStreetAddress"];
+            this.deliveryCity = _data["deliveryCity"];
+            this.deliveryState = _data["deliveryState"];
+            this.deliveryPostCode = _data["deliveryPostCode"];
+            this.deliverTo = _data["deliverTo"];
+            if (Array.isArray(_data["consumableOrderItems"])) {
+                this.consumableOrderItems = [];
+                for (let item of _data["consumableOrderItems"])
+                    this.consumableOrderItems!.push(OrderItemModel.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): GetPatientLastConsumableOrderResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetPatientLastConsumableOrderResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["orderId"] = this.orderId;
+        data["orderedDate"] = this.orderedDate ? this.orderedDate.toISOString() : <any>undefined;
+        data["firstName"] = this.firstName;
+        data["lastName"] = this.lastName;
+        data["email"] = this.email;
+        data["mobile"] = this.mobile;
+        data["patientReferenceNumber"] = this.patientReferenceNumber;
+        data["deliveryInstitutionName"] = this.deliveryInstitutionName;
+        data["deliveryUnitNumber"] = this.deliveryUnitNumber;
+        data["deliveryStreetAddress"] = this.deliveryStreetAddress;
+        data["deliveryCity"] = this.deliveryCity;
+        data["deliveryState"] = this.deliveryState;
+        data["deliveryPostCode"] = this.deliveryPostCode;
+        data["deliverTo"] = this.deliverTo;
+        if (Array.isArray(this.consumableOrderItems)) {
+            data["consumableOrderItems"] = [];
+            for (let item of this.consumableOrderItems)
+                data["consumableOrderItems"].push(item.toJSON());
+        }
+        return data;
+    }
+
+    clone(): GetPatientLastConsumableOrderResponse {
+        const json = this.toJSON();
+        let result = new GetPatientLastConsumableOrderResponse();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetPatientLastConsumableOrderResponse {
+    orderId: string;
+    orderedDate: Date;
+    firstName: string | undefined;
+    lastName: string | undefined;
+    email: string | undefined;
+    mobile: string | undefined;
+    patientReferenceNumber: string | undefined;
+    deliveryInstitutionName: string | undefined;
+    deliveryUnitNumber: string | undefined;
+    deliveryStreetAddress: string | undefined;
+    deliveryCity: string | undefined;
+    deliveryState: AddressState;
+    deliveryPostCode: string | undefined;
+    deliverTo: string | undefined;
+    consumableOrderItems: OrderItemModel[] | undefined;
+}
+
+export class GetPatientLastConsumableOrderResponseApiResponse implements IGetPatientLastConsumableOrderResponseApiResponse {
+    isSuccess!: boolean;
+    resultObject!: GetPatientLastConsumableOrderResponse;
+    problemDetails!: ProblemDetails;
+
+    constructor(data?: IGetPatientLastConsumableOrderResponseApiResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.isSuccess = _data["isSuccess"];
+            this.resultObject = _data["resultObject"] ? GetPatientLastConsumableOrderResponse.fromJS(_data["resultObject"]) : <any>undefined;
+            this.problemDetails = _data["problemDetails"] ? ProblemDetails.fromJS(_data["problemDetails"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): GetPatientLastConsumableOrderResponseApiResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetPatientLastConsumableOrderResponseApiResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["isSuccess"] = this.isSuccess;
+        data["resultObject"] = this.resultObject ? this.resultObject.toJSON() : <any>undefined;
+        data["problemDetails"] = this.problemDetails ? this.problemDetails.toJSON() : <any>undefined;
+        return data;
+    }
+
+    clone(): GetPatientLastConsumableOrderResponseApiResponse {
+        const json = this.toJSON();
+        let result = new GetPatientLastConsumableOrderResponseApiResponse();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetPatientLastConsumableOrderResponseApiResponse {
+    isSuccess: boolean;
+    resultObject: GetPatientLastConsumableOrderResponse;
     problemDetails: ProblemDetails;
 }
 
@@ -25688,6 +25897,57 @@ export interface IMobileNumber {
     value: string | undefined;
 }
 
+export class OrderItemModel implements IOrderItemModel {
+    productId!: string | undefined;
+    sku!: string | undefined;
+    quantity!: number;
+
+    constructor(data?: IOrderItemModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.productId = _data["productId"];
+            this.sku = _data["sku"];
+            this.quantity = _data["quantity"];
+        }
+    }
+
+    static fromJS(data: any): OrderItemModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new OrderItemModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["productId"] = this.productId;
+        data["sku"] = this.sku;
+        data["quantity"] = this.quantity;
+        return data;
+    }
+
+    clone(): OrderItemModel {
+        const json = this.toJSON();
+        let result = new OrderItemModel();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IOrderItemModel {
+    productId: string | undefined;
+    sku: string | undefined;
+    quantity: number;
+}
+
 /** 1 = SubmittedForReview (Submitted for Review) 2 = ApprovedForProcessing (Approved for Processing) 3 = Processing (Processing) 4 = Dispatched (Dispatched) 5 = Delivered (Delivered) 6 = Cancelled (Cancelled) */
 export enum OrderStatus {
     SubmittedForReview = 1,
@@ -25826,7 +26086,6 @@ export interface IPatient {
 }
 
 export class PatientDto implements IPatientDto {
-    id!: string;
     title!: Title;
     firstName!: string | undefined;
     lastName!: string | undefined;
@@ -25850,7 +26109,6 @@ export class PatientDto implements IPatientDto {
 
     init(_data?: any) {
         if (_data) {
-            this.id = _data["id"];
             this.title = _data["title"];
             this.firstName = _data["firstName"];
             this.lastName = _data["lastName"];
@@ -25874,7 +26132,6 @@ export class PatientDto implements IPatientDto {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
         data["title"] = this.title;
         data["firstName"] = this.firstName;
         data["lastName"] = this.lastName;
@@ -25898,7 +26155,6 @@ export class PatientDto implements IPatientDto {
 }
 
 export interface IPatientDto {
-    id: string;
     title: Title;
     firstName: string | undefined;
     lastName: string | undefined;

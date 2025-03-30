@@ -51,8 +51,8 @@ export class DynamicFormHelper {
     criteriaToTransform.forEach(element => {
       radioFormElements.push(
         new RadioFormInputElement({
-          name: element.optionName,
-          label: element.optionDescription,
+          name: element.optionName ? element.optionName : '',
+          label: element.optionDescription ? element.optionDescription : '',
           options: criteriaOptions,
           validation: {
             required: element.optionCriteria,

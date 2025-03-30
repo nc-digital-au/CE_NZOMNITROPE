@@ -5,8 +5,7 @@ import { FormInputElement, IFormInputProps } from "./form-input-element.model";
 interface ITimeFormInputValidation extends IFormValidation {
   minTime?: string;
   maxTime?: string;
-  interval?: number;
-  required?: boolean;
+  interval?: string;
 }
 
 export interface ITimeFormInputProps extends IFormInputProps {
@@ -15,13 +14,8 @@ export interface ITimeFormInputProps extends IFormInputProps {
 }
 
 export class TimeFormInputElement extends FormInputElement {
-  placeholder?: string;
-  override validation: ITimeFormInputValidation;
-
   constructor(props: ITimeFormInputProps) {
     super(props);
     this.type = FormElementType.Time;
-    this.placeholder = props.placeholder;
-    this.validation = props.validation || {};
   }
 }

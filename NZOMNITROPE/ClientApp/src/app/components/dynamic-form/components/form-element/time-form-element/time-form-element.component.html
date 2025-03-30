@@ -1,11 +1,17 @@
 <div class="form-container">
-    <mat-form-field appearance="outline" class="expand-form-field">
+    <mat-form-field appearance="outline" class="expand-form-field" [formGroup]="form">
       <mat-label>Select a Time</mat-label>
-      <mat-select [formControl]="timeControl">
-        <mat-option *ngFor="let time of availableTimes" [value]="time.value">
-          {{ time.label }}
-        </mat-option>
-      </mat-select>
+      <input
+        matInput
+        [matTimepicker]="picker"
+        matTimepickerMin="09:00"
+        matTimepickerMax="17:30"
+        [formControlName]="timeFormElement.name">
+      <mat-timepicker-toggle matIconSuffix [for]="picker"/>
+      <mat-timepicker #picker interval="15m"/>
+      <mat-error>
+        {{ setErrorMessage(form, timeFormElement.name, timeFormElement.label) }}
+      </mat-error>
     </mat-form-field>
   </div>
   

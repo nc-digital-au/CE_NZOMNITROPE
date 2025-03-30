@@ -38,7 +38,6 @@ export class OrderSurepalDeviceComponent {
   orderFormComponent!: OrderFormComponent;
 
   destroyRef = inject(DestroyRef);
-  enrolmentSuccess = false;
   stepperOrientation: Observable<StepperOrientation>;
   patientId: string;
   routeLinks = routeLinks;
@@ -76,7 +75,7 @@ export class OrderSurepalDeviceComponent {
   onEstablishmentOnlyChange(event: any): void {
     this.establishmentOnly = event.value;
   }
-
+  
   private getPatientInformation(): void {
     this._patientService.getPatientInformationWithCarer()
       .pipe(
@@ -193,7 +192,6 @@ export class OrderSurepalDeviceComponent {
 
   private GetOrderProducts(): void {
     const orderFormData = this.orderForm.value as any;
-    console.log('Order Form Data:', orderFormData);
     if(orderFormData.needleKit){
       this.productsRequested.push(new ConsumableOrderItemDto({
         productId: undefined,

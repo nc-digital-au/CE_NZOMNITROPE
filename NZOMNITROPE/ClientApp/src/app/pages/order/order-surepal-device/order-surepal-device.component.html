@@ -1,5 +1,5 @@
 <h1>Order SurePal<sup>®</sup> Device and Consumables Form</h1>
-<div *ngIf="!enrolmentSuccess">
+<div *ngIf="!orderSuccess">
   <p>*Indicates mandatory field</p>
   @if (loading) {
     <mat-progress-bar mode="query"></mat-progress-bar>
@@ -27,7 +27,7 @@
           <app-address 
           [establishmentOnly]="establishmentOnly" 
           [hiddenFields]="['phone', 'mobile', 'state']"
-          [disabledFields]="establishmentOnly ? ['name'] : []"
+          [disabledFields]="establishmentOnly ? [] : ['name']"
           (formCreated)="addressForm = $event"
           >
           <div class="d-flex align-items-center justify-content-between">
@@ -47,7 +47,7 @@
               </div>
               <button mat-flat-button color="primary" type="submit" (click)="onFormSubmit()">
                 @if(!submitting) {
-                  Order
+                  Submit
                 }@else {
                   <mat-spinner diameter="20" mode="indeterminate"></mat-spinner>
                 }
@@ -59,7 +59,7 @@
     </mat-card-content>
   </mat-card>
 </div>
-<div *ngIf="enrolmentSuccess">
+<div *ngIf="orderSuccess">
   <mat-card>
     <mat-card-content class="b-t-1">
       <h4 class="mat-subtitle-2 d-flex align-items-center f-w-600">

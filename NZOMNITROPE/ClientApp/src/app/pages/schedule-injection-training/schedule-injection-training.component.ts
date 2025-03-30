@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject } from '@angular/core';
+import { AfterViewInit, Component, DestroyRef, EventEmitter, inject, OnInit, Output, output } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -13,10 +13,13 @@ import { TitleFormElement } from 'src/app/components/dynamic-form/models/form-el
 import { DateFormInputElement } from 'src/app/components/dynamic-form/models/form-elements/date-form-input-element.model';
 import { MatTimepickerModule } from '@angular/material/timepicker';
 import { TimeFormInputElement } from 'src/app/components/dynamic-form/models/form-elements/time-form-input-element.model';
-import { GetPatientInformationWithCarerResponse, PatientServiceProxy } from 'src/app/services/service-proxies/service-proxies';
+import { CarerDto, CreateServiceBookingDto, Gender, GetPatientInformationWithCarerResponse, PatientDto, PatientServiceProxy, ProgramServicesServiceProxy, Title } from 'src/app/services/service-proxies/service-proxies';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { tap } from 'rxjs';
 import { GroupFormElement } from 'src/app/components/dynamic-form/models/form-elements/group-form-element.model';
+import { environment } from 'src/environments/environment';
+import { SessionBookingComponent } from './session-booking/session-booking.component';
+
 
 @Component({
   selector: 'app-schedule-injection-training',
@@ -29,35 +32,36 @@ import { GroupFormElement } from 'src/app/components/dynamic-form/models/form-el
     RouterLink,
     GuardianFormComponent,
     PatientFormComponent,
-    DynamicFormComponent,
+    SessionBookingComponent,
     ReactiveFormsModule,
     MatTimepickerModule,
   ]
 })
-export class ScheduleInjectionTrainingComponent {
+export class ScheduleInjectionTrainingComponent implements OnInit {
   routeLinks = routeLinks;
   submitting = false;
   loading = true
   enrolmentSuccess = false;
-  injectionTrainingForm!: FormGroup;
-  injectionSessionFormDefinition!: DynamicForm;
+
+  bookingForm: FormGroup;
+
   patientForm  = this.fb.group({});
   guardianForm = this.fb.group({});
+  sessionForm = this.fb.group({});
   _destroyRef = inject(DestroyRef);
   patientModel: GetPatientInformationWithCarerResponse;
 
   constructor(
     private readonly fb: FormBuilder,
     private readonly router: Router,
-    private readonly patientService: PatientServiceProxy
+    private readonly patientService: PatientServiceProxy,
+    private readonly bookingService: ProgramServicesServiceProxy,
   ) {}
 
   ngOnInit(): void {
-    this.injectionTrainingForm = this.fb.group({
-      injectionSession: this.fb.group({}), 
-    });
     this.getPatientInformation();
   }
+
 
   private getPatientInformation(): void {
     this.patientService.getPatientInformationWithCarer()
@@ -66,7 +70,6 @@ export class ScheduleInjectionTrainingComponent {
         tap((response) => {
           if(response.isSuccess){
             this.patientModel = response.resultObject;
-            this.buildForm();
             this.updatePatientForm(this.patientModel);
             this.updateGuardianForm(this.patientModel);
             this.loading = false;
@@ -83,32 +86,6 @@ export class ScheduleInjectionTrainingComponent {
           console.error('Error fetching patient information:', error);
         }
       }));
-  }
-
-  private buildForm(): void {
-    this.injectionSessionFormDefinition = new DynamicForm([
-      new TitleFormElement({
-        label: 'Injection Training Session',
-      }),
-      new GroupFormElement({
-        children: [
-          new DateFormInputElement({
-            name: 'sessionDate',
-            label: 'Date of Training',
-            validation: {
-              required: true,
-            },
-          }),
-          new TimeFormInputElement({
-            name: 'sessionTime',
-            label: 'Select Time',
-            validation: {
-              required: true,
-            },
-          }),
-        ],
-      }),
-    ]);
   }
 
   private updatePatientForm(data: GetPatientInformationWithCarerResponse): void {
@@ -135,23 +112,95 @@ export class ScheduleInjectionTrainingComponent {
     this.guardianForm.patchValue(guardianFormData);
   }
 
-  onSubmit(): void {
-    if (this.injectionTrainingForm.valid) {
+  onFormSubmit(): void {
+    const isValid = this.isFormValid();
+    if (this.sessionForm.valid) {
       this.submitting = true;
-
-      console.log('Submitting form data:', this.injectionTrainingForm.value);
-
-      setTimeout(() => {
-        this.submitting = false;
-        this.enrolmentSuccess = true;
-      }, 2000);
-    } else {
-      console.log('Form is invalid. Please check the required fields.');
+      const submitDto = this.GetSubmitDto();
+      this.bookingService
+        .bookService(submitDto)
+        .pipe(
+          takeUntilDestroyed(this._destroyRef),
+          tap((response) => { 
+            if (response.isSuccess) {
+              this.enrolmentSuccess = true;
+              this.submitting = false;
+              this.router.navigate(['/']);
+            } else {
+              this.submitting = false;
+            }
+          }
+        )
+        )
+        .subscribe({
+          next: (result) => {     
+            if (result.isSuccess) {
+              this.enrolmentSuccess = true;
+              this.submitting = false;
+              this.router.navigate(['/']);
+            } else {
+              this.submitting = false;
+            }
+          }
+        }); 
+      
     }
   }
 
-  private GetSubmitDto(): any {
+  private isFormValid(): boolean {
+    this.patientForm.markAllAsTouched();
+    this.guardianForm.markAllAsTouched();
+    this.sessionForm.markAllAsTouched();
+    const sessionFormData = this.sessionForm.value as any;
+    console.log('Session Form Data:', sessionFormData);
+    return this.patientForm.valid && this.guardianForm.valid && this.sessionForm.valid;
+  }
 
+  private GetSubmitDto(): CreateServiceBookingDto {
+    const bookingFormData = this.sessionForm.value as any;
+    const guardianDto = this.GetGuardianDto();
+    const patientDto = this.GetPatientDto();
+    return new CreateServiceBookingDto({
+      serviceName: 'Injection training',
+      bookingDay: bookingFormData.sessionDate.getDate(),
+      bookingMonth: bookingFormData.sessionDate.getMonth() + 1,
+      bookingYear: bookingFormData.sessionDate.getFullYear(),
+      bookingHour: bookingFormData.sessionTime.getHours(),
+      bookingMinute: bookingFormData.sessionTime.getMinutes(),
+      patient: patientDto,
+      carer: guardianDto,
+      adminNotificationEmail: environment.trainingAdminEmail,
+    });
+  }
+
+  private GetPatientDto(): PatientDto {
+    const patientFormData = this.patientForm.value as any;
+    return new PatientDto({
+      title: Title.Unknown,
+      firstName: patientFormData.firstName,
+      lastName: patientFormData.lastName,
+      middleName: undefined,
+      email: patientFormData.email,
+      medicalReferenceNumber: patientFormData.nhiNumber,
+      mobile: undefined,
+      birthDay: undefined,
+      birthMonth: undefined,
+      birthYear: undefined,
+      gender: Gender.NotSpecified
+    });
+  }
+  private GetGuardianDto(): CarerDto {
+    const guardianFormData = this.guardianForm.value as any;
+    return new CarerDto({
+      id: undefined,
+      title: Title.Unknown,
+      middleName: undefined,
+      firstName: guardianFormData.firstName,
+      lastName: guardianFormData.lastName,        
+      email: guardianFormData.email,
+      gender: Gender.NotSpecified,
+      mobile: guardianFormData.mobile,
+    });
   }
 
   onCancel(): void {
