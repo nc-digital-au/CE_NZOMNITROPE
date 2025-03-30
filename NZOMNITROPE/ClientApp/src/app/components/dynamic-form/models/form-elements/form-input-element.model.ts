@@ -10,17 +10,18 @@ export interface IFormInputProps {
   hidden?: boolean;
   errorLabel?: string;
   hideErrors?: boolean;
+  [key: string]: any;
 }
 
 export abstract class FormInputElement extends FormElement {
   name: string;
   label: string;
-  validation: IFormValidation;
+  validation: IFormValidation | undefined;
   value: any;
-  disabled: boolean;
-  hidden: boolean;
+  disabled: boolean | undefined;
+  hidden: boolean | undefined;
   errorLabel: string;
-  hideErrors: boolean;
+  hideErrors: boolean | undefined;
 
   constructor(
     props: IFormInputProps,

@@ -1,38 +1,46 @@
-import { Component, Input } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormElement } from '../../../models/form-elements/form-element.model';
+import { CommonModule, JsonPipe } from '@angular/common';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { FormControl, FormGroup, FormGroupDirective, ReactiveFormsModule } from '@angular/forms';
+import { MatError, MatFormFieldModule, MatLabel } from '@angular/material/form-field';
+import { MatOption } from '@angular/material/select';
 import { DynamicFormComponentBase } from '../../dynamic-form-component-base.model';
-import { FormGroup, ReactiveFormsModule } from '@angular/forms';
-
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-
-import { TimePickerModule } from '@syncfusion/ej2-angular-calendars';
-import { MaterialModule } from 'src/app/material.module';
+import { TimeFormInputElement } from '../../../models/form-elements/time-form-input-element.model';
+import { MatTimepickerModule } from '@angular/material/timepicker';
+import { MatInput } from '@angular/material/input';
+import { provideNativeDateAdapter } from '@angular/material/core';
 
 @Component({
   selector: 'app-time-form-element',
+  templateUrl: './time-form-element.component.html',
+  styleUrl: './time-form-element.component.scss',
   standalone: true,
   imports: [
-    CommonModule,
+    MatFormFieldModule,
     ReactiveFormsModule,
-    MatFormFieldModule, 
-    MatInputModule,      
-    TimePickerModule,
-    MaterialModule
+    MatTimepickerModule,
+    MatLabel,
+    MatInput,
+    MatOption,
+    ReactiveFormsModule,
+    CommonModule,
+    MatError,
+    JsonPipe
   ],
-  templateUrl: './time-form-element.component.html',
-  styleUrl: './time-form-element.component.scss'
+  providers: [
+    provideNativeDateAdapter(),
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TimeFormElementComponent extends DynamicFormComponentBase {
-  startTimeVariable: Date = new Date();
   @Input()
-  set formElement(value: FormElement) {
-    this.timeFormElement = value as any;
-    this.startTimeVariable.setHours(9, 0, 0);
+  set formElement(value: any) {
+    this.timeFormElement = value;
   }
 
-  @Input() form: FormGroup;
+  timeFormElement: TimeFormInputElement;
+  timeControl = new FormControl<Date | null>(null);
 
-  timeFormElement: any;
+  @Input()
+  form: FormGroup;
+  // timeControl = new FormControl<string | null>(null);
 }

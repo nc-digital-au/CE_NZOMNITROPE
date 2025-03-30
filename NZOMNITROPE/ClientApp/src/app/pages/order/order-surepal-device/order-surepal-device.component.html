@@ -1,38 +1,57 @@
 <h1>Order SurePal<sup>®</sup> Device and Consumables Form</h1>
-<div *ngIf="!enrolmentSuccess">
+<div *ngIf="!orderSuccess">
   <p>*Indicates mandatory field</p>
-  @if (submitting) {
-  <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+  @if (loading) {
+    <mat-progress-bar mode="query"></mat-progress-bar>
   }
-  <mat-card class="cardWithShadow theme-card">
-    <mat-card-content class="b-t-1">
+  <mat-card>
+    <mat-card-content>
       <mat-stepper #stepper [orientation]="(stepperOrientation | async)!" [linear]="false">
 
-        <mat-step [stepControl]="patientForm">
-          <ng-template matStepLabel>Patient Details</ng-template>
+        <mat-step [stepControl]="patientForm" label="Patient Details">
           <app-patient-form (formCreated)="patientForm = $event"></app-patient-form>
-          <div class="p-16 bg-light-secondary rounded m-y-20">
-            <h5 class="mat-subtitle-2 text-secondary align-items-center f-w-600">
+          <div class="p-16 bg-dark-blue rounded m-y-20">
+            <h5 class="white">
               Please provide a physical address for the delivery of your SurePal<sup>®</sup> Pen or consumables kit. You can choose to have your delivery sent to your home, work/office or local community pharmacy for collection.
             </h5>
           </div>
-          <app-address [establishmentOnly]="false" [hiddenFields]="['name', 'phone', 'mobile', 'state']">
-            <div class="d-flex align-items-center justify-content-between">
-              <button mat-stroked-button class="cancel-button" [routerLink]="[routeLinks.patients.dashboard]" type="button">Cancel</button>
-              <button mat-flat-button color="primary" type="submit" (click)="onPatientFormNext()">Next</button>
-            </div>
+
+          <mat-label>Delivery Address Type</mat-label>
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-select [(value)]="establishmentOnly" (selectionChange)="onEstablishmentOnlyChange($event)">
+              <mat-option [value]="true">Place of business</mat-option>
+              <mat-option [value]="false">Private address</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <app-address 
+          [establishmentOnly]="establishmentOnly" 
+          [hiddenFields]="['phone', 'mobile', 'state']"
+          [disabledFields]="establishmentOnly ? [] : ['name']"
+          (formCreated)="addressForm = $event"
+          >
+          <div class="d-flex align-items-center justify-content-between">
+            <button mat-stroked-button class="cancel-button" [routerLink]="[routeLinks.home]" type="button">Cancel</button>
+            <button mat-flat-button color="primary" type="submit" (click)="onPatientFormNext()">Next</button>
+          </div>
         </app-address>
         </mat-step>
 
         <mat-step [stepControl]="orderForm">
         <ng-template matStepLabel>Order Form</ng-template>
-        <app-order-form></app-order-form>
-            <div class="d-flex align-items-center justify-content-between">
+        <app-order-form (formCreated)="orderForm = $event"></app-order-form>
+        <div class="d-flex align-items-center justify-content-between">
               <div>
-                <button mat-stroked-button class="cancel-button" [routerLink]="[routeLinks.patients.dashboard]" type="button">Cancel</button>
+                <button mat-stroked-button class="cancel-button" [routerLink]="[routeLinks.home]" type="button">Cancel</button>
                 <button mat-flat-button color="accent" class="m-l-10" matStepperPrevious>Back</button>
               </div>
-              <button mat-flat-button color="primary" type="submit" (click)="onFormSubmit()">Submit</button>
+              <button mat-flat-button color="primary" type="submit" (click)="onFormSubmit()">
+                @if(!submitting) {
+                  Submit
+                }@else {
+                  <mat-spinner diameter="20" mode="indeterminate"></mat-spinner>
+                }
+              </button>
             </div>
         </mat-step>
 
@@ -40,15 +59,14 @@
     </mat-card-content>
   </mat-card>
 </div>
-<div *ngIf="enrolmentSuccess">
-  <mat-card class="cardWithShadow theme-card">
+<div *ngIf="orderSuccess">
+  <mat-card>
     <mat-card-content class="b-t-1">
       <h4 class="mat-subtitle-2 d-flex align-items-center f-w-600">
         Order Submitted
       </h4>
       <div class="p-16 bg-light-info rounded m-y-20 text-info">
         <div class="icon-block">
-          <svg-icon src="assets/images/svgs/information-mark-circle.svg" svgClass="icon-block-image"></svg-icon>
           <div class="icon-block-content" style="max-width: 100%;">
             Thank you, your order has been placed and will be delivered within 10 working days. Please note that if you have nominated to have your order delivered to your local community pharmacy, you will need to collect your order directly from there.
             Should you have any queries please contact the Program Administrator on 0800 666 487.            

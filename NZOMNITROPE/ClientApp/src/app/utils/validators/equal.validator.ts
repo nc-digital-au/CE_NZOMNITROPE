@@ -8,9 +8,10 @@ export const equalValidator: ValidatorFn = (
   control: AbstractControl
 ): ValidationErrors | null => {
   if (control && control.parent) {
-    const keys = Object.keys(control.parent.controls);
+    const controls = control.parent.controls as { [key: string]: AbstractControl };
+    const keys = Object.keys(controls);
     for (const key of keys) {
-      const subControl: AbstractControl = control.parent.controls[key];
+      const subControl: AbstractControl = controls[key];
       if (control !== subControl && subControl.hasValidator(equalValidator)) {
         if (subControl.value) {
           if (control.value !== subControl.value) {

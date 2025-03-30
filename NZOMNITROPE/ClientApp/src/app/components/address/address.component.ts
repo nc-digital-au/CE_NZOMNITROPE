@@ -1,15 +1,12 @@
 import { NgxGpAutocompleteModule, NgxGpAutocompleteOptions } from '@angular-magic/ngx-gp-autocomplete';
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { SelectOption } from '@kolkov/angular-editor';
 import { DynamicFormComponent } from '../dynamic-form/dynamic-form.component';
 import { DynamicForm } from '../dynamic-form/models/dynamic-form.model';
 import { GroupFormElement } from '../dynamic-form/models/form-elements/group-form-element.model';
-import { SelectFormInputElement } from '../dynamic-form/models/form-elements/select-form-input-element.model';
 import { TextFormInputElement } from '../dynamic-form/models/form-elements/text-form-input-element.model';
 import { MatLabel, MatFormField, MatHint } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
-import { AddressState } from 'src/app/services/service-proxies/service-proxies';
 import { UI_DEFAULTS } from 'src/app/utils/constants';
 import { Loader } from '@googlemaps/js-api-loader';
 import { environment } from 'src/environments/environment';
@@ -46,6 +43,8 @@ export class AddressComponent implements OnInit {
   hiddenFields: string[] = [];
   @Input()
   searchHint: string;
+  @Input()
+  disabledFields: string[] = [];
 
   @Output()
   formCreated = new EventEmitter<FormGroup>();
@@ -56,29 +55,29 @@ export class AddressComponent implements OnInit {
   addressFormDefinition: DynamicForm;
 
   options: NgxGpAutocompleteOptions = {
-    componentRestrictions: { country: ['au'] },
+    componentRestrictions: { country: ['nz'] },
     fields: ['name', 'address_components', 'geometry'],
   };
 
   ngOnInit(): void {
-    this.options.types = [this.establishmentOnly ? 'establishment' : 'address'];
+    this.buildForm();
+  }
 
-    const stateOptions: SelectOption[] = [];
-    const stateKeys = Object.keys(AddressState).filter(key => isNaN(Number(key)));
-    stateKeys.forEach((key, i) => {
-      stateOptions.push({
-        label: key,
-        value: AddressState[key],
-      })
-    });
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['establishmentOnly'] || changes['disabledFields']) {
+      this.buildForm();
+    }
+  }
 
+  private buildForm(): void {
     this.addressFormDefinition = new DynamicForm([
       new TextFormInputElement({
         name: 'name',
-        label: 'Pharmacist name',
+        label: 'Business name',
         hidden: this.hiddenFields.includes('name'),
+        disabled: this.disabledFields.includes('name'),
         validation: {
-          required: !this.hiddenFields.includes('name'),
+          required: this.hiddenFields.includes('name') && this.disabledFields.includes('name'),
         }
       }),
       new GroupFormElement({
@@ -90,8 +89,7 @@ export class AddressComponent implements OnInit {
             validation: {
               maxLength: UI_DEFAULTS.TEXT_INPUT_LIMIT,
             },
-          }),
-          undefined,
+          })
         ],
       }),
       new TextFormInputElement({
@@ -114,19 +112,6 @@ export class AddressComponent implements OnInit {
       }),
       new GroupFormElement({
         children: [
-          new SelectFormInputElement({
-            name: 'state',
-            label: 'State',
-            hidden: true,
-            options: stateOptions,
-            validation: {
-              required: !this.hiddenFields.includes('state'),
-            },
-          }),
-        ],
-      }),
-      new GroupFormElement({
-        children: [
           new TextFormInputElement({
             name: 'postcode',
             label: 'Post code',
@@ -145,15 +130,6 @@ export class AddressComponent implements OnInit {
               required: !this.hiddenFields.includes('phone'),
             },
           }),
-          // new TextFormInputElement({
-          //   name: 'mobile',
-          //   label: 'Mobile number',
-          //   hidden: this.hiddenFields.includes('mobile'),
-          //   validation: {
-          //     mobile: true,
-          //     required: !this.hiddenFields.includes('mobile'),
-          //   },
-          // }),
         ],
       }),
     ]);
@@ -191,11 +167,6 @@ export class AddressComponent implements OnInit {
         case "locality":
           this.dynamicForm.setValue('city', component.long_name);
           break;
-
-        case "administrative_area_level_1": {
-          this.dynamicForm.setValue('state', AddressState[component.short_name]);
-          break;
-        }
       }
     }
 

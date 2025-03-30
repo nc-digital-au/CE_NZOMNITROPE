@@ -12,7 +12,6 @@ import { DynamicFormComponentBase } from '../../dynamic-form-component-base.mode
   imports: [
     ReactiveFormsModule,
     MatCheckbox,
-    MatLabel,
     MatError,
   ],
   templateUrl: './checkbox-form-element.component.html',

@@ -1,8 +1,8 @@
 <mat-form-field appearance="outline" class="w-100" color="primary" [formGroup]="form">
-  <input matInput [matDatepicker]="dateOfBirth" [formControlName]="dateFormElement.name" placeholder="DD/MM/YYYY" />
+  <input matInput [matDatepicker]="dateOfBirth" [formControlName]="dateFormElement.name" placeholder="dd/mm/yyyy" />
   <mat-datepicker-toggle matIconSuffix [for]="dateOfBirth"></mat-datepicker-toggle>
   <mat-datepicker #dateOfBirth></mat-datepicker>
   <mat-error>
-    {{ setErrorMessage(form, dateFormElement.name, dateFormElement.errorLabel) }}
+    {{ setErrorMessage(form, dateFormElement.name, dateFormElement.label) }}
   </mat-error>
 </mat-form-field>

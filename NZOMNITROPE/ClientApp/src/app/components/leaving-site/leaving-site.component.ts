@@ -1,4 +1,5 @@
 import { Component, Inject, Input} from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogActions, MatDialogClose, MatDialogContent, MatDialogTitle } from '@angular/material/dialog';
 import { MaterialModule } from 'src/app/material.module';
 
@@ -33,7 +34,7 @@ export class LeavingSiteComponent {
   templateUrl:'./leaving-site-dialog.html',
   standalone: true,
   imports:[
-    MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose
+    MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose, MatButtonModule
   ],
 })
 export class LeavingSiteDialog{

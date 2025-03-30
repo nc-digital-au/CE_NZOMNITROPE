@@ -1,28 +1,15 @@
 <mat-toolbar class="topbar horizontal-topbar">
-  <div class="container">
+  <div class="container gap-6">
 
     <!-- Mobile Menu -->
     <button mat-icon-button (click)="toggleMobileNav.emit()" class="d-block d-lg-none">
       <i-tabler name="menu-2" class="icon-20 d-flex"></i-tabler>
     </button>
-    <!-- --------------------------------------------------------------- -->
 
     <app-branding class="flex-grow-1"></app-branding>
-
     <img 
     src="../../../../../assets/images/logos/OmnitropeSurePalLogo.png" 
     alt="OmniPal" 
-    class="logo" 
-  />
-  
-    @if (authenticated$ | async) {
-      @if (logoutUrl$ | async; as logoutUrl) {
-        <div class="nav-item d-none d-sm-flex">
-          <a mat-flat-button [href]="logoutUrl + '&returnUrl=/landing'" color="primary" class="nav-link" (click)="onSignoutClick()">
-            Signout
-          </a>
-        </div>
-      }
-    }
+    class="logo"  />
   </div>
 </mat-toolbar>

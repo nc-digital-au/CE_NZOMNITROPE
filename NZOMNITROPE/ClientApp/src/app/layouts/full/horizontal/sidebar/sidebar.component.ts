@@ -9,16 +9,14 @@ import { navItems } from './sidebar-data';
 import { Router } from '@angular/router';
 import { NavService } from '../../../../services/nav.service';
 import { MediaMatcher } from '@angular/cdk/layout';
-import { TablerIconsModule } from 'angular-tabler-icons';
-import { MaterialModule } from 'src/app/material.module';
-import { CommonModule } from '@angular/common';
 import { AppHorizontalNavItemComponent } from './nav-item/nav-item.component';
+import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-horizontal-sidebar',
-  standalone: true,
-  imports: [CommonModule, TablerIconsModule, MaterialModule, AppHorizontalNavItemComponent],
-  templateUrl: './sidebar.component.html',
+    selector: 'app-horizontal-sidebar',
+    standalone: true,
+    imports: [AppHorizontalNavItemComponent, CommonModule],
+    templateUrl: './sidebar.component.html'
 })
 export class AppHorizontalSidebarComponent implements OnInit {
   navItems = navItems;
@@ -41,5 +39,5 @@ export class AppHorizontalSidebarComponent implements OnInit {
     );
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 }

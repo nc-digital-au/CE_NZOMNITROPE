@@ -1,13 +1,12 @@
 @if (formElement) {
   @if (formElement.type === FormElementType.Group) {
     <app-group-form-element [formElement]="formElement" [form]="form" [tempForm]="tempForm"></app-group-form-element>
-    <div class="col-lg-12"></div>
   }
   @else if (formElement.type === FormElementType.Title) {
     <div class="col-lg-12">
-      <div class="p-16 bg-light-secondary rounded m-y-20">
-        <h5 class="mat-subtitle-2 text-secondary d-flex align-items-center f-w-600">
-          {{ formElement['label'] }}
+      <div class="p-16 bg-dark-blue rounded m-b-20">
+        <h5 class="white">
+          {{ titleLabel }}
         </h5>
       </div>
     </div>
@@ -15,42 +14,37 @@
   @else {
     <div [class]="formClass">
       @if (!hidden && formElement.type !== FormElementType.Checkbox && formElement.type !== FormElementType.Display) {
-        <mat-label class="mat-subtitle-2 f-w-600 d-block" [class.required]="formElement['validation']?.required">
-          {{ formElement['label'] }}
+        <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16" [class.required]="validation?.required">
+          {{ label }}
         </mat-label>
       }
       @switch (formElement.type) {
         @case(FormElementType.Text) {
-          <app-text-form-element [formElement]="formElement" [form]="form">
-          </app-text-form-element>
+          <app-text-form-element [formElement]="formElement" [form]="form"></app-text-form-element>
         }
         @case(FormElementType.Select) {
-          <app-select-form-element [formElement]="formElement" [form]="form">
-          </app-select-form-element>
+          <app-select-form-element [formElement]="formElement" [form]="form"></app-select-form-element>
         }
         @case(FormElementType.Date) {
-          <app-date-form-element [formElement]="formElement" [form]="form">
-          </app-date-form-element>
+          <app-date-form-element [formElement]="formElement" [form]="form"></app-date-form-element>
         }
         @case(FormElementType.MultilineText) {
-          <app-multiline-text-form-element [formElement]="formElement" [form]="form">
-          </app-multiline-text-form-element>
+          <app-multiline-text-form-element [formElement]="formElement" [form]="form"></app-multiline-text-form-element>
         }
-        @case(FormElementType.Checkbox) {
-          <app-checkbox-form-element [formElement]="formElement" [form]="form" [tempForm]="tempForm">
-          </app-checkbox-form-element>
+        @case(FormElementType.ToggleButton) {
+          <app-toggle-button-form-element [formElement]="formElement" [form]="form" [tempForm]="tempForm"></app-toggle-button-form-element>
         }
         @case(FormElementType.Display) {
-          <app-display-form-element [formElement]="formElement">
-          </app-display-form-element>
+          <app-display-form-element [formElement]="formElement"></app-display-form-element>
+        }
+        @case(FormElementType.Checkbox) {
+          <app-checkbox-form-element [formElement]="formElement" [form]="form" [tempForm]="tempForm"></app-checkbox-form-element>
         }
         @case(FormElementType.Radio) {
-          <app-radio-form-element [formElement]="formElement" [form]="form" [tempForm]="tempForm">
-          </app-radio-form-element>
+          <app-radio-form-element [formElement]="formElement" [form]="form" [tempForm]="tempForm"></app-radio-form-element>
         }
         @case(FormElementType.Time) {
-          <app-time-form-element [formElement]="formElement" [form]="form">
-          </app-time-form-element>
+          <app-time-form-element [formElement]="formElement" [form]="form"></app-time-form-element>
         }
       }
     </div>

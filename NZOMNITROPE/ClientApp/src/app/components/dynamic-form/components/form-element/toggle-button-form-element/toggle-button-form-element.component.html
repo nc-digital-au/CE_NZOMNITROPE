@@ -1,0 +1,12 @@
+<div [formGroup]="form" class="m-b-20">
+  <mat-button-toggle-group [formControlName]="toggleButtonFormElement.name">
+    @for (option of toggleButtonFormElement.options; track option) {
+      <mat-button-toggle [value]="option.value">{{ option.label }}</mat-button-toggle>
+    }
+  </mat-button-toggle-group>
+  @if (tempForm.submitted) {
+    <mat-error class="f-s-12 p-x-16">
+      {{ setErrorMessage(form, toggleButtonFormElement.name, toggleButtonFormElement.label) }}
+    </mat-error>
+  }
+</div>

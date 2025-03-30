@@ -11,7 +11,7 @@ describe('TimeFormElementComponent', () => {
       imports: [TimeFormElementComponent]
     })
     .compileComponents();
-    
+
     fixture = TestBed.createComponent(TimeFormElementComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

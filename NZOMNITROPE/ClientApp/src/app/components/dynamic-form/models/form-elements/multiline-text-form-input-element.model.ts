@@ -15,7 +15,7 @@ interface IMultilineTextFormInputProps extends IFormInputProps {
 
 export class MultilineTextFormInputElement extends TextFormInputElement {
   rows: number;
-  placeholder: string;
+  placeholder: string | undefined;
 
   constructor(props: IMultilineTextFormInputProps) {
     super(props);

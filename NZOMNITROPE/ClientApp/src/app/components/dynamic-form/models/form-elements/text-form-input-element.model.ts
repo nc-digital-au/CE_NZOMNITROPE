@@ -14,16 +14,17 @@ interface ITextFormInputValidation extends IFormValidation {
   password?: boolean;
   custom?: any[];
   customAsync?: any[];
+  pattern?: string;
 }
 
-interface ITextFormInputProps extends IFormInputProps {
+export interface ITextFormInputProps extends IFormInputProps {
   hint?: string;
   validation?: ITextFormInputValidation,
 }
 
 export class TextFormInputElement extends FormInputElement {
   hint?: string;
-  validation: ITextFormInputValidation;
+  override validation: ITextFormInputValidation;
   
   constructor(props: ITextFormInputProps) {
     super(props);

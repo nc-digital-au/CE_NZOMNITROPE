@@ -1,52 +1,20 @@
 import { ViewportScroller } from '@angular/common';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, ViewEncapsulation } from '@angular/core';
 import { CoreService } from 'src/app/services/core.service';
 import { routeLinks } from 'src/app/utils/routes';
 import { CONTACT_VALUES } from 'src/app/utils/constants';
-import { LeavingSite, LeavingSiteComponent } from 'src/app/components/leaving-site/leaving-site.component';
+import { RouterLink } from '@angular/router';
 
-interface apps {
-  id: number;
-  img: string;
-  title: string;
-  subtitle: string;
-  link: string;
-}
-
-interface quicklinks {
-  id: number;
-  title: string;
-  link: string;
-}
-
-interface demos {
-  id: number;
-  name: string;
-  url: string;
-  imgSrc: string;
-}
-
-interface testimonials {
-  id: number;
-  name: string;
-  subtext: string;
-  imgSrc: string;
-}
-
-interface features {
-  id: number;
-  icon: string;
-  title: string;
-  subtext: string;
-}
 
 @Component({
   selector: 'app-landing',
-  // standalone: true,
-  // imports: [
-  // ],
+  standalone: true,
+  imports: [
+    RouterLink
+  ],
   templateUrl: './landing.component.html',
-  styleUrls: ['./landing.component.scss']
+  styleUrls: ['./landing.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class LandingComponent {
   @Input() showToggle = true;

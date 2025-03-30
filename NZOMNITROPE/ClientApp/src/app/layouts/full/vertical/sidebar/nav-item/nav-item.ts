@@ -1,7 +1,5 @@
 export interface NavItem {
-    target?: string;
     displayName?: string;
-    displayNameLine2?: string;
     disabled?: boolean;
     external?: boolean;
     twoLines?: boolean;
@@ -14,5 +12,8 @@ export interface NavItem {
     route?: string;
     children?: NavItem[];
     ddType?: string;
+    displayNameLine2?: string;
+    target?: string;
     isPdf?: boolean;
+    logout?: boolean;
 }

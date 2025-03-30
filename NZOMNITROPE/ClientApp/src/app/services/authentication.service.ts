@@ -53,7 +53,7 @@ export class AuthenticatedUser {
   }
 
   private readSessionValue(key: string): string {
-    return this._claims.find(c => c?.type === key)?.value;
+    return this._claims.find(c => c?.type === key)?.value || '';
   }
 }
 
@@ -78,9 +78,10 @@ export class AuthenticationService {
         tap(claims => {
           if (claims && claims.length) {
             this._currentUser = new AuthenticatedUser(claims);
-          } else {
-            this._currentUser = undefined;
-          }
+          } 
+          // else {
+          //   this._currentUser = undefined;
+          // }
         }),
         catchError(err => {
           return of(ANONYMOUS);

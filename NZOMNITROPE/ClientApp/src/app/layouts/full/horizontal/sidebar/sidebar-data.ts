@@ -28,7 +28,7 @@ export const navItems: NavItem[] = [
       {
         displayName: 'How to Inject Video',
         iconName: '',
-        route: 'resources/how-to-inject',
+        route: 'resources',
       },
       {
         displayName: 'SurePal 5mg How to use guide',
@@ -40,18 +40,21 @@ export const navItems: NavItem[] = [
       {
         displayName: 'SurePal 10mg How to use guide',
         iconName: '',
-        route: 'https://rss.medsinfo.com.au/by/pi.cfm?product=bypofevc',
+        route: '/assets/pdfs/Omnitrope10.pdf',
         target: '_blank',
+        isPdf: true,
       },
       {
         displayName: 'SurePal 15mg How to use guide',
         iconName: '',
-        route: 'https://rss.medsinfo.com.au/by/pi.cfm?product=bypofevc',
+        route: '/assets/pdfs/Omnitrope15.pdf',
         target: '_blank',
+        isPdf: true,
       },
       {
         displayName: 'Omnitrope CMI',
         iconName: '',
+        external: true,
         route: 'https://www.medsafe.govt.nz/Consumers/CMI/o/omnitrope.pdf',
         target: '_blank',
       }
@@ -59,7 +62,8 @@ export const navItems: NavItem[] = [
   },
   {
     displayName: 'Logout',
-    route: '',
+    route: 'logout',
     ddType: '',
+    logout: true,
   },
 ];

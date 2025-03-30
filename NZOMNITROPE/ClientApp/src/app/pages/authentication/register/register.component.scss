@@ -1,0 +1,13 @@
+@use '/src/assets/scss/variables' as *;
+
+.headers {
+  color: $white;
+}
+
+.register-form {
+  max-width: 1000px;
+}
+
+.auth-register {
+  background: $theme-accent-two;
+}
