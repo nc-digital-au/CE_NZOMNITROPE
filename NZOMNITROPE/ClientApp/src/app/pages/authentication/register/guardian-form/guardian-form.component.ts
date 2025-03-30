@@ -34,21 +34,21 @@ export class GuardianFormComponent {
         label: 'Guardian/Carer Details (if different from patient details)',
       }),
       new TextFormInputElement({
-        name: 'guardianFirstName',
+        name: 'firstName',
         label: 'First Name',
         validation: {
           required: false,
         },
       }),
       new TextFormInputElement({
-        name: 'guardianLastName',
+        name: 'lastName',
         label: 'Last Name',
         validation: {
           required: false,
         },
       }),
       new TextFormInputElement({
-        name: 'guardianEmail',
+        name: 'email',
         label: 'Email Address',
         validation: {
           required: false,
@@ -56,7 +56,7 @@ export class GuardianFormComponent {
         },
       }),
       new TextFormInputElement({
-        name: 'guardianMobile',
+        name: 'mobile',
         label: 'Mobile Phone',
         validation: {
           required: false,
