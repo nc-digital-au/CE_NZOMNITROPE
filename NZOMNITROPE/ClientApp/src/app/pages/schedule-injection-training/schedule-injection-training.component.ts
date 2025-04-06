@@ -119,7 +119,6 @@ export class ScheduleInjectionTrainingComponent implements OnInit {
             if (response.isSuccess) {
               this.enrolmentSuccess = true;
               this.submitting = false;
-              this.router.navigate(['/']);
             } else {
               this.submitting = false;
             }
@@ -131,7 +130,6 @@ export class ScheduleInjectionTrainingComponent implements OnInit {
             if (result.isSuccess) {
               this.enrolmentSuccess = true;
               this.submitting = false;
-              this.router.navigate(['/']);
             } else {
               this.submitting = false;
             }

@@ -43,13 +43,14 @@
                           Enter exactly 4 digits.
                         </mat-error>
                       }
-                      @if(barcodeFormSubmitted && barcodeInvalid)
+                    </mat-form-field>
+                    
+                      @if(barcodeInvalid)
                       {
                         <mat-error>
                           Invalid barcode.
                         </mat-error>
                       }
-                    </mat-form-field>
                   </div>
                   <div class="form-row">
                     <mat-checkbox formControlName="consent">
@@ -72,6 +73,13 @@
           <mat-step [stepControl]="patientForm">
             <ng-template matStepLabel>Patient Details</ng-template>
             <app-register-patient-details (formCreated)="patientForm = $event"></app-register-patient-details>
+            @if(emailInvalid){
+              <div class="form-error-message">
+                <mat-error>
+                  The email address you have entered cannot be used to register for this program.
+                </mat-error>
+              </div>
+            }
             <div class="d-flex align-items-center justify-content-between">
               <div>
                 <button mat-stroked-button class="cancel-button" [routerLink]="[routeLinks.landing]" type="button">Cancel</button>

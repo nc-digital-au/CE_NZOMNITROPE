@@ -29,9 +29,7 @@ export class TermsFormComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     setTimeout(() => {  
-      const privacyPolicyLink = document.getElementsByClassName("privacy-policy")[0];
-      if (privacyPolicyLink) {
-        privacyPolicyLink.addEventListener("click", (ev) => {
+      document.getElementsByClassName("privacy-policy")[0].addEventListener("click", (ev) => {
           ev.preventDefault();
           ev.stopPropagation();
           this._dialog.open(LeavingSiteDialog, {
@@ -42,7 +40,7 @@ export class TermsFormComponent implements AfterViewInit {
           });
         });
       }
-    });
+    );
   }
 
   onFormCreated(form: FormGroup): void {
@@ -72,7 +70,7 @@ export class TermsFormComponent implements AfterViewInit {
       }),
       new CheckboxFormInputElement({
         name: 'informationConsent',
-        label: 'You understand that to manage the program, your personal information will be accessed by the Program Administrators who will collect and store your information in accordance with the <a class="privacy-policy" href="https://www.sandoz.com.au/Website-privacy-policy/">privacy policy</a>.',
+        label: 'You understand that to manage the program, your personal information will be accessed by the Program Administrators who will collect and store your information in accordance with the <a id="privacy-policy" class="privacy-policy" href="#privacy-policy">privacy policy</a>.',
         errorLabel: 'Privacy Policy acceptance',
         validation: {
           required: true,
@@ -80,7 +78,7 @@ export class TermsFormComponent implements AfterViewInit {
       }),
       new CheckboxFormInputElement({
         name: 'privacyConsent',
-        label: 'You have read, understand and agree to the <a class="privacy-policy" href="https://www.sandoz.com.au/Website-privacy-policy/">privacy policy</a>.',
+        label: 'You have read, understand and agree to the <a id="agree-privacy-policy" class="privacy-policy" href="#agree-privacy-policy">privacy policy</a>.',
         errorLabel: 'Privacy Policy acceptance',
         validation: {
           required: true,

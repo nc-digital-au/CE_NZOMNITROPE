@@ -73,6 +73,7 @@ export class RegisterComponent implements OnInit {
   barcodeInvalid: boolean = false;
   registrationSubmitted: boolean = false;
   submitting: boolean = false;
+  emailInvalid: boolean = false;
 
   patientForm = this._fb.group({});
   guardianForm = this._fb.group({});
@@ -118,22 +119,24 @@ export class RegisterComponent implements OnInit {
     const barcodeFormData = this.barcodeForm.value as any;
     if (this.barcodeForm.valid) {
       const barcode = barcodeFormData.barcode;
+      this.barcodeFormSubmitted = true;
       this._registrationService.validateProductBarcode(barcode)
         .pipe(
           takeUntilDestroyed(this._destroyRef),
         )
         .subscribe((response) => 
-          {
+        {
            if (response.isSuccess) {
-            const validBarcode = response.resultObject;
-            this.barcodeInvalid = !validBarcode;
-            if (validBarcode){
-              this.stepper.next();
-            }
-           } else {
+              const validBarcode = response.resultObject;
+              this.barcodeInvalid = !validBarcode;
+              if (validBarcode){
+                this.stepper.next();
+              }
+           } else 
+           {
             this.barcodeForm.setErrors({ invalid: true });
+            this.barcodeInvalid = true;
            }
-           this.barcodeFormSubmitted = true;
         }
       );
     }
@@ -142,9 +145,24 @@ export class RegisterComponent implements OnInit {
   submitPatientDetailsForm(){
     const patientFormData = this.patientForm.value as any;
     this.patientForm.markAllAsTouched();
-    if (this.patientForm.valid) {
-      this.stepper.next();
-    }
+    this._registrationService.checkEmail(patientFormData.email)
+      .pipe(
+        takeUntilDestroyed(this._destroyRef),
+      )
+      .subscribe((response) => {
+        if (response.isSuccess) {
+          const emailUnique = response.resultObject;
+          this.emailInvalid = !emailUnique;
+          if (emailUnique) {
+            this.patientForm.markAllAsTouched();
+            if (this.patientForm.valid) {
+              this.stepper.next();
+            }
+          }
+        } else {
+          this.emailInvalid = true;
+        }
+      });
   }
 
   submitGuardianForm(){
@@ -247,4 +265,5 @@ export class RegisterComponent implements OnInit {
     });
     return dto;
   }
+
 }
