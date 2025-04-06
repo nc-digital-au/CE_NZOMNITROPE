@@ -593,3 +593,13 @@ a.block-menu-item{
   background-color: #E9F4FE !important;
 }
 
+div.form-error-message {
+  color: $theme-error-one;
+  font-size: 14px;
+  margin-top: 4px;
+  margin-bottom: 16px;
+  padding: 5px;
+  border: 1px solid $theme-error-one;
+  border-radius: 4px;
+}
+

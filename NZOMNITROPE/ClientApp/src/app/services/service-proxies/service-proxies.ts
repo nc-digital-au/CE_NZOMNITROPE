@@ -1996,18 +1996,23 @@ export class OrderServiceProxy {
 
     /**
      * @param searchFilter (optional) 
+     * @param orderDate (optional) 
      * @param sortField (optional) 
      * @param sortDescending (optional) 
      * @param skipCount (optional) 
      * @param maxResultCount (optional) 
      * @return Success
      */
-    getMedicationOrders(searchFilter?: string | undefined, sortField?: string | undefined, sortDescending?: boolean | undefined, skipCount?: number | undefined, maxResultCount?: number | undefined): Observable<GetPagedMedicationOrderResponsePagedResultDtoApiResponse> {
+    getMedicationOrders(searchFilter?: string | undefined, orderDate?: Date | undefined, sortField?: string | undefined, sortDescending?: boolean | undefined, skipCount?: number | undefined, maxResultCount?: number | undefined): Observable<GetPagedMedicationOrderResponsePagedResultDtoApiResponse> {
         let url_ = this.baseUrl + "/api/admin/order/medication-orders?";
         if (searchFilter === null)
             throw new Error("The parameter 'searchFilter' cannot be null.");
         else if (searchFilter !== undefined)
             url_ += "SearchFilter=" + encodeURIComponent("" + searchFilter) + "&";
+        if (orderDate === null)
+            throw new Error("The parameter 'orderDate' cannot be null.");
+        else if (orderDate !== undefined)
+            url_ += "OrderDate=" + encodeURIComponent(orderDate ? "" + orderDate.toISOString() : "") + "&";
         if (sortField === null)
             throw new Error("The parameter 'sortField' cannot be null.");
         else if (sortField !== undefined)
@@ -8575,6 +8580,60 @@ export class RegistrationServiceProxy {
         }
         return _observableOf(null as any);
     }
+
+    /**
+     * @return Success
+     */
+    checkEmail(email: string): Observable<BooleanApiResponse> {
+        let url_ = this.baseUrl + "/api/register/check/email/{email}";
+        if (email === undefined || email === null)
+            throw new Error("The parameter 'email' must be defined.");
+        url_ = url_.replace("{email}", encodeURIComponent("" + email));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processCheckEmail(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processCheckEmail(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<BooleanApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<BooleanApiResponse>;
+        }));
+    }
+
+    protected processCheckEmail(response: HttpResponseBase): Observable<BooleanApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = BooleanApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
 }
 
 @Injectable({
@@ -8751,6 +8810,57 @@ export class TenantProgramServiceProxy {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
             result200 = TenantIEnumerableApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @return Success
+     */
+    getAccess(): Observable<GetTenantListItemResponseListApiResponse> {
+        let url_ = this.baseUrl + "/api/admin/tenant-program/access";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetAccess(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetAccess(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<GetTenantListItemResponseListApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<GetTenantListItemResponseListApiResponse>;
+        }));
+    }
+
+    protected processGetAccess(response: HttpResponseBase): Observable<GetTenantListItemResponseListApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = GetTenantListItemResponseListApiResponse.fromJS(resultData200);
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -10081,6 +10191,139 @@ export class TreatmentServiceProxy {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
             result200 = BooleanApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @return Success
+     */
+    getPatientInformationForEditing(patientId: string): Observable<GetPatientInformationForEditingResponseApiResponse> {
+        let url_ = this.baseUrl + "/api/admin/patient/{patientId}/treatment/details";
+        if (patientId === undefined || patientId === null)
+            throw new Error("The parameter 'patientId' must be defined.");
+        url_ = url_.replace("{patientId}", encodeURIComponent("" + patientId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetPatientInformationForEditing(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetPatientInformationForEditing(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<GetPatientInformationForEditingResponseApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<GetPatientInformationForEditingResponseApiResponse>;
+        }));
+    }
+
+    protected processGetPatientInformationForEditing(response: HttpResponseBase): Observable<GetPatientInformationForEditingResponseApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = GetPatientInformationForEditingResponseApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param searchFilter (optional) 
+     * @param sortField (optional) 
+     * @param sortDescending (optional) 
+     * @param skipCount (optional) 
+     * @param maxResultCount (optional) 
+     * @return Success
+     */
+    getPagedProgramActivitiesForPatient(patientId: string, searchFilter?: string | undefined, sortField?: string | undefined, sortDescending?: boolean | undefined, skipCount?: number | undefined, maxResultCount?: number | undefined): Observable<GetPagedTreatmentActivitiesForPatientResponsePagedResultDtoApiResponse> {
+        let url_ = this.baseUrl + "/api/admin/patient/{patientId}/treatment/paged/activities?";
+        if (patientId === undefined || patientId === null)
+            throw new Error("The parameter 'patientId' must be defined.");
+        url_ = url_.replace("{patientId}", encodeURIComponent("" + patientId));
+        if (searchFilter === null)
+            throw new Error("The parameter 'searchFilter' cannot be null.");
+        else if (searchFilter !== undefined)
+            url_ += "SearchFilter=" + encodeURIComponent("" + searchFilter) + "&";
+        if (sortField === null)
+            throw new Error("The parameter 'sortField' cannot be null.");
+        else if (sortField !== undefined)
+            url_ += "SortField=" + encodeURIComponent("" + sortField) + "&";
+        if (sortDescending === null)
+            throw new Error("The parameter 'sortDescending' cannot be null.");
+        else if (sortDescending !== undefined)
+            url_ += "SortDescending=" + encodeURIComponent("" + sortDescending) + "&";
+        if (skipCount === null)
+            throw new Error("The parameter 'skipCount' cannot be null.");
+        else if (skipCount !== undefined)
+            url_ += "SkipCount=" + encodeURIComponent("" + skipCount) + "&";
+        if (maxResultCount === null)
+            throw new Error("The parameter 'maxResultCount' cannot be null.");
+        else if (maxResultCount !== undefined)
+            url_ += "MaxResultCount=" + encodeURIComponent("" + maxResultCount) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetPagedProgramActivitiesForPatient(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetPagedProgramActivitiesForPatient(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<GetPagedTreatmentActivitiesForPatientResponsePagedResultDtoApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<GetPagedTreatmentActivitiesForPatientResponsePagedResultDtoApiResponse>;
+        }));
+    }
+
+    protected processGetPagedProgramActivitiesForPatient(response: HttpResponseBase): Observable<GetPagedTreatmentActivitiesForPatientResponsePagedResultDtoApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = GetPagedTreatmentActivitiesForPatientResponsePagedResultDtoApiResponse.fromJS(resultData200);
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -17534,11 +17777,15 @@ export class GetPagedMedicationOrderResponse implements IGetPagedMedicationOrder
     deliveryContactPhone!: string | undefined;
     sku!: string | undefined;
     description!: string | undefined;
+    productName!: string | undefined;
     quantity!: number | undefined;
     firstName!: string | undefined;
     lastName!: string | undefined;
     dateOfBirth!: Date | undefined;
     status!: OrderStatus;
+    dispatchDate!: Date | undefined;
+    deliveryDate!: Date | undefined;
+    cancelledDate!: Date | undefined;
     portalProgramId!: string;
     patientInitials!: string | undefined;
     fullAddress!: string | undefined;
@@ -17568,11 +17815,15 @@ export class GetPagedMedicationOrderResponse implements IGetPagedMedicationOrder
             this.deliveryContactPhone = _data["deliveryContactPhone"];
             this.sku = _data["sku"];
             this.description = _data["description"];
+            this.productName = _data["productName"];
             this.quantity = _data["quantity"];
             this.firstName = _data["firstName"];
             this.lastName = _data["lastName"];
             this.dateOfBirth = _data["dateOfBirth"] ? new Date(_data["dateOfBirth"].toString()) : <any>undefined;
             this.status = _data["status"];
+            this.dispatchDate = _data["dispatchDate"] ? new Date(_data["dispatchDate"].toString()) : <any>undefined;
+            this.deliveryDate = _data["deliveryDate"] ? new Date(_data["deliveryDate"].toString()) : <any>undefined;
+            this.cancelledDate = _data["cancelledDate"] ? new Date(_data["cancelledDate"].toString()) : <any>undefined;
             this.portalProgramId = _data["portalProgramId"];
             this.patientInitials = _data["patientInitials"];
             this.fullAddress = _data["fullAddress"];
@@ -17602,11 +17853,15 @@ export class GetPagedMedicationOrderResponse implements IGetPagedMedicationOrder
         data["deliveryContactPhone"] = this.deliveryContactPhone;
         data["sku"] = this.sku;
         data["description"] = this.description;
+        data["productName"] = this.productName;
         data["quantity"] = this.quantity;
         data["firstName"] = this.firstName;
         data["lastName"] = this.lastName;
         data["dateOfBirth"] = this.dateOfBirth ? this.dateOfBirth.toISOString() : <any>undefined;
         data["status"] = this.status;
+        data["dispatchDate"] = this.dispatchDate ? this.dispatchDate.toISOString() : <any>undefined;
+        data["deliveryDate"] = this.deliveryDate ? this.deliveryDate.toISOString() : <any>undefined;
+        data["cancelledDate"] = this.cancelledDate ? this.cancelledDate.toISOString() : <any>undefined;
         data["portalProgramId"] = this.portalProgramId;
         data["patientInitials"] = this.patientInitials;
         data["fullAddress"] = this.fullAddress;
@@ -17636,11 +17891,15 @@ export interface IGetPagedMedicationOrderResponse {
     deliveryContactPhone: string | undefined;
     sku: string | undefined;
     description: string | undefined;
+    productName: string | undefined;
     quantity: number | undefined;
     firstName: string | undefined;
     lastName: string | undefined;
     dateOfBirth: Date | undefined;
     status: OrderStatus;
+    dispatchDate: Date | undefined;
+    deliveryDate: Date | undefined;
+    cancelledDate: Date | undefined;
     portalProgramId: string;
     patientInitials: string | undefined;
     fullAddress: string | undefined;
@@ -18513,6 +18772,167 @@ export interface IGetPagedScheduleAdminTasksResponsePagedResultDtoApiResponse {
     problemDetails: ProblemDetails;
 }
 
+export class GetPagedTreatmentActivitiesForPatientResponse implements IGetPagedTreatmentActivitiesForPatientResponse {
+    id!: string;
+    treatmentMilestone!: TreatmentMilestone;
+    eventDate!: Date | undefined;
+    eventDescription!: string | undefined;
+
+    constructor(data?: IGetPagedTreatmentActivitiesForPatientResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.treatmentMilestone = _data["treatmentMilestone"];
+            this.eventDate = _data["eventDate"] ? new Date(_data["eventDate"].toString()) : <any>undefined;
+            this.eventDescription = _data["eventDescription"];
+        }
+    }
+
+    static fromJS(data: any): GetPagedTreatmentActivitiesForPatientResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetPagedTreatmentActivitiesForPatientResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["treatmentMilestone"] = this.treatmentMilestone;
+        data["eventDate"] = this.eventDate ? this.eventDate.toISOString() : <any>undefined;
+        data["eventDescription"] = this.eventDescription;
+        return data;
+    }
+
+    clone(): GetPagedTreatmentActivitiesForPatientResponse {
+        const json = this.toJSON();
+        let result = new GetPagedTreatmentActivitiesForPatientResponse();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetPagedTreatmentActivitiesForPatientResponse {
+    id: string;
+    treatmentMilestone: TreatmentMilestone;
+    eventDate: Date | undefined;
+    eventDescription: string | undefined;
+}
+
+export class GetPagedTreatmentActivitiesForPatientResponsePagedResultDto implements IGetPagedTreatmentActivitiesForPatientResponsePagedResultDto {
+    totalCount!: number;
+    items!: GetPagedTreatmentActivitiesForPatientResponse[] | undefined;
+
+    constructor(data?: IGetPagedTreatmentActivitiesForPatientResponsePagedResultDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.totalCount = _data["totalCount"];
+            if (Array.isArray(_data["items"])) {
+                this.items = [];
+                for (let item of _data["items"])
+                    this.items!.push(GetPagedTreatmentActivitiesForPatientResponse.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): GetPagedTreatmentActivitiesForPatientResponsePagedResultDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetPagedTreatmentActivitiesForPatientResponsePagedResultDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["totalCount"] = this.totalCount;
+        if (Array.isArray(this.items)) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item.toJSON());
+        }
+        return data;
+    }
+
+    clone(): GetPagedTreatmentActivitiesForPatientResponsePagedResultDto {
+        const json = this.toJSON();
+        let result = new GetPagedTreatmentActivitiesForPatientResponsePagedResultDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetPagedTreatmentActivitiesForPatientResponsePagedResultDto {
+    totalCount: number;
+    items: GetPagedTreatmentActivitiesForPatientResponse[] | undefined;
+}
+
+export class GetPagedTreatmentActivitiesForPatientResponsePagedResultDtoApiResponse implements IGetPagedTreatmentActivitiesForPatientResponsePagedResultDtoApiResponse {
+    isSuccess!: boolean;
+    resultObject!: GetPagedTreatmentActivitiesForPatientResponsePagedResultDto;
+    problemDetails!: ProblemDetails;
+
+    constructor(data?: IGetPagedTreatmentActivitiesForPatientResponsePagedResultDtoApiResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.isSuccess = _data["isSuccess"];
+            this.resultObject = _data["resultObject"] ? GetPagedTreatmentActivitiesForPatientResponsePagedResultDto.fromJS(_data["resultObject"]) : <any>undefined;
+            this.problemDetails = _data["problemDetails"] ? ProblemDetails.fromJS(_data["problemDetails"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): GetPagedTreatmentActivitiesForPatientResponsePagedResultDtoApiResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetPagedTreatmentActivitiesForPatientResponsePagedResultDtoApiResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["isSuccess"] = this.isSuccess;
+        data["resultObject"] = this.resultObject ? this.resultObject.toJSON() : <any>undefined;
+        data["problemDetails"] = this.problemDetails ? this.problemDetails.toJSON() : <any>undefined;
+        return data;
+    }
+
+    clone(): GetPagedTreatmentActivitiesForPatientResponsePagedResultDtoApiResponse {
+        const json = this.toJSON();
+        let result = new GetPagedTreatmentActivitiesForPatientResponsePagedResultDtoApiResponse();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetPagedTreatmentActivitiesForPatientResponsePagedResultDtoApiResponse {
+    isSuccess: boolean;
+    resultObject: GetPagedTreatmentActivitiesForPatientResponsePagedResultDto;
+    problemDetails: ProblemDetails;
+}
+
 export class GetPatientByNameAndDobDto implements IGetPatientByNameAndDobDto {
     patientFirstName!: string | undefined;
     patientLastName!: string | undefined;
@@ -19144,6 +19564,268 @@ export class GetPatientEligibilityCriteriaResponseIEnumerableApiResponse impleme
 export interface IGetPatientEligibilityCriteriaResponseIEnumerableApiResponse {
     isSuccess: boolean;
     resultObject: GetPatientEligibilityCriteriaResponse[] | undefined;
+    problemDetails: ProblemDetails;
+}
+
+export class GetPatientInformationForEditingResponse implements IGetPatientInformationForEditingResponse {
+    id!: string;
+    treatmentId!: string;
+    title!: Title;
+    firstName!: string | undefined;
+    lastName!: string | undefined;
+    middleName!: string | undefined;
+    dateOfBirth!: Date;
+    gender!: Gender;
+    email!: string | undefined;
+    phone!: string | undefined;
+    mobile!: string | undefined;
+    medicareNumber!: string | undefined;
+    nationalHealthIndex!: string | undefined;
+    salesForceId!: string | undefined;
+    homeUnitNumber!: string | undefined;
+    homeStreetAddress!: string | undefined;
+    homeCity!: string | undefined;
+    homeState!: AddressState;
+    homePostcode!: string | undefined;
+    deliveryUnitNumber!: string | undefined;
+    deliveryStreetAddress!: string | undefined;
+    deliveryCity!: string | undefined;
+    deliveryState!: AddressState;
+    deliveryPostcode!: string | undefined;
+    status!: TreatmentStatus;
+    registeredOn!: Date;
+    carerTitle!: Title;
+    carerFirstName!: string | undefined;
+    carerLastName!: string | undefined;
+    carerPhone!: string | undefined;
+    carerMobile!: string | undefined;
+    prescriberNumber!: string | undefined;
+    canContinue!: boolean;
+    pharmacyName!: string | undefined;
+    pharmacyUnitNumber!: string | undefined;
+    pharmacyStreetAddress!: string | undefined;
+    pharmacyCity!: string | undefined;
+    pharmacyState!: AddressState;
+    pharmacyPostcode!: string | undefined;
+    pharmacyPhone!: string | undefined;
+    dosageId!: number | undefined;
+    canEditPatientProfile!: boolean;
+    canEditCarerProfile!: boolean;
+
+    constructor(data?: IGetPatientInformationForEditingResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.treatmentId = _data["treatmentId"];
+            this.title = _data["title"];
+            this.firstName = _data["firstName"];
+            this.lastName = _data["lastName"];
+            this.middleName = _data["middleName"];
+            this.dateOfBirth = _data["dateOfBirth"] ? new Date(_data["dateOfBirth"].toString()) : <any>undefined;
+            this.gender = _data["gender"];
+            this.email = _data["email"];
+            this.phone = _data["phone"];
+            this.mobile = _data["mobile"];
+            this.medicareNumber = _data["medicareNumber"];
+            this.nationalHealthIndex = _data["nationalHealthIndex"];
+            this.salesForceId = _data["salesForceId"];
+            this.homeUnitNumber = _data["homeUnitNumber"];
+            this.homeStreetAddress = _data["homeStreetAddress"];
+            this.homeCity = _data["homeCity"];
+            this.homeState = _data["homeState"];
+            this.homePostcode = _data["homePostcode"];
+            this.deliveryUnitNumber = _data["deliveryUnitNumber"];
+            this.deliveryStreetAddress = _data["deliveryStreetAddress"];
+            this.deliveryCity = _data["deliveryCity"];
+            this.deliveryState = _data["deliveryState"];
+            this.deliveryPostcode = _data["deliveryPostcode"];
+            this.status = _data["status"];
+            this.registeredOn = _data["registeredOn"] ? new Date(_data["registeredOn"].toString()) : <any>undefined;
+            this.carerTitle = _data["carerTitle"];
+            this.carerFirstName = _data["carerFirstName"];
+            this.carerLastName = _data["carerLastName"];
+            this.carerPhone = _data["carerPhone"];
+            this.carerMobile = _data["carerMobile"];
+            this.prescriberNumber = _data["prescriberNumber"];
+            this.canContinue = _data["canContinue"];
+            this.pharmacyName = _data["pharmacyName"];
+            this.pharmacyUnitNumber = _data["pharmacyUnitNumber"];
+            this.pharmacyStreetAddress = _data["pharmacyStreetAddress"];
+            this.pharmacyCity = _data["pharmacyCity"];
+            this.pharmacyState = _data["pharmacyState"];
+            this.pharmacyPostcode = _data["pharmacyPostcode"];
+            this.pharmacyPhone = _data["pharmacyPhone"];
+            this.dosageId = _data["dosageId"];
+            this.canEditPatientProfile = _data["canEditPatientProfile"];
+            this.canEditCarerProfile = _data["canEditCarerProfile"];
+        }
+    }
+
+    static fromJS(data: any): GetPatientInformationForEditingResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetPatientInformationForEditingResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["treatmentId"] = this.treatmentId;
+        data["title"] = this.title;
+        data["firstName"] = this.firstName;
+        data["lastName"] = this.lastName;
+        data["middleName"] = this.middleName;
+        data["dateOfBirth"] = this.dateOfBirth ? this.dateOfBirth.toISOString() : <any>undefined;
+        data["gender"] = this.gender;
+        data["email"] = this.email;
+        data["phone"] = this.phone;
+        data["mobile"] = this.mobile;
+        data["medicareNumber"] = this.medicareNumber;
+        data["nationalHealthIndex"] = this.nationalHealthIndex;
+        data["salesForceId"] = this.salesForceId;
+        data["homeUnitNumber"] = this.homeUnitNumber;
+        data["homeStreetAddress"] = this.homeStreetAddress;
+        data["homeCity"] = this.homeCity;
+        data["homeState"] = this.homeState;
+        data["homePostcode"] = this.homePostcode;
+        data["deliveryUnitNumber"] = this.deliveryUnitNumber;
+        data["deliveryStreetAddress"] = this.deliveryStreetAddress;
+        data["deliveryCity"] = this.deliveryCity;
+        data["deliveryState"] = this.deliveryState;
+        data["deliveryPostcode"] = this.deliveryPostcode;
+        data["status"] = this.status;
+        data["registeredOn"] = this.registeredOn ? this.registeredOn.toISOString() : <any>undefined;
+        data["carerTitle"] = this.carerTitle;
+        data["carerFirstName"] = this.carerFirstName;
+        data["carerLastName"] = this.carerLastName;
+        data["carerPhone"] = this.carerPhone;
+        data["carerMobile"] = this.carerMobile;
+        data["prescriberNumber"] = this.prescriberNumber;
+        data["canContinue"] = this.canContinue;
+        data["pharmacyName"] = this.pharmacyName;
+        data["pharmacyUnitNumber"] = this.pharmacyUnitNumber;
+        data["pharmacyStreetAddress"] = this.pharmacyStreetAddress;
+        data["pharmacyCity"] = this.pharmacyCity;
+        data["pharmacyState"] = this.pharmacyState;
+        data["pharmacyPostcode"] = this.pharmacyPostcode;
+        data["pharmacyPhone"] = this.pharmacyPhone;
+        data["dosageId"] = this.dosageId;
+        data["canEditPatientProfile"] = this.canEditPatientProfile;
+        data["canEditCarerProfile"] = this.canEditCarerProfile;
+        return data;
+    }
+
+    clone(): GetPatientInformationForEditingResponse {
+        const json = this.toJSON();
+        let result = new GetPatientInformationForEditingResponse();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetPatientInformationForEditingResponse {
+    id: string;
+    treatmentId: string;
+    title: Title;
+    firstName: string | undefined;
+    lastName: string | undefined;
+    middleName: string | undefined;
+    dateOfBirth: Date;
+    gender: Gender;
+    email: string | undefined;
+    phone: string | undefined;
+    mobile: string | undefined;
+    medicareNumber: string | undefined;
+    nationalHealthIndex: string | undefined;
+    salesForceId: string | undefined;
+    homeUnitNumber: string | undefined;
+    homeStreetAddress: string | undefined;
+    homeCity: string | undefined;
+    homeState: AddressState;
+    homePostcode: string | undefined;
+    deliveryUnitNumber: string | undefined;
+    deliveryStreetAddress: string | undefined;
+    deliveryCity: string | undefined;
+    deliveryState: AddressState;
+    deliveryPostcode: string | undefined;
+    status: TreatmentStatus;
+    registeredOn: Date;
+    carerTitle: Title;
+    carerFirstName: string | undefined;
+    carerLastName: string | undefined;
+    carerPhone: string | undefined;
+    carerMobile: string | undefined;
+    prescriberNumber: string | undefined;
+    canContinue: boolean;
+    pharmacyName: string | undefined;
+    pharmacyUnitNumber: string | undefined;
+    pharmacyStreetAddress: string | undefined;
+    pharmacyCity: string | undefined;
+    pharmacyState: AddressState;
+    pharmacyPostcode: string | undefined;
+    pharmacyPhone: string | undefined;
+    dosageId: number | undefined;
+    canEditPatientProfile: boolean;
+    canEditCarerProfile: boolean;
+}
+
+export class GetPatientInformationForEditingResponseApiResponse implements IGetPatientInformationForEditingResponseApiResponse {
+    isSuccess!: boolean;
+    resultObject!: GetPatientInformationForEditingResponse;
+    problemDetails!: ProblemDetails;
+
+    constructor(data?: IGetPatientInformationForEditingResponseApiResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.isSuccess = _data["isSuccess"];
+            this.resultObject = _data["resultObject"] ? GetPatientInformationForEditingResponse.fromJS(_data["resultObject"]) : <any>undefined;
+            this.problemDetails = _data["problemDetails"] ? ProblemDetails.fromJS(_data["problemDetails"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): GetPatientInformationForEditingResponseApiResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetPatientInformationForEditingResponseApiResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["isSuccess"] = this.isSuccess;
+        data["resultObject"] = this.resultObject ? this.resultObject.toJSON() : <any>undefined;
+        data["problemDetails"] = this.problemDetails ? this.problemDetails.toJSON() : <any>undefined;
+        return data;
+    }
+
+    clone(): GetPatientInformationForEditingResponseApiResponse {
+        const json = this.toJSON();
+        let result = new GetPatientInformationForEditingResponseApiResponse();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetPatientInformationForEditingResponseApiResponse {
+    isSuccess: boolean;
+    resultObject: GetPatientInformationForEditingResponse;
     problemDetails: ProblemDetails;
 }
 
@@ -24851,6 +25533,120 @@ export interface IGetRestartTreatmentValidationInformationResponseApiResponse {
     problemDetails: ProblemDetails;
 }
 
+export class GetTenantListItemResponse implements IGetTenantListItemResponse {
+    programId!: string;
+    tenantId!: string;
+    name!: string | undefined;
+    description!: string | undefined;
+
+    constructor(data?: IGetTenantListItemResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.programId = _data["programId"];
+            this.tenantId = _data["tenantId"];
+            this.name = _data["name"];
+            this.description = _data["description"];
+        }
+    }
+
+    static fromJS(data: any): GetTenantListItemResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetTenantListItemResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["programId"] = this.programId;
+        data["tenantId"] = this.tenantId;
+        data["name"] = this.name;
+        data["description"] = this.description;
+        return data;
+    }
+
+    clone(): GetTenantListItemResponse {
+        const json = this.toJSON();
+        let result = new GetTenantListItemResponse();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetTenantListItemResponse {
+    programId: string;
+    tenantId: string;
+    name: string | undefined;
+    description: string | undefined;
+}
+
+export class GetTenantListItemResponseListApiResponse implements IGetTenantListItemResponseListApiResponse {
+    isSuccess!: boolean;
+    readonly resultObject!: GetTenantListItemResponse[] | undefined;
+    problemDetails!: ProblemDetails;
+
+    constructor(data?: IGetTenantListItemResponseListApiResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.isSuccess = _data["isSuccess"];
+            if (Array.isArray(_data["resultObject"])) {
+                (<any>this).resultObject = [];
+                for (let item of _data["resultObject"])
+                    (<any>this).resultObject!.push(GetTenantListItemResponse.fromJS(item));
+            }
+            this.problemDetails = _data["problemDetails"] ? ProblemDetails.fromJS(_data["problemDetails"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): GetTenantListItemResponseListApiResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetTenantListItemResponseListApiResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["isSuccess"] = this.isSuccess;
+        if (Array.isArray(this.resultObject)) {
+            data["resultObject"] = [];
+            for (let item of this.resultObject)
+                data["resultObject"].push(item.toJSON());
+        }
+        data["problemDetails"] = this.problemDetails ? this.problemDetails.toJSON() : <any>undefined;
+        return data;
+    }
+
+    clone(): GetTenantListItemResponseListApiResponse {
+        const json = this.toJSON();
+        let result = new GetTenantListItemResponseListApiResponse();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetTenantListItemResponseListApiResponse {
+    isSuccess: boolean;
+    resultObject: GetTenantListItemResponse[] | undefined;
+    problemDetails: ProblemDetails;
+}
+
 export class GetTreatmentActivitiesResponse implements IGetTreatmentActivitiesResponse {
     eventDate!: Date;
     description!: string | undefined;
@@ -29989,6 +30785,7 @@ export class Tenant implements ITenant {
     readonly isDeleted!: boolean;
     readonly programs!: TenantProgram[] | undefined;
     readonly userTenants!: UserTenant[] | undefined;
+    readonly userPrograms!: UserProgram[] | undefined;
 
     constructor(data?: ITenant) {
         if (data) {
@@ -30014,6 +30811,11 @@ export class Tenant implements ITenant {
                 (<any>this).userTenants = [];
                 for (let item of _data["userTenants"])
                     (<any>this).userTenants!.push(UserTenant.fromJS(item));
+            }
+            if (Array.isArray(_data["userPrograms"])) {
+                (<any>this).userPrograms = [];
+                for (let item of _data["userPrograms"])
+                    (<any>this).userPrograms!.push(UserProgram.fromJS(item));
             }
         }
     }
@@ -30041,6 +30843,11 @@ export class Tenant implements ITenant {
             for (let item of this.userTenants)
                 data["userTenants"].push(item.toJSON());
         }
+        if (Array.isArray(this.userPrograms)) {
+            data["userPrograms"] = [];
+            for (let item of this.userPrograms)
+                data["userPrograms"].push(item.toJSON());
+        }
         return data;
     }
 
@@ -30059,6 +30866,7 @@ export interface ITenant {
     isDeleted: boolean;
     programs: TenantProgram[] | undefined;
     userTenants: UserTenant[] | undefined;
+    userPrograms: UserProgram[] | undefined;
 }
 
 export class TenantIEnumerableApiResponse implements ITenantIEnumerableApiResponse {
@@ -31758,6 +32566,7 @@ export class User implements IUser {
     readonly active!: boolean;
     readonly claims!: UserClaim[] | undefined;
     readonly userTenants!: UserTenant[] | undefined;
+    readonly userPrograms!: UserProgram[] | undefined;
     readonly createdOn!: Date | undefined;
     createdBy!: string;
 
@@ -31805,6 +32614,11 @@ export class User implements IUser {
                 (<any>this).userTenants = [];
                 for (let item of _data["userTenants"])
                     (<any>this).userTenants!.push(UserTenant.fromJS(item));
+            }
+            if (Array.isArray(_data["userPrograms"])) {
+                (<any>this).userPrograms = [];
+                for (let item of _data["userPrograms"])
+                    (<any>this).userPrograms!.push(UserProgram.fromJS(item));
             }
             (<any>this).createdOn = _data["createdOn"] ? new Date(_data["createdOn"].toString()) : <any>undefined;
             this.createdBy = _data["createdBy"];
@@ -31854,6 +32668,11 @@ export class User implements IUser {
             for (let item of this.userTenants)
                 data["userTenants"].push(item.toJSON());
         }
+        if (Array.isArray(this.userPrograms)) {
+            data["userPrograms"] = [];
+            for (let item of this.userPrograms)
+                data["userPrograms"].push(item.toJSON());
+        }
         data["createdOn"] = this.createdOn ? this.createdOn.toISOString() : <any>undefined;
         data["createdBy"] = this.createdBy;
         return data;
@@ -31890,6 +32709,7 @@ export interface IUser {
     active: boolean;
     claims: UserClaim[] | undefined;
     userTenants: UserTenant[] | undefined;
+    userPrograms: UserProgram[] | undefined;
     createdOn: Date | undefined;
     createdBy: string;
 }
@@ -31955,6 +32775,73 @@ export interface IUserClaim {
     concurrencyStamp: string | undefined;
     user: User;
     userId: string;
+}
+
+export class UserProgram implements IUserProgram {
+    readonly id!: string;
+    user!: User;
+    readonly userId!: string;
+    readonly programId!: string;
+    tenant!: Tenant;
+    readonly tenantId!: string;
+    readonly isDeleted!: boolean;
+
+    constructor(data?: IUserProgram) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            (<any>this).id = _data["id"];
+            this.user = _data["user"] ? User.fromJS(_data["user"]) : <any>undefined;
+            (<any>this).userId = _data["userId"];
+            (<any>this).programId = _data["programId"];
+            this.tenant = _data["tenant"] ? Tenant.fromJS(_data["tenant"]) : <any>undefined;
+            (<any>this).tenantId = _data["tenantId"];
+            (<any>this).isDeleted = _data["isDeleted"];
+        }
+    }
+
+    static fromJS(data: any): UserProgram {
+        data = typeof data === 'object' ? data : {};
+        let result = new UserProgram();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["user"] = this.user ? this.user.toJSON() : <any>undefined;
+        data["userId"] = this.userId;
+        data["programId"] = this.programId;
+        data["tenant"] = this.tenant ? this.tenant.toJSON() : <any>undefined;
+        data["tenantId"] = this.tenantId;
+        data["isDeleted"] = this.isDeleted;
+        return data;
+    }
+
+    clone(): UserProgram {
+        const json = this.toJSON();
+        let result = new UserProgram();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IUserProgram {
+    id: string;
+    user: User;
+    userId: string;
+    programId: string;
+    tenant: Tenant;
+    tenantId: string;
+    isDeleted: boolean;
 }
 
 /** 1 = SystemAdmin (System admimn) 2 = ProgramAdmin (Program admin) 3 = Prescriber (Prescriber) 4 = Pharmacist (Pharmacist) 5 = Nurse (Nurse) 6 = Hcp (HCP) 7 = Patient (Patient) 8 = Carer (Carer) 9 = ClinicManager (Clinic manager) */
