@@ -119,22 +119,24 @@ export class RegisterComponent implements OnInit {
     const barcodeFormData = this.barcodeForm.value as any;
     if (this.barcodeForm.valid) {
       const barcode = barcodeFormData.barcode;
+      this.barcodeFormSubmitted = true;
       this._registrationService.validateProductBarcode(barcode)
         .pipe(
           takeUntilDestroyed(this._destroyRef),
         )
         .subscribe((response) => 
-          {
+        {
            if (response.isSuccess) {
-            const validBarcode = response.resultObject;
-            this.barcodeInvalid = !validBarcode;
-            if (validBarcode){
-              this.stepper.next();
-            }
-           } else {
+              const validBarcode = response.resultObject;
+              this.barcodeInvalid = !validBarcode;
+              if (validBarcode){
+                this.stepper.next();
+              }
+           } else 
+           {
             this.barcodeForm.setErrors({ invalid: true });
+            this.barcodeInvalid = true;
            }
-           this.barcodeFormSubmitted = true;
         }
       );
     }

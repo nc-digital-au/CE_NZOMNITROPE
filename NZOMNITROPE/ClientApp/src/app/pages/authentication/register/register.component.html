@@ -43,13 +43,14 @@
                           Enter exactly 4 digits.
                         </mat-error>
                       }
-                      @if(barcodeFormSubmitted && barcodeInvalid)
+                    </mat-form-field>
+                    
+                      @if(barcodeInvalid)
                       {
                         <mat-error>
                           Invalid barcode.
                         </mat-error>
                       }
-                    </mat-form-field>
                   </div>
                   <div class="form-row">
                     <mat-checkbox formControlName="consent">
