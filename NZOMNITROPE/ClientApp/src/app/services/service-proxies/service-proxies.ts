@@ -19851,7 +19851,6 @@ export class GetPatientInformationWithCarerResponse implements IGetPatientInform
     homeCity!: string | undefined;
     homeState!: AddressState;
     homePostcode!: string | undefined;
-    deliveryBusinessName!: string | undefined;
     deliveryUnitNumber!: string | undefined;
     deliveryStreetAddress!: string | undefined;
     deliveryCity!: string | undefined;
@@ -19891,7 +19890,6 @@ export class GetPatientInformationWithCarerResponse implements IGetPatientInform
             this.homeCity = _data["homeCity"];
             this.homeState = _data["homeState"];
             this.homePostcode = _data["homePostcode"];
-            this.deliveryBusinessName = _data["deliveryBusinessName"];
             this.deliveryUnitNumber = _data["deliveryUnitNumber"];
             this.deliveryStreetAddress = _data["deliveryStreetAddress"];
             this.deliveryCity = _data["deliveryCity"];
@@ -19931,7 +19929,6 @@ export class GetPatientInformationWithCarerResponse implements IGetPatientInform
         data["homeCity"] = this.homeCity;
         data["homeState"] = this.homeState;
         data["homePostcode"] = this.homePostcode;
-        data["deliveryBusinessName"] = this.deliveryBusinessName;
         data["deliveryUnitNumber"] = this.deliveryUnitNumber;
         data["deliveryStreetAddress"] = this.deliveryStreetAddress;
         data["deliveryCity"] = this.deliveryCity;
@@ -19971,7 +19968,6 @@ export interface IGetPatientInformationWithCarerResponse {
     homeCity: string | undefined;
     homeState: AddressState;
     homePostcode: string | undefined;
-    deliveryBusinessName: string | undefined;
     deliveryUnitNumber: string | undefined;
     deliveryStreetAddress: string | undefined;
     deliveryCity: string | undefined;
