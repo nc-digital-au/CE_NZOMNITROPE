@@ -47,6 +47,9 @@ export function getErrorMessage(formGroup: FormGroup, formName: string, errorLab
     if (formCtl.errors?.['invalidNHI'])
       return `${errorLabel} must be a valid NHI number (e.g. ABC1234)`;    
 
+    if (formCtl.errors?.['passwordMismatch'])
+      return `Passwords do not match`;    
+
     if(formCtl.errors?.['custom'])
       return `${errorLabel} ${formCtl.errors?.['custom']}`;
 
