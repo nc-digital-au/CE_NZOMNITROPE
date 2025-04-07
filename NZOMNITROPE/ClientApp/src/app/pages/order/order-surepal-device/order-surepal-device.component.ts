@@ -107,17 +107,18 @@ export class OrderSurepalDeviceComponent {
       lastName: data.lastName,
       nhiNumber: data.nationalHealthIndex,
       email: data.email,
-      mobile: data.mobileNumber,
+      mobile: data.mobileNumber
     }
     this.patientForm.patchValue(patientFormData);
   }
 
   private updateAddressForm(data: GetPatientInformationWithCarerResponse): void {
     const addressFormData = {
-      unitNumber: data.homeUnitNumber,
-      streetAddress: data.homeStreetAddress,
-      city: data.homeCity,
-      postcode: data.homePostcode,
+      name: data.deliveryBusinessName,
+      unitNumber: data.deliveryUnitNumber,
+      streetAddress: data.deliveryStreetAddress,
+      city: data.deliveryCity,
+      postcode: data.deliveryPostcode,
     }
     this.addressForm.patchValue(addressFormData);
   }
