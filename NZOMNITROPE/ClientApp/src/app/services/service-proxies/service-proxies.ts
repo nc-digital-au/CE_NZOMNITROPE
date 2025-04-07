@@ -19851,6 +19851,12 @@ export class GetPatientInformationWithCarerResponse implements IGetPatientInform
     homeCity!: string | undefined;
     homeState!: AddressState;
     homePostcode!: string | undefined;
+    deliveryBusinessName!: string | undefined;
+    deliveryUnitNumber!: string | undefined;
+    deliveryStreetAddress!: string | undefined;
+    deliveryCity!: string | undefined;
+    deliveryState!: AddressState;
+    deliveryPostcode!: string | undefined;
     carer!: CarerModel;
 
     constructor(data?: IGetPatientInformationWithCarerResponse) {
@@ -19885,6 +19891,12 @@ export class GetPatientInformationWithCarerResponse implements IGetPatientInform
             this.homeCity = _data["homeCity"];
             this.homeState = _data["homeState"];
             this.homePostcode = _data["homePostcode"];
+            this.deliveryBusinessName = _data["deliveryBusinessName"];
+            this.deliveryUnitNumber = _data["deliveryUnitNumber"];
+            this.deliveryStreetAddress = _data["deliveryStreetAddress"];
+            this.deliveryCity = _data["deliveryCity"];
+            this.deliveryState = _data["deliveryState"];
+            this.deliveryPostcode = _data["deliveryPostcode"];
             this.carer = _data["carer"] ? CarerModel.fromJS(_data["carer"]) : <any>undefined;
         }
     }
@@ -19919,6 +19931,12 @@ export class GetPatientInformationWithCarerResponse implements IGetPatientInform
         data["homeCity"] = this.homeCity;
         data["homeState"] = this.homeState;
         data["homePostcode"] = this.homePostcode;
+        data["deliveryBusinessName"] = this.deliveryBusinessName;
+        data["deliveryUnitNumber"] = this.deliveryUnitNumber;
+        data["deliveryStreetAddress"] = this.deliveryStreetAddress;
+        data["deliveryCity"] = this.deliveryCity;
+        data["deliveryState"] = this.deliveryState;
+        data["deliveryPostcode"] = this.deliveryPostcode;
         data["carer"] = this.carer ? this.carer.toJSON() : <any>undefined;
         return data;
     }
@@ -19953,6 +19971,12 @@ export interface IGetPatientInformationWithCarerResponse {
     homeCity: string | undefined;
     homeState: AddressState;
     homePostcode: string | undefined;
+    deliveryBusinessName: string | undefined;
+    deliveryUnitNumber: string | undefined;
+    deliveryStreetAddress: string | undefined;
+    deliveryCity: string | undefined;
+    deliveryState: AddressState;
+    deliveryPostcode: string | undefined;
     carer: CarerModel;
 }
 
