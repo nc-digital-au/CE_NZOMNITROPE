@@ -10,6 +10,7 @@ export interface IFormInputProps {
   hidden?: boolean;
   errorLabel?: string;
   hideErrors?: boolean;
+  nhi?: boolean;
   [key: string]: any;
 }
 

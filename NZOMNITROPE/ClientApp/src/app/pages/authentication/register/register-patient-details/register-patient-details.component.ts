@@ -52,6 +52,7 @@ export class RegisterPatientDetailsComponent {
         label: 'NHI Number (if known)',
         validation: {
           required: false,
+          nhi: true,
         },
       }),
       new TextFormInputElement({

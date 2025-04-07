@@ -73,6 +73,7 @@ export class PatientFormComponent implements OnInit {
         label: 'NHI Number (if known)',
         validation: {
           required: false,
+          nhi: true,
         },
       }),
     ]);

@@ -8,4 +8,5 @@ export interface IFormValidation {
   email?: boolean;
   phone?: boolean;
   mobile?: boolean;
+  nhi?: boolean;
 }
