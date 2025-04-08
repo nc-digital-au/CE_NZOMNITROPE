@@ -5,6 +5,8 @@ import { DynamicForm } from 'src/app/components/dynamic-form/models/dynamic-form
 import { TextFormInputElement } from 'src/app/components/dynamic-form/models/form-elements/text-form-input-element.model';
 import { TitleFormElement } from 'src/app/components/dynamic-form/models/form-elements/title-form-element.model';
 import { ValidateMobile } from 'src/app/utils/validators/mobile.validator';
+import { passwordsMatch } from 'src/app/utils/validators/password-match.validator';
+
 
 @Component({
   selector: 'app-register-patient-details',
@@ -23,6 +25,9 @@ export class RegisterPatientDetailsComponent {
   }
 
   onFormCreated(form: FormGroup): void {
+    form.setValidators(passwordsMatch('password', 'confirmPassword'));
+
+    form.updateValueAndValidity();
     this.formCreated.emit(form);
   }
 
@@ -52,6 +57,7 @@ export class RegisterPatientDetailsComponent {
         label: 'NHI Number (if known)',
         validation: {
           required: false,
+          nhi: true,
         },
       }),
       new TextFormInputElement({

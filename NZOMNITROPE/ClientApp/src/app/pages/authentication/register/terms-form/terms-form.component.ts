@@ -28,8 +28,10 @@ export class TermsFormComponent implements AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    setTimeout(() => {  
-      document.getElementsByClassName("privacy-policy")[0].addEventListener("click", (ev) => {
+    setTimeout(() => {
+      const elements = document.getElementsByClassName("privacy-policy");
+      Array.from(elements).forEach((el: Element) => {
+        el.addEventListener("click", (ev) => {
           ev.preventDefault();
           ev.stopPropagation();
           this._dialog.open(LeavingSiteDialog, {
@@ -39,9 +41,10 @@ export class TermsFormComponent implements AfterViewInit {
             }
           });
         });
-      }
-    );
+      });
+    });
   }
+  
 
   onFormCreated(form: FormGroup): void {
     this.formCreated.emit(form);

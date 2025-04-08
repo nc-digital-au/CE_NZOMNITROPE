@@ -39,6 +39,7 @@ export class PatientFormComponent implements OnInit {
       new TextFormInputElement({
         name: 'firstName',
         label: 'First Name',
+        disabled: true,
         validation: {
           required: true,
           maxLength: 50,
@@ -47,6 +48,7 @@ export class PatientFormComponent implements OnInit {
       new TextFormInputElement({
         name: 'lastName',
         label: 'Last Name',
+        disabled: true,
         validation: {
           required: true,
           maxLength: 50,
@@ -55,6 +57,7 @@ export class PatientFormComponent implements OnInit {
       new TextFormInputElement({
         name: 'email',
         label: 'Email Address',
+        disabled: true,
         validation: {
           required: true,
           email: true,
@@ -73,6 +76,7 @@ export class PatientFormComponent implements OnInit {
         label: 'NHI Number (if known)',
         validation: {
           required: false,
+          nhi: true,
         },
       }),
     ]);

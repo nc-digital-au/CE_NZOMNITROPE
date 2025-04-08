@@ -29,7 +29,7 @@ export const navItems: NavItem[] = [
       {
         displayName: 'How to Inject Video',
         iconName: '',
-        route: 'resources/how-to-inject',
+        route: 'resources',
       },
       {
         displayName: 'SurePal 5mg How to use guide',

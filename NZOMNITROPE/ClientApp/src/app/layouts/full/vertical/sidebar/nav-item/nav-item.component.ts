@@ -61,25 +61,30 @@ export class AppNavItemComponent implements OnChanges {
   }
 
   onItemSelected(item: NavItem) {
+    console.log('Clicked item:', item);
+    if (item.external) {
+      window.open(item.route, '_blank');
+      return;
+    }
+  
     if (!item.children || !item.children.length) {
       this.router.navigate([item.route]);
-      
     }
+  
     if (item.children && item.children.length) {
       this.expanded = !this.expanded;
     }
-    //scroll
+  
     window.scroll({
       top: 0,
       left: 0,
       behavior: 'smooth',
     });
-    if (!this.expanded){
-    if (window.innerWidth < 1024) {
+  
+    if (!this.expanded && window.innerWidth < 1024) {
       this.notify.emit();
     }
-  }
-  }
+  }  
 
   onSubItemSelected(item: NavItem) {
     if (!item.children || !item.children.length){

@@ -43,18 +43,14 @@
 <!-- external Link -->
 
 @if(!item.navCap && item.external) {
-<mat-list-item
-  onClick="window.open(item.route, '_blank')"
+  <a
+  mat-list-item
   class="menu-list-item"
-  target="_blank"
+  (click)="onItemSelected(item)"
 >
-  <i-tabler
-    class="routeIcon"
-    name="{{ item.iconName }}"
-    matListItemIcon
-  ></i-tabler>
+  <i-tabler class="routeIcon" name="{{ item.iconName }}" matListItemIcon></i-tabler>
   <span class="hide-menu">{{ item.displayName | translate }}</span>
-</mat-list-item>
+</a>
 }
 
 <!-- children -->

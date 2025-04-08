@@ -11,6 +11,7 @@ import { ValidatePhone } from 'src/app/utils/validators/phone.validator';
 import { ValidateMobile } from 'src/app/utils/validators/mobile.validator';
 import { CheckboxFormInputElement } from './models/form-elements/checkbox-form-input-element.model';
 import { requiredLength } from 'src/app/utils/validators/required-length.validator';
+import { validateNHI } from 'src/app/utils/validators/nhi.validator';
 
 @Component({
   selector: 'app-dynamic-form',
@@ -105,6 +106,9 @@ export class DynamicFormComponent implements OnChanges {
           if (formElement.validation?.mobile !== undefined) {
             validations.push(ValidateMobile);
           }
+          if (formElement.validation?.nhi !== undefined) {
+            validations.push(validateNHI);
+          }          
 
           if ('custom' in formElement.validation) {
             for (const custom of formElement.validation.custom as any[]) {
