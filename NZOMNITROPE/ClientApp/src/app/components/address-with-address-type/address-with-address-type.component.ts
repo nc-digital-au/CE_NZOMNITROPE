@@ -12,7 +12,7 @@ import { Loader } from '@googlemaps/js-api-loader';
 import { environment } from 'src/environments/environment';
 
 @Component({
-  selector: 'app-address',
+  selector: 'app-address-with-address-type',
   standalone: true,
   imports: [
     DynamicFormComponent,
@@ -31,37 +31,50 @@ import { environment } from 'src/environments/environment';
       })
     },
   ],
-  templateUrl: './address.component.html',
-  styleUrl: './address.component.scss'
+  templateUrl: './address-with-address-type.component.html',
+  styleUrl: './address-with-address-type.component.scss'
 })
-export class AddressComponent implements OnInit {
-  @Input()
-  title: string;
-  @Input()
-  hiddenFields: string[] = [];
-  @Input()
-  searchHint: string;
-  @Input()
-  disabledFields: string[] = [];
+export class AddressWithAddressTypeComponent implements OnInit {
+  @Input() title: string;
+  @Input() establishmentOnly = true;
+  @Input() hiddenFields: string[] = [];
+  @Input() searchHint: string;
+  @Input() disabledFields: string[] = [];
 
-  @Output()
-  formCreated = new EventEmitter<FormGroup>();
+  @Output() formCreated = new EventEmitter<FormGroup>();
 
   @ViewChild(DynamicFormComponent)
   dynamicForm: DynamicFormComponent;
 
   addressFormDefinition: DynamicForm;
 
+  private hasPatchedInitialValues = false;
+
   options: NgxGpAutocompleteOptions = {
     componentRestrictions: { country: ['nz'] },
     fields: ['name', 'address_components', 'geometry'],
   };
 
+  @Input()
+  set addressValues(values: any) {
+    if (values && this.dynamicForm?.form && !this.hasPatchedInitialValues) {
+      this.dynamicForm.form.patchValue(values);
+      this.hasPatchedInitialValues = true;
+    }
+  }
+
   ngOnInit(): void {
     this.buildForm();
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['establishmentOnly'] || changes['disabledFields']) {
+      this.buildForm();
+    }
+  }
+
   private buildForm(): void {
+    this.hasPatchedInitialValues = false; // allow repatching after form rebuild
     this.addressFormDefinition = new DynamicForm([
       new TextFormInputElement({
         name: 'name',

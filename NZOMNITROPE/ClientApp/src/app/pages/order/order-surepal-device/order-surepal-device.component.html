@@ -24,8 +24,9 @@
             </mat-select>
           </mat-form-field>
 
-          <app-address 
+          <app-address-with-address-type
           [establishmentOnly]="establishmentOnly" 
+          [addressValues]="getAddressPatchData()"
           [hiddenFields]="['phone', 'mobile', 'state']"
           [disabledFields]="establishmentOnly ? [] : ['name']"
           (formCreated)="addressForm = $event"
@@ -34,7 +35,7 @@
             <button mat-stroked-button class="cancel-button" [routerLink]="[routeLinks.home]" type="button">Cancel</button>
             <button mat-flat-button color="primary" type="submit" (click)="onPatientFormNext()">Next</button>
           </div>
-        </app-address>
+        </app-address-with-address-type>
         </mat-step>
 
         <mat-step [stepControl]="orderForm">

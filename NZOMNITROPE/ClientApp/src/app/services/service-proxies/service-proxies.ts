@@ -13041,6 +13041,7 @@ export class CreateOrderForConsumableProductsForPatientDto implements ICreateOrd
     email!: string | undefined;
     mobile!: string | undefined;
     patientReferenceNumber!: string | undefined;
+    deliveryAddressType!: DeliveryAddressType;
     deliveryInstitutionName!: string | undefined;
     deliveryUnitNumber!: string | undefined;
     deliveryStreetAddress!: string | undefined;
@@ -13068,6 +13069,7 @@ export class CreateOrderForConsumableProductsForPatientDto implements ICreateOrd
             this.email = _data["email"];
             this.mobile = _data["mobile"];
             this.patientReferenceNumber = _data["patientReferenceNumber"];
+            this.deliveryAddressType = _data["deliveryAddressType"];
             this.deliveryInstitutionName = _data["deliveryInstitutionName"];
             this.deliveryUnitNumber = _data["deliveryUnitNumber"];
             this.deliveryStreetAddress = _data["deliveryStreetAddress"];
@@ -13099,6 +13101,7 @@ export class CreateOrderForConsumableProductsForPatientDto implements ICreateOrd
         data["email"] = this.email;
         data["mobile"] = this.mobile;
         data["patientReferenceNumber"] = this.patientReferenceNumber;
+        data["deliveryAddressType"] = this.deliveryAddressType;
         data["deliveryInstitutionName"] = this.deliveryInstitutionName;
         data["deliveryUnitNumber"] = this.deliveryUnitNumber;
         data["deliveryStreetAddress"] = this.deliveryStreetAddress;
@@ -13130,6 +13133,7 @@ export interface ICreateOrderForConsumableProductsForPatientDto {
     email: string | undefined;
     mobile: string | undefined;
     patientReferenceNumber: string | undefined;
+    deliveryAddressType: DeliveryAddressType;
     deliveryInstitutionName: string | undefined;
     deliveryUnitNumber: string | undefined;
     deliveryStreetAddress: string | undefined;
