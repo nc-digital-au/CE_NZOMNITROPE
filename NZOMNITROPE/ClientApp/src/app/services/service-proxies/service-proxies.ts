@@ -13610,6 +13610,12 @@ export enum DeletedReason {
     Archived = 4,
 }
 
+/** 1 = PrivateAddress (Private address) 2 = BusinessAddress (Business address) */
+export enum DeliveryAddressType {
+    PrivateAddress = 1,
+    BusinessAddress = 2,
+}
+
 export class DeliveryModelDto implements IDeliveryModelDto {
     delivetToName!: string | undefined;
     deliveryContactNumber!: string | undefined;
@@ -19851,6 +19857,7 @@ export class GetPatientInformationWithCarerResponse implements IGetPatientInform
     homeCity!: string | undefined;
     homeState!: AddressState;
     homePostcode!: string | undefined;
+    deliveryAddressType!: DeliveryAddressType;
     deliveryBusinessName!: string | undefined;
     deliveryUnitNumber!: string | undefined;
     deliveryStreetAddress!: string | undefined;
@@ -19891,6 +19898,7 @@ export class GetPatientInformationWithCarerResponse implements IGetPatientInform
             this.homeCity = _data["homeCity"];
             this.homeState = _data["homeState"];
             this.homePostcode = _data["homePostcode"];
+            this.deliveryAddressType = _data["deliveryAddressType"];
             this.deliveryBusinessName = _data["deliveryBusinessName"];
             this.deliveryUnitNumber = _data["deliveryUnitNumber"];
             this.deliveryStreetAddress = _data["deliveryStreetAddress"];
@@ -19931,6 +19939,7 @@ export class GetPatientInformationWithCarerResponse implements IGetPatientInform
         data["homeCity"] = this.homeCity;
         data["homeState"] = this.homeState;
         data["homePostcode"] = this.homePostcode;
+        data["deliveryAddressType"] = this.deliveryAddressType;
         data["deliveryBusinessName"] = this.deliveryBusinessName;
         data["deliveryUnitNumber"] = this.deliveryUnitNumber;
         data["deliveryStreetAddress"] = this.deliveryStreetAddress;
@@ -19971,6 +19980,7 @@ export interface IGetPatientInformationWithCarerResponse {
     homeCity: string | undefined;
     homeState: AddressState;
     homePostcode: string | undefined;
+    deliveryAddressType: DeliveryAddressType;
     deliveryBusinessName: string | undefined;
     deliveryUnitNumber: string | undefined;
     deliveryStreetAddress: string | undefined;

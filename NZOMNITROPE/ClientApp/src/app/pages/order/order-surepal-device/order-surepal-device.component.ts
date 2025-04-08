@@ -54,7 +54,6 @@ export class OrderSurepalDeviceComponent {
   patientForm = this._fb.group({});
   addressForm = this._fb.group({});
   orderForm = this._fb.group({});
-
   constructor(
     private readonly _fb: FormBuilder,
     private readonly _breakpointObserver: BreakpointObserver,
@@ -103,6 +102,7 @@ export class OrderSurepalDeviceComponent {
 
   private updatePatientForm(data: GetPatientInformationWithCarerResponse): void {
     const patientFormData = {
+      
       firstName: data.firstName,
       lastName: data.lastName,
       nhiNumber: data.nationalHealthIndex,
