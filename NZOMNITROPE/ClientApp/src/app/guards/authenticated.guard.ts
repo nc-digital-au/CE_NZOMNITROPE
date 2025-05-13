@@ -10,7 +10,9 @@ export const authenticatedGuard: CanActivateFn = (route, state) => {
   return authService.getIsAuthenticated()
     .pipe(map((response) => {
       if (!response) {
-        router.navigate([routeNames.landing]);
+        router.navigate([routeNames.landing], {
+          queryParams: { returnUrl: state.url }
+        });
       }
       return response;
     }));
