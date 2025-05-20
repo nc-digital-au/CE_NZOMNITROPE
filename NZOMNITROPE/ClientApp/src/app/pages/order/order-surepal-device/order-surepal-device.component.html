@@ -25,6 +25,8 @@
           </mat-form-field>
 
           <app-address-with-address-type
+          *ngIf="showAddressForm"
+          [key]="establishmentOnly"
           [establishmentOnly]="establishmentOnly" 
           [addressValues]="getAddressPatchData()"
           [hiddenFields]="['phone', 'mobile', 'state']"

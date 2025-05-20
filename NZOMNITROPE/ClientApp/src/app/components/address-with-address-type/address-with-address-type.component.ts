@@ -1,5 +1,5 @@
 import { NgxGpAutocompleteModule, NgxGpAutocompleteOptions } from '@angular-magic/ngx-gp-autocomplete';
-import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges, ViewChild, AfterViewInit, OnChanges } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { DynamicFormComponent } from '../dynamic-form/dynamic-form.component';
 import { DynamicForm } from '../dynamic-form/models/dynamic-form.model';
@@ -34,26 +34,45 @@ import { environment } from 'src/environments/environment';
   templateUrl: './address-with-address-type.component.html',
   styleUrl: './address-with-address-type.component.scss'
 })
-export class AddressWithAddressTypeComponent implements OnInit {
+export class AddressWithAddressTypeComponent implements OnInit, AfterViewInit, OnChanges {
   @Input() title: string;
-  @Input() establishmentOnly = true;
   @Input() hiddenFields: string[] = [];
   @Input() searchHint: string;
   @Input() disabledFields: string[] = [];
+  @Input() establishmentOnly: boolean = true;
+  @Input() key: any;
 
   @Output() formCreated = new EventEmitter<FormGroup>();
+
+  private hasPatchedInitialValues = false;
 
   @ViewChild(DynamicFormComponent)
   dynamicForm: DynamicFormComponent;
 
   addressFormDefinition: DynamicForm;
 
-  private hasPatchedInitialValues = false;
+  get options(): NgxGpAutocompleteOptions {
+    return {
+      componentRestrictions: { country: ['nz'] },
+      fields: ['name', 'address_components', 'geometry'],
+      types: this.establishmentOnly ? ['establishment'] : ['address']
+    };
+  }
 
-  options: NgxGpAutocompleteOptions = {
-    componentRestrictions: { country: ['nz'] },
-    fields: ['name', 'address_components', 'geometry'],
-  };
+  ngOnInit(): void {
+    this.buildForm();
+  }
+
+  ngAfterViewInit(): void {
+    setTimeout(() => this.updateAutocompleteOptions(), 0);
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['establishmentOnly'] && !changes['establishmentOnly'].firstChange) {
+      this.buildForm();
+      setTimeout(() => this.updateAutocompleteOptions(), 0);
+    }
+  }
 
   @Input()
   set addressValues(values: any) {
@@ -63,18 +82,8 @@ export class AddressWithAddressTypeComponent implements OnInit {
     }
   }
 
-  ngOnInit(): void {
-    this.buildForm();
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['establishmentOnly'] || changes['disabledFields']) {
-      this.buildForm();
-    }
-  }
-
   private buildForm(): void {
-    this.hasPatchedInitialValues = false; // allow repatching after form rebuild
+    this.hasPatchedInitialValues = false;
     this.addressFormDefinition = new DynamicForm([
       new TextFormInputElement({
         name: 'name',
@@ -168,7 +177,6 @@ export class AddressWithAddressTypeComponent implements OnInit {
           this.dynamicForm.setValue('postcode', component.long_name);
           break;
         }
-
         case "locality":
           this.dynamicForm.setValue('city', component.long_name);
           break;
@@ -188,6 +196,14 @@ export class AddressWithAddressTypeComponent implements OnInit {
       if (place.name) {
         this.dynamicForm.setValue('streetAddress', place.name);
       }
+    }
+  }
+
+  private updateAutocompleteOptions(): void {
+    const autocomplete = (this.dynamicForm as any)?.placesInput;
+    if (autocomplete?.initAutocomplete) {
+      autocomplete.options = this.options;
+      autocomplete.initAutocomplete();
     }
   }
 }

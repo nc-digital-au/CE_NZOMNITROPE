@@ -52,6 +52,7 @@ export class OrderSurepalDeviceComponent {
   loading = true;
   orderSuccess = false;
   establishmentOnly = false;
+  showAddressForm = true;
   _destroyRef = inject(DestroyRef);
   patientModel: GetPatientInformationWithCarerResponse;
   productsRequested: ConsumableOrderItemDto[] = [];
@@ -80,6 +81,15 @@ export class OrderSurepalDeviceComponent {
 
   onEstablishmentOnlyChange(event: any): void {
     this.establishmentOnly = event.value;
+    console.log('🏢 establishmentOnly changed:', this.establishmentOnly);
+
+    const type = this.establishmentOnly
+      ? DeliveryAddressType.BusinessAddress
+      : DeliveryAddressType.PrivateAddress;
+    console.log('📦 New DeliveryAddressType:', type);
+
+    this.showAddressForm = false;
+    setTimeout(() => (this.showAddressForm = true), 0);
   }
 
   getAddressPatchData(): any {
