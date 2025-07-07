@@ -81,12 +81,10 @@ export class OrderSurepalDeviceComponent {
 
   onEstablishmentOnlyChange(event: any): void {
     this.establishmentOnly = event.value;
-    console.log('🏢 establishmentOnly changed:', this.establishmentOnly);
 
     const type = this.establishmentOnly
       ? DeliveryAddressType.BusinessAddress
       : DeliveryAddressType.PrivateAddress;
-    console.log('📦 New DeliveryAddressType:', type);
 
     this.showAddressForm = false;
     setTimeout(() => (this.showAddressForm = true), 0);
@@ -117,7 +115,6 @@ export class OrderSurepalDeviceComponent {
         tap((response) => {
           if (response.isSuccess) {
             this.patientModel = response.resultObject;
-            console.log('Delivery AddresType:', this.patientModel.deliveryAddressType);
             this.establishmentOnly =
               this.patientModel.deliveryAddressType ===
               DeliveryAddressType.BusinessAddress;
@@ -197,9 +194,6 @@ export class OrderSurepalDeviceComponent {
       consumableOrderItems: this.productsRequested,
       adminNotificationEmail: adminNotificationEmail,
     });
-
-    console.log('Order DTO:', orderDto);
-
     return orderDto;
   }
 

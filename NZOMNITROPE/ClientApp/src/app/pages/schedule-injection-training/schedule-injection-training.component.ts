@@ -144,7 +144,6 @@ export class ScheduleInjectionTrainingComponent implements OnInit {
     this.guardianForm.markAllAsTouched();
     this.sessionForm.markAllAsTouched();
     const sessionFormData = this.sessionForm.value as any;
-    console.log('Session Form Data:', sessionFormData);
     return this.patientForm.valid && this.guardianForm.valid && this.sessionForm.valid;
   }
 

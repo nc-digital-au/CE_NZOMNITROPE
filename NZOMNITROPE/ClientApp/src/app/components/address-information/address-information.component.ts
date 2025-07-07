@@ -99,7 +99,6 @@ export class AddressInformationComponent {
   
         case "administrative_area_level_1": {
           this.addressState.setValue(AddressState[component.short_name]);
-          console.log(`administrative_area_level_1 = ${component.short_name}`);
           break;
         }
       }

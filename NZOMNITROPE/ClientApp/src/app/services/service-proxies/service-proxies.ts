@@ -476,6 +476,62 @@ export class AccountServiceProxy {
         }
         return _observableOf(null as any);
     }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    triggerContinuationEmail(body?: ContinuationEmailDto | undefined): Observable<BooleanApiResponse> {
+        let url_ = this.baseUrl + "/api/account/trigger/continuation/email";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json-patch+json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processTriggerContinuationEmail(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processTriggerContinuationEmail(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<BooleanApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<BooleanApiResponse>;
+        }));
+    }
+
+    protected processTriggerContinuationEmail(response: HttpResponseBase): Observable<BooleanApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = BooleanApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
 }
 
 @Injectable({
@@ -1756,6 +1812,73 @@ export class InstitutionServiceProxy {
 @Injectable({
     providedIn: 'root'
 })
+export class JobsServiceProxy {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl ?? "";
+    }
+
+    /**
+     * @return Success
+     */
+    getContinuationNotifications(token: string, clientToken: string): Observable<void> {
+        let url_ = this.baseUrl + "/api/job/{token}/{clientToken}/continuation/notifications";
+        if (token === undefined || token === null)
+            throw new Error("The parameter 'token' must be defined.");
+        url_ = url_.replace("{token}", encodeURIComponent("" + token));
+        if (clientToken === undefined || clientToken === null)
+            throw new Error("The parameter 'clientToken' must be defined.");
+        url_ = url_.replace("{clientToken}", encodeURIComponent("" + clientToken));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetContinuationNotifications(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetContinuationNotifications(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<void>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<void>;
+        }));
+    }
+
+    protected processGetContinuationNotifications(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return _observableOf(null as any);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+}
+
+@Injectable({
+    providedIn: 'root'
+})
 export class MedicationServiceProxy {
     private http: HttpClient;
     private baseUrl: string;
@@ -1764,6 +1887,60 @@ export class MedicationServiceProxy {
     constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
         this.http = http;
         this.baseUrl = baseUrl ?? "";
+    }
+
+    /**
+     * @return Success
+     */
+    getMedicationDoseOptions(medication: string): Observable<GetProgramMedicationInformationResponseApiResponse> {
+        let url_ = this.baseUrl + "/api/medication/dose/options/{medication}";
+        if (medication === undefined || medication === null)
+            throw new Error("The parameter 'medication' must be defined.");
+        url_ = url_.replace("{medication}", encodeURIComponent("" + medication));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetMedicationDoseOptions(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetMedicationDoseOptions(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<GetProgramMedicationInformationResponseApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<GetProgramMedicationInformationResponseApiResponse>;
+        }));
+    }
+
+    protected processGetMedicationDoseOptions(response: HttpResponseBase): Observable<GetProgramMedicationInformationResponseApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = GetProgramMedicationInformationResponseApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
     }
 
     /**
@@ -3446,6 +3623,65 @@ export class PatientServiceProxy {
      * @param body (optional) 
      * @return Success
      */
+    updatePatientProfile(id: string, body?: Operation[] | undefined): Observable<BooleanApiResponse> {
+        let url_ = this.baseUrl + "/api/admin/patient/{id}/profile/update";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json-patch+json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("patch", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processUpdatePatientProfile(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processUpdatePatientProfile(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<BooleanApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<BooleanApiResponse>;
+        }));
+    }
+
+    protected processUpdatePatientProfile(response: HttpResponseBase): Observable<BooleanApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = BooleanApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
     updatePatientAddresss(body?: UpdatePatientAddressDto | undefined): Observable<BooleanApiResponse> {
         let url_ = this.baseUrl + "/api/admin/patient/Address";
         url_ = url_.replace(/[?&]$/, "");
@@ -3674,6 +3910,65 @@ export class PatientServiceProxy {
      * @param body (optional) 
      * @return Success
      */
+    patchPatientRegistration(id: string, body?: Operation[] | undefined): Observable<BooleanApiResponse> {
+        let url_ = this.baseUrl + "/api/admin/patient/{id}/registration/patch";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json-patch+json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("patch", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processPatchPatientRegistration(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processPatchPatientRegistration(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<BooleanApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<BooleanApiResponse>;
+        }));
+    }
+
+    protected processPatchPatientRegistration(response: HttpResponseBase): Observable<BooleanApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = BooleanApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
     createPatientContact(id: string, body?: CreatePatientContactLogDto | undefined): Observable<GuidApiResponse> {
         let url_ = this.baseUrl + "/api/admin/patient/{id}/contact/create";
         if (id === undefined || id === null)
@@ -3708,6 +4003,62 @@ export class PatientServiceProxy {
     }
 
     protected processCreatePatientContact(response: HttpResponseBase): Observable<GuidApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = GuidApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    registerPatientPspWithDeliveryByAdmin(body?: RegisterPspPatientWithDeliveryRequiredByAdminDto | undefined): Observable<GuidApiResponse> {
+        let url_ = this.baseUrl + "/api/admin/patient/register/psp/with-delivery";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json-patch+json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processRegisterPatientPspWithDeliveryByAdmin(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processRegisterPatientPspWithDeliveryByAdmin(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<GuidApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<GuidApiResponse>;
+        }));
+    }
+
+    protected processRegisterPatientPspWithDeliveryByAdmin(response: HttpResponseBase): Observable<GuidApiResponse> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -4601,8 +4952,11 @@ export class PharmacistServiceProxy {
      * @param body (optional) 
      * @return Success
      */
-    updatePharmacistProfile(body?: UpdatePharmacistProfileDto | undefined): Observable<BooleanApiResponse> {
-        let url_ = this.baseUrl + "/api/admin/pharmacist/update-profile";
+    updateProfileForPharmacist(id: string, body?: Operation[] | undefined): Observable<BooleanApiResponse> {
+        let url_ = this.baseUrl + "/api/admin/pharmacist/{id}/profile/update";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
         url_ = url_.replace(/[?&]$/, "");
 
         const content_ = JSON.stringify(body);
@@ -4617,12 +4971,12 @@ export class PharmacistServiceProxy {
             })
         };
 
-        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processUpdatePharmacistProfile(response_);
+        return this.http.request("patch", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processUpdateProfileForPharmacist(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processUpdatePharmacistProfile(response_ as any);
+                    return this.processUpdateProfileForPharmacist(response_ as any);
                 } catch (e) {
                     return _observableThrow(e) as any as Observable<BooleanApiResponse>;
                 }
@@ -4631,7 +4985,7 @@ export class PharmacistServiceProxy {
         }));
     }
 
-    protected processUpdatePharmacistProfile(response: HttpResponseBase): Observable<BooleanApiResponse> {
+    protected processUpdateProfileForPharmacist(response: HttpResponseBase): Observable<BooleanApiResponse> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -4657,7 +5011,7 @@ export class PharmacistServiceProxy {
      * @param body (optional) 
      * @return Success
      */
-    updatePharmacistRegistration(id: string, body?: UpdatePharmacistProgramRegistrationDto | undefined): Observable<BooleanApiResponse> {
+    updatePharmacistRegistrationPOST(id: string, body?: UpdatePharmacistProgramRegistrationDto | undefined): Observable<BooleanApiResponse> {
         let url_ = this.baseUrl + "/api/admin/pharmacist/{id}/registration/update";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -4677,11 +5031,11 @@ export class PharmacistServiceProxy {
         };
 
         return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processUpdatePharmacistRegistration(response_);
+            return this.processUpdatePharmacistRegistrationPOST(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processUpdatePharmacistRegistration(response_ as any);
+                    return this.processUpdatePharmacistRegistrationPOST(response_ as any);
                 } catch (e) {
                     return _observableThrow(e) as any as Observable<BooleanApiResponse>;
                 }
@@ -4690,7 +5044,66 @@ export class PharmacistServiceProxy {
         }));
     }
 
-    protected processUpdatePharmacistRegistration(response: HttpResponseBase): Observable<BooleanApiResponse> {
+    protected processUpdatePharmacistRegistrationPOST(response: HttpResponseBase): Observable<BooleanApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = BooleanApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    updatePharmacistRegistrationPATCH(id: string, body?: Operation[] | undefined): Observable<BooleanApiResponse> {
+        let url_ = this.baseUrl + "/api/admin/pharmacist/{id}/registration/update";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json-patch+json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("patch", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processUpdatePharmacistRegistrationPATCH(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processUpdatePharmacistRegistrationPATCH(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<BooleanApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<BooleanApiResponse>;
+        }));
+    }
+
+    protected processUpdatePharmacistRegistrationPATCH(response: HttpResponseBase): Observable<BooleanApiResponse> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -4826,6 +5239,57 @@ export class PortalProgramServiceProxy {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
             result200 = GuidApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @return Success
+     */
+    canRegisterPatient(): Observable<BooleanApiResponse> {
+        let url_ = this.baseUrl + "/api/admin/portal/can-register-patient";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processCanRegisterPatient(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processCanRegisterPatient(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<BooleanApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<BooleanApiResponse>;
+        }));
+    }
+
+    protected processCanRegisterPatient(response: HttpResponseBase): Observable<BooleanApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = BooleanApiResponse.fromJS(resultData200);
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -5369,57 +5833,6 @@ export class PrescriberServiceProxy {
     /**
      * @return Success
      */
-    remind(): Observable<BooleanApiResponse> {
-        let url_ = this.baseUrl + "/api/admin/prescriber/remind";
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_ : any = {
-            observe: "response",
-            responseType: "blob",
-            headers: new HttpHeaders({
-                "Accept": "application/json"
-            })
-        };
-
-        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processRemind(response_);
-        })).pipe(_observableCatch((response_: any) => {
-            if (response_ instanceof HttpResponseBase) {
-                try {
-                    return this.processRemind(response_ as any);
-                } catch (e) {
-                    return _observableThrow(e) as any as Observable<BooleanApiResponse>;
-                }
-            } else
-                return _observableThrow(response_) as any as Observable<BooleanApiResponse>;
-        }));
-    }
-
-    protected processRemind(response: HttpResponseBase): Observable<BooleanApiResponse> {
-        const status = response.status;
-        const responseBlob =
-            response instanceof HttpResponse ? response.body :
-            (response as any).error instanceof Blob ? (response as any).error : undefined;
-
-        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
-        if (status === 200) {
-            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = BooleanApiResponse.fromJS(resultData200);
-            return _observableOf(result200);
-            }));
-        } else if (status !== 200 && status !== 204) {
-            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            }));
-        }
-        return _observableOf(null as any);
-    }
-
-    /**
-     * @return Success
-     */
     getPrescriberProfile(id: string): Observable<GetPrescriberProfileResponseApiResponse> {
         let url_ = this.baseUrl + "/api/admin/prescriber/{id}/profile";
         if (id === undefined || id === null)
@@ -5608,7 +6021,7 @@ export class PrescriberServiceProxy {
      * @param body (optional) 
      * @return Success
      */
-    updatePrescriberProfile(id: string, body?: UpdatePrescriberProfileDto | undefined): Observable<BooleanApiResponse> {
+    updatePrescriberProfilePOST(id: string, body?: UpdatePrescriberProfileDto | undefined): Observable<BooleanApiResponse> {
         let url_ = this.baseUrl + "/api/admin/prescriber/{id}/update-profile";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -5628,11 +6041,11 @@ export class PrescriberServiceProxy {
         };
 
         return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processUpdatePrescriberProfile(response_);
+            return this.processUpdatePrescriberProfilePOST(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processUpdatePrescriberProfile(response_ as any);
+                    return this.processUpdatePrescriberProfilePOST(response_ as any);
                 } catch (e) {
                     return _observableThrow(e) as any as Observable<BooleanApiResponse>;
                 }
@@ -5641,7 +6054,66 @@ export class PrescriberServiceProxy {
         }));
     }
 
-    protected processUpdatePrescriberProfile(response: HttpResponseBase): Observable<BooleanApiResponse> {
+    protected processUpdatePrescriberProfilePOST(response: HttpResponseBase): Observable<BooleanApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = BooleanApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    updatePrescriberProfilePATCH(id: string, body?: Operation[] | undefined): Observable<BooleanApiResponse> {
+        let url_ = this.baseUrl + "/api/admin/prescriber/{id}/update-profile";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json-patch+json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("patch", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processUpdatePrescriberProfilePATCH(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processUpdatePrescriberProfilePATCH(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<BooleanApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<BooleanApiResponse>;
+        }));
+    }
+
+    protected processUpdatePrescriberProfilePATCH(response: HttpResponseBase): Observable<BooleanApiResponse> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -5816,6 +6288,65 @@ export class PrescriberServiceProxy {
     }
 
     protected processUpdatePrescriberRegistration(response: HttpResponseBase): Observable<BooleanApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = BooleanApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    updatePrescriberRegistrationProfile(id: string, body?: Operation[] | undefined): Observable<BooleanApiResponse> {
+        let url_ = this.baseUrl + "/api/admin/prescriber/{id}/registration/update";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json-patch+json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("patch", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processUpdatePrescriberRegistrationProfile(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processUpdatePrescriberRegistrationProfile(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<BooleanApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<BooleanApiResponse>;
+        }));
+    }
+
+    protected processUpdatePrescriberRegistrationProfile(response: HttpResponseBase): Observable<BooleanApiResponse> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -7689,7 +8220,7 @@ export class ProgramServicesServiceProxy {
      * @param body (optional) 
      * @return Success
      */
-    bookService(body?: CreateServiceBookingDto | undefined): Observable<Int32ApiResponse> {
+    bookService(body?: CreateServiceBookingDto | undefined): Observable<GuidApiResponse> {
         let url_ = this.baseUrl + "/api/program/services/book-service";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -7712,14 +8243,14 @@ export class ProgramServicesServiceProxy {
                 try {
                     return this.processBookService(response_ as any);
                 } catch (e) {
-                    return _observableThrow(e) as any as Observable<Int32ApiResponse>;
+                    return _observableThrow(e) as any as Observable<GuidApiResponse>;
                 }
             } else
-                return _observableThrow(response_) as any as Observable<Int32ApiResponse>;
+                return _observableThrow(response_) as any as Observable<GuidApiResponse>;
         }));
     }
 
-    protected processBookService(response: HttpResponseBase): Observable<Int32ApiResponse> {
+    protected processBookService(response: HttpResponseBase): Observable<GuidApiResponse> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -7730,7 +8261,7 @@ export class ProgramServicesServiceProxy {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = Int32ApiResponse.fromJS(resultData200);
+            result200 = GuidApiResponse.fromJS(resultData200);
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -9632,6 +10163,65 @@ export class TreatmentServiceProxy {
     }
 
     /**
+     * @param body (optional) 
+     * @return Success
+     */
+    patchTreatmentProfile(patientId: string, body?: Operation[] | undefined): Observable<BooleanApiResponse> {
+        let url_ = this.baseUrl + "/api/patient/{patientId}/treatment/patch-profile";
+        if (patientId === undefined || patientId === null)
+            throw new Error("The parameter 'patientId' must be defined.");
+        url_ = url_.replace("{patientId}", encodeURIComponent("" + patientId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json-patch+json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processPatchTreatmentProfile(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processPatchTreatmentProfile(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<BooleanApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<BooleanApiResponse>;
+        }));
+    }
+
+    protected processPatchTreatmentProfile(response: HttpResponseBase): Observable<BooleanApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = BooleanApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
      * @return Success
      */
     getTreatmentProfileWithCategory(patientId: string): Observable<GetPatientTreatmentCategoryProfileResponseApiResponse> {
@@ -9675,6 +10265,65 @@ export class TreatmentServiceProxy {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
             result200 = GetPatientTreatmentCategoryProfileResponseApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    grandfatherPatientTreatment(patientId: string, body?: TransitionPatientToPbsDto | undefined): Observable<GuidApiResponse> {
+        let url_ = this.baseUrl + "/api/patient/{patientId}/treatment/grandfathering";
+        if (patientId === undefined || patientId === null)
+            throw new Error("The parameter 'patientId' must be defined.");
+        url_ = url_.replace("{patientId}", encodeURIComponent("" + patientId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json-patch+json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGrandfatherPatientTreatment(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGrandfatherPatientTreatment(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<GuidApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<GuidApiResponse>;
+        }));
+    }
+
+    protected processGrandfatherPatientTreatment(response: HttpResponseBase): Observable<GuidApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = GuidApiResponse.fromJS(resultData200);
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -9969,65 +10618,6 @@ export class TreatmentServiceProxy {
      * @param body (optional) 
      * @return Success
      */
-    continuePatient(patientId: string, body?: ContinuePatientTreatmentByAdminDto | undefined): Observable<BooleanApiResponse> {
-        let url_ = this.baseUrl + "/api/admin/patient/{patientId}/treatment/continue";
-        if (patientId === undefined || patientId === null)
-            throw new Error("The parameter 'patientId' must be defined.");
-        url_ = url_.replace("{patientId}", encodeURIComponent("" + patientId));
-        url_ = url_.replace(/[?&]$/, "");
-
-        const content_ = JSON.stringify(body);
-
-        let options_ : any = {
-            body: content_,
-            observe: "response",
-            responseType: "blob",
-            headers: new HttpHeaders({
-                "Content-Type": "application/json-patch+json",
-                "Accept": "application/json"
-            })
-        };
-
-        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processContinuePatient(response_);
-        })).pipe(_observableCatch((response_: any) => {
-            if (response_ instanceof HttpResponseBase) {
-                try {
-                    return this.processContinuePatient(response_ as any);
-                } catch (e) {
-                    return _observableThrow(e) as any as Observable<BooleanApiResponse>;
-                }
-            } else
-                return _observableThrow(response_) as any as Observable<BooleanApiResponse>;
-        }));
-    }
-
-    protected processContinuePatient(response: HttpResponseBase): Observable<BooleanApiResponse> {
-        const status = response.status;
-        const responseBlob =
-            response instanceof HttpResponse ? response.body :
-            (response as any).error instanceof Blob ? (response as any).error : undefined;
-
-        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
-        if (status === 200) {
-            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = BooleanApiResponse.fromJS(resultData200);
-            return _observableOf(result200);
-            }));
-        } else if (status !== 200 && status !== 204) {
-            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            }));
-        }
-        return _observableOf(null as any);
-    }
-
-    /**
-     * @param body (optional) 
-     * @return Success
-     */
     restartPatientTreatment(patientId: string, body?: RestartTreatmentByAdminDto | undefined): Observable<BooleanApiResponse> {
         let url_ = this.baseUrl + "/api/admin/patient/{patientId}/treatment/restart";
         if (patientId === undefined || patientId === null)
@@ -10087,7 +10677,7 @@ export class TreatmentServiceProxy {
      * @param body (optional) 
      * @return Success
      */
-    updateDeliveryAddresss(patientId: string, body?: UpdateDeliveryAddressDto | undefined): Observable<BooleanApiResponse> {
+    updateDeliveryAddresssPOST(patientId: string, body?: UpdateDeliveryAddressDetailsDto | undefined): Observable<BooleanApiResponse> {
         let url_ = this.baseUrl + "/api/admin/patient/{patientId}/treatment/DeliveryAddress";
         if (patientId === undefined || patientId === null)
             throw new Error("The parameter 'patientId' must be defined.");
@@ -10107,11 +10697,11 @@ export class TreatmentServiceProxy {
         };
 
         return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processUpdateDeliveryAddresss(response_);
+            return this.processUpdateDeliveryAddresssPOST(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processUpdateDeliveryAddresss(response_ as any);
+                    return this.processUpdateDeliveryAddresssPOST(response_ as any);
                 } catch (e) {
                     return _observableThrow(e) as any as Observable<BooleanApiResponse>;
                 }
@@ -10120,7 +10710,66 @@ export class TreatmentServiceProxy {
         }));
     }
 
-    protected processUpdateDeliveryAddresss(response: HttpResponseBase): Observable<BooleanApiResponse> {
+    protected processUpdateDeliveryAddresssPOST(response: HttpResponseBase): Observable<BooleanApiResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = BooleanApiResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    updateDeliveryAddresssPATCH(patientId: string, body?: Operation[] | undefined): Observable<BooleanApiResponse> {
+        let url_ = this.baseUrl + "/api/admin/patient/{patientId}/treatment/DeliveryAddress";
+        if (patientId === undefined || patientId === null)
+            throw new Error("The parameter 'patientId' must be defined.");
+        url_ = url_.replace("{patientId}", encodeURIComponent("" + patientId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json-patch+json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("patch", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processUpdateDeliveryAddresssPATCH(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processUpdateDeliveryAddresssPATCH(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<BooleanApiResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<BooleanApiResponse>;
+        }));
+    }
+
+    protected processUpdateDeliveryAddresssPATCH(response: HttpResponseBase): Observable<BooleanApiResponse> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -10904,73 +11553,6 @@ export interface IAddPrescriberClinicDto {
     notificationEmail: string | undefined;
 }
 
-export class Address implements IAddress {
-    readonly unitNumber!: string | undefined;
-    readonly addressLine1!: string | undefined;
-    readonly addressLine2!: string | undefined;
-    readonly city!: string | undefined;
-    state!: AddressState;
-    readonly postcode!: string | undefined;
-    readonly streetAddress!: string | undefined;
-
-    constructor(data?: IAddress) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            (<any>this).unitNumber = _data["unitNumber"];
-            (<any>this).addressLine1 = _data["addressLine1"];
-            (<any>this).addressLine2 = _data["addressLine2"];
-            (<any>this).city = _data["city"];
-            this.state = _data["state"];
-            (<any>this).postcode = _data["postcode"];
-            (<any>this).streetAddress = _data["streetAddress"];
-        }
-    }
-
-    static fromJS(data: any): Address {
-        data = typeof data === 'object' ? data : {};
-        let result = new Address();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["unitNumber"] = this.unitNumber;
-        data["addressLine1"] = this.addressLine1;
-        data["addressLine2"] = this.addressLine2;
-        data["city"] = this.city;
-        data["state"] = this.state;
-        data["postcode"] = this.postcode;
-        data["streetAddress"] = this.streetAddress;
-        return data;
-    }
-
-    clone(): Address {
-        const json = this.toJSON();
-        let result = new Address();
-        result.init(json);
-        return result;
-    }
-}
-
-export interface IAddress {
-    unitNumber: string | undefined;
-    addressLine1: string | undefined;
-    addressLine2: string | undefined;
-    city: string | undefined;
-    state: AddressState;
-    postcode: string | undefined;
-    streetAddress: string | undefined;
-}
-
 export class AddressDto implements IAddressDto {
     unitNumber!: string | undefined;
     addressLine1!: string | undefined;
@@ -11193,49 +11775,6 @@ export interface IAdverseEventModel {
     reportingMethod: ComplianceReportMethod;
 }
 
-export class AhpraNumber implements IAhpraNumber {
-    readonly value!: string | undefined;
-
-    constructor(data?: IAhpraNumber) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            (<any>this).value = _data["value"];
-        }
-    }
-
-    static fromJS(data: any): AhpraNumber {
-        data = typeof data === 'object' ? data : {};
-        let result = new AhpraNumber();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["value"] = this.value;
-        return data;
-    }
-
-    clone(): AhpraNumber {
-        const json = this.toJSON();
-        let result = new AhpraNumber();
-        result.init(json);
-        return result;
-    }
-}
-
-export interface IAhpraNumber {
-    value: string | undefined;
-}
-
 export class ApprovePharmacistDto implements IApprovePharmacistDto {
     pharmacistId!: string;
 
@@ -11426,57 +11965,6 @@ export class AssignTaskToLoggedInUserDto implements IAssignTaskToLoggedInUserDto
 
 export interface IAssignTaskToLoggedInUserDto {
     taskId: string;
-}
-
-export class BankAccount implements IBankAccount {
-    readonly accountName!: string | undefined;
-    readonly bsbNumber!: string | undefined;
-    readonly accountNumber!: string | undefined;
-
-    constructor(data?: IBankAccount) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            (<any>this).accountName = _data["accountName"];
-            (<any>this).bsbNumber = _data["bsbNumber"];
-            (<any>this).accountNumber = _data["accountNumber"];
-        }
-    }
-
-    static fromJS(data: any): BankAccount {
-        data = typeof data === 'object' ? data : {};
-        let result = new BankAccount();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["accountName"] = this.accountName;
-        data["bsbNumber"] = this.bsbNumber;
-        data["accountNumber"] = this.accountNumber;
-        return data;
-    }
-
-    clone(): BankAccount {
-        const json = this.toJSON();
-        let result = new BankAccount();
-        result.init(json);
-        return result;
-    }
-}
-
-export interface IBankAccount {
-    accountName: string | undefined;
-    bsbNumber: string | undefined;
-    accountNumber: string | undefined;
 }
 
 export class BooleanApiResponse implements IBooleanApiResponse {
@@ -11835,133 +12323,6 @@ export interface ICarerModelDto {
     email: string | undefined;
     phone: string | undefined;
     mobile: string | undefined;
-}
-
-export class Clinic implements IClinic {
-    id!: string;
-    readonly isDeleted!: boolean;
-    readonly deletedOnUtc!: Date | undefined;
-    readonly deletedBy!: string | undefined;
-    deletedReason!: DeletedReason;
-    readonly name!: string | undefined;
-    businessAddress!: Address;
-    postalAddress!: Address;
-    deliveryAddress!: Address;
-    coordinate!: Coordinate;
-    phone!: PhoneNumber;
-    email!: EmailAddress;
-    reportingState!: AddressState;
-    readonly businessNumber!: string | undefined;
-    readonly adminNotes!: string | undefined;
-    readonly createdOnUtc!: Date;
-    readonly createdBy!: string | undefined;
-    readonly lastModifiedOnUtc!: Date | undefined;
-    readonly modifiedBy!: string | undefined;
-    readonly prescriptions!: Prescription[] | undefined;
-
-    constructor(data?: IClinic) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            (<any>this).isDeleted = _data["isDeleted"];
-            (<any>this).deletedOnUtc = _data["deletedOnUtc"] ? new Date(_data["deletedOnUtc"].toString()) : <any>undefined;
-            (<any>this).deletedBy = _data["deletedBy"];
-            this.deletedReason = _data["deletedReason"];
-            (<any>this).name = _data["name"];
-            this.businessAddress = _data["businessAddress"] ? Address.fromJS(_data["businessAddress"]) : <any>undefined;
-            this.postalAddress = _data["postalAddress"] ? Address.fromJS(_data["postalAddress"]) : <any>undefined;
-            this.deliveryAddress = _data["deliveryAddress"] ? Address.fromJS(_data["deliveryAddress"]) : <any>undefined;
-            this.coordinate = _data["coordinate"] ? Coordinate.fromJS(_data["coordinate"]) : <any>undefined;
-            this.phone = _data["phone"] ? PhoneNumber.fromJS(_data["phone"]) : <any>undefined;
-            this.email = _data["email"] ? EmailAddress.fromJS(_data["email"]) : <any>undefined;
-            this.reportingState = _data["reportingState"];
-            (<any>this).businessNumber = _data["businessNumber"];
-            (<any>this).adminNotes = _data["adminNotes"];
-            (<any>this).createdOnUtc = _data["createdOnUtc"] ? new Date(_data["createdOnUtc"].toString()) : <any>undefined;
-            (<any>this).createdBy = _data["createdBy"];
-            (<any>this).lastModifiedOnUtc = _data["lastModifiedOnUtc"] ? new Date(_data["lastModifiedOnUtc"].toString()) : <any>undefined;
-            (<any>this).modifiedBy = _data["modifiedBy"];
-            if (Array.isArray(_data["prescriptions"])) {
-                (<any>this).prescriptions = [];
-                for (let item of _data["prescriptions"])
-                    (<any>this).prescriptions!.push(Prescription.fromJS(item));
-            }
-        }
-    }
-
-    static fromJS(data: any): Clinic {
-        data = typeof data === 'object' ? data : {};
-        let result = new Clinic();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["isDeleted"] = this.isDeleted;
-        data["deletedOnUtc"] = this.deletedOnUtc ? this.deletedOnUtc.toISOString() : <any>undefined;
-        data["deletedBy"] = this.deletedBy;
-        data["deletedReason"] = this.deletedReason;
-        data["name"] = this.name;
-        data["businessAddress"] = this.businessAddress ? this.businessAddress.toJSON() : <any>undefined;
-        data["postalAddress"] = this.postalAddress ? this.postalAddress.toJSON() : <any>undefined;
-        data["deliveryAddress"] = this.deliveryAddress ? this.deliveryAddress.toJSON() : <any>undefined;
-        data["coordinate"] = this.coordinate ? this.coordinate.toJSON() : <any>undefined;
-        data["phone"] = this.phone ? this.phone.toJSON() : <any>undefined;
-        data["email"] = this.email ? this.email.toJSON() : <any>undefined;
-        data["reportingState"] = this.reportingState;
-        data["businessNumber"] = this.businessNumber;
-        data["adminNotes"] = this.adminNotes;
-        data["createdOnUtc"] = this.createdOnUtc ? this.createdOnUtc.toISOString() : <any>undefined;
-        data["createdBy"] = this.createdBy;
-        data["lastModifiedOnUtc"] = this.lastModifiedOnUtc ? this.lastModifiedOnUtc.toISOString() : <any>undefined;
-        data["modifiedBy"] = this.modifiedBy;
-        if (Array.isArray(this.prescriptions)) {
-            data["prescriptions"] = [];
-            for (let item of this.prescriptions)
-                data["prescriptions"].push(item.toJSON());
-        }
-        return data;
-    }
-
-    clone(): Clinic {
-        const json = this.toJSON();
-        let result = new Clinic();
-        result.init(json);
-        return result;
-    }
-}
-
-export interface IClinic {
-    id: string;
-    isDeleted: boolean;
-    deletedOnUtc: Date | undefined;
-    deletedBy: string | undefined;
-    deletedReason: DeletedReason;
-    name: string | undefined;
-    businessAddress: Address;
-    postalAddress: Address;
-    deliveryAddress: Address;
-    coordinate: Coordinate;
-    phone: PhoneNumber;
-    email: EmailAddress;
-    reportingState: AddressState;
-    businessNumber: string | undefined;
-    adminNotes: string | undefined;
-    createdOnUtc: Date;
-    createdBy: string | undefined;
-    lastModifiedOnUtc: Date | undefined;
-    modifiedBy: string | undefined;
-    prescriptions: Prescription[] | undefined;
 }
 
 export class ClinicDto implements IClinicDto {
@@ -12410,16 +12771,16 @@ export enum ContactType {
     SystemOutbound = 3,
 }
 
-export class ContinuePatientTreatmentByAdminDto implements IContinuePatientTreatmentByAdminDto {
-    continuedOn!: Date;
-    continuationProvidedByMethod!: ContactMethod;
-    dosageId!: number;
-    requiresAdverseEventReport!: boolean;
-    eligibilityCriteriaOptions!: number[] | undefined;
-    repeats!: number;
-    prescriptionInstructions!: string | undefined;
+export class ContinuationEmailDto implements IContinuationEmailDto {
+    emailAddress!: string | undefined;
+    prescriberFirstName!: string | undefined;
+    prescriberLastName!: string | undefined;
+    patientFirstName!: string | undefined;
+    patientLastName!: string | undefined;
+    patientId!: string;
+    programId!: string;
 
-    constructor(data?: IContinuePatientTreatmentByAdminDto) {
+    constructor(data?: IContinuationEmailDto) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -12430,59 +12791,51 @@ export class ContinuePatientTreatmentByAdminDto implements IContinuePatientTreat
 
     init(_data?: any) {
         if (_data) {
-            this.continuedOn = _data["continuedOn"] ? new Date(_data["continuedOn"].toString()) : <any>undefined;
-            this.continuationProvidedByMethod = _data["continuationProvidedByMethod"];
-            this.dosageId = _data["dosageId"];
-            this.requiresAdverseEventReport = _data["requiresAdverseEventReport"];
-            if (Array.isArray(_data["eligibilityCriteriaOptions"])) {
-                this.eligibilityCriteriaOptions = [];
-                for (let item of _data["eligibilityCriteriaOptions"])
-                    this.eligibilityCriteriaOptions!.push(item);
-            }
-            this.repeats = _data["repeats"];
-            this.prescriptionInstructions = _data["prescriptionInstructions"];
+            this.emailAddress = _data["emailAddress"];
+            this.prescriberFirstName = _data["prescriberFirstName"];
+            this.prescriberLastName = _data["prescriberLastName"];
+            this.patientFirstName = _data["patientFirstName"];
+            this.patientLastName = _data["patientLastName"];
+            this.patientId = _data["patientId"];
+            this.programId = _data["programId"];
         }
     }
 
-    static fromJS(data: any): ContinuePatientTreatmentByAdminDto {
+    static fromJS(data: any): ContinuationEmailDto {
         data = typeof data === 'object' ? data : {};
-        let result = new ContinuePatientTreatmentByAdminDto();
+        let result = new ContinuationEmailDto();
         result.init(data);
         return result;
     }
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["continuedOn"] = this.continuedOn ? this.continuedOn.toISOString() : <any>undefined;
-        data["continuationProvidedByMethod"] = this.continuationProvidedByMethod;
-        data["dosageId"] = this.dosageId;
-        data["requiresAdverseEventReport"] = this.requiresAdverseEventReport;
-        if (Array.isArray(this.eligibilityCriteriaOptions)) {
-            data["eligibilityCriteriaOptions"] = [];
-            for (let item of this.eligibilityCriteriaOptions)
-                data["eligibilityCriteriaOptions"].push(item);
-        }
-        data["repeats"] = this.repeats;
-        data["prescriptionInstructions"] = this.prescriptionInstructions;
+        data["emailAddress"] = this.emailAddress;
+        data["prescriberFirstName"] = this.prescriberFirstName;
+        data["prescriberLastName"] = this.prescriberLastName;
+        data["patientFirstName"] = this.patientFirstName;
+        data["patientLastName"] = this.patientLastName;
+        data["patientId"] = this.patientId;
+        data["programId"] = this.programId;
         return data;
     }
 
-    clone(): ContinuePatientTreatmentByAdminDto {
+    clone(): ContinuationEmailDto {
         const json = this.toJSON();
-        let result = new ContinuePatientTreatmentByAdminDto();
+        let result = new ContinuationEmailDto();
         result.init(json);
         return result;
     }
 }
 
-export interface IContinuePatientTreatmentByAdminDto {
-    continuedOn: Date;
-    continuationProvidedByMethod: ContactMethod;
-    dosageId: number;
-    requiresAdverseEventReport: boolean;
-    eligibilityCriteriaOptions: number[] | undefined;
-    repeats: number;
-    prescriptionInstructions: string | undefined;
+export interface IContinuationEmailDto {
+    emailAddress: string | undefined;
+    prescriberFirstName: string | undefined;
+    prescriberLastName: string | undefined;
+    patientFirstName: string | undefined;
+    patientLastName: string | undefined;
+    patientId: string;
+    programId: string;
 }
 
 export class ContinuePatientWithAdverseEventReportDto implements IContinuePatientWithAdverseEventReportDto {
@@ -12646,53 +12999,6 @@ export interface IContinuePatientWithAdverseEventReportDto {
     entryDay: number | undefined;
     entryMonth: number | undefined;
     entryYear: number | undefined;
-}
-
-export class Coordinate implements ICoordinate {
-    readonly longitude!: number;
-    readonly latitude!: number;
-
-    constructor(data?: ICoordinate) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            (<any>this).longitude = _data["longitude"];
-            (<any>this).latitude = _data["latitude"];
-        }
-    }
-
-    static fromJS(data: any): Coordinate {
-        data = typeof data === 'object' ? data : {};
-        let result = new Coordinate();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["longitude"] = this.longitude;
-        data["latitude"] = this.latitude;
-        return data;
-    }
-
-    clone(): Coordinate {
-        const json = this.toJSON();
-        let result = new Coordinate();
-        result.init(json);
-        return result;
-    }
-}
-
-export interface ICoordinate {
-    longitude: number;
-    latitude: number;
 }
 
 export class CreateAdminContactLogDto implements ICreateAdminContactLogDto {
@@ -13473,65 +13779,6 @@ export enum CustomerType {
     ProgramAdministrator = 5,
 }
 
-export class DateOfBirth implements IDateOfBirth {
-    readonly day!: number;
-    readonly month!: number;
-    readonly year!: number;
-    readonly birthDate!: Date;
-    readonly age!: number;
-
-    constructor(data?: IDateOfBirth) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            (<any>this).day = _data["day"];
-            (<any>this).month = _data["month"];
-            (<any>this).year = _data["year"];
-            (<any>this).birthDate = _data["birthDate"] ? new Date(_data["birthDate"].toString()) : <any>undefined;
-            (<any>this).age = _data["age"];
-        }
-    }
-
-    static fromJS(data: any): DateOfBirth {
-        data = typeof data === 'object' ? data : {};
-        let result = new DateOfBirth();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["day"] = this.day;
-        data["month"] = this.month;
-        data["year"] = this.year;
-        data["birthDate"] = this.birthDate ? this.birthDate.toISOString() : <any>undefined;
-        data["age"] = this.age;
-        return data;
-    }
-
-    clone(): DateOfBirth {
-        const json = this.toJSON();
-        let result = new DateOfBirth();
-        result.init(json);
-        return result;
-    }
-}
-
-export interface IDateOfBirth {
-    day: number;
-    month: number;
-    year: number;
-    birthDate: Date;
-    age: number;
-}
-
 export class DateOnly implements IDateOnly {
     year!: number;
     month!: number;
@@ -13606,12 +13853,13 @@ export enum DayOfWeek {
     Saturday = 6,
 }
 
-/** 1 = RemovalRequested (Removal requested) 2 = RecordDuplicated (Record duplicated) 3 = EnteredInError (Entered in error) 4 = Archived (Archived) */
+/** 1 = RemovalRequested (Removal requested) 2 = RecordDuplicated (Record duplicated) 3 = EnteredInError (Entered in error) 4 = Archived (Archived) 5 = DeletedBySystem (Deleted by system) */
 export enum DeletedReason {
     RemovalRequested = 1,
     RecordDuplicated = 2,
     EnteredInError = 3,
     Archived = 4,
+    DeletedBySystem = 5,
 }
 
 /** 1 = PrivateAddress (Private address) 2 = BusinessAddress (Business address) */
@@ -13930,485 +14178,6 @@ export interface IDiscontinueWithAdverseEventForPatientDto {
     entryDay: number | undefined;
     entryMonth: number | undefined;
     entryYear: number | undefined;
-}
-
-export class DispensingRecord implements IDispensingRecord {
-    id!: string;
-    readonly isDeleted!: boolean;
-    readonly deletedOnUtc!: Date | undefined;
-    readonly deletedBy!: string | undefined;
-    deletedReason!: DeletedReason;
-    readonly portalProgramId!: string;
-    prescription!: Prescription;
-    prescriptionId!: string;
-    patient!: Patient;
-    readonly patientId!: string;
-    pharmacy!: Pharmacy;
-    pharmacyId!: string;
-    pharmacyAddress!: string | undefined;
-    pharmacist!: Pharmacist;
-    pharmacistId!: string | undefined;
-    pharmacistName!: string | undefined;
-    dosageDescription!: string | undefined;
-    dispensedOn!: Date | undefined;
-    viewedDate!: Date | undefined;
-    reviewStatus!: ReviewStatus;
-    readonly createdOnUtc!: Date;
-    readonly createdBy!: string | undefined;
-    readonly lastModifiedOnUtc!: Date | undefined;
-    readonly modifiedBy!: string | undefined;
-
-    constructor(data?: IDispensingRecord) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            (<any>this).isDeleted = _data["isDeleted"];
-            (<any>this).deletedOnUtc = _data["deletedOnUtc"] ? new Date(_data["deletedOnUtc"].toString()) : <any>undefined;
-            (<any>this).deletedBy = _data["deletedBy"];
-            this.deletedReason = _data["deletedReason"];
-            (<any>this).portalProgramId = _data["portalProgramId"];
-            this.prescription = _data["prescription"] ? Prescription.fromJS(_data["prescription"]) : <any>undefined;
-            this.prescriptionId = _data["prescriptionId"];
-            this.patient = _data["patient"] ? Patient.fromJS(_data["patient"]) : <any>undefined;
-            (<any>this).patientId = _data["patientId"];
-            this.pharmacy = _data["pharmacy"] ? Pharmacy.fromJS(_data["pharmacy"]) : <any>undefined;
-            this.pharmacyId = _data["pharmacyId"];
-            this.pharmacyAddress = _data["pharmacyAddress"];
-            this.pharmacist = _data["pharmacist"] ? Pharmacist.fromJS(_data["pharmacist"]) : <any>undefined;
-            this.pharmacistId = _data["pharmacistId"];
-            this.pharmacistName = _data["pharmacistName"];
-            this.dosageDescription = _data["dosageDescription"];
-            this.dispensedOn = _data["dispensedOn"] ? new Date(_data["dispensedOn"].toString()) : <any>undefined;
-            this.viewedDate = _data["viewedDate"] ? new Date(_data["viewedDate"].toString()) : <any>undefined;
-            this.reviewStatus = _data["reviewStatus"];
-            (<any>this).createdOnUtc = _data["createdOnUtc"] ? new Date(_data["createdOnUtc"].toString()) : <any>undefined;
-            (<any>this).createdBy = _data["createdBy"];
-            (<any>this).lastModifiedOnUtc = _data["lastModifiedOnUtc"] ? new Date(_data["lastModifiedOnUtc"].toString()) : <any>undefined;
-            (<any>this).modifiedBy = _data["modifiedBy"];
-        }
-    }
-
-    static fromJS(data: any): DispensingRecord {
-        data = typeof data === 'object' ? data : {};
-        let result = new DispensingRecord();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["isDeleted"] = this.isDeleted;
-        data["deletedOnUtc"] = this.deletedOnUtc ? this.deletedOnUtc.toISOString() : <any>undefined;
-        data["deletedBy"] = this.deletedBy;
-        data["deletedReason"] = this.deletedReason;
-        data["portalProgramId"] = this.portalProgramId;
-        data["prescription"] = this.prescription ? this.prescription.toJSON() : <any>undefined;
-        data["prescriptionId"] = this.prescriptionId;
-        data["patient"] = this.patient ? this.patient.toJSON() : <any>undefined;
-        data["patientId"] = this.patientId;
-        data["pharmacy"] = this.pharmacy ? this.pharmacy.toJSON() : <any>undefined;
-        data["pharmacyId"] = this.pharmacyId;
-        data["pharmacyAddress"] = this.pharmacyAddress;
-        data["pharmacist"] = this.pharmacist ? this.pharmacist.toJSON() : <any>undefined;
-        data["pharmacistId"] = this.pharmacistId;
-        data["pharmacistName"] = this.pharmacistName;
-        data["dosageDescription"] = this.dosageDescription;
-        data["dispensedOn"] = this.dispensedOn ? this.dispensedOn.toISOString() : <any>undefined;
-        data["viewedDate"] = this.viewedDate ? this.viewedDate.toISOString() : <any>undefined;
-        data["reviewStatus"] = this.reviewStatus;
-        data["createdOnUtc"] = this.createdOnUtc ? this.createdOnUtc.toISOString() : <any>undefined;
-        data["createdBy"] = this.createdBy;
-        data["lastModifiedOnUtc"] = this.lastModifiedOnUtc ? this.lastModifiedOnUtc.toISOString() : <any>undefined;
-        data["modifiedBy"] = this.modifiedBy;
-        return data;
-    }
-
-    clone(): DispensingRecord {
-        const json = this.toJSON();
-        let result = new DispensingRecord();
-        result.init(json);
-        return result;
-    }
-}
-
-export interface IDispensingRecord {
-    id: string;
-    isDeleted: boolean;
-    deletedOnUtc: Date | undefined;
-    deletedBy: string | undefined;
-    deletedReason: DeletedReason;
-    portalProgramId: string;
-    prescription: Prescription;
-    prescriptionId: string;
-    patient: Patient;
-    patientId: string;
-    pharmacy: Pharmacy;
-    pharmacyId: string;
-    pharmacyAddress: string | undefined;
-    pharmacist: Pharmacist;
-    pharmacistId: string | undefined;
-    pharmacistName: string | undefined;
-    dosageDescription: string | undefined;
-    dispensedOn: Date | undefined;
-    viewedDate: Date | undefined;
-    reviewStatus: ReviewStatus;
-    createdOnUtc: Date;
-    createdBy: string | undefined;
-    lastModifiedOnUtc: Date | undefined;
-    modifiedBy: string | undefined;
-}
-
-export class DispensingVerificationRecord implements IDispensingVerificationRecord {
-    id!: string;
-    readonly isDeleted!: boolean;
-    readonly deletedOnUtc!: Date | undefined;
-    readonly deletedBy!: string | undefined;
-    deletedReason!: DeletedReason;
-    readonly domainEvents!: DomainEventBase[] | undefined;
-    readonly portalProgramId!: string;
-    dispensedOn!: Date;
-    treatmentProfile!: TreatmentProfile;
-    treatmentProfileId!: string;
-    pharmacy!: Pharmacy;
-    pharmacyId!: string | undefined;
-    pharmacyAccountNumber!: string | undefined;
-    pharmacist!: Pharmacist;
-    pharmacistId!: string;
-    prescriber!: Prescriber;
-    prescriberId!: string | undefined;
-    medication!: Medication;
-    medicationId!: number;
-    dosage!: Dosage;
-    readonly dosageId!: number | undefined;
-    readonly packSize!: number | undefined;
-    treatmentCategory!: TreatmentCategory;
-    readonly riskAssessmentCarriedOut!: boolean | undefined;
-    readonly treatmentRisk!: string | undefined;
-    readonly verificationNumber!: string | undefined;
-    riskAssessmentOutcome!: RiskAssessmentOutcome;
-    readonly viewedDate!: Date | undefined;
-    readonly createdOnUtc!: Date;
-    readonly createdBy!: string | undefined;
-    readonly lastModifiedOnUtc!: Date | undefined;
-    readonly modifiedBy!: string | undefined;
-    readonly isCancelled!: boolean | undefined;
-    readonly cancelledOnUtc!: Date | undefined;
-    readonly cancelledBy!: string | undefined;
-    readonly cancellationRequestedBy!: string | undefined;
-    readonly cancelledReason!: string | undefined;
-
-    constructor(data?: IDispensingVerificationRecord) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            (<any>this).isDeleted = _data["isDeleted"];
-            (<any>this).deletedOnUtc = _data["deletedOnUtc"] ? new Date(_data["deletedOnUtc"].toString()) : <any>undefined;
-            (<any>this).deletedBy = _data["deletedBy"];
-            this.deletedReason = _data["deletedReason"];
-            if (Array.isArray(_data["domainEvents"])) {
-                (<any>this).domainEvents = [];
-                for (let item of _data["domainEvents"])
-                    (<any>this).domainEvents!.push(DomainEventBase.fromJS(item));
-            }
-            (<any>this).portalProgramId = _data["portalProgramId"];
-            this.dispensedOn = _data["dispensedOn"] ? new Date(_data["dispensedOn"].toString()) : <any>undefined;
-            this.treatmentProfile = _data["treatmentProfile"] ? TreatmentProfile.fromJS(_data["treatmentProfile"]) : <any>undefined;
-            this.treatmentProfileId = _data["treatmentProfileId"];
-            this.pharmacy = _data["pharmacy"] ? Pharmacy.fromJS(_data["pharmacy"]) : <any>undefined;
-            this.pharmacyId = _data["pharmacyId"];
-            this.pharmacyAccountNumber = _data["pharmacyAccountNumber"];
-            this.pharmacist = _data["pharmacist"] ? Pharmacist.fromJS(_data["pharmacist"]) : <any>undefined;
-            this.pharmacistId = _data["pharmacistId"];
-            this.prescriber = _data["prescriber"] ? Prescriber.fromJS(_data["prescriber"]) : <any>undefined;
-            this.prescriberId = _data["prescriberId"];
-            this.medication = _data["medication"] ? Medication.fromJS(_data["medication"]) : <any>undefined;
-            this.medicationId = _data["medicationId"];
-            this.dosage = _data["dosage"] ? Dosage.fromJS(_data["dosage"]) : <any>undefined;
-            (<any>this).dosageId = _data["dosageId"];
-            (<any>this).packSize = _data["packSize"];
-            this.treatmentCategory = _data["treatmentCategory"];
-            (<any>this).riskAssessmentCarriedOut = _data["riskAssessmentCarriedOut"];
-            (<any>this).treatmentRisk = _data["treatmentRisk"];
-            (<any>this).verificationNumber = _data["verificationNumber"];
-            this.riskAssessmentOutcome = _data["riskAssessmentOutcome"];
-            (<any>this).viewedDate = _data["viewedDate"] ? new Date(_data["viewedDate"].toString()) : <any>undefined;
-            (<any>this).createdOnUtc = _data["createdOnUtc"] ? new Date(_data["createdOnUtc"].toString()) : <any>undefined;
-            (<any>this).createdBy = _data["createdBy"];
-            (<any>this).lastModifiedOnUtc = _data["lastModifiedOnUtc"] ? new Date(_data["lastModifiedOnUtc"].toString()) : <any>undefined;
-            (<any>this).modifiedBy = _data["modifiedBy"];
-            (<any>this).isCancelled = _data["isCancelled"];
-            (<any>this).cancelledOnUtc = _data["cancelledOnUtc"] ? new Date(_data["cancelledOnUtc"].toString()) : <any>undefined;
-            (<any>this).cancelledBy = _data["cancelledBy"];
-            (<any>this).cancellationRequestedBy = _data["cancellationRequestedBy"];
-            (<any>this).cancelledReason = _data["cancelledReason"];
-        }
-    }
-
-    static fromJS(data: any): DispensingVerificationRecord {
-        data = typeof data === 'object' ? data : {};
-        let result = new DispensingVerificationRecord();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["isDeleted"] = this.isDeleted;
-        data["deletedOnUtc"] = this.deletedOnUtc ? this.deletedOnUtc.toISOString() : <any>undefined;
-        data["deletedBy"] = this.deletedBy;
-        data["deletedReason"] = this.deletedReason;
-        if (Array.isArray(this.domainEvents)) {
-            data["domainEvents"] = [];
-            for (let item of this.domainEvents)
-                data["domainEvents"].push(item.toJSON());
-        }
-        data["portalProgramId"] = this.portalProgramId;
-        data["dispensedOn"] = this.dispensedOn ? this.dispensedOn.toISOString() : <any>undefined;
-        data["treatmentProfile"] = this.treatmentProfile ? this.treatmentProfile.toJSON() : <any>undefined;
-        data["treatmentProfileId"] = this.treatmentProfileId;
-        data["pharmacy"] = this.pharmacy ? this.pharmacy.toJSON() : <any>undefined;
-        data["pharmacyId"] = this.pharmacyId;
-        data["pharmacyAccountNumber"] = this.pharmacyAccountNumber;
-        data["pharmacist"] = this.pharmacist ? this.pharmacist.toJSON() : <any>undefined;
-        data["pharmacistId"] = this.pharmacistId;
-        data["prescriber"] = this.prescriber ? this.prescriber.toJSON() : <any>undefined;
-        data["prescriberId"] = this.prescriberId;
-        data["medication"] = this.medication ? this.medication.toJSON() : <any>undefined;
-        data["medicationId"] = this.medicationId;
-        data["dosage"] = this.dosage ? this.dosage.toJSON() : <any>undefined;
-        data["dosageId"] = this.dosageId;
-        data["packSize"] = this.packSize;
-        data["treatmentCategory"] = this.treatmentCategory;
-        data["riskAssessmentCarriedOut"] = this.riskAssessmentCarriedOut;
-        data["treatmentRisk"] = this.treatmentRisk;
-        data["verificationNumber"] = this.verificationNumber;
-        data["riskAssessmentOutcome"] = this.riskAssessmentOutcome;
-        data["viewedDate"] = this.viewedDate ? this.viewedDate.toISOString() : <any>undefined;
-        data["createdOnUtc"] = this.createdOnUtc ? this.createdOnUtc.toISOString() : <any>undefined;
-        data["createdBy"] = this.createdBy;
-        data["lastModifiedOnUtc"] = this.lastModifiedOnUtc ? this.lastModifiedOnUtc.toISOString() : <any>undefined;
-        data["modifiedBy"] = this.modifiedBy;
-        data["isCancelled"] = this.isCancelled;
-        data["cancelledOnUtc"] = this.cancelledOnUtc ? this.cancelledOnUtc.toISOString() : <any>undefined;
-        data["cancelledBy"] = this.cancelledBy;
-        data["cancellationRequestedBy"] = this.cancellationRequestedBy;
-        data["cancelledReason"] = this.cancelledReason;
-        return data;
-    }
-
-    clone(): DispensingVerificationRecord {
-        const json = this.toJSON();
-        let result = new DispensingVerificationRecord();
-        result.init(json);
-        return result;
-    }
-}
-
-export interface IDispensingVerificationRecord {
-    id: string;
-    isDeleted: boolean;
-    deletedOnUtc: Date | undefined;
-    deletedBy: string | undefined;
-    deletedReason: DeletedReason;
-    domainEvents: DomainEventBase[] | undefined;
-    portalProgramId: string;
-    dispensedOn: Date;
-    treatmentProfile: TreatmentProfile;
-    treatmentProfileId: string;
-    pharmacy: Pharmacy;
-    pharmacyId: string | undefined;
-    pharmacyAccountNumber: string | undefined;
-    pharmacist: Pharmacist;
-    pharmacistId: string;
-    prescriber: Prescriber;
-    prescriberId: string | undefined;
-    medication: Medication;
-    medicationId: number;
-    dosage: Dosage;
-    dosageId: number | undefined;
-    packSize: number | undefined;
-    treatmentCategory: TreatmentCategory;
-    riskAssessmentCarriedOut: boolean | undefined;
-    treatmentRisk: string | undefined;
-    verificationNumber: string | undefined;
-    riskAssessmentOutcome: RiskAssessmentOutcome;
-    viewedDate: Date | undefined;
-    createdOnUtc: Date;
-    createdBy: string | undefined;
-    lastModifiedOnUtc: Date | undefined;
-    modifiedBy: string | undefined;
-    isCancelled: boolean | undefined;
-    cancelledOnUtc: Date | undefined;
-    cancelledBy: string | undefined;
-    cancellationRequestedBy: string | undefined;
-    cancelledReason: string | undefined;
-}
-
-export class DomainEventBase implements IDomainEventBase {
-    readonly dateOccurredOnUtc!: Date;
-    readonly programId!: string;
-    readonly actionedBy!: string | undefined;
-
-    constructor(data?: IDomainEventBase) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            (<any>this).dateOccurredOnUtc = _data["dateOccurredOnUtc"] ? new Date(_data["dateOccurredOnUtc"].toString()) : <any>undefined;
-            (<any>this).programId = _data["programId"];
-            (<any>this).actionedBy = _data["actionedBy"];
-        }
-    }
-
-    static fromJS(data: any): DomainEventBase {
-        data = typeof data === 'object' ? data : {};
-        let result = new DomainEventBase();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["dateOccurredOnUtc"] = this.dateOccurredOnUtc ? this.dateOccurredOnUtc.toISOString() : <any>undefined;
-        data["programId"] = this.programId;
-        data["actionedBy"] = this.actionedBy;
-        return data;
-    }
-
-    clone(): DomainEventBase {
-        const json = this.toJSON();
-        let result = new DomainEventBase();
-        result.init(json);
-        return result;
-    }
-}
-
-export interface IDomainEventBase {
-    dateOccurredOnUtc: Date;
-    programId: string;
-    actionedBy: string | undefined;
-}
-
-export class Dosage implements IDosage {
-    id!: number;
-    readonly isDeleted!: boolean;
-    readonly deletedOnUtc!: Date | undefined;
-    readonly deletedBy!: string | undefined;
-    deletedReason!: DeletedReason;
-    readonly portalProgramId!: string;
-    medication!: Medication;
-    readonly medicationId!: number | undefined;
-    strength!: string | undefined;
-    supplyDuration!: number;
-    durationType!: DurationType;
-    readonly indication!: string | undefined;
-    readonly dosageDescription!: string | undefined;
-
-    constructor(data?: IDosage) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            (<any>this).isDeleted = _data["isDeleted"];
-            (<any>this).deletedOnUtc = _data["deletedOnUtc"] ? new Date(_data["deletedOnUtc"].toString()) : <any>undefined;
-            (<any>this).deletedBy = _data["deletedBy"];
-            this.deletedReason = _data["deletedReason"];
-            (<any>this).portalProgramId = _data["portalProgramId"];
-            this.medication = _data["medication"] ? Medication.fromJS(_data["medication"]) : <any>undefined;
-            (<any>this).medicationId = _data["medicationId"];
-            this.strength = _data["strength"];
-            this.supplyDuration = _data["supplyDuration"];
-            this.durationType = _data["durationType"];
-            (<any>this).indication = _data["indication"];
-            (<any>this).dosageDescription = _data["dosageDescription"];
-        }
-    }
-
-    static fromJS(data: any): Dosage {
-        data = typeof data === 'object' ? data : {};
-        let result = new Dosage();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["isDeleted"] = this.isDeleted;
-        data["deletedOnUtc"] = this.deletedOnUtc ? this.deletedOnUtc.toISOString() : <any>undefined;
-        data["deletedBy"] = this.deletedBy;
-        data["deletedReason"] = this.deletedReason;
-        data["portalProgramId"] = this.portalProgramId;
-        data["medication"] = this.medication ? this.medication.toJSON() : <any>undefined;
-        data["medicationId"] = this.medicationId;
-        data["strength"] = this.strength;
-        data["supplyDuration"] = this.supplyDuration;
-        data["durationType"] = this.durationType;
-        data["indication"] = this.indication;
-        data["dosageDescription"] = this.dosageDescription;
-        return data;
-    }
-
-    clone(): Dosage {
-        const json = this.toJSON();
-        let result = new Dosage();
-        result.init(json);
-        return result;
-    }
-}
-
-export interface IDosage {
-    id: number;
-    isDeleted: boolean;
-    deletedOnUtc: Date | undefined;
-    deletedBy: string | undefined;
-    deletedReason: DeletedReason;
-    portalProgramId: string;
-    medication: Medication;
-    medicationId: number | undefined;
-    strength: string | undefined;
-    supplyDuration: number;
-    durationType: DurationType;
-    indication: string | undefined;
-    dosageDescription: string | undefined;
-}
-
-/** 1 = Days (Days) 2 = Weeks (Weeks) 3 = Months (Months) */
-export enum DurationType {
-    Days = 1,
-    Weeks = 2,
-    Months = 3,
 }
 
 export class EmailAddress implements IEmailAddress {
@@ -15632,7 +15401,6 @@ export class GetDispenseVerificationDetailsForEditingResponse implements IGetDis
     patientDateOfBirth!: Date | undefined;
     prescriberId!: string;
     prescriberName!: string | undefined;
-    pharmacy!: Pharmacy;
     pharmacyId!: string | undefined;
     pharmacyName!: string | undefined;
     pharmacyAccountNumber!: string | undefined;
@@ -15673,7 +15441,6 @@ export class GetDispenseVerificationDetailsForEditingResponse implements IGetDis
             this.patientDateOfBirth = _data["patientDateOfBirth"] ? new Date(_data["patientDateOfBirth"].toString()) : <any>undefined;
             this.prescriberId = _data["prescriberId"];
             this.prescriberName = _data["prescriberName"];
-            this.pharmacy = _data["pharmacy"] ? Pharmacy.fromJS(_data["pharmacy"]) : <any>undefined;
             this.pharmacyId = _data["pharmacyId"];
             this.pharmacyName = _data["pharmacyName"];
             this.pharmacyAccountNumber = _data["pharmacyAccountNumber"];
@@ -15714,7 +15481,6 @@ export class GetDispenseVerificationDetailsForEditingResponse implements IGetDis
         data["patientDateOfBirth"] = this.patientDateOfBirth ? this.patientDateOfBirth.toISOString() : <any>undefined;
         data["prescriberId"] = this.prescriberId;
         data["prescriberName"] = this.prescriberName;
-        data["pharmacy"] = this.pharmacy ? this.pharmacy.toJSON() : <any>undefined;
         data["pharmacyId"] = this.pharmacyId;
         data["pharmacyName"] = this.pharmacyName;
         data["pharmacyAccountNumber"] = this.pharmacyAccountNumber;
@@ -15755,7 +15521,6 @@ export interface IGetDispenseVerificationDetailsForEditingResponse {
     patientDateOfBirth: Date | undefined;
     prescriberId: string;
     prescriberName: string | undefined;
-    pharmacy: Pharmacy;
     pharmacyId: string | undefined;
     pharmacyName: string | undefined;
     pharmacyAccountNumber: string | undefined;
@@ -18032,6 +17797,8 @@ export class GetPagedPatientsByPrescriberResponse implements IGetPagedPatientsBy
     dateOfBirth!: Date;
     clinicName!: string | undefined;
     status!: TreatmentStatus;
+    evauationDueDate!: string | undefined;
+    reminderSentDate!: Date | undefined;
 
     constructor(data?: IGetPagedPatientsByPrescriberResponse) {
         if (data) {
@@ -18053,6 +17820,8 @@ export class GetPagedPatientsByPrescriberResponse implements IGetPagedPatientsBy
             this.dateOfBirth = _data["dateOfBirth"] ? new Date(_data["dateOfBirth"].toString()) : <any>undefined;
             this.clinicName = _data["clinicName"];
             this.status = _data["status"];
+            this.evauationDueDate = _data["evauationDueDate"];
+            this.reminderSentDate = _data["reminderSentDate"] ? new Date(_data["reminderSentDate"].toString()) : <any>undefined;
         }
     }
 
@@ -18074,6 +17843,8 @@ export class GetPagedPatientsByPrescriberResponse implements IGetPagedPatientsBy
         data["dateOfBirth"] = this.dateOfBirth ? this.dateOfBirth.toISOString() : <any>undefined;
         data["clinicName"] = this.clinicName;
         data["status"] = this.status;
+        data["evauationDueDate"] = this.evauationDueDate;
+        data["reminderSentDate"] = this.reminderSentDate ? this.reminderSentDate.toISOString() : <any>undefined;
         return data;
     }
 
@@ -18095,6 +17866,8 @@ export interface IGetPagedPatientsByPrescriberResponse {
     dateOfBirth: Date;
     clinicName: string | undefined;
     status: TreatmentStatus;
+    evauationDueDate: string | undefined;
+    reminderSentDate: Date | undefined;
 }
 
 export class GetPagedPatientsByPrescriberResponsePagedResultDto implements IGetPagedPatientsByPrescriberResponsePagedResultDto {
@@ -19584,7 +19357,7 @@ export class GetPatientInformationForEditingResponse implements IGetPatientInfor
     firstName!: string | undefined;
     lastName!: string | undefined;
     middleName!: string | undefined;
-    dateOfBirth!: Date;
+    dateOfBirth!: Date | undefined;
     gender!: Gender;
     email!: string | undefined;
     phone!: string | undefined;
@@ -19592,6 +19365,7 @@ export class GetPatientInformationForEditingResponse implements IGetPatientInfor
     medicareNumber!: string | undefined;
     nationalHealthIndex!: string | undefined;
     salesForceId!: string | undefined;
+    isPrivatePatient!: boolean | undefined;
     homeUnitNumber!: string | undefined;
     homeStreetAddress!: string | undefined;
     homeCity!: string | undefined;
@@ -19647,6 +19421,7 @@ export class GetPatientInformationForEditingResponse implements IGetPatientInfor
             this.medicareNumber = _data["medicareNumber"];
             this.nationalHealthIndex = _data["nationalHealthIndex"];
             this.salesForceId = _data["salesForceId"];
+            this.isPrivatePatient = _data["isPrivatePatient"];
             this.homeUnitNumber = _data["homeUnitNumber"];
             this.homeStreetAddress = _data["homeStreetAddress"];
             this.homeCity = _data["homeCity"];
@@ -19702,6 +19477,7 @@ export class GetPatientInformationForEditingResponse implements IGetPatientInfor
         data["medicareNumber"] = this.medicareNumber;
         data["nationalHealthIndex"] = this.nationalHealthIndex;
         data["salesForceId"] = this.salesForceId;
+        data["isPrivatePatient"] = this.isPrivatePatient;
         data["homeUnitNumber"] = this.homeUnitNumber;
         data["homeStreetAddress"] = this.homeStreetAddress;
         data["homeCity"] = this.homeCity;
@@ -19749,7 +19525,7 @@ export interface IGetPatientInformationForEditingResponse {
     firstName: string | undefined;
     lastName: string | undefined;
     middleName: string | undefined;
-    dateOfBirth: Date;
+    dateOfBirth: Date | undefined;
     gender: Gender;
     email: string | undefined;
     phone: string | undefined;
@@ -19757,6 +19533,7 @@ export interface IGetPatientInformationForEditingResponse {
     medicareNumber: string | undefined;
     nationalHealthIndex: string | undefined;
     salesForceId: string | undefined;
+    isPrivatePatient: boolean | undefined;
     homeUnitNumber: string | undefined;
     homeStreetAddress: string | undefined;
     homeCity: string | undefined;
@@ -21627,6 +21404,23 @@ export class GetPatientTreatmentProfileForAdminResponse implements IGetPatientTr
     canContinue!: boolean;
     canReapprove!: boolean;
     discontinuedDate!: Date | undefined;
+    programType!: ProgramType;
+    carerTitle!: Title;
+    carerFirstName!: string | undefined;
+    carerLastName!: string | undefined;
+    carerMiddleName!: string | undefined;
+    carerEmail!: string | undefined;
+    carerPhone!: string | undefined;
+    carerMobile!: string | undefined;
+    deliveryAddressType!: DeliveryAddressType;
+    deliveryBusinessName!: string | undefined;
+    deliverToName!: string | undefined;
+    deliveryUnitNumber!: string | undefined;
+    deliveryStreetAddress!: string | undefined;
+    deliveryCity!: string | undefined;
+    deliveryState!: AddressState;
+    deliveryPostCode!: string | undefined;
+    contactNumberForDelivery!: string | undefined;
 
     constructor(data?: IGetPatientTreatmentProfileForAdminResponse) {
         if (data) {
@@ -21666,6 +21460,23 @@ export class GetPatientTreatmentProfileForAdminResponse implements IGetPatientTr
             this.canContinue = _data["canContinue"];
             this.canReapprove = _data["canReapprove"];
             this.discontinuedDate = _data["discontinuedDate"] ? new Date(_data["discontinuedDate"].toString()) : <any>undefined;
+            this.programType = _data["programType"];
+            this.carerTitle = _data["carerTitle"];
+            this.carerFirstName = _data["carerFirstName"];
+            this.carerLastName = _data["carerLastName"];
+            this.carerMiddleName = _data["carerMiddleName"];
+            this.carerEmail = _data["carerEmail"];
+            this.carerPhone = _data["carerPhone"];
+            this.carerMobile = _data["carerMobile"];
+            this.deliveryAddressType = _data["deliveryAddressType"];
+            this.deliveryBusinessName = _data["deliveryBusinessName"];
+            this.deliverToName = _data["deliverToName"];
+            this.deliveryUnitNumber = _data["deliveryUnitNumber"];
+            this.deliveryStreetAddress = _data["deliveryStreetAddress"];
+            this.deliveryCity = _data["deliveryCity"];
+            this.deliveryState = _data["deliveryState"];
+            this.deliveryPostCode = _data["deliveryPostCode"];
+            this.contactNumberForDelivery = _data["contactNumberForDelivery"];
         }
     }
 
@@ -21705,6 +21516,23 @@ export class GetPatientTreatmentProfileForAdminResponse implements IGetPatientTr
         data["canContinue"] = this.canContinue;
         data["canReapprove"] = this.canReapprove;
         data["discontinuedDate"] = this.discontinuedDate ? this.discontinuedDate.toISOString() : <any>undefined;
+        data["programType"] = this.programType;
+        data["carerTitle"] = this.carerTitle;
+        data["carerFirstName"] = this.carerFirstName;
+        data["carerLastName"] = this.carerLastName;
+        data["carerMiddleName"] = this.carerMiddleName;
+        data["carerEmail"] = this.carerEmail;
+        data["carerPhone"] = this.carerPhone;
+        data["carerMobile"] = this.carerMobile;
+        data["deliveryAddressType"] = this.deliveryAddressType;
+        data["deliveryBusinessName"] = this.deliveryBusinessName;
+        data["deliverToName"] = this.deliverToName;
+        data["deliveryUnitNumber"] = this.deliveryUnitNumber;
+        data["deliveryStreetAddress"] = this.deliveryStreetAddress;
+        data["deliveryCity"] = this.deliveryCity;
+        data["deliveryState"] = this.deliveryState;
+        data["deliveryPostCode"] = this.deliveryPostCode;
+        data["contactNumberForDelivery"] = this.contactNumberForDelivery;
         return data;
     }
 
@@ -21744,6 +21572,23 @@ export interface IGetPatientTreatmentProfileForAdminResponse {
     canContinue: boolean;
     canReapprove: boolean;
     discontinuedDate: Date | undefined;
+    programType: ProgramType;
+    carerTitle: Title;
+    carerFirstName: string | undefined;
+    carerLastName: string | undefined;
+    carerMiddleName: string | undefined;
+    carerEmail: string | undefined;
+    carerPhone: string | undefined;
+    carerMobile: string | undefined;
+    deliveryAddressType: DeliveryAddressType;
+    deliveryBusinessName: string | undefined;
+    deliverToName: string | undefined;
+    deliveryUnitNumber: string | undefined;
+    deliveryStreetAddress: string | undefined;
+    deliveryCity: string | undefined;
+    deliveryState: AddressState;
+    deliveryPostCode: string | undefined;
+    contactNumberForDelivery: string | undefined;
 }
 
 export class GetPatientTreatmentProfileForAdminResponseApiResponse implements IGetPatientTreatmentProfileForAdminResponseApiResponse {
@@ -25069,6 +24914,57 @@ export interface IGetProgramMedicationInformationResponse {
     dosages: MedicationDoseResponse[] | undefined;
 }
 
+export class GetProgramMedicationInformationResponseApiResponse implements IGetProgramMedicationInformationResponseApiResponse {
+    isSuccess!: boolean;
+    resultObject!: GetProgramMedicationInformationResponse;
+    problemDetails!: ProblemDetails;
+
+    constructor(data?: IGetProgramMedicationInformationResponseApiResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.isSuccess = _data["isSuccess"];
+            this.resultObject = _data["resultObject"] ? GetProgramMedicationInformationResponse.fromJS(_data["resultObject"]) : <any>undefined;
+            this.problemDetails = _data["problemDetails"] ? ProblemDetails.fromJS(_data["problemDetails"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): GetProgramMedicationInformationResponseApiResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetProgramMedicationInformationResponseApiResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["isSuccess"] = this.isSuccess;
+        data["resultObject"] = this.resultObject ? this.resultObject.toJSON() : <any>undefined;
+        data["problemDetails"] = this.problemDetails ? this.problemDetails.toJSON() : <any>undefined;
+        return data;
+    }
+
+    clone(): GetProgramMedicationInformationResponseApiResponse {
+        const json = this.toJSON();
+        let result = new GetProgramMedicationInformationResponseApiResponse();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetProgramMedicationInformationResponseApiResponse {
+    isSuccess: boolean;
+    resultObject: GetProgramMedicationInformationResponse;
+    problemDetails: ProblemDetails;
+}
+
 export class GetProgramMedicationInformationResponseIEnumerableApiResponse implements IGetProgramMedicationInformationResponseIEnumerableApiResponse {
     isSuccess!: boolean;
     readonly resultObject!: GetProgramMedicationInformationResponse[] | undefined;
@@ -26431,6 +26327,61 @@ export interface IGuidApiResponse {
     problemDetails: ProblemDetails;
 }
 
+export class IDomainEvent implements IIDomainEvent {
+    dateOccurredOnUtc!: Date;
+    programId!: string;
+    tenantId!: string;
+    actionedBy!: string | undefined;
+
+    constructor(data?: IIDomainEvent) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.dateOccurredOnUtc = _data["dateOccurredOnUtc"] ? new Date(_data["dateOccurredOnUtc"].toString()) : <any>undefined;
+            this.programId = _data["programId"];
+            this.tenantId = _data["tenantId"];
+            this.actionedBy = _data["actionedBy"];
+        }
+    }
+
+    static fromJS(data: any): IDomainEvent {
+        data = typeof data === 'object' ? data : {};
+        let result = new IDomainEvent();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["dateOccurredOnUtc"] = this.dateOccurredOnUtc ? this.dateOccurredOnUtc.toISOString() : <any>undefined;
+        data["programId"] = this.programId;
+        data["tenantId"] = this.tenantId;
+        data["actionedBy"] = this.actionedBy;
+        return data;
+    }
+
+    clone(): IDomainEvent {
+        const json = this.toJSON();
+        let result = new IDomainEvent();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IIDomainEvent {
+    dateOccurredOnUtc: Date;
+    programId: string;
+    tenantId: string;
+    actionedBy: string | undefined;
+}
+
 export class Int32ApiResponse implements IInt32ApiResponse {
     isSuccess!: boolean;
     readonly resultObject!: number;
@@ -26538,101 +26489,6 @@ export interface IInvitePharmacistToRegisterDto {
     phone: string | undefined;
 }
 
-export class Medication implements IMedication {
-    id!: number;
-    readonly isDeleted!: boolean;
-    readonly deletedOnUtc!: Date | undefined;
-    readonly deletedBy!: string | undefined;
-    deletedReason!: DeletedReason;
-    readonly portalProgramId!: string;
-    productName!: string | undefined;
-    activeIngredient!: string | undefined;
-    readonly consumerInformation!: string | undefined;
-    readonly prescriberInformation!: string | undefined;
-    readonly administrationMethod!: string | undefined;
-    readonly dosages!: Dosage[] | undefined;
-
-    constructor(data?: IMedication) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            (<any>this).isDeleted = _data["isDeleted"];
-            (<any>this).deletedOnUtc = _data["deletedOnUtc"] ? new Date(_data["deletedOnUtc"].toString()) : <any>undefined;
-            (<any>this).deletedBy = _data["deletedBy"];
-            this.deletedReason = _data["deletedReason"];
-            (<any>this).portalProgramId = _data["portalProgramId"];
-            this.productName = _data["productName"];
-            this.activeIngredient = _data["activeIngredient"];
-            (<any>this).consumerInformation = _data["consumerInformation"];
-            (<any>this).prescriberInformation = _data["prescriberInformation"];
-            (<any>this).administrationMethod = _data["administrationMethod"];
-            if (Array.isArray(_data["dosages"])) {
-                (<any>this).dosages = [];
-                for (let item of _data["dosages"])
-                    (<any>this).dosages!.push(Dosage.fromJS(item));
-            }
-        }
-    }
-
-    static fromJS(data: any): Medication {
-        data = typeof data === 'object' ? data : {};
-        let result = new Medication();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["isDeleted"] = this.isDeleted;
-        data["deletedOnUtc"] = this.deletedOnUtc ? this.deletedOnUtc.toISOString() : <any>undefined;
-        data["deletedBy"] = this.deletedBy;
-        data["deletedReason"] = this.deletedReason;
-        data["portalProgramId"] = this.portalProgramId;
-        data["productName"] = this.productName;
-        data["activeIngredient"] = this.activeIngredient;
-        data["consumerInformation"] = this.consumerInformation;
-        data["prescriberInformation"] = this.prescriberInformation;
-        data["administrationMethod"] = this.administrationMethod;
-        if (Array.isArray(this.dosages)) {
-            data["dosages"] = [];
-            for (let item of this.dosages)
-                data["dosages"].push(item.toJSON());
-        }
-        return data;
-    }
-
-    clone(): Medication {
-        const json = this.toJSON();
-        let result = new Medication();
-        result.init(json);
-        return result;
-    }
-}
-
-export interface IMedication {
-    id: number;
-    isDeleted: boolean;
-    deletedOnUtc: Date | undefined;
-    deletedBy: string | undefined;
-    deletedReason: DeletedReason;
-    portalProgramId: string;
-    productName: string | undefined;
-    activeIngredient: string | undefined;
-    consumerInformation: string | undefined;
-    prescriberInformation: string | undefined;
-    administrationMethod: string | undefined;
-    dosages: Dosage[] | undefined;
-}
-
 export class MedicationDoseResponse implements IMedicationDoseResponse {
     id!: number;
     medicationId!: number | undefined;
@@ -26731,6 +26587,76 @@ export interface IMobileNumber {
     value: string | undefined;
 }
 
+export class Operation implements IOperation {
+    operationType!: OperationType;
+    path!: string | undefined;
+    op!: string | undefined;
+    from!: string | undefined;
+    value!: any | undefined;
+
+    constructor(data?: IOperation) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.operationType = _data["operationType"];
+            this.path = _data["path"];
+            this.op = _data["op"];
+            this.from = _data["from"];
+            this.value = _data["value"];
+        }
+    }
+
+    static fromJS(data: any): Operation {
+        data = typeof data === 'object' ? data : {};
+        let result = new Operation();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["operationType"] = this.operationType;
+        data["path"] = this.path;
+        data["op"] = this.op;
+        data["from"] = this.from;
+        data["value"] = this.value;
+        return data;
+    }
+
+    clone(): Operation {
+        const json = this.toJSON();
+        let result = new Operation();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IOperation {
+    operationType: OperationType;
+    path: string | undefined;
+    op: string | undefined;
+    from: string | undefined;
+    value: any | undefined;
+}
+
+/** 0 = Add 1 = Remove 2 = Replace 3 = Move 4 = Copy 5 = Test 6 = Invalid */
+export enum OperationType {
+    Add = 0,
+    Remove = 1,
+    Replace = 2,
+    Move = 3,
+    Copy = 4,
+    Test = 5,
+    Invalid = 6,
+}
+
 export class OrderItemModel implements IOrderItemModel {
     productId!: string | undefined;
     sku!: string | undefined;
@@ -26782,7 +26708,7 @@ export interface IOrderItemModel {
     quantity: number;
 }
 
-/** 1 = SubmittedForReview (Submitted for Review) 2 = ApprovedForProcessing (Approved for Processing) 3 = Processing (Processing) 4 = Dispatched (Dispatched) 5 = Delivered (Delivered) 6 = Cancelled (Cancelled) */
+/** 1 = SubmittedForReview (Submitted for Review) 2 = ApprovedForProcessing (Approved for Processing) 3 = Processing (Processing) 4 = Dispatched (Dispatched) 5 = Delivered (Delivered) 6 = Cancelled (Cancelled) 7 = OnHoldPendingAction (On hold pending action) */
 export enum OrderStatus {
     SubmittedForReview = 1,
     ApprovedForProcessing = 2,
@@ -26790,133 +26716,7 @@ export enum OrderStatus {
     Dispatched = 4,
     Delivered = 5,
     Cancelled = 6,
-}
-
-export class Patient implements IPatient {
-    id!: string;
-    readonly isDeleted!: boolean;
-    readonly deletedOnUtc!: Date | undefined;
-    readonly deletedBy!: string | undefined;
-    deletedReason!: DeletedReason;
-    title!: Title;
-    address!: Address;
-    email!: EmailAddress;
-    phone!: PhoneNumber;
-    mobile!: MobileNumber;
-    patientStatus!: PatientStatus;
-    name!: PersonName;
-    dateOfBirth!: DateOfBirth;
-    gender!: Gender;
-    readonly medicareNumber!: string | undefined;
-    readonly nationalHealthIndex!: string | undefined;
-    readonly userId!: string | undefined;
-    readonly requiresSupportProgramResourceAccess!: boolean | undefined;
-    readonly supportProgramResourceAccessCode!: string | undefined;
-    readonly treatmentProfiles!: TreatmentProfile[] | undefined;
-
-    constructor(data?: IPatient) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            (<any>this).isDeleted = _data["isDeleted"];
-            (<any>this).deletedOnUtc = _data["deletedOnUtc"] ? new Date(_data["deletedOnUtc"].toString()) : <any>undefined;
-            (<any>this).deletedBy = _data["deletedBy"];
-            this.deletedReason = _data["deletedReason"];
-            this.title = _data["title"];
-            this.address = _data["address"] ? Address.fromJS(_data["address"]) : <any>undefined;
-            this.email = _data["email"] ? EmailAddress.fromJS(_data["email"]) : <any>undefined;
-            this.phone = _data["phone"] ? PhoneNumber.fromJS(_data["phone"]) : <any>undefined;
-            this.mobile = _data["mobile"] ? MobileNumber.fromJS(_data["mobile"]) : <any>undefined;
-            this.patientStatus = _data["patientStatus"];
-            this.name = _data["name"] ? PersonName.fromJS(_data["name"]) : <any>undefined;
-            this.dateOfBirth = _data["dateOfBirth"] ? DateOfBirth.fromJS(_data["dateOfBirth"]) : <any>undefined;
-            this.gender = _data["gender"];
-            (<any>this).medicareNumber = _data["medicareNumber"];
-            (<any>this).nationalHealthIndex = _data["nationalHealthIndex"];
-            (<any>this).userId = _data["userId"];
-            (<any>this).requiresSupportProgramResourceAccess = _data["requiresSupportProgramResourceAccess"];
-            (<any>this).supportProgramResourceAccessCode = _data["supportProgramResourceAccessCode"];
-            if (Array.isArray(_data["treatmentProfiles"])) {
-                (<any>this).treatmentProfiles = [];
-                for (let item of _data["treatmentProfiles"])
-                    (<any>this).treatmentProfiles!.push(TreatmentProfile.fromJS(item));
-            }
-        }
-    }
-
-    static fromJS(data: any): Patient {
-        data = typeof data === 'object' ? data : {};
-        let result = new Patient();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["isDeleted"] = this.isDeleted;
-        data["deletedOnUtc"] = this.deletedOnUtc ? this.deletedOnUtc.toISOString() : <any>undefined;
-        data["deletedBy"] = this.deletedBy;
-        data["deletedReason"] = this.deletedReason;
-        data["title"] = this.title;
-        data["address"] = this.address ? this.address.toJSON() : <any>undefined;
-        data["email"] = this.email ? this.email.toJSON() : <any>undefined;
-        data["phone"] = this.phone ? this.phone.toJSON() : <any>undefined;
-        data["mobile"] = this.mobile ? this.mobile.toJSON() : <any>undefined;
-        data["patientStatus"] = this.patientStatus;
-        data["name"] = this.name ? this.name.toJSON() : <any>undefined;
-        data["dateOfBirth"] = this.dateOfBirth ? this.dateOfBirth.toJSON() : <any>undefined;
-        data["gender"] = this.gender;
-        data["medicareNumber"] = this.medicareNumber;
-        data["nationalHealthIndex"] = this.nationalHealthIndex;
-        data["userId"] = this.userId;
-        data["requiresSupportProgramResourceAccess"] = this.requiresSupportProgramResourceAccess;
-        data["supportProgramResourceAccessCode"] = this.supportProgramResourceAccessCode;
-        if (Array.isArray(this.treatmentProfiles)) {
-            data["treatmentProfiles"] = [];
-            for (let item of this.treatmentProfiles)
-                data["treatmentProfiles"].push(item.toJSON());
-        }
-        return data;
-    }
-
-    clone(): Patient {
-        const json = this.toJSON();
-        let result = new Patient();
-        result.init(json);
-        return result;
-    }
-}
-
-export interface IPatient {
-    id: string;
-    isDeleted: boolean;
-    deletedOnUtc: Date | undefined;
-    deletedBy: string | undefined;
-    deletedReason: DeletedReason;
-    title: Title;
-    address: Address;
-    email: EmailAddress;
-    phone: PhoneNumber;
-    mobile: MobileNumber;
-    patientStatus: PatientStatus;
-    name: PersonName;
-    dateOfBirth: DateOfBirth;
-    gender: Gender;
-    medicareNumber: string | undefined;
-    nationalHealthIndex: string | undefined;
-    userId: string | undefined;
-    requiresSupportProgramResourceAccess: boolean | undefined;
-    supportProgramResourceAccessCode: string | undefined;
-    treatmentProfiles: TreatmentProfile[] | undefined;
+    OnHoldPendingAction = 7,
 }
 
 export class PatientDto implements IPatientDto {
@@ -27105,15 +26905,6 @@ export interface IPatientModelDto {
     gender: Gender;
 }
 
-/** 1 = ApprovalRequired (Approval required) 2 = Approved (Approved) 3 = Inactive (Inactive) 4 = Reactivated (Reacivated) 5 = Archived (Archived) */
-export enum PatientStatus {
-    ApprovalRequired = 1,
-    Approved = 2,
-    Inactive = 3,
-    Reactivated = 4,
-    Archived = 5,
-}
-
 export class PersonName implements IPersonName {
     firstName!: string | undefined;
     middleName!: string | undefined;
@@ -27167,97 +26958,6 @@ export interface IPersonName {
     middleName: string | undefined;
     lastName: string | undefined;
     name: string | undefined;
-}
-
-export class Pharmacist implements IPharmacist {
-    id!: string;
-    readonly isDeleted!: boolean;
-    readonly deletedOnUtc!: Date | undefined;
-    readonly deletedBy!: string | undefined;
-    deletedReason!: DeletedReason;
-    title!: Title;
-    name!: PersonName;
-    email!: EmailAddress;
-    ahpraNumber!: AhpraNumber;
-    phone!: PhoneNumber;
-    readonly dispensingRecords!: DispensingRecord[] | undefined;
-
-    constructor(data?: IPharmacist) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            (<any>this).isDeleted = _data["isDeleted"];
-            (<any>this).deletedOnUtc = _data["deletedOnUtc"] ? new Date(_data["deletedOnUtc"].toString()) : <any>undefined;
-            (<any>this).deletedBy = _data["deletedBy"];
-            this.deletedReason = _data["deletedReason"];
-            this.title = _data["title"];
-            this.name = _data["name"] ? PersonName.fromJS(_data["name"]) : <any>undefined;
-            this.email = _data["email"] ? EmailAddress.fromJS(_data["email"]) : <any>undefined;
-            this.ahpraNumber = _data["ahpraNumber"] ? AhpraNumber.fromJS(_data["ahpraNumber"]) : <any>undefined;
-            this.phone = _data["phone"] ? PhoneNumber.fromJS(_data["phone"]) : <any>undefined;
-            if (Array.isArray(_data["dispensingRecords"])) {
-                (<any>this).dispensingRecords = [];
-                for (let item of _data["dispensingRecords"])
-                    (<any>this).dispensingRecords!.push(DispensingRecord.fromJS(item));
-            }
-        }
-    }
-
-    static fromJS(data: any): Pharmacist {
-        data = typeof data === 'object' ? data : {};
-        let result = new Pharmacist();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["isDeleted"] = this.isDeleted;
-        data["deletedOnUtc"] = this.deletedOnUtc ? this.deletedOnUtc.toISOString() : <any>undefined;
-        data["deletedBy"] = this.deletedBy;
-        data["deletedReason"] = this.deletedReason;
-        data["title"] = this.title;
-        data["name"] = this.name ? this.name.toJSON() : <any>undefined;
-        data["email"] = this.email ? this.email.toJSON() : <any>undefined;
-        data["ahpraNumber"] = this.ahpraNumber ? this.ahpraNumber.toJSON() : <any>undefined;
-        data["phone"] = this.phone ? this.phone.toJSON() : <any>undefined;
-        if (Array.isArray(this.dispensingRecords)) {
-            data["dispensingRecords"] = [];
-            for (let item of this.dispensingRecords)
-                data["dispensingRecords"].push(item.toJSON());
-        }
-        return data;
-    }
-
-    clone(): Pharmacist {
-        const json = this.toJSON();
-        let result = new Pharmacist();
-        result.init(json);
-        return result;
-    }
-}
-
-export interface IPharmacist {
-    id: string;
-    isDeleted: boolean;
-    deletedOnUtc: Date | undefined;
-    deletedBy: string | undefined;
-    deletedReason: DeletedReason;
-    title: Title;
-    name: PersonName;
-    email: EmailAddress;
-    ahpraNumber: AhpraNumber;
-    phone: PhoneNumber;
-    dispensingRecords: DispensingRecord[] | undefined;
 }
 
 export class PharmacistProgramInviteResponse implements IPharmacistProgramInviteResponse {
@@ -27376,137 +27076,6 @@ export interface IPharmacistProgramInviteResponseApiResponse {
     isSuccess: boolean;
     resultObject: PharmacistProgramInviteResponse;
     problemDetails: ProblemDetails;
-}
-
-export class Pharmacy implements IPharmacy {
-    id!: string;
-    readonly isDeleted!: boolean;
-    readonly deletedOnUtc!: Date | undefined;
-    readonly deletedBy!: string | undefined;
-    deletedReason!: DeletedReason;
-    readonly name!: string | undefined;
-    businessAddress!: Address;
-    phone!: PhoneNumber;
-    email!: EmailAddress;
-    readonly createdOnUtc!: Date;
-    readonly createdBy!: string | undefined;
-    readonly lastModifiedOnUtc!: Date | undefined;
-    readonly modifiedBy!: string | undefined;
-    bankAccount!: BankAccount;
-    programParticipationStatus!: ProgramParticipationStatus;
-    readonly participationConsentConfirmedOnUtc!: Date | undefined;
-    readonly participationConsentGrantedBy!: string | undefined;
-    readonly dispensingRecords!: DispensingRecord[] | undefined;
-    readonly treatmentProfiles!: TreatmentProfile[] | undefined;
-
-    constructor(data?: IPharmacy) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            (<any>this).isDeleted = _data["isDeleted"];
-            (<any>this).deletedOnUtc = _data["deletedOnUtc"] ? new Date(_data["deletedOnUtc"].toString()) : <any>undefined;
-            (<any>this).deletedBy = _data["deletedBy"];
-            this.deletedReason = _data["deletedReason"];
-            (<any>this).name = _data["name"];
-            this.businessAddress = _data["businessAddress"] ? Address.fromJS(_data["businessAddress"]) : <any>undefined;
-            this.phone = _data["phone"] ? PhoneNumber.fromJS(_data["phone"]) : <any>undefined;
-            this.email = _data["email"] ? EmailAddress.fromJS(_data["email"]) : <any>undefined;
-            (<any>this).createdOnUtc = _data["createdOnUtc"] ? new Date(_data["createdOnUtc"].toString()) : <any>undefined;
-            (<any>this).createdBy = _data["createdBy"];
-            (<any>this).lastModifiedOnUtc = _data["lastModifiedOnUtc"] ? new Date(_data["lastModifiedOnUtc"].toString()) : <any>undefined;
-            (<any>this).modifiedBy = _data["modifiedBy"];
-            this.bankAccount = _data["bankAccount"] ? BankAccount.fromJS(_data["bankAccount"]) : <any>undefined;
-            this.programParticipationStatus = _data["programParticipationStatus"];
-            (<any>this).participationConsentConfirmedOnUtc = _data["participationConsentConfirmedOnUtc"] ? new Date(_data["participationConsentConfirmedOnUtc"].toString()) : <any>undefined;
-            (<any>this).participationConsentGrantedBy = _data["participationConsentGrantedBy"];
-            if (Array.isArray(_data["dispensingRecords"])) {
-                (<any>this).dispensingRecords = [];
-                for (let item of _data["dispensingRecords"])
-                    (<any>this).dispensingRecords!.push(DispensingRecord.fromJS(item));
-            }
-            if (Array.isArray(_data["treatmentProfiles"])) {
-                (<any>this).treatmentProfiles = [];
-                for (let item of _data["treatmentProfiles"])
-                    (<any>this).treatmentProfiles!.push(TreatmentProfile.fromJS(item));
-            }
-        }
-    }
-
-    static fromJS(data: any): Pharmacy {
-        data = typeof data === 'object' ? data : {};
-        let result = new Pharmacy();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["isDeleted"] = this.isDeleted;
-        data["deletedOnUtc"] = this.deletedOnUtc ? this.deletedOnUtc.toISOString() : <any>undefined;
-        data["deletedBy"] = this.deletedBy;
-        data["deletedReason"] = this.deletedReason;
-        data["name"] = this.name;
-        data["businessAddress"] = this.businessAddress ? this.businessAddress.toJSON() : <any>undefined;
-        data["phone"] = this.phone ? this.phone.toJSON() : <any>undefined;
-        data["email"] = this.email ? this.email.toJSON() : <any>undefined;
-        data["createdOnUtc"] = this.createdOnUtc ? this.createdOnUtc.toISOString() : <any>undefined;
-        data["createdBy"] = this.createdBy;
-        data["lastModifiedOnUtc"] = this.lastModifiedOnUtc ? this.lastModifiedOnUtc.toISOString() : <any>undefined;
-        data["modifiedBy"] = this.modifiedBy;
-        data["bankAccount"] = this.bankAccount ? this.bankAccount.toJSON() : <any>undefined;
-        data["programParticipationStatus"] = this.programParticipationStatus;
-        data["participationConsentConfirmedOnUtc"] = this.participationConsentConfirmedOnUtc ? this.participationConsentConfirmedOnUtc.toISOString() : <any>undefined;
-        data["participationConsentGrantedBy"] = this.participationConsentGrantedBy;
-        if (Array.isArray(this.dispensingRecords)) {
-            data["dispensingRecords"] = [];
-            for (let item of this.dispensingRecords)
-                data["dispensingRecords"].push(item.toJSON());
-        }
-        if (Array.isArray(this.treatmentProfiles)) {
-            data["treatmentProfiles"] = [];
-            for (let item of this.treatmentProfiles)
-                data["treatmentProfiles"].push(item.toJSON());
-        }
-        return data;
-    }
-
-    clone(): Pharmacy {
-        const json = this.toJSON();
-        let result = new Pharmacy();
-        result.init(json);
-        return result;
-    }
-}
-
-export interface IPharmacy {
-    id: string;
-    isDeleted: boolean;
-    deletedOnUtc: Date | undefined;
-    deletedBy: string | undefined;
-    deletedReason: DeletedReason;
-    name: string | undefined;
-    businessAddress: Address;
-    phone: PhoneNumber;
-    email: EmailAddress;
-    createdOnUtc: Date;
-    createdBy: string | undefined;
-    lastModifiedOnUtc: Date | undefined;
-    modifiedBy: string | undefined;
-    bankAccount: BankAccount;
-    programParticipationStatus: ProgramParticipationStatus;
-    participationConsentConfirmedOnUtc: Date | undefined;
-    participationConsentGrantedBy: string | undefined;
-    dispensingRecords: DispensingRecord[] | undefined;
-    treatmentProfiles: TreatmentProfile[] | undefined;
 }
 
 export class PharmacyAccountDto implements IPharmacyAccountDto {
@@ -27756,49 +27325,6 @@ export interface IPhoneContactModel {
     end: string | undefined;
 }
 
-export class PhoneNumber implements IPhoneNumber {
-    readonly value!: string | undefined;
-
-    constructor(data?: IPhoneNumber) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            (<any>this).value = _data["value"];
-        }
-    }
-
-    static fromJS(data: any): PhoneNumber {
-        data = typeof data === 'object' ? data : {};
-        let result = new PhoneNumber();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["value"] = this.value;
-        return data;
-    }
-
-    clone(): PhoneNumber {
-        const json = this.toJSON();
-        let result = new PhoneNumber();
-        result.init(json);
-        return result;
-    }
-}
-
-export interface IPhoneNumber {
-    value: string | undefined;
-}
-
 export class PreEnrolPatientForPrescriberDto implements IPreEnrolPatientForPrescriberDto {
     prescriberId!: string;
     registrationMethod!: RegistrationMethod;
@@ -27912,288 +27438,6 @@ export enum PreferredContactMethod {
     Mobile = 2,
     Email = 3,
     Any = 4,
-}
-
-export class Prescriber implements IPrescriber {
-    id!: string;
-    readonly isDeleted!: boolean;
-    readonly deletedOnUtc!: Date | undefined;
-    readonly deletedBy!: string | undefined;
-    deletedReason!: DeletedReason;
-    title!: Title;
-    name!: PersonName;
-    ahpraNumber!: AhpraNumber;
-    email!: EmailAddress;
-    speciality!: Specialty;
-    phone!: PhoneNumber;
-    mobile!: MobileNumber;
-    specialityOther!: string | undefined;
-    prescriberNumber!: string | undefined;
-    readonly prescriptions!: Prescription[] | undefined;
-    readonly treatmentProfiles!: TreatmentProfile[] | undefined;
-
-    constructor(data?: IPrescriber) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            (<any>this).isDeleted = _data["isDeleted"];
-            (<any>this).deletedOnUtc = _data["deletedOnUtc"] ? new Date(_data["deletedOnUtc"].toString()) : <any>undefined;
-            (<any>this).deletedBy = _data["deletedBy"];
-            this.deletedReason = _data["deletedReason"];
-            this.title = _data["title"];
-            this.name = _data["name"] ? PersonName.fromJS(_data["name"]) : <any>undefined;
-            this.ahpraNumber = _data["ahpraNumber"] ? AhpraNumber.fromJS(_data["ahpraNumber"]) : <any>undefined;
-            this.email = _data["email"] ? EmailAddress.fromJS(_data["email"]) : <any>undefined;
-            this.speciality = _data["speciality"];
-            this.phone = _data["phone"] ? PhoneNumber.fromJS(_data["phone"]) : <any>undefined;
-            this.mobile = _data["mobile"] ? MobileNumber.fromJS(_data["mobile"]) : <any>undefined;
-            this.specialityOther = _data["specialityOther"];
-            this.prescriberNumber = _data["prescriberNumber"];
-            if (Array.isArray(_data["prescriptions"])) {
-                (<any>this).prescriptions = [];
-                for (let item of _data["prescriptions"])
-                    (<any>this).prescriptions!.push(Prescription.fromJS(item));
-            }
-            if (Array.isArray(_data["treatmentProfiles"])) {
-                (<any>this).treatmentProfiles = [];
-                for (let item of _data["treatmentProfiles"])
-                    (<any>this).treatmentProfiles!.push(TreatmentProfile.fromJS(item));
-            }
-        }
-    }
-
-    static fromJS(data: any): Prescriber {
-        data = typeof data === 'object' ? data : {};
-        let result = new Prescriber();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["isDeleted"] = this.isDeleted;
-        data["deletedOnUtc"] = this.deletedOnUtc ? this.deletedOnUtc.toISOString() : <any>undefined;
-        data["deletedBy"] = this.deletedBy;
-        data["deletedReason"] = this.deletedReason;
-        data["title"] = this.title;
-        data["name"] = this.name ? this.name.toJSON() : <any>undefined;
-        data["ahpraNumber"] = this.ahpraNumber ? this.ahpraNumber.toJSON() : <any>undefined;
-        data["email"] = this.email ? this.email.toJSON() : <any>undefined;
-        data["speciality"] = this.speciality;
-        data["phone"] = this.phone ? this.phone.toJSON() : <any>undefined;
-        data["mobile"] = this.mobile ? this.mobile.toJSON() : <any>undefined;
-        data["specialityOther"] = this.specialityOther;
-        data["prescriberNumber"] = this.prescriberNumber;
-        if (Array.isArray(this.prescriptions)) {
-            data["prescriptions"] = [];
-            for (let item of this.prescriptions)
-                data["prescriptions"].push(item.toJSON());
-        }
-        if (Array.isArray(this.treatmentProfiles)) {
-            data["treatmentProfiles"] = [];
-            for (let item of this.treatmentProfiles)
-                data["treatmentProfiles"].push(item.toJSON());
-        }
-        return data;
-    }
-
-    clone(): Prescriber {
-        const json = this.toJSON();
-        let result = new Prescriber();
-        result.init(json);
-        return result;
-    }
-}
-
-export interface IPrescriber {
-    id: string;
-    isDeleted: boolean;
-    deletedOnUtc: Date | undefined;
-    deletedBy: string | undefined;
-    deletedReason: DeletedReason;
-    title: Title;
-    name: PersonName;
-    ahpraNumber: AhpraNumber;
-    email: EmailAddress;
-    speciality: Specialty;
-    phone: PhoneNumber;
-    mobile: MobileNumber;
-    specialityOther: string | undefined;
-    prescriberNumber: string | undefined;
-    prescriptions: Prescription[] | undefined;
-    treatmentProfiles: TreatmentProfile[] | undefined;
-}
-
-export class Prescription implements IPrescription {
-    id!: string;
-    readonly isDeleted!: boolean;
-    readonly deletedOnUtc!: Date | undefined;
-    readonly deletedBy!: string | undefined;
-    deletedReason!: DeletedReason;
-    readonly domainEvents!: DomainEventBase[] | undefined;
-    readonly portalProgramId!: string;
-    treatmentProfile!: TreatmentProfile;
-    treatmentProfileId!: string;
-    readonly isFilled!: boolean;
-    readonly issuedOnUtc!: Date;
-    readonly prescriptionDate!: Date | undefined;
-    readonly completedOn!: Date | undefined;
-    expiryDate!: DateOnly;
-    readonly dispensingRecords!: DispensingRecord[] | undefined;
-    dosage!: Dosage;
-    dosageId!: number;
-    prescriber!: Prescriber;
-    prescriberId!: string;
-    homeDeliveryAddress!: Address;
-    pharmacy!: Pharmacy;
-    readonly pharmacyId!: string | undefined;
-    clinic!: Clinic;
-    clinicId!: string | undefined;
-    instructions!: string | undefined;
-    repeats!: number;
-    readonly completedRepeats!: number;
-
-    constructor(data?: IPrescription) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            (<any>this).isDeleted = _data["isDeleted"];
-            (<any>this).deletedOnUtc = _data["deletedOnUtc"] ? new Date(_data["deletedOnUtc"].toString()) : <any>undefined;
-            (<any>this).deletedBy = _data["deletedBy"];
-            this.deletedReason = _data["deletedReason"];
-            if (Array.isArray(_data["domainEvents"])) {
-                (<any>this).domainEvents = [];
-                for (let item of _data["domainEvents"])
-                    (<any>this).domainEvents!.push(DomainEventBase.fromJS(item));
-            }
-            (<any>this).portalProgramId = _data["portalProgramId"];
-            this.treatmentProfile = _data["treatmentProfile"] ? TreatmentProfile.fromJS(_data["treatmentProfile"]) : <any>undefined;
-            this.treatmentProfileId = _data["treatmentProfileId"];
-            (<any>this).isFilled = _data["isFilled"];
-            (<any>this).issuedOnUtc = _data["issuedOnUtc"] ? new Date(_data["issuedOnUtc"].toString()) : <any>undefined;
-            (<any>this).prescriptionDate = _data["prescriptionDate"] ? new Date(_data["prescriptionDate"].toString()) : <any>undefined;
-            (<any>this).completedOn = _data["completedOn"] ? new Date(_data["completedOn"].toString()) : <any>undefined;
-            this.expiryDate = _data["expiryDate"] ? DateOnly.fromJS(_data["expiryDate"]) : <any>undefined;
-            if (Array.isArray(_data["dispensingRecords"])) {
-                (<any>this).dispensingRecords = [];
-                for (let item of _data["dispensingRecords"])
-                    (<any>this).dispensingRecords!.push(DispensingRecord.fromJS(item));
-            }
-            this.dosage = _data["dosage"] ? Dosage.fromJS(_data["dosage"]) : <any>undefined;
-            this.dosageId = _data["dosageId"];
-            this.prescriber = _data["prescriber"] ? Prescriber.fromJS(_data["prescriber"]) : <any>undefined;
-            this.prescriberId = _data["prescriberId"];
-            this.homeDeliveryAddress = _data["homeDeliveryAddress"] ? Address.fromJS(_data["homeDeliveryAddress"]) : <any>undefined;
-            this.pharmacy = _data["pharmacy"] ? Pharmacy.fromJS(_data["pharmacy"]) : <any>undefined;
-            (<any>this).pharmacyId = _data["pharmacyId"];
-            this.clinic = _data["clinic"] ? Clinic.fromJS(_data["clinic"]) : <any>undefined;
-            this.clinicId = _data["clinicId"];
-            this.instructions = _data["instructions"];
-            this.repeats = _data["repeats"];
-            (<any>this).completedRepeats = _data["completedRepeats"];
-        }
-    }
-
-    static fromJS(data: any): Prescription {
-        data = typeof data === 'object' ? data : {};
-        let result = new Prescription();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["isDeleted"] = this.isDeleted;
-        data["deletedOnUtc"] = this.deletedOnUtc ? this.deletedOnUtc.toISOString() : <any>undefined;
-        data["deletedBy"] = this.deletedBy;
-        data["deletedReason"] = this.deletedReason;
-        if (Array.isArray(this.domainEvents)) {
-            data["domainEvents"] = [];
-            for (let item of this.domainEvents)
-                data["domainEvents"].push(item.toJSON());
-        }
-        data["portalProgramId"] = this.portalProgramId;
-        data["treatmentProfile"] = this.treatmentProfile ? this.treatmentProfile.toJSON() : <any>undefined;
-        data["treatmentProfileId"] = this.treatmentProfileId;
-        data["isFilled"] = this.isFilled;
-        data["issuedOnUtc"] = this.issuedOnUtc ? this.issuedOnUtc.toISOString() : <any>undefined;
-        data["prescriptionDate"] = this.prescriptionDate ? this.prescriptionDate.toISOString() : <any>undefined;
-        data["completedOn"] = this.completedOn ? this.completedOn.toISOString() : <any>undefined;
-        data["expiryDate"] = this.expiryDate ? this.expiryDate.toJSON() : <any>undefined;
-        if (Array.isArray(this.dispensingRecords)) {
-            data["dispensingRecords"] = [];
-            for (let item of this.dispensingRecords)
-                data["dispensingRecords"].push(item.toJSON());
-        }
-        data["dosage"] = this.dosage ? this.dosage.toJSON() : <any>undefined;
-        data["dosageId"] = this.dosageId;
-        data["prescriber"] = this.prescriber ? this.prescriber.toJSON() : <any>undefined;
-        data["prescriberId"] = this.prescriberId;
-        data["homeDeliveryAddress"] = this.homeDeliveryAddress ? this.homeDeliveryAddress.toJSON() : <any>undefined;
-        data["pharmacy"] = this.pharmacy ? this.pharmacy.toJSON() : <any>undefined;
-        data["pharmacyId"] = this.pharmacyId;
-        data["clinic"] = this.clinic ? this.clinic.toJSON() : <any>undefined;
-        data["clinicId"] = this.clinicId;
-        data["instructions"] = this.instructions;
-        data["repeats"] = this.repeats;
-        data["completedRepeats"] = this.completedRepeats;
-        return data;
-    }
-
-    clone(): Prescription {
-        const json = this.toJSON();
-        let result = new Prescription();
-        result.init(json);
-        return result;
-    }
-}
-
-export interface IPrescription {
-    id: string;
-    isDeleted: boolean;
-    deletedOnUtc: Date | undefined;
-    deletedBy: string | undefined;
-    deletedReason: DeletedReason;
-    domainEvents: DomainEventBase[] | undefined;
-    portalProgramId: string;
-    treatmentProfile: TreatmentProfile;
-    treatmentProfileId: string;
-    isFilled: boolean;
-    issuedOnUtc: Date;
-    prescriptionDate: Date | undefined;
-    completedOn: Date | undefined;
-    expiryDate: DateOnly;
-    dispensingRecords: DispensingRecord[] | undefined;
-    dosage: Dosage;
-    dosageId: number;
-    prescriber: Prescriber;
-    prescriberId: string;
-    homeDeliveryAddress: Address;
-    pharmacy: Pharmacy;
-    pharmacyId: string | undefined;
-    clinic: Clinic;
-    clinicId: string | undefined;
-    instructions: string | undefined;
-    repeats: number;
-    completedRepeats: number;
 }
 
 export class ProblemDetails implements IProblemDetails {
@@ -29651,6 +28895,69 @@ export interface IRegisterProgramAdministratorFromInviteDto {
     password: string | undefined;
 }
 
+export class RegisterPspPatientWithDeliveryRequiredByAdminDto implements IRegisterPspPatientWithDeliveryRequiredByAdminDto {
+    patientModel!: PatientModelDto;
+    carerModel!: CarerModelDto;
+    deliveryModel!: DeliveryModelDto;
+    programTermsAndCondtionsModel!: ProgramTermsAndConditionsModelDto;
+    prescriberId!: string | undefined;
+    registrationMethod!: RegistrationMethod;
+
+    constructor(data?: IRegisterPspPatientWithDeliveryRequiredByAdminDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.patientModel = _data["patientModel"] ? PatientModelDto.fromJS(_data["patientModel"]) : <any>undefined;
+            this.carerModel = _data["carerModel"] ? CarerModelDto.fromJS(_data["carerModel"]) : <any>undefined;
+            this.deliveryModel = _data["deliveryModel"] ? DeliveryModelDto.fromJS(_data["deliveryModel"]) : <any>undefined;
+            this.programTermsAndCondtionsModel = _data["programTermsAndCondtionsModel"] ? ProgramTermsAndConditionsModelDto.fromJS(_data["programTermsAndCondtionsModel"]) : <any>undefined;
+            this.prescriberId = _data["prescriberId"];
+            this.registrationMethod = _data["registrationMethod"];
+        }
+    }
+
+    static fromJS(data: any): RegisterPspPatientWithDeliveryRequiredByAdminDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new RegisterPspPatientWithDeliveryRequiredByAdminDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["patientModel"] = this.patientModel ? this.patientModel.toJSON() : <any>undefined;
+        data["carerModel"] = this.carerModel ? this.carerModel.toJSON() : <any>undefined;
+        data["deliveryModel"] = this.deliveryModel ? this.deliveryModel.toJSON() : <any>undefined;
+        data["programTermsAndCondtionsModel"] = this.programTermsAndCondtionsModel ? this.programTermsAndCondtionsModel.toJSON() : <any>undefined;
+        data["prescriberId"] = this.prescriberId;
+        data["registrationMethod"] = this.registrationMethod;
+        return data;
+    }
+
+    clone(): RegisterPspPatientWithDeliveryRequiredByAdminDto {
+        const json = this.toJSON();
+        let result = new RegisterPspPatientWithDeliveryRequiredByAdminDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IRegisterPspPatientWithDeliveryRequiredByAdminDto {
+    patientModel: PatientModelDto;
+    carerModel: CarerModelDto;
+    deliveryModel: DeliveryModelDto;
+    programTermsAndCondtionsModel: ProgramTermsAndConditionsModelDto;
+    prescriberId: string | undefined;
+    registrationMethod: RegistrationMethod;
+}
+
 export class RegisterPspPatientWithDeliveryRequiredDto implements IRegisterPspPatientWithDeliveryRequiredDto {
     patientModel!: PatientModelDto;
     carerModel!: CarerModelDto;
@@ -29714,10 +29021,10 @@ export interface IRegisterPspPatientWithDeliveryRequiredDto {
     registrationMethod: RegistrationMethod;
 }
 
-/** 1 = PortalWebForm (Portal web form) 2 = Emailed (Email to admin) 3 = PaperForm (Paper form) 4 = PackInsert (Pack insert) 5 = Other (Other) */
+/** 1 = PortalWebForm (Portal web form) 2 = AdminPortal (Admin portal) 3 = PaperForm (Paper form) 4 = PackInsert (Pack insert) 5 = Other (Other) */
 export enum RegistrationMethod {
     PortalWebForm = 1,
-    Emailed = 2,
+    AdminPortal = 2,
     PaperForm = 3,
     PackInsert = 4,
     Other = 5,
@@ -30275,16 +29582,6 @@ export interface IResupplyPatientDto {
     repeats: number;
     additionalInstructions: string | undefined;
     programId: string;
-}
-
-/** 1 = Submitted (Submitted) 2 = Viewed (Viewed) 3 = Downloaded (Downloaded) 4 = Approved (Approved) 5 = UpdateRequired (Updated required) 6 = Rejected (Rejected) */
-export enum ReviewStatus {
-    Submitted = 1,
-    Viewed = 2,
-    Downloaded = 3,
-    Approved = 4,
-    UpdateRequired = 5,
-    Rejected = 6,
 }
 
 export class RevokeProgramAdminAccessDto implements IRevokeProgramAdminAccessDto {
@@ -31152,6 +30449,53 @@ export enum Title {
     Miss = 9,
 }
 
+export class TransitionPatientToPbsDto implements ITransitionPatientToPbsDto {
+    isEligibileForPbs!: boolean;
+    patientId!: string;
+
+    constructor(data?: ITransitionPatientToPbsDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.isEligibileForPbs = _data["isEligibileForPbs"];
+            this.patientId = _data["patientId"];
+        }
+    }
+
+    static fromJS(data: any): TransitionPatientToPbsDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new TransitionPatientToPbsDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["isEligibileForPbs"] = this.isEligibileForPbs;
+        data["patientId"] = this.patientId;
+        return data;
+    }
+
+    clone(): TransitionPatientToPbsDto {
+        const json = this.toJSON();
+        let result = new TransitionPatientToPbsDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface ITransitionPatientToPbsDto {
+    isEligibileForPbs: boolean;
+    patientId: string;
+}
+
 /** 1 = Male (Male) 2 = FemaleOfChildbearingPotential (Female of childbearing potential) 3 = FemaleOfNonChildbearingPotential (Female of non-childbearing potential) */
 export enum TreatmentCategory {
     Male = 1,
@@ -31159,7 +30503,7 @@ export enum TreatmentCategory {
     FemaleOfNonChildbearingPotential = 3,
 }
 
-/** 1 = TreatmentApproved (Approved) 2 = TreatmentStarted (Started) 3 = TreatmentSuspended (Suspended) 4 = TreatmentRestarted (Restarted) 5 = MedicationDoseChanged (Dose changed) 6 = EvaluationCompleted (Evaluation completed) 7 = PrescriberChanged (Prescriber changed) 8 = TreatmentDiscontinued (Discontinued) 9 = TreatmentStopped (Stopped) 10 = RegisteredForTreatment (Registered) 11 = PrescriptionIssued (Prescription issued) 12 = TransferRequested (Transfer requested) 13 = Misc (Treatment profile updated) 14 = MedicationChanged (Medication changed) 15 = NominatedPharmacyChanged (Nominated pharmacy changed) 16 = TreatingClinicChanged (Treating clinic changed) 17 = PatientOrderDispatched (Patient order dispatched) 18 = PatientOrderReceived (Patient order received) 19 = PatientOrderReturned (Patient order returned) 20 = PatientOrderCancelled (Patient order cancelled) 21 = PatientOrderUpdated (Patient order updated) 22 = EvaluationCreated (Treatment evaluation created) 23 = EvaluationUpdated (Treatment evaluation updated) 24 = EvaluationReminderPushed (Treatment evaluation reminder pushed) 25 = PreEnrolled (Pre-enrolled) 26 = OrderSubmitted (Order submitted) */
+/** 1 = TreatmentApproved (Approved) 2 = TreatmentStarted (Started) 3 = TreatmentSuspended (Suspended) 4 = TreatmentRestarted (Restarted) 5 = MedicationDoseChanged (Dose changed) 6 = EvaluationCompleted (Evaluation completed) 7 = PrescriberChanged (Prescriber changed) 8 = TreatmentDiscontinued (Discontinued) 9 = TreatmentStopped (Stopped) 10 = RegisteredForTreatment (Registered) 11 = PrescriptionIssued (Prescription issued) 12 = TransferRequested (Transfer requested) 13 = Misc (Treatment profile updated) 14 = MedicationChanged (Medication changed) 15 = NominatedPharmacyChanged (Nominated pharmacy changed) 16 = TreatingClinicChanged (Treating clinic changed) 17 = PatientOrderDispatched (Patient order dispatched) 18 = PatientOrderReceived (Patient order received) 19 = PatientOrderReturned (Patient order returned) 20 = PatientOrderCancelled (Patient order cancelled) 21 = PatientOrderUpdated (Patient order updated) 22 = EvaluationCreated (Treatment evaluation created) 23 = EvaluationUpdated (Treatment evaluation updated) 24 = EvaluationReminderPushed (Treatment evaluation reminder pushed) 25 = PreEnrolled (Pre-enrolled) 26 = OrderSubmitted (Order submitted) 27 = TreatmentStatusChanged (Treatment status changed) */
 export enum TreatmentMilestone {
     TreatmentApproved = 1,
     TreatmentStarted = 2,
@@ -31187,181 +30531,7 @@ export enum TreatmentMilestone {
     EvaluationReminderPushed = 24,
     PreEnrolled = 25,
     OrderSubmitted = 26,
-}
-
-export class TreatmentProfile implements ITreatmentProfile {
-    id!: string;
-    readonly isDeleted!: boolean;
-    readonly deletedOnUtc!: Date | undefined;
-    readonly deletedBy!: string | undefined;
-    deletedReason!: DeletedReason;
-    readonly portalProgramId!: string;
-    dosage!: Dosage;
-    readonly dosageId!: number | undefined;
-    readonly enrolledOn!: Date | undefined;
-    readonly treatmentStartedOn!: Date | undefined;
-    readonly treatmentEndedOn!: Date | undefined;
-    discontinueDate!: DateOnly;
-    readonly discontinuedBy!: string | undefined;
-    treatmentStatus!: TreatmentStatus;
-    patient!: Patient;
-    readonly patientId!: string;
-    pharmacy!: Pharmacy;
-    readonly pharmacyId!: string | undefined;
-    prescriber!: Prescriber;
-    readonly prescriberId!: string;
-    clinic!: Clinic;
-    readonly clinicId!: string | undefined;
-    treatmentCategory!: TreatmentCategory;
-    readonly medicationId!: number | undefined;
-    readonly createdOnUtc!: Date;
-    readonly createdBy!: string | undefined;
-    readonly lastModifiedOnUtc!: Date | undefined;
-    readonly modifiedBy!: string | undefined;
-    readonly prescriptions!: Prescription[] | undefined;
-    readonly dispensingVerificationRecords!: DispensingVerificationRecord[] | undefined;
-
-    constructor(data?: ITreatmentProfile) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            (<any>this).isDeleted = _data["isDeleted"];
-            (<any>this).deletedOnUtc = _data["deletedOnUtc"] ? new Date(_data["deletedOnUtc"].toString()) : <any>undefined;
-            (<any>this).deletedBy = _data["deletedBy"];
-            this.deletedReason = _data["deletedReason"];
-            (<any>this).portalProgramId = _data["portalProgramId"];
-            this.dosage = _data["dosage"] ? Dosage.fromJS(_data["dosage"]) : <any>undefined;
-            (<any>this).dosageId = _data["dosageId"];
-            (<any>this).enrolledOn = _data["enrolledOn"] ? new Date(_data["enrolledOn"].toString()) : <any>undefined;
-            (<any>this).treatmentStartedOn = _data["treatmentStartedOn"] ? new Date(_data["treatmentStartedOn"].toString()) : <any>undefined;
-            (<any>this).treatmentEndedOn = _data["treatmentEndedOn"] ? new Date(_data["treatmentEndedOn"].toString()) : <any>undefined;
-            this.discontinueDate = _data["discontinueDate"] ? DateOnly.fromJS(_data["discontinueDate"]) : <any>undefined;
-            (<any>this).discontinuedBy = _data["discontinuedBy"];
-            this.treatmentStatus = _data["treatmentStatus"];
-            this.patient = _data["patient"] ? Patient.fromJS(_data["patient"]) : <any>undefined;
-            (<any>this).patientId = _data["patientId"];
-            this.pharmacy = _data["pharmacy"] ? Pharmacy.fromJS(_data["pharmacy"]) : <any>undefined;
-            (<any>this).pharmacyId = _data["pharmacyId"];
-            this.prescriber = _data["prescriber"] ? Prescriber.fromJS(_data["prescriber"]) : <any>undefined;
-            (<any>this).prescriberId = _data["prescriberId"];
-            this.clinic = _data["clinic"] ? Clinic.fromJS(_data["clinic"]) : <any>undefined;
-            (<any>this).clinicId = _data["clinicId"];
-            this.treatmentCategory = _data["treatmentCategory"];
-            (<any>this).medicationId = _data["medicationId"];
-            (<any>this).createdOnUtc = _data["createdOnUtc"] ? new Date(_data["createdOnUtc"].toString()) : <any>undefined;
-            (<any>this).createdBy = _data["createdBy"];
-            (<any>this).lastModifiedOnUtc = _data["lastModifiedOnUtc"] ? new Date(_data["lastModifiedOnUtc"].toString()) : <any>undefined;
-            (<any>this).modifiedBy = _data["modifiedBy"];
-            if (Array.isArray(_data["prescriptions"])) {
-                (<any>this).prescriptions = [];
-                for (let item of _data["prescriptions"])
-                    (<any>this).prescriptions!.push(Prescription.fromJS(item));
-            }
-            if (Array.isArray(_data["dispensingVerificationRecords"])) {
-                (<any>this).dispensingVerificationRecords = [];
-                for (let item of _data["dispensingVerificationRecords"])
-                    (<any>this).dispensingVerificationRecords!.push(DispensingVerificationRecord.fromJS(item));
-            }
-        }
-    }
-
-    static fromJS(data: any): TreatmentProfile {
-        data = typeof data === 'object' ? data : {};
-        let result = new TreatmentProfile();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["isDeleted"] = this.isDeleted;
-        data["deletedOnUtc"] = this.deletedOnUtc ? this.deletedOnUtc.toISOString() : <any>undefined;
-        data["deletedBy"] = this.deletedBy;
-        data["deletedReason"] = this.deletedReason;
-        data["portalProgramId"] = this.portalProgramId;
-        data["dosage"] = this.dosage ? this.dosage.toJSON() : <any>undefined;
-        data["dosageId"] = this.dosageId;
-        data["enrolledOn"] = this.enrolledOn ? this.enrolledOn.toISOString() : <any>undefined;
-        data["treatmentStartedOn"] = this.treatmentStartedOn ? this.treatmentStartedOn.toISOString() : <any>undefined;
-        data["treatmentEndedOn"] = this.treatmentEndedOn ? this.treatmentEndedOn.toISOString() : <any>undefined;
-        data["discontinueDate"] = this.discontinueDate ? this.discontinueDate.toJSON() : <any>undefined;
-        data["discontinuedBy"] = this.discontinuedBy;
-        data["treatmentStatus"] = this.treatmentStatus;
-        data["patient"] = this.patient ? this.patient.toJSON() : <any>undefined;
-        data["patientId"] = this.patientId;
-        data["pharmacy"] = this.pharmacy ? this.pharmacy.toJSON() : <any>undefined;
-        data["pharmacyId"] = this.pharmacyId;
-        data["prescriber"] = this.prescriber ? this.prescriber.toJSON() : <any>undefined;
-        data["prescriberId"] = this.prescriberId;
-        data["clinic"] = this.clinic ? this.clinic.toJSON() : <any>undefined;
-        data["clinicId"] = this.clinicId;
-        data["treatmentCategory"] = this.treatmentCategory;
-        data["medicationId"] = this.medicationId;
-        data["createdOnUtc"] = this.createdOnUtc ? this.createdOnUtc.toISOString() : <any>undefined;
-        data["createdBy"] = this.createdBy;
-        data["lastModifiedOnUtc"] = this.lastModifiedOnUtc ? this.lastModifiedOnUtc.toISOString() : <any>undefined;
-        data["modifiedBy"] = this.modifiedBy;
-        if (Array.isArray(this.prescriptions)) {
-            data["prescriptions"] = [];
-            for (let item of this.prescriptions)
-                data["prescriptions"].push(item.toJSON());
-        }
-        if (Array.isArray(this.dispensingVerificationRecords)) {
-            data["dispensingVerificationRecords"] = [];
-            for (let item of this.dispensingVerificationRecords)
-                data["dispensingVerificationRecords"].push(item.toJSON());
-        }
-        return data;
-    }
-
-    clone(): TreatmentProfile {
-        const json = this.toJSON();
-        let result = new TreatmentProfile();
-        result.init(json);
-        return result;
-    }
-}
-
-export interface ITreatmentProfile {
-    id: string;
-    isDeleted: boolean;
-    deletedOnUtc: Date | undefined;
-    deletedBy: string | undefined;
-    deletedReason: DeletedReason;
-    portalProgramId: string;
-    dosage: Dosage;
-    dosageId: number | undefined;
-    enrolledOn: Date | undefined;
-    treatmentStartedOn: Date | undefined;
-    treatmentEndedOn: Date | undefined;
-    discontinueDate: DateOnly;
-    discontinuedBy: string | undefined;
-    treatmentStatus: TreatmentStatus;
-    patient: Patient;
-    patientId: string;
-    pharmacy: Pharmacy;
-    pharmacyId: string | undefined;
-    prescriber: Prescriber;
-    prescriberId: string;
-    clinic: Clinic;
-    clinicId: string | undefined;
-    treatmentCategory: TreatmentCategory;
-    medicationId: number | undefined;
-    createdOnUtc: Date;
-    createdBy: string | undefined;
-    lastModifiedOnUtc: Date | undefined;
-    modifiedBy: string | undefined;
-    prescriptions: Prescription[] | undefined;
-    dispensingVerificationRecords: DispensingVerificationRecord[] | undefined;
+    TreatmentStatusChanged = 27,
 }
 
 /** 1 = ApprovalRequired (Approval required) 2 = Approved (Approved) 3 = EvaluationPending (Evaluation pending) 4 = Suspended (Suspended) 5 = Discontinued (Discontinued) 6 = OnContinuedSupply (On continued supply) 7 = Completed (Complete) 8 = TransferRequested (TransferRequested) 9 = Grandfathered (Grandfathered) */
@@ -31507,7 +30677,11 @@ export interface IUpdateContactLogAdverseEventDto {
     adverseEventDetails: AdverseEventDetailDto;
 }
 
-export class UpdateDeliveryAddressDto implements IUpdateDeliveryAddressDto {
+export class UpdateDeliveryAddressDetailsDto implements IUpdateDeliveryAddressDetailsDto {
+    deliveryAddressType!: DeliveryAddressType;
+    deliveryContactNumber!: string | undefined;
+    deliveryToName!: string | undefined;
+    deliveryBusinessName!: string | undefined;
     patientId!: string;
     unitNumber!: string | undefined;
     streetAddress!: string | undefined;
@@ -31515,7 +30689,7 @@ export class UpdateDeliveryAddressDto implements IUpdateDeliveryAddressDto {
     state!: AddressState;
     postcode!: string | undefined;
 
-    constructor(data?: IUpdateDeliveryAddressDto) {
+    constructor(data?: IUpdateDeliveryAddressDetailsDto) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -31526,6 +30700,10 @@ export class UpdateDeliveryAddressDto implements IUpdateDeliveryAddressDto {
 
     init(_data?: any) {
         if (_data) {
+            this.deliveryAddressType = _data["deliveryAddressType"];
+            this.deliveryContactNumber = _data["deliveryContactNumber"];
+            this.deliveryToName = _data["deliveryToName"];
+            this.deliveryBusinessName = _data["deliveryBusinessName"];
             this.patientId = _data["patientId"];
             this.unitNumber = _data["unitNumber"];
             this.streetAddress = _data["streetAddress"];
@@ -31535,15 +30713,19 @@ export class UpdateDeliveryAddressDto implements IUpdateDeliveryAddressDto {
         }
     }
 
-    static fromJS(data: any): UpdateDeliveryAddressDto {
+    static fromJS(data: any): UpdateDeliveryAddressDetailsDto {
         data = typeof data === 'object' ? data : {};
-        let result = new UpdateDeliveryAddressDto();
+        let result = new UpdateDeliveryAddressDetailsDto();
         result.init(data);
         return result;
     }
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
+        data["deliveryAddressType"] = this.deliveryAddressType;
+        data["deliveryContactNumber"] = this.deliveryContactNumber;
+        data["deliveryToName"] = this.deliveryToName;
+        data["deliveryBusinessName"] = this.deliveryBusinessName;
         data["patientId"] = this.patientId;
         data["unitNumber"] = this.unitNumber;
         data["streetAddress"] = this.streetAddress;
@@ -31553,15 +30735,19 @@ export class UpdateDeliveryAddressDto implements IUpdateDeliveryAddressDto {
         return data;
     }
 
-    clone(): UpdateDeliveryAddressDto {
+    clone(): UpdateDeliveryAddressDetailsDto {
         const json = this.toJSON();
-        let result = new UpdateDeliveryAddressDto();
+        let result = new UpdateDeliveryAddressDetailsDto();
         result.init(json);
         return result;
     }
 }
 
-export interface IUpdateDeliveryAddressDto {
+export interface IUpdateDeliveryAddressDetailsDto {
+    deliveryAddressType: DeliveryAddressType;
+    deliveryContactNumber: string | undefined;
+    deliveryToName: string | undefined;
+    deliveryBusinessName: string | undefined;
     patientId: string;
     unitNumber: string | undefined;
     streetAddress: string | undefined;
@@ -31756,6 +30942,7 @@ export class UpdatePatientProfileDto implements IUpdatePatientProfileDto {
     salesForceId!: string | undefined;
     medicareNumber!: string | undefined;
     nationalHealthIndex!: string | undefined;
+    isPrivatePatient!: boolean | undefined;
 
     constructor(data?: IUpdatePatientProfileDto) {
         if (data) {
@@ -31783,6 +30970,7 @@ export class UpdatePatientProfileDto implements IUpdatePatientProfileDto {
             this.salesForceId = _data["salesForceId"];
             this.medicareNumber = _data["medicareNumber"];
             this.nationalHealthIndex = _data["nationalHealthIndex"];
+            this.isPrivatePatient = _data["isPrivatePatient"];
         }
     }
 
@@ -31810,6 +30998,7 @@ export class UpdatePatientProfileDto implements IUpdatePatientProfileDto {
         data["salesForceId"] = this.salesForceId;
         data["medicareNumber"] = this.medicareNumber;
         data["nationalHealthIndex"] = this.nationalHealthIndex;
+        data["isPrivatePatient"] = this.isPrivatePatient;
         return data;
     }
 
@@ -31837,6 +31026,7 @@ export interface IUpdatePatientProfileDto {
     salesForceId: string | undefined;
     medicareNumber: string | undefined;
     nationalHealthIndex: string | undefined;
+    isPrivatePatient: boolean | undefined;
 }
 
 export class UpdatePatientProgramRegistrationDto implements IUpdatePatientProgramRegistrationDto {
@@ -31904,81 +31094,6 @@ export interface IUpdatePatientProgramRegistrationDto {
     programTermsAgreed: boolean;
     marketingCommunicationConsentProvided: boolean;
     adverseEventContactConsentProvided: boolean;
-}
-
-export class UpdatePharmacistProfileDto implements IUpdatePharmacistProfileDto {
-    pharmacistId!: string;
-    title!: Title;
-    firstName!: string | undefined;
-    middleName!: string | undefined;
-    lastName!: string | undefined;
-    email!: string | undefined;
-    phone!: string | undefined;
-    mobile!: string | undefined;
-    ahpraNumber!: string | undefined;
-
-    constructor(data?: IUpdatePharmacistProfileDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.pharmacistId = _data["pharmacistId"];
-            this.title = _data["title"];
-            this.firstName = _data["firstName"];
-            this.middleName = _data["middleName"];
-            this.lastName = _data["lastName"];
-            this.email = _data["email"];
-            this.phone = _data["phone"];
-            this.mobile = _data["mobile"];
-            this.ahpraNumber = _data["ahpraNumber"];
-        }
-    }
-
-    static fromJS(data: any): UpdatePharmacistProfileDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new UpdatePharmacistProfileDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["pharmacistId"] = this.pharmacistId;
-        data["title"] = this.title;
-        data["firstName"] = this.firstName;
-        data["middleName"] = this.middleName;
-        data["lastName"] = this.lastName;
-        data["email"] = this.email;
-        data["phone"] = this.phone;
-        data["mobile"] = this.mobile;
-        data["ahpraNumber"] = this.ahpraNumber;
-        return data;
-    }
-
-    clone(): UpdatePharmacistProfileDto {
-        const json = this.toJSON();
-        let result = new UpdatePharmacistProfileDto();
-        result.init(json);
-        return result;
-    }
-}
-
-export interface IUpdatePharmacistProfileDto {
-    pharmacistId: string;
-    title: Title;
-    firstName: string | undefined;
-    middleName: string | undefined;
-    lastName: string | undefined;
-    email: string | undefined;
-    phone: string | undefined;
-    mobile: string | undefined;
-    ahpraNumber: string | undefined;
 }
 
 export class UpdatePharmacistProgramRegistrationDto implements IUpdatePharmacistProgramRegistrationDto {
@@ -32587,8 +31702,9 @@ export class User implements IUser {
     readonly deletedOnUtc!: Date | undefined;
     readonly deletedBy!: string | undefined;
     deletedReason!: DeletedReason;
-    readonly domainEvents!: DomainEventBase[] | undefined;
+    readonly domainEvents!: IDomainEvent[] | undefined;
     readonly username!: string | undefined;
+    readonly _username!: string | undefined;
     readonly password!: string | undefined;
     readonly title!: string | undefined;
     name!: PersonName;
@@ -32627,9 +31743,10 @@ export class User implements IUser {
             if (Array.isArray(_data["domainEvents"])) {
                 (<any>this).domainEvents = [];
                 for (let item of _data["domainEvents"])
-                    (<any>this).domainEvents!.push(DomainEventBase.fromJS(item));
+                    (<any>this).domainEvents!.push(IDomainEvent.fromJS(item));
             }
             (<any>this).username = _data["username"];
+            (<any>this)._username = _data["_username"];
             (<any>this).password = _data["password"];
             (<any>this).title = _data["title"];
             this.name = _data["name"] ? PersonName.fromJS(_data["name"]) : <any>undefined;
@@ -32683,6 +31800,7 @@ export class User implements IUser {
                 data["domainEvents"].push(item.toJSON());
         }
         data["username"] = this.username;
+        data["_username"] = this._username;
         data["password"] = this.password;
         data["title"] = this.title;
         data["name"] = this.name ? this.name.toJSON() : <any>undefined;
@@ -32730,8 +31848,9 @@ export interface IUser {
     deletedOnUtc: Date | undefined;
     deletedBy: string | undefined;
     deletedReason: DeletedReason;
-    domainEvents: DomainEventBase[] | undefined;
+    domainEvents: IDomainEvent[] | undefined;
     username: string | undefined;
+    _username: string | undefined;
     password: string | undefined;
     title: string | undefined;
     name: PersonName;
