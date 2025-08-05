@@ -34,7 +34,7 @@ export class LandingComponent {
 
   loginButtonClicked(){
     const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl') || '/';
-    const loginUrl = `/bff/login?returnUrl=${encodeURIComponent(returnUrl)}`;
+    const loginUrl = `/.auth/login`;
     window.location.href = loginUrl;
   }
 }

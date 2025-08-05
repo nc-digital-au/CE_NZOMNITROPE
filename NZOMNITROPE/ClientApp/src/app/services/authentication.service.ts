@@ -74,7 +74,7 @@ export class AuthenticationService {
 
   public getSession(ignoreCache: boolean = true) {
     if (!this._session$ || ignoreCache) {
-      this._session$ = this._http.get<Session>('bff/user').pipe(
+      this._session$ = this._http.get<Session>('/.auth/me').pipe(
         tap(claims => {
           if (claims && claims.length) {
             this._currentUser = new AuthenticatedUser(claims);
@@ -114,7 +114,7 @@ export class AuthenticationService {
   public getLogoutUrl(ignoreCache: boolean = false) {
     return this.getSession(ignoreCache).pipe(
       filter(this.userIsAuthenticated),
-      map(s => s.find(c => c.type === 'bff:logout_url')?.value)
+      map(s => s.find(c => c.type === '/.auth/end-session')?.value)
     );
   }
 

@@ -7,7 +7,7 @@ const PROXY_CONFIG = [
   {
     context: [
       // BFF Management Routes
-      "/bff",
+      "/.auth",
 
       // OIDC Handler Routes
       "/signin-oidc",
