@@ -1,7 +1,7 @@
 export const environment = {
   production: false,
-  programId: '2b8753ae-e823-4033-aef7-c4e102b463a1',
-  googleApiKey: 'AIzaSyCU-xrj6qLt4JijYTt9GPy8JJ1IyTTVpAY',
+  programId: '3f79e9f9-fdbe-4ca8-973d-8a27bc53ff6b',
+  googleApiKey: 'AIzaSyA85_sTJVqFq-cldz0vpywUH-3DOrL1la0',
   orderAdminEmail: 'omnipal-order@nc-digital.com.au',
   trainingAdminEmail: 'omnipal-booking@nc-digital.com.au'
 };
