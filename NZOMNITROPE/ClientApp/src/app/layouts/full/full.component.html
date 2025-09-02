@@ -2,152 +2,140 @@
   autosize
   autoFocus
   [ngClass]="{
-  'sidebarNav-mini': options.sidenavCollapsed && options.navPos !== 'top' &&  !resView,
-  'sidebarNav-horizontal': options.horizontal,
-  cardBorder: options.cardBorder,
-}" class="page-container"
+    'sidebarNav-mini': options.sidenavCollapsed && options.navPos !== 'top' && !resView,
+    'sidebarNav-horizontal': options.horizontal,
+    cardBorder: options.cardBorder
+  }"
+  class="page-container"
   [dir]="options.dir!"
 >
-  <!-- ============================================================== -->
-  <!-- VerticalHeader -->
-  <!-- ============================================================== -->
   @if(!options.horizontal) {
-  <app-header
-    [showToggle]="!isOver"
-    (toggleCollapsed)="toggleCollapsed()"
-    (toggleMobileNav)="sidenav.toggle()"
-    (toggleMobileFilterNav)="filterNavRight.toggle()"
-  ></app-header>
+    <app-header
+      [showToggle]="!isOver"
+      (toggleCollapsed)="toggleCollapsed()"
+      (toggleMobileNav)="sidenav.toggle()"
+      (toggleMobileFilterNav)="filterNavRight.toggle()"
+    ></app-header>
   } @else {
-  <!-- horizontal header -->
-  <app-horizontal-header
-    (toggleMobileNav)="sidenav.toggle()"
-    (toggleMobileFilterNav)="filterNavRight.toggle()"
-  ></app-horizontal-header>
+    <app-horizontal-header
+      (toggleMobileNav)="sidenav.toggle()"
+      (toggleMobileFilterNav)="filterNavRight.toggle()"
+    ></app-horizontal-header>
   }
 
   <mat-sidenav-container class="mainWrapper">
-    <!-- ============================================================== -->
-    <!-- Vertical Sidebar -->
-    <!-- ============================================================== -->
     @if(!options.horizontal) {
-    <mat-sidenav
-      align="start"
-      #leftsidenav
-      [mode]="isOver ? 'over' : 'side'"
-      [opened]="
-        options.navPos === 'side' &&
-        options.sidenavOpened &&
-        !isOver &&
-        !resView
-      "
-      (openedChange)="onSidenavOpenedChange($event)"
-      (closedStart)="onSidenavClosedStart()"
-      class="sidebarNav"
-    >
-      <app-sidebar> </app-sidebar>
-      <ng-scrollbar
-        class="position-relative mini-scroll"
-        style="height: calc(100vh - 230px)"
+      <mat-sidenav
+        align="start"
+        #leftsidenav
+        [mode]="isOver ? 'over' : 'side'"
+        [opened]="options.navPos === 'side' && options.sidenavOpened && !isOver && !resView"
+        (openedChange)="onSidenavOpenedChange($event)"
+        (closedStart)="onSidenavClosedStart()"
+        class="sidebarNav"
       >
-        <mat-nav-list class="sidebar-list">
-          @for(item of navItems; track item) {
-          <app-nav-item [item]="item" (notify)="sidenav.toggle()">
-          </app-nav-item>
-          }
-        </mat-nav-list>
-      </ng-scrollbar>
-    </mat-sidenav>
+        <app-sidebar></app-sidebar>
+        <ng-scrollbar class="position-relative mini-scroll" style="height: calc(100vh - 230px)">
+          <mat-nav-list class="sidebar-list">
+            @for(item of navItems; track item) {
+              <app-nav-item [item]="item" (notify)="sidenav.toggle()"></app-nav-item>
+            }
+          </mat-nav-list>
+        </ng-scrollbar>
+      </mat-sidenav>
     }
 
-    <!-- ============================================================== -->
-    <!-- horizontal Sidebar -->
-    <!-- ============================================================== -->
     @if(resView && options.horizontal) {
-    <mat-sidenav
-      #leftsidenav
-      [mode]="'over'"
-      [opened]="options.sidenavOpened && !isTablet"
-      (openedChange)="onSidenavOpenedChange($event)"
-      (closedStart)="onSidenavClosedStart()"
-      class="sidebarNav"
-    >
-      <app-sidebar> </app-sidebar>
-      <ng-scrollbar
-        class="position-relative mini-scroll"
-        style="height: calc(100vh - 230px)"
+      <mat-sidenav
+        #leftsidenav
+        [mode]="'over'"
+        [opened]="options.sidenavOpened && !isTablet"
+        (openedChange)="onSidenavOpenedChange($event)"
+        (closedStart)="onSidenavClosedStart()"
+        class="sidebarNav"
       >
-        <mat-nav-list class="sidebar-list">
-          @for(item of navItems; track item) {
-          <app-nav-item [item]="item" (notify)="sidenav.toggle()">
-          </app-nav-item>
-          }
-        </mat-nav-list>
-      </ng-scrollbar>
-    </mat-sidenav>
+        <app-sidebar></app-sidebar>
+        <ng-scrollbar class="position-relative mini-scroll" style="height: calc(100vh - 230px)">
+          <mat-nav-list class="sidebar-list">
+            @for(item of navItems; track item) {
+              <app-nav-item [item]="item" (notify)="sidenav.toggle()"></app-nav-item>
+            }
+          </mat-nav-list>
+        </ng-scrollbar>
+      </mat-sidenav>
     }
 
-    <!-- ============================================================== -->
-    <!-- Main Content -->
-    <!-- ============================================================== -->
     <mat-sidenav-content class="contentWrapper">
       <app-horizontal-sidebar></app-horizontal-sidebar>
 
-      <main
-        class="pageWrapper"
-        [ngClass]="{
-          maxWidth: options.boxed
-        }"
-      >
+      <main class="pageWrapper" [ngClass]="{ maxWidth: options.boxed }">
         <router-outlet></router-outlet>
       </main>
+
       <footer>
         <div class="footer-centered" [ngClass]="{ maxWidth: options.boxed }">
           <div class="row">
             <div class="col-sm-12">
               <ul id="footer-menu">
                 <li>
-                  <app-leaving-site [linkUrl]="contactValue.TERMS_OF_USE" linkLocation="Terms of Use"></app-leaving-site>
+                  <app-leaving-site
+                    [linkUrl]="contactValue.TERMS_OF_USE"
+                    linkLocation="Terms of Use"
+                  ></app-leaving-site>
                 </li>
+                <li>|</li>
+                <li><a (click)="openContactUs()">Contact Us</a></li>
+                <li>|</li>
                 <li>
-                  |
-                </li>
-                <li>
-                  <a (click)="openContactUs()">Contact Us</a> 
-                </li>
-                <li>
-                  |
-                <li>
-                  <app-leaving-site [linkUrl]="contactValue.PRIVACY_POLICY" linkLocation="Privacy Policy"></app-leaving-site>
+                  <app-leaving-site
+                    [linkUrl]="contactValue.PRIVACY_POLICY"
+                    linkLocation="Privacy Policy"
+                  ></app-leaving-site>
                 </li>
               </ul>
+
               <div class="footer-content">
                 <p>
-                  Sandoz New Zealand Limited, NZBN: 9429051041342, Office 1.02, Level 1, 12 Madden Street, Auckland Central, Auckland 1010, New Zealand.
-                  <br>
+                  Sandoz New Zealand Limited, NZBN: 9429051041342, Office 1.02, Level 1, 12 Madden Street,
+                  Auckland Central, Auckland 1010, New Zealand.
+                  <br />
                   Telephone: {{ contactValue.MEDICAL_ENQUIRY_PHONE }}. MLR-0007-NZ March 2025. TAPS NP12345
                 </p>
-                <img src="../../../assets/images/logos/Sandoz Logo Sandoz Blue RGB.png" alt="Sandoz Logo" class="footer-logo" />
-              </div> 
+                <img
+                  src="../../../assets/images/logos/Sandoz Logo Sandoz Blue RGB.png"
+                  alt="Sandoz Logo"
+                  class="footer-logo"
+                />
+              </div>
+
+              <div class="product-disclaimer">
+                <p>
+                  OMNITROPE (somatropin) 5mg, 10mg and 15mg solution for injection administered using the SurePal pen is a fully funded
+                  (subject to Special Authority criteria, please refer to www.pharmac.govt.nz) prescription medicine used to promote the growth
+                  of long bones in children with reduced height due to lower than normal levels of growth hormone, to treat reduced growth in
+                  children with Turner syndrome and in children prior to the onset of puberty who have long-term kidney problems causing growth
+                  disturbance, and in children with Prader-Willi syndrome (PWS). In adults, it is used to treat those who have low levels of
+                  growth hormone and those who have PWS to improve their body composition.
+                </p>
+                <p><strong>b.</strong> Ask your doctor to see if OMNITROPE is right for you. You may need to pay for this medicine and normal doctor’s fees apply. Use strictly as directed.</p>
+                <p><strong>c.</strong> Omnitrope has risks and benefits.</p>
+                <p><strong>d.</strong> Do not use OMNITROPE if you have cancer; your bones are unable to grow anymore; you have a serious injury or illness; you are severely overweight or have difficulty breathing.</p>
+                <p><strong>e.</strong> Tell your doctor if you have or have ever had diabetes, cancer, a kidney transplant, thyroid problems, are pregnant, planning to become pregnant or are breastfeeding, are taking any other medicines.</p>
+                <p><strong>f.</strong> Most common side-effects: a reaction near the injection site; limping; swelling of the arms or legs; painful joints; muscle aches, pains or stiffness; tingling; or numbness in your hands or feet. If symptoms continue or you experience other side effects or would like further information, please talk to your healthcare professional or visit www.medsafe.govt.nz for the Consumer Medicines Information.</p>
+                <p><strong>g.</strong> OMNITROPE and SurePal are registered trademarks of Sandoz AG. Sandoz New Zealand Limited, Auckland</p>
+              </div>
             </div>
           </div>
         </div>
-      </footer>     
+      </footer>
     </mat-sidenav-content>
-    
   </mat-sidenav-container>
-  <!-- ------------------------------------------------------------------
-  Mobile Apps Sidebar
-  ------------------------------------------------------------------ -->
+
   <mat-drawer #filterNavRight mode="over" position="end" class="filter-sidebar">
     <div>
       <div class="d-flex justify-content-between align-items-center p-16">
         <app-auth-branding></app-auth-branding>
-        <button
-          mat-icon-button
-          (click)="filterNavRight.toggle()"
-          class="d-flex justify-content-center"
-        >
+        <button mat-icon-button (click)="filterNavRight.toggle()" class="d-flex justify-content-center">
           <i-tabler name="x" class="icon-18 d-flex"></i-tabler>
         </button>
       </div>

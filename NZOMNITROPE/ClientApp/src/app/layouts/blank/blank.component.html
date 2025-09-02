@@ -7,10 +7,7 @@
   }"
   [dir]="options.dir!"
 >
-<!-- ============================================================== -->
-<!-- Header Element -->
-<!-- ============================================================== -->
-@if(!options.horizontal) {
+  @if(!options.horizontal) {
     <app-header
       [showToggle]="!isOver"
       (toggleCollapsed)="toggleCollapsed()"
@@ -21,43 +18,65 @@
       (toggleMobileNav)="sidenav.toggle()"
     ></app-horizontal-header>
   }
-  
-  <!-- ============================================================== -->
-  <!-- Router Outlet -->
-  <!-- ============================================================== -->
+
   <router-outlet></router-outlet>
-  
-  <!-- ============================================================== -->
-  <!-- Footer Element -->
-  <!-- ============================================================== -->
+
   <footer>
     <div class="footer-centered" [ngClass]="{ maxWidth: options.boxed }">
       <div class="row">
         <div class="col-sm-12">
           <ul id="footer-menu">
             <li>
-              <app-leaving-site [linkUrl]="contactValue.TERMS_OF_USE" linkLocation="Terms of Use"></app-leaving-site>
+              <app-leaving-site
+                [linkUrl]="contactValue.TERMS_OF_USE"
+                linkLocation="Terms of Use"
+              ></app-leaving-site>
             </li>
+            <li>|</li>
             <li>
-              |
+              <a (click)="openContactUs()">Contact Us</a>
             </li>
+            <li>|</li>
             <li>
-              <a (click)="openContactUs()">Contact Us</a> 
-            </li>
-            <li>
-              |
-            <li>
-              <app-leaving-site [linkUrl]="contactValue.PRIVACY_POLICY" linkLocation="Privacy Policy"></app-leaving-site>
+              <app-leaving-site
+                [linkUrl]="contactValue.PRIVACY_POLICY"
+                linkLocation="Privacy Policy"
+              ></app-leaving-site>
             </li>
           </ul>
+
           <div class="footer-content">
             <p>
-              Sandoz New Zealand Limited, NZBN: 9429051041342, Office 1.02, Level 1, 12 Madden Street, Auckland Central, Auckland 1010, New Zealand.
-              <br>
+              Sandoz New Zealand Limited, NZBN: 9429051041342, Office 1.02, Level 1, 12 Madden Street, Auckland Central,
+              Auckland 1010, New Zealand.
+              <br />
               Telephone: {{ contactValue.MEDICAL_ENQUIRY_PHONE }}. MLR-0007-NZ March 2025. TAPS NP12345
             </p>
-            <img src="../../../assets/images/logos/Sandoz Logo Sandoz Blue RGB.png" alt="Sandoz Logo" class="footer-logo" />
-          </div>                  
+            <img
+              src="../../../assets/images/logos/Sandoz Logo Sandoz Blue RGB.png"
+              alt="Sandoz Logo"
+              class="footer-logo"
+            />
+          </div>
+
+          <div class="product-disclaimer">
+            <p>
+              OMNITROPE (somatropin) 5mg, 10mg and 15mg solution for injection administered using the SurePal pen is a
+              fully funded (subject to Special Authority criteria, please refer to www.pharmac.govt.nz) prescription
+              medicine used to promote the growth of long bones in children with reduced height due to lower than normal
+              levels of growth hormone, to treat reduced growth in children with Turner syndrome and in children prior to
+              the onset of puberty who have long-term kidney problems causing growth disturbance, and in children with
+              Prader-Willi syndrome (PWS). In adults, it is used to treat those who have low levels of growth hormone and
+              those who have PWS to improve their body composition.
+            </p>
+            <p><strong>b.</strong> Ask your doctor to see if OMNITROPE is right for you. You may need to pay for this medicine and normal doctor’s fees apply. Use strictly as directed.</p>
+            <p><strong>c.</strong> Omnitrope has risks and benefits.</p>
+            <p><strong>d.</strong> Do not use OMNITROPE if you have cancer; your bones are unable to grow anymore; you have a serious injury or illness; you are severely overweight or have difficulty breathing.</p>
+            <p><strong>e.</strong> Tell your doctor if you have or have ever had diabetes, cancer, a kidney transplant, thyroid problems, are pregnant, planning to become pregnant or are breastfeeding, are taking any other medicines.</p>
+            <p><strong>f.</strong> Most common side-effects: a reaction near the injection site; limping; swelling of the arms or legs; painful joints; muscle aches, pains or stiffness; tingling; or numbness in your hands or feet. If symptoms continue or you experience other side effects or would like further information, please talk to your healthcare professional or visit www.medsafe.govt.nz for the Consumer Medicines Information.</p>
+            <p><strong>g.</strong> OMNITROPE and SurePal are registered trademarks of Sandoz AG. Sandoz New Zealand Limited, Auckland</p>
+          </div>
+
         </div>
       </div>
     </div>

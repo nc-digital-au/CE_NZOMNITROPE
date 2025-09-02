@@ -22,6 +22,12 @@ import { MatInputModule } from '@angular/material/input';
 import { RegisterPatientDetailsComponent } from './register-patient-details/register-patient-details.component';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 
+  const defaultDateOfBirth = {
+    day: 1,
+    month: 1,
+    year: 1900
+  }
+
 @Component({
   selector: 'app-register',
   standalone: true,
@@ -219,9 +225,9 @@ export class RegisterComponent implements OnInit {
       firstName: patientData.firstName,
       lastName: patientData.lastName,
       middleName: undefined,
-      birthDay: undefined,
-      birthYear: undefined,
-      birthMonth: undefined,
+      birthDay: defaultDateOfBirth.day,
+      birthYear: defaultDateOfBirth.year,
+      birthMonth: defaultDateOfBirth.month,
       nationalHealthIndex: patientData.nhiNumber,
       medicareNumber: undefined,
       email: patientData.email,
