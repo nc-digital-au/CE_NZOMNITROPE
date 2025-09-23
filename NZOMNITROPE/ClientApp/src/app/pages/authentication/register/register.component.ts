@@ -20,13 +20,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatInputModule } from '@angular/material/input';
 import { RegisterPatientDetailsComponent } from './register-patient-details/register-patient-details.component';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
-
-  const defaultDateOfBirth = {
-    day: 1,
-    month: 1,
-    year: 1900
-  }
+import { MatProgressSpinner } from '@angular/material/progress-spinner'; 
 
 @Component({
   selector: 'app-register',
@@ -80,6 +74,8 @@ export class RegisterComponent implements OnInit {
   registrationSubmitted: boolean = false;
   submitting: boolean = false;
   emailInvalid: boolean = false;
+  deliveryFormSubmitted = false;
+
 
   patientForm = this._fb.group({});
   guardianForm = this._fb.group({});
@@ -120,32 +116,42 @@ export class RegisterComponent implements OnInit {
     });
   }
 
+  get consentCtrl() {
+    return this.barcodeForm?.get('consent');
+  }
+
+  get showConsentError(): boolean {
+    const c = this.consentCtrl;
+    return !!(c && c.invalid && (c.touched || this.barcodeFormSubmitted));
+  }
+
   submitBarcodeValidation() {
+    this.barcodeFormSubmitted = true;
     this.barcodeForm.markAllAsTouched();
-    const barcodeFormData = this.barcodeForm.value as any;
-    if (this.barcodeForm.valid) {
-      const barcode = barcodeFormData.barcode;
-      this.barcodeFormSubmitted = true;
-      this._registrationService.validateProductBarcode(barcode)
-        .pipe(
-          takeUntilDestroyed(this._destroyRef),
-        )
-        .subscribe((response) => 
-        {
-           if (response.isSuccess) {
-              const validBarcode = response.resultObject;
-              this.barcodeInvalid = !validBarcode;
-              if (validBarcode){
-                this.stepper.next();
-              }
-           } else 
-           {
-            this.barcodeForm.setErrors({ invalid: true });
-            this.barcodeInvalid = true;
-           }
-        }
-      );
+    this.barcodeForm.updateValueAndValidity({ onlySelf: false, emitEvent: false });
+
+    console.log('consent value:', this.consentCtrl?.value,
+                'errors:', this.consentCtrl?.errors,
+                'touched:', this.consentCtrl?.touched,
+                'invalid:', this.consentCtrl?.invalid);
+
+    if (this.barcodeForm.invalid) {
+      return;
     }
+
+    const { barcode } = this.barcodeForm.value as any;
+    this._registrationService.validateProductBarcode(barcode)
+      .pipe(takeUntilDestroyed(this._destroyRef))
+      .subscribe((response) => {
+        if (response.isSuccess) {
+          const validBarcode = response.resultObject;
+          this.barcodeInvalid = !validBarcode;
+          if (validBarcode) this.stepper.next();
+        } else {
+          this.barcodeForm.setErrors({ invalid: true });
+          this.barcodeInvalid = true;
+        }
+      });
   }
 
   submitPatientDetailsForm(){
@@ -179,14 +185,20 @@ export class RegisterComponent implements OnInit {
     }
   }
 
-  submitDeliveryForm(){
-    const collectingFormData = this.collectingForm.value as any;
-    const addressFormData = this.addressForm.value as any;
+  submitDeliveryForm() {
+    this.deliveryFormSubmitted = true;
+
     this.collectingForm.markAllAsTouched();
+    this.addressForm.markAllAsTouched();
+
+    this.collectingForm.updateValueAndValidity({ emitEvent: false });
+    this.addressForm.updateValueAndValidity({ emitEvent: false });
+
     if (this.collectingForm.valid && this.addressForm.valid) {
       this.stepper.next();
     }
   }
+
   onRegisterClick(): void {
     const dto = this.createDto();
     if (this.patientForm.valid && this.guardianForm.valid && this.addressForm.valid && this.termsForm.valid) {
@@ -225,9 +237,9 @@ export class RegisterComponent implements OnInit {
       firstName: patientData.firstName,
       lastName: patientData.lastName,
       middleName: undefined,
-      birthDay: defaultDateOfBirth.day,
-      birthYear: defaultDateOfBirth.year,
-      birthMonth: defaultDateOfBirth.month,
+      birthDay: undefined,
+      birthYear: undefined,
+      birthMonth: undefined,
       nationalHealthIndex: patientData.nhiNumber,
       medicareNumber: undefined,
       email: patientData.email,
