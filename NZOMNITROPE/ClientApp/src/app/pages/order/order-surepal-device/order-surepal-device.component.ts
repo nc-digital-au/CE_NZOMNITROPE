@@ -1,11 +1,10 @@
 import { Component, DestroyRef, inject, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { MaterialModule } from 'src/app/material.module';
 import { StepperOrientation } from '@angular/cdk/stepper';
 import { Observable, finalize, map, tap } from 'rxjs';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { CommonModule } from '@angular/common';
-import { AddressComponent } from '../../../components/address/address.component';
 import {
   AddressState,
   ConsumableOrderItemDto,
@@ -24,6 +23,16 @@ import { OrderFormComponent } from './order-form/order-form.component';
 import { PatientFormComponent } from 'src/app/components/patient-form/patient-form.component';
 import { environment } from 'src/environments/environment';
 import { AddressWithAddressTypeComponent } from 'src/app/components/address-with-address-type/address-with-address-type.component';
+
+function exactlyOneSelected(keys: string[]): ValidatorFn {
+  return (control: AbstractControl): ValidationErrors | null => {
+    const group = control as FormGroup;
+    if (!group || typeof (group as any).get !== 'function') return null;
+    const values = keys.map(k => group.get(k)?.value);
+    const count = values.filter(Boolean).length;
+    return count === 1 ? null : { productSelection: 'Please select one option.' };
+  };
+}
 
 @Component({
   selector: 'app-order-surepal-device',
@@ -52,11 +61,11 @@ export class OrderSurepalDeviceComponent {
   loading = true;
   orderSuccess = false;
   establishmentOnly = false;
+  showAddressForm = true;
   _destroyRef = inject(DestroyRef);
   patientModel: GetPatientInformationWithCarerResponse;
   productsRequested: ConsumableOrderItemDto[] = [];
 
-  // forms
   patientForm = this._fb.group({});
   addressForm = this._fb.group({});
   orderForm = this._fb.group({});
@@ -78,8 +87,57 @@ export class OrderSurepalDeviceComponent {
     this.getPatientInformation();
   }
 
+  onOrderFormCreated(form: FormGroup) {
+    this.orderForm = form;
+    this.applyProductSelectionValidators();
+    this.orderForm.valueChanges
+      .pipe(takeUntilDestroyed(this._destroyRef))
+      .subscribe(() => this.applyProductSelectionValidators());
+  }
+
+  private applyProductSelectionValidators(): void {
+    if (!this.orderForm) return;
+
+    const needleCtl = this.orderForm.get('needleKit');
+    const penCtl = this.orderForm.get('penReplacement');
+
+    if (!needleCtl || !penCtl) return;
+
+    // Reset control-level validators
+    needleCtl.removeValidators(Validators.required);
+    penCtl.removeValidators(Validators.required);
+
+    // Reset group-level validator then re-apply based on availability
+    this.orderForm.setValidators(null);
+
+    const needleAvail = needleCtl.enabled;
+    const penAvail = penCtl.enabled;
+
+    if (needleAvail && penAvail) {
+      // Both visible/available: exactly one must be chosen
+      this.orderForm.addValidators(exactlyOneSelected(['needleKit', 'penReplacement']));
+    } else if (penAvail) {
+      // Only pen available: require it
+      penCtl.addValidators(Validators.required);
+    } else if (needleAvail) {
+      // Only needle available: require it
+      needleCtl.addValidators(Validators.required);
+    }
+
+    needleCtl.updateValueAndValidity({ emitEvent: false });
+    penCtl.updateValueAndValidity({ emitEvent: false });
+    this.orderForm.updateValueAndValidity({ emitEvent: false });
+  }
+
+  private hasAnyProductSelected(): boolean {
+    const v = this.orderForm?.value as any;
+    return !!(v?.needleKit || v?.penReplacement);
+  }
+
   onEstablishmentOnlyChange(event: any): void {
     this.establishmentOnly = event.value;
+    this.showAddressForm = false;
+    setTimeout(() => (this.showAddressForm = true), 0);
   }
 
   getAddressPatchData(): any {
@@ -107,7 +165,6 @@ export class OrderSurepalDeviceComponent {
         tap((response) => {
           if (response.isSuccess) {
             this.patientModel = response.resultObject;
-            console.log('Delivery AddresType:', this.patientModel.deliveryAddressType);
             this.establishmentOnly =
               this.patientModel.deliveryAddressType ===
               DeliveryAddressType.BusinessAddress;
@@ -121,6 +178,7 @@ export class OrderSurepalDeviceComponent {
           if (result.isSuccess) {
             this.patientModel = result.resultObject;
             this.loading = false;
+            if (this.orderForm) this.applyProductSelectionValidators();
           }
         },
         error: (error) => {
@@ -169,13 +227,13 @@ export class OrderSurepalDeviceComponent {
       ? DeliveryAddressType.BusinessAddress
       : DeliveryAddressType.PrivateAddress;
 
-    const orderDto = new CreateOrderForConsumableProductsForPatientDto({
+    return new CreateOrderForConsumableProductsForPatientDto({
       patientId: this.patientModel.patientId,
       firstName: patientFormData.firstName,
       lastName: patientFormData.lastName,
       email: this.patientModel.email,
-      mobile: this.patientModel.mobileNumber,
-      patientReferenceNumber: this.patientModel.nationalHealthIndex,
+      mobile: patientFormData.mobileNumber,
+      patientReferenceNumber: patientFormData.nhiNumber,
       deliveryAddressType: deliveryType,
       deliveryInstitutionName: addressFormData.name,
       deliveryUnitNumber: addressFormData.unitNumber,
@@ -185,16 +243,25 @@ export class OrderSurepalDeviceComponent {
       deliveryState: AddressState.NA,
       deliverTo: undefined,
       consumableOrderItems: this.productsRequested,
-      adminNotificationEmail: adminNotificationEmail,
+      adminNotificationEmail,
     });
-
-    console.log('Order DTO:', orderDto);
-
-    return orderDto;
   }
 
   onFormSubmit(): void {
     this.orderForm.markAllAsTouched();
+    this.applyProductSelectionValidators();
+
+    // FINAL GUARD: block submit if no product picked (covers any edge-case)
+    if (!this.hasAnyProductSelected()) {
+      const current = this.orderForm.errors || {};
+      this.orderForm.setErrors({ ...current, productSelection: 'Please select one option.' });
+      return;
+    } else {
+      // clear form-level selection error if user has fixed it
+      const { productSelection, ...rest } = this.orderForm.errors || {};
+      this.orderForm.setErrors(Object.keys(rest).length ? rest : null);
+    }
+
     if (
       this.patientForm.valid &&
       this.addressForm.valid &&
@@ -227,23 +294,16 @@ export class OrderSurepalDeviceComponent {
   }
 
   private GetOrderProducts(): void {
+    this.productsRequested = [];
     const orderFormData = this.orderForm.value as any;
     if (orderFormData.needleKit) {
       this.productsRequested.push(
-        new ConsumableOrderItemDto({
-          productId: undefined,
-          sku: orderFormData.needleKit,
-          quantity: 1,
-        })
+        new ConsumableOrderItemDto({ productId: undefined, sku: orderFormData.needleKit, quantity: 1 })
       );
     }
     if (orderFormData.penReplacement) {
       this.productsRequested.push(
-        new ConsumableOrderItemDto({
-          productId: undefined,
-          sku: orderFormData.penReplacement,
-          quantity: 1,
-        })
+        new ConsumableOrderItemDto({ productId: undefined, sku: orderFormData.penReplacement, quantity: 1 })
       );
     }
   }

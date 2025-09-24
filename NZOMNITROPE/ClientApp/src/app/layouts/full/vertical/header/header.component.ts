@@ -132,10 +132,6 @@ export class HeaderComponent {
 
   openDialog() {
     const dialogRef = this.dialog.open(AppSearchDialogComponent);
-
-    dialogRef.afterClosed().subscribe((result) => {
-      console.log(`Dialog result: ${result}`);
-    });
   }
 
   changeLanguage(lang: any): void {

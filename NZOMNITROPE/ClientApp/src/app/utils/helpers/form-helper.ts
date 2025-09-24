@@ -50,6 +50,12 @@ export function getErrorMessage(formGroup: FormGroup, formName: string, errorLab
     if (formCtl.errors?.['passwordMismatch'])
       return `Passwords do not match`;    
 
+    if (formCtl.errors?.['pastDate'])         
+      return `${errorLabel} cannot be in the past`;
+
+    if (formCtl.errors?.['withinNextHour'])   
+      return `${errorLabel} must be at least 1 hour from now`;
+
     if(formCtl.errors?.['custom'])
       return `${errorLabel} ${formCtl.errors?.['custom']}`;
 

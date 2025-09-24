@@ -61,7 +61,6 @@ export class AppNavItemComponent implements OnChanges {
   }
 
   onItemSelected(item: NavItem) {
-    console.log('Clicked item:', item);
     if (item.external) {
       window.open(item.route, '_blank');
       return;

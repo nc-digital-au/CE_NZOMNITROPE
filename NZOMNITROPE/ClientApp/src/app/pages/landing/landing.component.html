@@ -11,7 +11,7 @@
       <div class="grid-container">
         <div class="grid-box first-box">
           <p>If you are returning, please re-enter your details to login.</p>
-          <a mat-flat-button class="login-button" href="/bff/login">LOGIN</a>
+          <button mat-flat-button class="login-button" (click)="loginButtonClicked()">LOGIN</button>
           <div class="forgot-password">
             <span>Forgot your password?</span>
             <a [routerLink]="[routeLinks.authentication.forgotPassword]" class="text-decoration-none f-w-500 f-s-14">
