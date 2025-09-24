@@ -19,13 +19,13 @@ namespace NZOMNITROPE.ServiceRegistrations
             JsonWebTokenHandler.DefaultMapInboundClaims = false;
             services.AddAuthentication(options =>
             {
-                options.DefaultScheme = "omnitrope_cookie";
+                options.DefaultScheme = "omnipal_cookie";
                 options.DefaultChallengeScheme = "oidc";
                 options.DefaultSignOutScheme = "oidc";
             })
-            .AddCookie("omnitrope_cookie", options =>
+            .AddCookie("omnipal_cookie", options =>
             {
-                options.Cookie.Name = "__Host-omnitrope";
+                options.Cookie.Name = "__Host-omnipal";
                 options.Cookie.SameSite = SameSiteMode.Strict;
             })
             .AddOpenIdConnect("oidc", options =>
@@ -40,11 +40,10 @@ namespace NZOMNITROPE.ServiceRegistrations
                 options.GetClaimsFromUserInfoEndpoint = true;
                 options.SaveTokens = true;
                 options.Scope.Clear();
-                 foreach (var scope in config.Scopes)
+                foreach (var scope in config.Scopes)
                 {
                     options.Scope.Add(scope);
                 }
-                options.ClaimActions.Remove("aud");
                 options.ClaimActions.DeleteClaim("idp");
                 options.ClaimActions.MapJsonKey("role", "role");
                 options.ClaimActions.MapJsonKey("program_id", "program_id");
@@ -53,7 +52,7 @@ namespace NZOMNITROPE.ServiceRegistrations
                 options.ClaimActions.MapJsonKey("prescriber_number", "prescriber_number");
                 options.ClaimActions.MapJsonKey("ahpra_number", "ahpra_number");
                 options.ClaimActions.MapJsonKey("registration_status", "registration_status");
-
+                
                 options.TokenValidationParameters = new()
                 {
                     NameClaimType = "name",
