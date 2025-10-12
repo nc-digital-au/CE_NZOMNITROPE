@@ -25,43 +25,56 @@
           </mat-form-field>
 
           <app-address-with-address-type
-          *ngIf="showAddressForm"
-          [key]="establishmentOnly"
-          [establishmentOnly]="establishmentOnly" 
-          [addressValues]="getAddressPatchData()"
-          [hiddenFields]="['phone', 'mobile', 'state']"
-          [disabledFields]="establishmentOnly ? [] : ['name']"
-          (formCreated)="addressForm = $event"
+            *ngIf="showAddressForm"
+            [key]="establishmentOnly"
+            [establishmentOnly]="establishmentOnly"
+            [addressValues]="getAddressPatchData()"
+            [hiddenFields]="['phone', 'mobile', 'state']"
+            [disabledFields]="establishmentOnly ? [] : ['name']"
+            (formCreated)="addressForm = $event"
           >
-          <div class="d-flex align-items-center justify-content-between">
-            <button mat-stroked-button class="cancel-button" [routerLink]="[routeLinks.home]" type="button">Cancel</button>
-            <button mat-flat-button color="primary" type="submit" (click)="onPatientFormNext()">Next</button>
-          </div>
-        </app-address-with-address-type>
+            <div class="d-flex align-items-center justify-content-between">
+              <button mat-stroked-button class="cancel-button" [routerLink]="[routeLinks.home]" type="button">Cancel</button>
+              <button mat-flat-button color="primary" type="submit" (click)="onPatientFormNext()">Next</button>
+            </div>
+          </app-address-with-address-type>
         </mat-step>
 
         <mat-step [stepControl]="orderForm">
-        <ng-template matStepLabel>Order Form</ng-template>
-        <app-order-form (formCreated)="orderForm = $event"></app-order-form>
-        <div class="d-flex align-items-center justify-content-between">
-              <div>
-                <button mat-stroked-button class="cancel-button" [routerLink]="[routeLinks.home]" type="button">Cancel</button>
-                <button mat-flat-button color="accent" class="m-l-10" matStepperPrevious>Back</button>
-              </div>
-              <button mat-flat-button color="primary" type="submit" (click)="onFormSubmit()">
-                @if(!submitting) {
-                  Submit
-                }@else {
-                  <mat-spinner diameter="20" mode="indeterminate"></mat-spinner>
-                }
-              </button>
+          <ng-template matStepLabel>Order Form</ng-template>
+
+          <app-order-form (formCreated)="onOrderFormCreated($event)"></app-order-form>
+
+          <mat-error *ngIf="orderForm?.errors?.['productSelection'] && orderForm?.touched">
+            {{ orderForm?.errors?.['productSelection'] }}
+          </mat-error>
+          <mat-error *ngIf="orderForm?.get('penReplacement')?.hasError('required') && orderForm?.touched">
+            Please select Pen Replacement.
+          </mat-error>
+          <mat-error *ngIf="orderForm?.get('needleKit')?.hasError('required') && orderForm?.touched">
+            Please select Needle Kit.
+          </mat-error>
+
+          <div class="d-flex align-items-center justify-content-between">
+            <div>
+              <button mat-stroked-button class="cancel-button" [routerLink]="[routeLinks.home]" type="button">Cancel</button>
+              <button mat-flat-button color="accent" class="m-l-10" matStepperPrevious>Back</button>
             </div>
+            <button mat-flat-button color="primary" type="submit" (click)="onFormSubmit()">
+              @if(!submitting) {
+                Submit
+              }@else {
+                <mat-spinner diameter="20" mode="indeterminate"></mat-spinner>
+              }
+            </button>
+          </div>
         </mat-step>
 
       </mat-stepper>
     </mat-card-content>
   </mat-card>
 </div>
+
 <div *ngIf="orderSuccess">
   <mat-card>
     <mat-card-content class="b-t-1">
@@ -72,8 +85,8 @@
         <div class="icon-block">
           <div class="icon-block-content" style="max-width: 100%;">
             Thank you, your order has been placed and will be delivered within 10 working days. Please note that if you have nominated to have your order delivered to your local community pharmacy, you will need to collect your order directly from there.
-            Should you have any queries please contact the Program Administrator on 0800 666 487.            
-        </div>
+            Should you have any queries please contact the Program Administrator on 0800 666 487.
+          </div>
         </div>
       </div>
     </mat-card-content>

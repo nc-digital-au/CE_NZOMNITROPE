@@ -56,10 +56,9 @@
                     <mat-checkbox formControlName="consent">
                       I confirm that I have been prescribed Omnitrope<sup>®</sup> (somatropin).*
                     </mat-checkbox>
-                    @if(barcodeForm.get('consent')?.hasError('requiredTrue')){
-                      <mat-error>
-                        Please confirm to proceed.
-                      </mat-error>
+
+                    @if (showConsentError) {
+                      <div class="mat-mdc-form-field-error">Please confirm to proceed.</div>
                     }
                   </div>
                 </form>    
@@ -104,10 +103,12 @@
           <mat-step [stepControl]="addressForm">
             <ng-template matStepLabel>Delivery</ng-template>
             <app-person-collecting-form (formCreated)="collectingForm = $event"></app-person-collecting-form>
-            <app-address (formCreated)="addressForm = $event" title="Delivery Address"
+            <app-address
+              (formCreated)="addressForm = $event"
+              [submitted]="deliveryFormSubmitted"
+              title="Delivery Address"
               searchHint="Enter your delivery address to search"
-              [hiddenFields]="[ 'mobile','search', 'name']"
-              >
+              [hiddenFields]="['mobile','search','name']">
             </app-address>
             <div class="d-flex align-items-center justify-content-between">
               <div>

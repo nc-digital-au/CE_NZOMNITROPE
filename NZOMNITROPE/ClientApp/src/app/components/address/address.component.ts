@@ -43,6 +43,7 @@ export class AddressComponent implements OnInit {
   searchHint: string;
   @Input()
   disabledFields: string[] = [];
+  @Input() submitted = false;
 
   @Output()
   formCreated = new EventEmitter<FormGroup>();
