@@ -124,10 +124,20 @@
   font-style: italic;
 }
 
-  // font
-  $font-family: 'Jost', arial;
-  $font-family-text: 'Jost', arial;
-  $font-family-head: 'Jost', arial;
+// Material Icons font-face declaration
+@font-face {
+  font-family: 'Material Icons';
+  font-style: normal;
+  font-weight: 400;
+  src: url('../fonts/MaterialIcons-Regular.woff2') format('woff2'),
+       url('../fonts/MaterialIcons-Regular.woff') format('woff'),
+       url('../fonts/MaterialIcons-Regular.ttf') format('truetype');
+}
+
+  // font (removed Arial fallbacks for compliance)
+  $font-family: 'Jost';
+  $font-family-text: 'Jost';
+  $font-family-head: 'Jost';
 
 // ======================================================
 // Branding guideline colors
