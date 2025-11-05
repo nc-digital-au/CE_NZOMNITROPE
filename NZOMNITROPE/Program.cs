@@ -1,47 +1,53 @@
-using Microsoft.AspNetCore.SpaServices.AngularCli;
-using OidcProxy.Net.ModuleInitializers;
-using OidcProxy.Net.OpenIdConnect;
+using Duende.Bff.Yarp;
+using NZOMNITROPE;
+using NZOMNITROPE.ServiceRegistrations;
+using Microsoft.AspNetCore.HttpOverrides;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var config = builder.Configuration
-    .GetSection("OidcProxy")
-    .Get<OidcProxyConfig>();
+Configuration config = new();
+builder.Configuration.Bind("BFF", config);
 
-builder.Services.AddOidcProxy(config);
-builder.Services.AddHttpContextAccessor();
-
-builder.Services.AddSpaStaticFiles(configuration =>
+// Configure forwarded headers for Azure App Service
+builder.Services.Configure<ForwardedHeadersOptions>(options =>
 {
-    configuration.RootPath = "wwwroot";
-});            
+    options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+    options.KnownNetworks.Clear();
+    options.KnownProxies.Clear();
+});
+
+builder.Services.AddAuthenticationServices(config);
+
+// Add controllers for diagnostics
+builder.Services.AddControllers();
 
 var app = builder.Build();
+
+// Use forwarded headers for Azure App Service
+app.UseForwardedHeaders();
 
 app.UseDefaultFiles();
 app.UseStaticFiles();
 
-if (!app.Environment.IsDevelopment())
+app.UseAuthentication();
+app.UseBff();
+app.MapBffManagementEndpoints();
+
+if (config.Apis.Count > 0)
 {
-    app.UseSpaStaticFiles();
+    foreach (var api in config.Apis)
+    {
+        var apiBuilder = app.MapRemoteBffApiEndpoint(api.LocalPath, api.RemoteUrl!);
+        if (api.RequiredToken.HasValue)
+        {
+            apiBuilder.RequireAccessToken(api.RequiredToken.Value);
+        }
+    }
 }
 
-app.UseOidcProxy();
-app.UseRouting();
+// Map controllers for diagnostics
+app.MapControllers();
 
-app.UseEndpoints(_ => { });
-
-app.UseSpa(spa =>
-{
-    spa.Options.SourcePath = "ClientApp";
-
-    if (app.Environment.IsDevelopment())
-    {
-        spa.UseAngularCliServer(npmScript: "start");
-        
-        // or use:
-        // spa.UseProxyToSpaDevelopmentServer("http://localhost:4200");
-    }
-});
+app.MapFallbackToFile("/index.html");
 
 app.Run();
