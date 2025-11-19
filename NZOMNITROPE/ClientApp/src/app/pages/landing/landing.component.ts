@@ -3,7 +3,7 @@ import { Component, EventEmitter, Input, Output, ViewEncapsulation } from '@angu
 import { CoreService } from 'src/app/services/core.service';
 import { routeLinks } from 'src/app/utils/routes';
 import { CONTACT_VALUES } from 'src/app/utils/constants';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { RouterLink } from '@angular/router';
 
 
 @Component({
@@ -29,12 +29,5 @@ export class LandingComponent {
   constructor(
     private settings: CoreService,
     private scroller: ViewportScroller,
-    private route: ActivatedRoute
   ) {}
-
-  loginButtonClicked(){
-    const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl') || '/';
-    const loginUrl = `/bff/login?returnUrl=${encodeURIComponent(returnUrl)}`;
-    window.location.href = loginUrl;
-  }
 }
