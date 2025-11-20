@@ -8,6 +8,8 @@ const PROXY_CONFIG = [
     context: [
       // OidcProxy auth endpoints
       "/.auth",
+      "/signin-oidc",
+      "/signout-callback-oidc",
 
       // API Routes
       "/api",

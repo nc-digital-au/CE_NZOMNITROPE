@@ -40,7 +40,7 @@ export class AppHorizontalNavItemComponent implements OnInit {
       this.authenticationSvc.getIsAuthenticated().subscribe((isAuthenticated) => {
         if (isAuthenticated) {
           this.authenticationSvc.signOut();
-          window.location.href = '/.auth/logout?landingpage=/landing';
+          window.location.href = '/.auth/end-session';
         } else {
           this.router.navigate([routeLinks.landing]);
         }

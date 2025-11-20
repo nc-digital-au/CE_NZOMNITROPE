@@ -72,6 +72,10 @@ export class AuthenticationService {
 
   constructor(private readonly _http: HttpClient) { }
 
+  public getLogoutUrl(): Observable<string> {
+    return of('/.auth/end-session');
+  }
+
   public getSession(ignoreCache: boolean = true) {
     if (!this._session$ || ignoreCache) {
       this._session$ = this._http.get<any>('/.auth/me').pipe(
