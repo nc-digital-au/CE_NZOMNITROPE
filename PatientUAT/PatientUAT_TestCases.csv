@@ -1,0 +1,202 @@
+UAT_ID,Test Name,Use Case,Preconditions,Instructions,Pass Criteria
+UAT_001,Patient registration - successful registration,"A new patient registers for the OmniPal Patient Support Program after being prescribed Omnitrope by their healthcare professional.","- Patient registration feature is available in the application
+- The patient has collected their prescription and has access to the product barcode (last 4 digits)
+- The email address to be used has not been previously registered","1. Navigate to the OmniPal landing page.
+2. Click the ""REGISTER"" button.
+3. On the Welcome step, enter the last 4 digits of the product barcode.
+4. Check the confirmation checkbox ""I confirm that I have been prescribed Omnitrope (somatropin).""
+5. Click ""Next"" to proceed to Patient Details.
+6. Enter patient details including first name, last name, NHI number, email address, mobile phone, and password.
+7. Click ""Next"" to proceed to Guardian Details.
+8. Optionally enter guardian details (first name, last name, email, mobile phone) or leave blank.
+9. Click ""Next"" to proceed to Delivery step.
+10. Enter the name of person collecting the delivery and contact number.
+11. Enter delivery address details (unit number if applicable, street address, city, postcode).
+12. Click ""Next"" to proceed to Terms step.
+13. Read and accept the privacy consent, terms and conditions, and adverse event contact consent.
+14. Click ""Submit"" to complete registration.","- A success message appears: ""Thank you for registering, your account is now active.""
+- The patient receives a confirmation email (check spam/junk folder if not in inbox).
+- The patient can log in with the registered email and password.
+- The patient record is created in the system."
+UAT_002,Patient registration - duplicate email error,"A patient attempts to register with an email address that is already registered in the system.","- Patient registration feature is available in the application
+- An existing user account already uses the email address that will be entered
+- The patient has a valid product barcode","1. Navigate to the OmniPal landing page.
+2. Click the ""REGISTER"" button.
+3. On the Welcome step, enter the last 4 digits of a valid product barcode.
+4. Check the confirmation checkbox ""I confirm that I have been prescribed Omnitrope (somatropin).""
+5. Click ""Next"" to proceed to Patient Details.
+6. Enter patient details, using an email address that is already registered in the system.
+7. Click ""Next"" to attempt to proceed to the next step.","- A validation error message appears indicating the email address cannot be used to register for this program.
+- The user is NOT advanced to the Guardian Details step.
+- A new patient record is NOT created in the system."
+UAT_003,Patient registration - invalid barcode error,"A patient attempts to register with an invalid product barcode.","- Patient registration feature is available in the application","1. Navigate to the OmniPal landing page.
+2. Click the ""REGISTER"" button.
+3. On the Welcome step, enter an invalid 4-digit barcode (e.g., ""0000"" or ""9999"").
+4. Check the confirmation checkbox ""I confirm that I have been prescribed Omnitrope (somatropin).""
+5. Click ""Next"" to attempt to proceed.","- An ""Invalid barcode"" error message is displayed.
+- The user is NOT advanced to the Patient Details step.
+- A patient record is NOT created in the system."
+UAT_004,Patient registration - consent checkbox validation,"A patient attempts to proceed with registration without confirming they have been prescribed Omnitrope.","- Patient registration feature is available in the application","1. Navigate to the OmniPal landing page.
+2. Click the ""REGISTER"" button.
+3. On the Welcome step, enter the last 4 digits of a valid product barcode.
+4. Leave the confirmation checkbox unchecked.
+5. Click ""Next"" to attempt to proceed.","- A validation error message appears: ""Please confirm to proceed.""
+- The user is NOT advanced to the Patient Details step.
+- A patient record is NOT created in the system."
+UAT_005,Patient registration - cancel registration,"A patient decides to cancel the registration process at any step.","- Patient registration feature is available in the application","1. Navigate to the OmniPal landing page.
+2. Click the ""REGISTER"" button.
+3. Begin filling out registration details (any step).
+4. Click the ""Cancel"" button.","- The user is redirected back to the landing page.
+- No patient record is created in the system.
+- Any entered data is discarded."
+UAT_006,Patient login - successful login,"A registered patient logs in to access the OmniPal Patient Support Program portal.","- The patient has a registered account with valid credentials
+- The patient is not currently logged in","1. Navigate to the OmniPal landing page.
+2. Click the ""LOGIN"" button.
+3. Enter the registered email address and password in the login form.
+4. Submit the login form.","- The patient is successfully authenticated.
+- The patient is redirected to the Home dashboard.
+- The Home dashboard displays the welcome message and available actions (Order SurePal Device, Schedule Training, Watch Video, Resources)."
+UAT_007,Patient login - invalid credentials error,"A patient attempts to log in with incorrect credentials.","- The patient has a registered account
+- The patient is not currently logged in","1. Navigate to the OmniPal landing page.
+2. Click the ""LOGIN"" button.
+3. Enter an incorrect email address or password.
+4. Submit the login form.","- An error message is displayed indicating invalid credentials.
+- The patient is NOT logged in.
+- The patient remains on the login page."
+UAT_008,Patient forgot password - request reset link,"A patient requests a password reset link because they have forgotten their password.","- The patient has a registered account
+- The patient has access to their registered email address","1. Navigate to the OmniPal landing page.
+2. Click the ""Click here"" link under ""Forgot your password?""
+3. Enter the registered email address in the form.
+4. Click ""Submit"" to request the reset link.","- A success message appears: ""Your request to reset your password was processed. Please check your email inbox for the reset password link.""
+- A password reset email is sent to the registered email address.
+- The ""Back to login"" button is displayed."
+UAT_009,Patient reset password - successful password reset,"A patient resets their password using the reset link received via email.","- The patient has requested a password reset link
+- The patient has access to the password reset email
+- The reset link has not expired","1. Open the password reset email.
+2. Click the password reset link in the email.
+3. On the reset password page, enter a new password.
+4. Confirm the new password.
+5. Click ""Submit"" to reset the password.","- A success message appears: ""Your password reset attempt was successful.""
+- The patient can log in using the new password.
+- The old password no longer works for login."
+UAT_010,Patient view home dashboard,"A logged-in patient views the Home dashboard to see available program services.","- The patient is logged in to the OmniPal portal","1. Navigate to or confirm you are on the Home page after login.
+2. Review the displayed content and available options.","- The welcome message ""Welcome to the OmniPal Patient Support Program"" is displayed.
+- The ""Order SurePal® Device and Consumables"" button is displayed and clickable.
+- The ""Schedule an Injection Training Session"" button is displayed and clickable.
+- The ""Watch: How to Inject Video"" section with a play button is displayed.
+- The Resources section with links to SurePal guides (5mg, 10mg, 15mg) and Consumer Medicine Information is displayed."
+UAT_011,Patient order SurePal device and consumables - full options,"A patient orders a SurePal device and consumables (needle kit and/or pen replacement) for the first time or after 90 days from their last order.","- The patient is logged in to the OmniPal portal
+- The patient has not placed an order in the last 90 days, OR this is their first order","1. From the Home dashboard, click ""Order SurePal® Device and Consumables"".
+2. On the Patient Details step, verify pre-populated patient information (first name, last name, NHI number, email, mobile).
+3. Select Delivery Address Type (Place of business or Private address).
+4. If Place of business, enter or verify the business name.
+5. Enter or verify the delivery address (unit number, street address, city, postcode).
+6. Click ""Next"" to proceed to Order Form.
+7. Select ONE option from the Needle Kit Options (4mm, 5mm, or 8mm Needle Kit).
+8. Alternatively, select ONE option from Pen Replacement (5mg, 10mg, or 15mg Pen).
+9. Click ""Submit"" to place the order.","- A success message appears: ""Thank you, your order has been placed and will be delivered within 10 working days.""
+- The message includes information about pharmacy collection if applicable.
+- Contact number for queries (0800 666 487) is displayed.
+- The order is recorded in the system."
+UAT_012,Patient order pen only - within 90 days of last order,"A patient orders a pen replacement when their last order was placed within the last 90 days.","- The patient is logged in to the OmniPal portal
+- The patient has placed an order within the last 90 days","1. From the Home dashboard, click ""Order SurePal® Device and Consumables"".
+2. On the Patient Details step, verify pre-populated patient information.
+3. Enter or verify the delivery address.
+4. Click ""Next"" to proceed to Order Form.
+5. Observe that only Pen Replacement options are available (Needle Kit options are not shown).
+6. Select a Pen Replacement option (5mg, 10mg, or 15mg Pen).
+7. Click ""Submit"" to place the order.","- Only Pen Replacement options are displayed on the Order Form step.
+- Needle Kit options are NOT displayed.
+- A success message appears confirming the order has been placed.
+- The order is recorded in the system with only the pen replacement."
+UAT_013,Patient order - no product selected validation,"A patient attempts to submit an order without selecting any products.","- The patient is logged in to the OmniPal portal
+- The patient is on the Order Form step","1. From the Home dashboard, click ""Order SurePal® Device and Consumables"".
+2. Complete the Patient Details step and click ""Next"".
+3. On the Order Form step, do not select any Needle Kit or Pen Replacement option.
+4. Click ""Submit"" to attempt to place the order.","- A validation error message appears: ""Please select one option.""
+- The order is NOT submitted.
+- The user remains on the Order Form step."
+UAT_014,Patient order - cancel order,"A patient cancels the order process before submission.","- The patient is logged in to the OmniPal portal
+- The patient has started the order process","1. From the Home dashboard, click ""Order SurePal® Device and Consumables"".
+2. Begin filling out the order form (any step).
+3. Click the ""Cancel"" button.","- The patient is redirected back to the Home dashboard.
+- No order is recorded in the system.
+- Any entered data is discarded."
+UAT_015,Patient schedule injection training - successful request,"A patient schedules an injection training session with a program administrator.","- The patient is logged in to the OmniPal portal
+- The patient has received their SurePal device","1. From the Home dashboard, click ""Schedule an Injection Training Session"".
+2. Verify pre-populated patient details (first name, last name, NHI number, email, mobile).
+3. Verify or enter guardian details if applicable.
+4. In the Session Booking section, select a future date for the session.
+5. Select a time for the session (at least 1 hour from now if today's date is selected).
+6. Click ""Submit Training Request"".","- A success message appears: ""Thank you, your injection training request has been submitted.""
+- The message indicates the Program Administrator will contact the patient to confirm date and time.
+- Contact number for queries (0800 666 487) is displayed.
+- The training request is recorded in the system."
+UAT_016,Patient schedule training - past date validation,"A patient attempts to schedule an injection training session for a past date.","- The patient is logged in to the OmniPal portal","1. From the Home dashboard, click ""Schedule an Injection Training Session"".
+2. Verify pre-populated patient details.
+3. In the Session Booking section, attempt to select a date in the past.
+4. Click ""Submit Training Request"".","- Past dates are not selectable in the date picker (dates before today are disabled).
+- If somehow a past date is entered, a validation error is displayed.
+- The training request is NOT submitted."
+UAT_017,Patient schedule training - time validation for today,"A patient attempts to schedule an injection training session for today but with a time less than 1 hour from now.","- The patient is logged in to the OmniPal portal
+- Current time is at least 1 hour before midnight","1. From the Home dashboard, click ""Schedule an Injection Training Session"".
+2. Verify pre-populated patient details.
+3. In the Session Booking section, select today's date.
+4. Select a time that is less than 1 hour from the current time.
+5. Click ""Submit Training Request"".","- A validation error is displayed indicating the session time must be at least 1 hour from now.
+- The training request is NOT submitted.
+- The user can correct the time and resubmit."
+UAT_018,Patient schedule training - cancel request,"A patient cancels the training scheduling process before submission.","- The patient is logged in to the OmniPal portal
+- The patient has started the training scheduling process","1. From the Home dashboard, click ""Schedule an Injection Training Session"".
+2. Begin filling out the training request form.
+3. Click the ""Cancel"" button.","- The patient is redirected back to the Home dashboard.
+- No training request is recorded in the system.
+- Any entered data is discarded."
+UAT_019,Patient view how to inject video,"A patient watches the ""How to Inject"" instructional video from the Home dashboard.","- The patient is logged in to the OmniPal portal","1. From the Home dashboard, locate the ""Watch: How to Inject Video"" section.
+2. Click the play button.
+3. View the video on the resources page.","- The patient is navigated to the How to Inject resources page.
+- The video player (Kaltura embedded video) is displayed.
+- The video is playable and shows injection instructions.
+- The page title ""How to Inject"" is displayed."
+UAT_020,Patient access resources - PDF guides,"A patient accesses the SurePal usage guides and Consumer Medicine Information from the Home dashboard.","- The patient is logged in to the OmniPal portal","1. From the Home dashboard, locate the Resources section.
+2. Click on ""SurePal 5mg How to use guide"" link.
+3. Return to the Home dashboard.
+4. Click on ""SurePal 10mg How to use guide"" link.
+5. Return to the Home dashboard.
+6. Click on ""SurePal 15mg How to use guide"" link.
+7. Return to the Home dashboard.
+8. Click on ""Consumer Medicine Information"" link.","- Each SurePal guide link opens the corresponding PDF document in a new tab/window.
+- The Consumer Medicine Information link opens the Medsafe CMI PDF (https://www.medsafe.govt.nz/Consumers/CMI/o/omnitrope.pdf) in a new tab/window.
+- All PDF documents are readable and display correct content."
+UAT_021,Patient footer - Terms of Use link,"A patient accesses the Terms of Use from the footer of the application.","- The patient is logged in to the OmniPal portal","1. Navigate to any page within the authenticated portal (e.g., Home dashboard).
+2. Scroll to the footer of the page.
+3. Click on the ""Terms of Use"" link.","- A leaving site dialog or confirmation may appear (if implemented).
+- The Terms of Use page opens in a new tab/window.
+- The Sandoz Terms of Use page (https://www.sandoz.com.au/terms-use-and-conditions/) is displayed."
+UAT_022,Patient footer - Privacy Policy link,"A patient accesses the Privacy Policy from the footer of the application.","- The patient is logged in to the OmniPal portal","1. Navigate to any page within the authenticated portal (e.g., Home dashboard).
+2. Scroll to the footer of the page.
+3. Click on the ""Privacy Policy"" link.","- A leaving site dialog or confirmation may appear (if implemented).
+- The Privacy Policy page opens in a new tab/window.
+- The Sandoz Privacy Policy page (https://www.sandoz.com.au/Website-privacy-policy/) is displayed."
+UAT_023,Patient footer - Contact Us dialog,"A patient accesses the Contact Us information from the footer of the application.","- The patient is logged in to the OmniPal portal","1. Navigate to any page within the authenticated portal (e.g., Home dashboard).
+2. Scroll to the footer of the page.
+3. Click on the ""Contact Us"" link.","- A Contact Us dialog appears.
+- The dialog displays the Program Administrator contact number (0800 666 487).
+- The dialog displays medical enquiry/adverse event reporting information with email (mi.new_zealand@sandoz.com) and phone (0800 726 369).
+- The dialog displays product complaint information with email (sdz.technicalcomplaint@sandoz.com)."
+UAT_024,Patient logout,"A patient logs out of the OmniPal Patient Support Program portal.","- The patient is logged in to the OmniPal portal","1. Navigate to any page within the authenticated portal.
+2. Locate the logout option (typically in the header or user menu).
+3. Click the logout option.","- The patient is logged out of the system.
+- The patient is redirected to the landing page.
+- Attempting to access authenticated pages redirects to the login/landing page.
+- The patient's session is terminated."
+UAT_025,Patient order - change delivery address type,"A patient changes the delivery address type between business and private address during order placement.","- The patient is logged in to the OmniPal portal
+- The patient has started an order","1. From the Home dashboard, click ""Order SurePal® Device and Consumables"".
+2. On the Patient Details step, note the current Delivery Address Type selection.
+3. Change the selection from ""Place of business"" to ""Private address"" (or vice versa).
+4. Observe the address form fields update.
+5. Enter the appropriate address details.
+6. Complete the order process.","- When ""Place of business"" is selected, a business name field is displayed.
+- When ""Private address"" is selected, the business name field is hidden or disabled.
+- The address form refreshes when the address type is changed.
+- Previously entered address details for the patient are pre-populated based on the selected type."
