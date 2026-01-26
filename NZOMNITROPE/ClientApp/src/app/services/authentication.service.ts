@@ -72,20 +72,31 @@ export class AuthenticationService {
 
   constructor(private readonly _http: HttpClient) { }
 
+  public getLogoutUrl(): Observable<string> {
+    return of('/.auth/end-session');
+  }
+
   public getSession(ignoreCache: boolean = true) {
     if (!this._session$ || ignoreCache) {
-      this._session$ = this._http.get<Session>('/.auth/me').pipe(
-        tap(claims => {
-          if (claims && claims.length) {
+      this._session$ = this._http.get<any>('/.auth/me').pipe(
+        map(user => {
+          if (!user) {
+            return ANONYMOUS;
+          }
+
+          const claims: Claim[] = Object.entries(user).map(([type, value]) => ({
+            type,
+            value: value != null ? String(value) : ''
+          }));
+
+          if (claims.length) {
             this._currentUser = new AuthenticatedUser(claims);
-          } 
-          // else {
-          //   this._currentUser = undefined;
-          // }
+            return claims;
+          }
+
+          return ANONYMOUS;
         }),
-        catchError(err => {
-          return of(ANONYMOUS);
-        }),
+        catchError(() => of(ANONYMOUS)),
         shareReplay(CACHE_SIZE)
       );
     }
@@ -108,13 +119,6 @@ export class AuthenticationService {
     return this.getSession(ignoreCache).pipe(
       filter(this.userIsAuthenticated),
       map(s => s.find(c => c.type === 'name')?.value)
-    );
-  }
-
-  public getLogoutUrl(ignoreCache: boolean = false) {
-    return this.getSession(ignoreCache).pipe(
-      filter(this.userIsAuthenticated),
-      map(s => s.find(c => c.type === '/.auth/end-session')?.value)
     );
   }
 

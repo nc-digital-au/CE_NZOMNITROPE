@@ -11,7 +11,7 @@
       <div class="grid-container">
         <div class="grid-box first-box">
           <p>If you are returning, please re-enter your details to login.</p>
-          <button mat-flat-button class="login-button" (click)="loginButtonClicked()">LOGIN</button>
+          <a mat-flat-button class="login-button" href="/.auth/login">LOGIN</a>
           <div class="forgot-password">
             <span>Forgot your password?</span>
             <a [routerLink]="[routeLinks.authentication.forgotPassword]" class="text-decoration-none f-w-500 f-s-14">
@@ -22,10 +22,8 @@
         <div class="grid-box">
           <p>
             This site is intended for an audience in New Zealand. Access to this site is subject to the following 
-            <!-- <app-leaving-site [linkUrl]="contactValues.TERMS_OF_USE" linkLocation="Terms of Use"></app-leaving-site> -->
             <a [href]="contactValues.TERMS_OF_USE" target="_blank" rel="noopener noreferrer">Terms of Use</a>, and by registering for access to this site, 
             you agree to be bound by its 
-            <!-- <app-leaving-site [linkUrl]="contactValues.TERMS_OF_USE" linkLocation="Terms of Use"></app-leaving-site> -->
             <a [href]="contactValues.TERMS_OF_USE" target="_blank" rel="noopener noreferrer">Terms of Use</a>.
           </p>               
         </div>
@@ -43,3 +41,17 @@
       </div>
     </div>
   </div>
+  <!-- <div class="blank-layout-container justify-content-center">
+    <div class="main-panel" style="margin-top: 150px;">
+      <h1 class="omni-logo">
+        Welcome to
+        <span class="omni-pal">
+          <span class="omni red">Omni</span>
+          <span class="pal blue">Pal</span>
+        </span>
+        Patient Support Program
+        <br/>
+        This site is currently under construction.
+      </h1>        
+    </div>
+  </div> -->

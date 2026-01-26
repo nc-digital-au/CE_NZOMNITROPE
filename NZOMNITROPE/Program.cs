@@ -1,25 +1,13 @@
-using Duende.Bff.Yarp;
-using NZOMNITROPE;
-using NZOMNITROPE.ServiceRegistrations;
-using Microsoft.AspNetCore.HttpOverrides;
+using OidcProxy.Net.ModuleInitializers;
+using OidcProxy.Net.OpenIdConnect;
 
 var builder = WebApplication.CreateBuilder(args);
 
-Configuration config = new();
-builder.Configuration.Bind("BFF", config);
+var oidcProxyConfig = builder.Configuration
+    .GetSection("OidcProxy")
+    .Get<OidcProxyConfig>();
 
-// Configure forwarded headers for Azure App Service
-builder.Services.Configure<ForwardedHeadersOptions>(options =>
-{
-    options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
-    options.KnownNetworks.Clear();
-    options.KnownProxies.Clear();
-});
-
-builder.Services.AddAuthenticationServices(config);
-
-// Add controllers for diagnostics
-builder.Services.AddControllers();
+builder.Services.AddOidcProxy(oidcProxyConfig!);
 
 var app = builder.Build();
 
@@ -29,24 +17,7 @@ app.UseForwardedHeaders();
 app.UseDefaultFiles();
 app.UseStaticFiles();
 
-app.UseAuthentication();
-app.UseBff();
-app.MapBffManagementEndpoints();
-
-if (config.Apis.Count > 0)
-{
-    foreach (var api in config.Apis)
-    {
-        var apiBuilder = app.MapRemoteBffApiEndpoint(api.LocalPath, api.RemoteUrl!);
-        if (api.RequiredToken.HasValue)
-        {
-            apiBuilder.RequireAccessToken(api.RequiredToken.Value);
-        }
-    }
-}
-
-// Map controllers for diagnostics
-app.MapControllers();
+app.UseOidcProxy();
 
 app.MapFallbackToFile("/index.html");
 

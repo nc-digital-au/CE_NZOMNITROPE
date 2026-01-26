@@ -17,6 +17,7 @@ import { FormsModule } from '@angular/forms';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { BrandingComponent } from '../sidebar/branding.component';
 import { AppSettings } from 'src/app/config';
+import { AuthenticationService } from 'src/app/services/authentication.service';
 
 interface notifications {
   id: number;
@@ -125,9 +126,15 @@ export class HeaderComponent {
     private settings: CoreService,
     private vsidenav: CoreService,
     public dialog: MatDialog,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private auth: AuthenticationService
   ) {
     translate.setDefaultLang('en');
+  }
+
+  onSignoutClick(): void {
+    this.auth.signOut();
+    window.location.href = '/.auth/end-session';
   }
 
   openDialog() {

@@ -3,10 +3,12 @@ import { CommonModule } from '@angular/common';
 import { Component, Input, ViewChild, inject } from '@angular/core';
 import { ControlContainer, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Loader } from '@googlemaps/js-api-loader';
+import { environment } from 'src/environments/environment';
+
 import { MaterialModule } from 'src/app/material.module';
 import { AddressState } from 'src/app/utils/enums/ofev-data';
 import { getErrorMessage } from 'src/app/utils/helpers/form-helper';
-import { requiredLengthValidator } from 'src/app/utils/validators/required-length.validator';
+import { requiredLength } from 'src/app/utils/validators/required-length.validator';
 
 @Component({
   selector: 'app-address-information',
@@ -21,7 +23,7 @@ import { requiredLengthValidator } from 'src/app/utils/validators/required-lengt
     {
       provide: Loader,
       useValue: new Loader({
-        apiKey: 'AIzaSyCU-xrj6qLt4JijYTt9GPy8JJ1IyTTVpAY',
+        apiKey: environment.googleApiKey,
         libraries: ['places']
       })
     },
@@ -52,18 +54,18 @@ export class AddressInformationComponent {
     types:['address']
   };
   eAddressState = AddressState;
-  
+
   address = this.fb.nonNullable.group({
     unitNumber: ['', Validators.maxLength(25)],
     streetAddress: ['', [Validators.required, Validators.maxLength(100)]],
     city: ['', [Validators.required, Validators.maxLength(50)]],
     addressState: [<AddressState | null> null, Validators.required],
-    postcode: ['', [Validators.required, requiredLengthValidator(4)] ],
+    postcode: ['', [Validators.required, requiredLength(4)] ],
     addressType: 'business',
   })
 
   constructor(private fb: FormBuilder){
-    
+
   }
 
   ngOnInit(){
@@ -92,13 +94,13 @@ export class AddressInformationComponent {
           this.postcode.setValue(component.long_name);
           break;
         }
-  
+
         case "locality":
           this.city.setValue(component.long_name);
           break;
-  
+
         case "administrative_area_level_1": {
-          this.addressState.setValue(AddressState[component.short_name]);
+          this.addressState.setValue(AddressState[component.short_name as keyof typeof AddressState]);
           break;
         }
       }
