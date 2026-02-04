@@ -27,12 +27,12 @@ export class CsrfHeaderInterceptor implements HttpInterceptor {
       });
     }
 
-    const tenantId = environment.tenantId;
-    if (!request.headers.has("X-TenantId") && tenantId) {
-      request = request.clone({
-        headers: request.headers.set("X-TenantId", tenantId),
-      });
-    }
+    // const tenantId = environment.tenantId;
+    // if (!request.headers.has("X-TenantId") && tenantId) {
+    //   request = request.clone({
+    //     headers: request.headers.set("X-TenantId", tenantId),
+    //   });
+    // }
 
     return next.handle(request);
   }

@@ -243,7 +243,7 @@ export class OrderSurepalDeviceComponent {
       deliveryState: AddressState.NA,
       deliverTo: undefined,
       consumableOrderItems: this.productsRequested,
-      adminNotificationEmail,
+      adminNotificationEmail: adminNotificationEmail,
     });
   }
 

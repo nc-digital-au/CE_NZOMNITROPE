@@ -611,3 +611,79 @@ div.form-error-message {
   color: $theme-gray-eight !important;
 }
 
+// Landing page mobile responsive styles
+@media (max-width: 768px) {
+  .blank-layout-container {
+    padding: 1rem;
+
+    .main-panel {
+      padding-left: 0.5rem;
+      padding-right: 0.5rem;
+    }
+
+    h1.omni-logo {
+      font-size: 1.75rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .grid-container {
+      display: flex !important;
+      flex-direction: column !important;
+      grid-template-columns: unset !important;
+    }
+
+    .grid-box {
+      min-height: auto;
+      padding: 1.25rem;
+    }
+
+    // Reorder boxes: first-box (login) > last-box (register) > terms of use > contact
+    // HTML order: first-box(1), terms(2), contact(3), last-box(4)
+    .grid-container > .grid-box.first-box {
+      order: 1 !important;
+    }
+
+    .grid-container > .grid-box.last-box {
+      order: 2 !important;
+    }
+
+    .grid-container > .grid-box:nth-child(2) {
+      order: 3 !important;
+    }
+
+    .grid-container > .grid-box:nth-child(3) {
+      order: 4 !important;
+    }
+
+    .login-button,
+    .register-button {
+      margin-left: 20px;
+      margin-right: 20px;
+    }
+
+    .register-button {
+      margin-bottom: 20px;
+    }
+  }
+
+  footer {
+    padding-left: 1rem;
+    padding-right: 1rem;
+
+    .footer-centered {
+      padding-left: 0.5rem;
+      padding-right: 0.5rem;
+    }
+
+    .footer-content {
+      flex-direction: column;
+      text-align: center;
+
+      .footer-logo {
+        margin-left: 0;
+        margin-top: 1rem;
+      }
+    }
+  }
+}
+

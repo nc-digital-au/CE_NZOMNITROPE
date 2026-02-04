@@ -160,7 +160,7 @@ export class ScheduleInjectionTrainingComponent implements OnInit {
       bookingMinute: bookingFormData.sessionTime.getMinutes(),
       patient: patientDto,
       carer: guardianDto,
-      adminNotificationEmail: environment.trainingAdminEmail,
+      adminNotificationEmail: environment.trainingAdminEmail
     });
   }
 
