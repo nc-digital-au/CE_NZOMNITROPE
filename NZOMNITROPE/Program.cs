@@ -9,6 +9,9 @@ var oidcProxyConfig = builder.Configuration
 
 builder.Services.AddOidcProxy(oidcProxyConfig!);
 
+// Add controllers for BFF endpoints (auth endpoints like forgot-password)
+builder.Services.AddControllers();
+
 var app = builder.Build();
 
 // Use forwarded headers for Azure App Service
@@ -18,6 +21,11 @@ app.UseDefaultFiles();
 app.UseStaticFiles();
 
 app.UseOidcProxy();
+
+app.UseRouting();
+
+// Map controllers for BFF endpoints (/.auth/forgot-password)
+app.MapControllers();
 
 app.MapFallbackToFile("/index.html");
 
