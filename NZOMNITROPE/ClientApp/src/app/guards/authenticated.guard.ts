@@ -1,19 +1,21 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 import { AuthenticationService } from '../services/authentication.service';
-import { map } from 'rxjs';
+import { map, tap } from 'rxjs';
 import { routeNames } from '../utils/routes';
 
 export const authenticatedGuard: CanActivateFn = (route, state) => {
   const authService = inject(AuthenticationService);
   const router = inject(Router);
-  return authService.getIsAuthenticated()
-    .pipe(map((response) => {
-      if (!response) {
+  
+  return authService.getIsAuthenticated().pipe(
+    tap(isAuthenticated => {
+      if (!isAuthenticated) {
         router.navigate([routeNames.landing], {
           queryParams: { returnUrl: state.url }
         });
       }
-      return response;
-    }));
+    }),
+    map(isAuthenticated => isAuthenticated)
+  );
 };
