@@ -68,7 +68,6 @@ export class AppHorizontalHeaderComponent {
   public username$ = this.auth.getUsername();
   public authenticated$ = this.auth.getIsAuthenticated();
   public anonymous$ = this.auth.getIsAnonymous();
-  public logoutUrl$ = this.auth.getLogoutUrl();
 
   showFiller = false;
   

@@ -1,34 +1,23 @@
-using Duende.Bff.Yarp;
-using NZOMNITROPE;
-using NZOMNITROPE.ServiceRegistrations;
+using OidcProxy.Net.ModuleInitializers;
+using OidcProxy.Net.OpenIdConnect;
 
 var builder = WebApplication.CreateBuilder(args);
 
-Configuration config = new();
-builder.Configuration.Bind("BFF", config);
+var oidcProxyConfig = builder.Configuration
+    .GetSection("OidcProxy")
+    .Get<OidcProxyConfig>();
 
-builder.Services.AddAuthenticationServices(config);
+builder.Services.AddOidcProxy(oidcProxyConfig!);
 
 var app = builder.Build();
+
+// Use forwarded headers for Azure App Service
+app.UseForwardedHeaders();
 
 app.UseDefaultFiles();
 app.UseStaticFiles();
 
-app.UseAuthentication();
-app.UseBff();
-app.MapBffManagementEndpoints();
-
-if (config.Apis.Any())
-{
-    foreach (var api in config.Apis)
-    {
-        var apiBuilder = app.MapRemoteBffApiEndpoint(api.LocalPath, api.RemoteUrl!);
-        if (api.RequiredToken.HasValue)
-        {
-            apiBuilder.RequireAccessToken(api.RequiredToken.Value);
-        }
-    }
-};
+app.UseOidcProxy();
 
 app.MapFallbackToFile("/index.html");
 

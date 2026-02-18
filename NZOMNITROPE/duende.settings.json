@@ -1,0 +1,31 @@
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "BFF": {
+    "Authority": "https://localhost:5024",
+    "ClientId": "3b29850c-300b-494e-9316-60b456341997",
+    "ClientSecret": "ba084567-a1bf-428a-9df4-a69358079b34",
+    "Scopes": [ "openid", "profile", "ceApi.read", "ceApi.write", "offline_access", "roles", "programs", "credentials" ],
+
+    "Apis": [
+      {
+        "LocalPath": "/api",
+        "RemoteUrl": "https://localhost:5144/api",
+        "RequiredToken": "User"
+      },
+      {
+        "LocalPath": "/api/register",
+        "RemoteUrl": "https://localhost:5144/api/register"      
+      },
+      {
+        "LocalPath": "/api/account",
+        "RemoteUrl": "https://localhost:5144/api/account"
+      }
+    ]
+  }
+  
+}

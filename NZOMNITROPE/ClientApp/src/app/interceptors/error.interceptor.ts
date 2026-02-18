@@ -32,7 +32,7 @@ export class ErrorInterceptor implements HttpInterceptor {
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     return next.handle(request).pipe(catchError(async (err: HttpErrorResponse) => {
-      if (request.url.startsWith('bff'))
+      if (request.url.startsWith('/.auth'))
         throw err;
 
       switch (err.status) {

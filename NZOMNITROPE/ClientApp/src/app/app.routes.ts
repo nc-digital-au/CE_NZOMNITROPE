@@ -7,7 +7,6 @@ import { unauthenticatedGuard } from './guards/unauthenticated.guard';
 import { HomeComponent } from './pages/home/home.component';
 import { LandingComponent } from './pages/landing/landing.component';
 import { HowToInjectComponent } from './pages/resources/how-to-inject.component';
-import { OrderFormComponent } from './pages/order/order-surepal-device/order-form/order-form.component';
 import { OrderSurepalDeviceComponent } from './pages/order/order-surepal-device/order-surepal-device.component';
 import { ScheduleInjectionTrainingComponent } from './pages/schedule-injection-training/schedule-injection-training.component';
 import { authenticatedGuard } from './guards/authenticated.guard';
