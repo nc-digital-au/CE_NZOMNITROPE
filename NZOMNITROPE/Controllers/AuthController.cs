@@ -36,5 +36,38 @@ public class AuthController : ControllerBase
 
         return Redirect(forgotPasswordUrl);
     }
+
+    /// <summary>
+    /// Clears local auth cookies and redirects to the OIDC end-session endpoint.
+    /// Uses optional returnUrl query parameter or the configured PostLogoutRedirectEndpoint.
+    /// </summary>
+    [HttpGet("/auth/logout")]
+    public IActionResult Logout([FromQuery] string? returnUrl = null)
+    {
+        var authority = _configuration["OidcProxy:Oidc:Authority"]?.TrimEnd('/');
+        var clientId = _configuration["OidcProxy:Oidc:ClientId"];
+        var postLogoutPath = _configuration["OidcProxy:Oidc:PostLogoutRedirectEndpoint"] ?? "/";
+
+        if (string.IsNullOrEmpty(authority) || string.IsNullOrEmpty(clientId))
+        {
+            return BadRequest("OIDC configuration is missing");
+        }
+
+        var redirectTarget = string.IsNullOrWhiteSpace(returnUrl) ? postLogoutPath : returnUrl;
+        var redirectUri = Uri.TryCreate(redirectTarget, UriKind.Absolute, out var absolute)
+            ? absolute.ToString()
+            : $"{Request.Scheme}://{Request.Host}{redirectTarget}";
+
+        foreach (var cookieName in Request.Cookies.Keys)
+        {
+            Response.Cookies.Delete(cookieName);
+        }
+
+        var logoutUrl =
+            $"{authority}/protocol/openid-connect/logout?client_id={Uri.EscapeDataString(clientId)}" +
+            $"&post_logout_redirect_uri={Uri.EscapeDataString(redirectUri)}";
+
+        return Redirect(logoutUrl);
+    }
 }
 
