@@ -28,7 +28,8 @@ describe('AuthenticationService', () => {
       name: 'John Doe',
       prescriber_id: 'P123',
       prescriber_number: 'PN456',
-      ahpra_number: 'AH789'
+      ahpra_number: 'AH789',
+      role: 'patient'
     };
 
     service.getSession(true).subscribe(session => {
@@ -57,5 +58,65 @@ describe('AuthenticationService', () => {
     const req = httpMock.expectOne('/.auth/me');
     expect(req.request.method).toBe('GET');
     req.flush(null);
+  });
+
+  it('getIsAuthenticated should return true when patient is in realm_access roles', (done) => {
+    const mockResponse = {
+      name: 'Jane Doe',
+      realm_access: {
+        roles: ['offline_access', 'patient']
+      }
+    };
+
+    service.getIsAuthenticated(true).subscribe(isAuthenticated => {
+      expect(isAuthenticated).toBeTrue();
+      expect(service.roles).toContain('patient');
+      done();
+    });
+
+    const req = httpMock.expectOne('/.auth/me');
+    expect(req.request.method).toBe('GET');
+    req.flush(mockResponse);
+  });
+
+  it('getIsAuthenticated should return true when patient is in resource_access roles', (done) => {
+    const mockResponse = {
+      name: 'Jane Doe',
+      resource_access: {
+        account: {
+          roles: ['manage-account']
+        },
+        app: {
+          roles: ['patient']
+        }
+      }
+    };
+
+    service.getIsAuthenticated(true).subscribe(isAuthenticated => {
+      expect(isAuthenticated).toBeTrue();
+      expect(service.roles).toContain('patient');
+      done();
+    });
+
+    const req = httpMock.expectOne('/.auth/me');
+    expect(req.request.method).toBe('GET');
+    req.flush(mockResponse);
+  });
+
+  it('getIsAuthenticated should return false when patient role is missing', (done) => {
+    const mockResponse = {
+      name: 'John Doe',
+      role: 'prescriber'
+    };
+
+    service.getIsAuthenticated(true).subscribe(isAuthenticated => {
+      expect(isAuthenticated).toBeFalse();
+      expect(service.roles).toContain('prescriber');
+      done();
+    });
+
+    const req = httpMock.expectOne('/.auth/me');
+    expect(req.request.method).toBe('GET');
+    req.flush(mockResponse);
   });
 });

@@ -5,7 +5,6 @@ import { AppSideLoginComponent } from './side-login/side-login.component';
 import { AppSideRegisterComponent } from './side-register/side-register.component';
 import { userTokenGuard } from 'src/app/guards/user-token.guard';
 import { routeNames } from 'src/app/utils/routes';
-import { ForgotPasswordComponent } from './account/forgot-password/forgot-password.component';
 import { ResetPasswordComponent } from './account/reset-password/reset-password.component';
 import { RegisterComponent } from './register/register.component';
 import { LandingComponent } from '../landing/landing.component';
@@ -21,10 +20,6 @@ export const AuthenticationRoutes: Routes = [
       {
         path: routeNames.register,
         component: RegisterComponent,
-      },
-      {
-        path: routeNames.forgotPassword,
-        component: ForgotPasswordComponent,
       },
       {
         path: routeNames.resetPassword,

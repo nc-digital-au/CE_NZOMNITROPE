@@ -20,10 +20,10 @@ export class CsrfHeaderInterceptor implements HttpInterceptor {
       });
     }
 
-    const tenantId = environment.tenantId;
-    if (!request.headers.has("X-TenantId") && tenantId) {
+    const programId = environment.programId;
+    if (!request.headers.has("X-ProgramId") && programId) {
       request = request.clone({
-        headers: request.headers.set("X-TenantId", tenantId),
+        headers: request.headers.set("X-ProgramId", programId),
       });
     }
 

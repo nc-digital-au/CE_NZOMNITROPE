@@ -37,7 +37,7 @@ export class AppHorizontalNavItemComponent implements OnInit {
   ngOnInit() { }
   onItemSelected(item: any) {
     if(item.logout){
-      this.authenticationSvc.getIsAuthenticated().subscribe((isAuthenticated) => {
+      this.authenticationSvc.getIsAuthenticated().subscribe((isAuthenticated: boolean) => {
         if (isAuthenticated) {
           this.authenticationSvc.signOut();
           window.location.href = '/.auth/end-session';

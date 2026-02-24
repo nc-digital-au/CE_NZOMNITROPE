@@ -8,7 +8,7 @@ export const authenticatedGuard: CanActivateFn = (route, state) => {
   const authService = inject(AuthenticationService);
   const router = inject(Router);
   
-  return authService.getIsAuthenticated().pipe(
+  return authService.getIsAuthenticated(true).pipe(
     tap(isAuthenticated => {
       if (!isAuthenticated) {
         router.navigate([routeNames.landing], {
