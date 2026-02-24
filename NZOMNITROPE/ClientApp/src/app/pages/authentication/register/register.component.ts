@@ -152,7 +152,7 @@ export class RegisterComponent implements OnInit {
   submitPatientDetailsForm(){
     const patientFormData = this.patientForm.value as any;
     this.patientForm.markAllAsTouched();
-    this._registrationService.checkEmail(patientFormData.email)
+    this._registrationService.checkEmailAvailability(patientFormData.email)
       .pipe(
         takeUntilDestroyed(this._destroyRef),
       )
