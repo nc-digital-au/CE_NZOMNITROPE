@@ -28,7 +28,7 @@ export class DynamicFormComponent implements OnChanges {
     throw new Error('Method not implemented.');
   }
   @Input()
-  formDefinition: DynamicForm;
+  formDefinition: DynamicForm | undefined;
 
   @Output()
   formCreated = new EventEmitter<FormGroup>();
@@ -48,16 +48,22 @@ export class DynamicFormComponent implements OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['formDefinition']) {
+      this.formReady = false;
       this.form = this._fb.group({});
-      if (this.formDefinition?.children && this.formDefinition.children.length) {
-        this.buildForm(this.formDefinition.children);
+      const children = this.formDefinition?.children ?? [];
+
+      if (children.length) {
+        this.buildForm(children);
       }
-      setTimeout(() => {
-        this.formReady = true;
-        this.formCreated.emit(this.form);
-        this._cd.detectChanges();
-        this.tempFormCreated.emit(this.tempForm);
-      });
+
+      if (this.formDefinition) {
+        setTimeout(() => {
+          this.formReady = true;
+          this.formCreated.emit(this.form);
+          this._cd.detectChanges();
+          this.tempFormCreated.emit(this.tempForm);
+        });
+      }
     }
   }
 

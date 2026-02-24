@@ -1,7 +1,7 @@
-@if (formReady && formDefinition.children && formDefinition.children.length) {
+@if (formReady && formDefinition && formDefinition.children && formDefinition.children.length) {
   <form [formGroup]="form" #tempForm="ngForm">
     <div class="row">
-      @for (formElement of formDefinition.children; track formElement) {
+      @for (formElement of formDefinition!.children; track formElement) {
         <app-form-element 
           [formElement]="formElement" 
           [form]="form" 
