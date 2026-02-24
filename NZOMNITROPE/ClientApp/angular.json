@@ -73,7 +73,7 @@
             "development": {
               "buildTarget": "NZOMNITROPE:build:development",
               "proxyConfig": "proxy.conf.js",
-              "ssl": false,
+              "ssl": true,
               "port": 44467
             }
           },

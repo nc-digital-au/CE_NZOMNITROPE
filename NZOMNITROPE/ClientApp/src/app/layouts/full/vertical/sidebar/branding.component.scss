@@ -1,6 +1,11 @@
 h1 {
   white-space: break-spaces;
   line-height: 1;
+  .omni-logo {
+    a {
+      text-decoration: none;
+    }
+  }
 }
 
 .nowrap {
