@@ -8,7 +8,7 @@ export const unauthenticatedGuard: CanActivateFn = (route, state) => {
   const authService = inject(AuthenticationService);
   const router = inject(Router);
   
-  return authService.getIsAnonymous().pipe(
+  return authService.getIsAnonymous(true).pipe(
     tap(isAnonymous => {
       if (!isAnonymous) {
         router.navigate([routeNames.default]);

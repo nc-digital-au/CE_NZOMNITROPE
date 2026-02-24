@@ -1,213 +1,75 @@
-// src/app/services/auth.service.ts
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Injectable, Signal, computed, inject } from '@angular/core';
-import { Router } from '@angular/router';
-import { catchError, shareReplay, Observable, defer, of, map } from 'rxjs';
-import { toSignal } from '@angular/core/rxjs-interop';
-import { environment } from '../../environments/environment';
-
-// OidcProxy.Net BFF endpoints
-const AUTH_ENDPOINTS = {
-  login: '/.auth/login',
-  logout: '/auth/logout',
-  me: '/.auth/me',
-  token: '/.auth/token',
-  forgotPassword: '/.auth/forgot-password'
-} as const;
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { catchError, filter, map, Observable, of, shareReplay } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 const ANONYMOUS: Session = null;
 const CACHE_SIZE = 1;
 
-// Development fallback role when auth is disabled
-// TODO: Set to 'pharmacist' to test pharmacist role, or null to disable
-const DEV_FALLBACK_ROLE: 'patient' | 'pharmacist' | null = 'patient';
+export interface Claim {
+  type: string;
+  value: string;
+}
+
+export class AuthenticatedUser {
+  prescriberId: string;
+  prescriberNumber: string;
+  ahpraNumber: string;
+
+  private _claims: Claim[] = [];
+  private _lsKey = {
+    prescriberNumber: 'prescriber.number',
+  };
+
+  constructor(claims: Claim[] = []) {
+    this._claims = claims;
+    this.initializeProps();
+  }
+
+  storePrescriberNumber(value: string): void {
+    if (value && value !== 'undefined' && value !== 'null') {
+      localStorage.setItem(this._lsKey.prescriberNumber, value);
+      this.initializeProps();
+    }
+  }
+
+  clearLocalStorage(): void {
+    localStorage.removeItem(this._lsKey.prescriberNumber);
+  }
+
+  private initializeProps(): void {
+    this.prescriberId = this.readSessionValue('prescriber_id');
+    this.ahpraNumber = this.readSessionValue('ahpra_number');
+
+    let prescriberNumber = this.readSessionValue('prescriber_number');
+    if (prescriberNumber && prescriberNumber !== 'undefined' && prescriberNumber !== 'null') {
+      localStorage.setItem(this._lsKey.prescriberNumber, prescriberNumber);
+    } else {
+      const lsPrescriberNumber = localStorage.getItem(this._lsKey.prescriberNumber);
+      if (lsPrescriberNumber) {
+        prescriberNumber = lsPrescriberNumber;
+      }
+    }
+    this.prescriberNumber = prescriberNumber;
+  }
+
+  private readSessionValue(key: string): string {
+    return this._claims.find(c => c?.type === key)?.value || '';
+  }
+}
+
+export type Session = Claim[] | null;
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthenticationService {
-  private readonly http = inject(HttpClient);
-  private readonly router = inject(Router);
-  private session$: Observable<Session> | null = null;
+  private _session$: Observable<Session> | null = null;
+  private _currentUser: AuthenticatedUser;
+  private _roles: string[] = [];
+  private readonly sessionEndpoint = environment.production ? '/.auth/me' : '/.bff/auth-debug';
 
-  // Create a signal from the getSession() observable
-  public session: Signal<Session> = toSignal(
-    defer(() => this.getSession()),
-    { initialValue: ANONYMOUS }
-  );
-
-  // Derived signals using computed that automatically update
-  public isAuthenticated = computed(() => this.session() !== null);
-  public isAnonymous = computed(() => this.session() === null);
-
-  public username = computed(() => {
-    const session = this.session();
-    if (!session) return null;
-
-    if (Array.isArray(session)) {
-      return session.find(c => c.type === 'name')?.value ?? null;
-    }
-    return (session as Record<string, unknown>)['name'] as string ?? null;
-  });
-
-  public email = computed(() => {
-    const session = this.session();
-    if (!session) return null;
-
-    if (Array.isArray(session)) {
-      return session.find(c => c.type === 'email')?.value ?? null;
-    }
-    return (session as Record<string, unknown>)['email'] as string ?? null;
-  });
-
-  // Extract claims directly from session (JWT from /.auth/me)
-  public claims = computed(() => {
-    const session = this.session();
-    if (!session) return null;
-
-    if (Array.isArray(session)) {
-      const claimsDict: Record<string, string> = {};
-      session.forEach(claim => {
-        if (claim?.type && claim?.value) {
-          claimsDict[claim.type] = claim.value;
-        }
-      });
-      return claimsDict;
-    }
-    return session as Record<string, unknown>;
-  });
-
-  public rolesFromClaims = computed(() => {
-    const session = this.session();
-    const roles = this.extractRolesFromSession(session);
-
-    // In development, if no roles detected, use fallback role for testing
-    if (!environment.production && roles.length === 0 && DEV_FALLBACK_ROLE) {
-      return [DEV_FALLBACK_ROLE];
-    }
-
-    return roles;
-  });
-
-  public programIdFromClaims = computed(() => this.extractProgramId(this.claims()));
-  public accountId = computed(() => this.extractAccountId(this.claims()));
-
-  constructor() {}
-
-  // -------------------------------------------------------------------------
-  // Observable Methods for Guards and Components
-  // -------------------------------------------------------------------------
-
-  /**
-   * Return authenticated state as Observable (for guards)
-   */
-  public getIsAuthenticated(): Observable<boolean> {
-    return this.getSession().pipe(
-      map(() => this.isAuthenticated()),
-      catchError(() => of(false))
-    );
-  }
-
-  /**
-   * Return anonymous state as Observable (for guards)
-   */
-  public getIsAnonymous(): Observable<boolean> {
-    return this.getSession().pipe(
-      map(() => this.isAnonymous()),
-      catchError(() => of(true))
-    );
-  }
-
-  /**
-   * Return username as Observable (for components)
-   */
-  public getUsername(): Observable<string | null> {
-    return this.getSession().pipe(
-      map(() => this.username()),
-      catchError(() => of(null))
-    );
-  }
-
-  // -------------------------------------------------------------------------
-  // Authentication Actions
-  // -------------------------------------------------------------------------
-
-  /**
-   * Redirect to OidcProxy login endpoint
-   */
-  public login(returnUrl?: string): void {
-    const url = returnUrl
-      ? `${AUTH_ENDPOINTS.login}?returnUrl=${encodeURIComponent(returnUrl)}`
-      : AUTH_ENDPOINTS.login;
-    window.location.href = url;
-  }
-
-  /**
-   * Redirect to OidcProxy logout endpoint and clear session
-   */
-  public logout(): void {
-    this.clearSessionCache();
-    const returnUrl = encodeURIComponent(`${window.location.origin}/`);
-    window.location.assign(`${AUTH_ENDPOINTS.logout}?returnUrl=${returnUrl}`);
-  }
-
-  /**
-   * Alias for logout() for compatibility with existing code
-   */
-  public signOut(): void {
-    this.logout();
-  }
-
-  /**
-   * Redirect to forgot password page
-   */
-  public forgotPassword(): void {
-    window.location.href = AUTH_ENDPOINTS.forgotPassword;
-  }
-
-  // -------------------------------------------------------------------------
-  // Session Management
-  // -------------------------------------------------------------------------
-
-  public getSession(ignoreCache: boolean = false): Observable<Session> {
-    if (!this.session$ || ignoreCache) {
-      this.session$ = this.http.get<Session>(AUTH_ENDPOINTS.me).pipe(
-        catchError((err: HttpErrorResponse) => {
-          this.clearSessionCache();
-
-          // Redirect to landing on auth error for protected routes
-          if (err.status === 401 || err.status === 403) {
-            const currentUrl = this.router.url;
-            const publicRoutes = ['/', '/register', '/terms', '/privacy', '/contact', '/error'];
-            const isPublicRoute = publicRoutes.some(route => currentUrl.startsWith(route));
-
-            if (!isPublicRoute) {
-              this.router.navigate(['/'], { queryParams: { returnUrl: currentUrl } });
-            }
-          }
-
-          return of(ANONYMOUS);
-        }),
-        shareReplay(CACHE_SIZE)
-      );
-    }
-    return this.session$;
-  }
-
-  /**
-   * Clear the cached session
-   */
-  public clearSessionCache(): void {
-    this.session$ = null;
-  }
-
-  // -------------------------------------------------------------------------
-  // Role Extraction (Keycloak-compatible)
-  // -------------------------------------------------------------------------
-
-  /**
-   * System roles to exclude from user roles
-   */
+  private readonly requiredRole = 'patient';
   private readonly systemRoles = [
     'offline_access',
     'uma_authorization',
@@ -217,140 +79,235 @@ export class AuthenticationService {
     'uma_protection'
   ];
 
-  /**
-   * Extract roles from session (JWT claims from /.auth/me)
-   * Handles Keycloak's complex role structures
-   */
-  private extractRolesFromSession(session: Session): string[] {
-    if (!session) return [];
+  public get currentUser(): AuthenticatedUser {
+    return this._currentUser;
+  }
 
+  public get roles(): string[] {
+    return this._roles;
+  }
+
+  constructor(private readonly _http: HttpClient) { }
+
+  public getLogoutUrl(): Observable<string> {
+    return of('/.auth/end-session');
+  }
+
+  public getSession(ignoreCache: boolean = true): Observable<Session> {
+    if (!this._session$ || ignoreCache) {
+      this._session$ = this._http.get<unknown>(this.sessionEndpoint).pipe(
+        map(user => {
+          if (!user) {
+            this._roles = [];
+            return ANONYMOUS;
+          }
+
+          const claims = this.extractClaimsFromSessionResponse(user);
+          const isAuthenticated = this.extractIsAuthenticatedFromSessionResponse(user);
+
+          if (isAuthenticated === false) {
+            this._roles = [];
+            return ANONYMOUS;
+          }
+
+          this._roles = this.extractRolesFromSession(user, claims);
+
+          if (claims.length) {
+            this._currentUser = new AuthenticatedUser(claims);
+            return claims;
+          }
+
+          return ANONYMOUS;
+        }),
+        catchError(() => {
+          this._roles = [];
+          return of(ANONYMOUS);
+        }),
+        shareReplay(CACHE_SIZE)
+      );
+    }
+
+    return this._session$;
+  }
+
+  public getIsAuthenticated(ignoreCache: boolean = false): Observable<boolean> {
+    return this.getSession(ignoreCache).pipe(
+      map(s => this.userIsAuthenticated(s))
+    );
+  }
+
+  public getIsAnonymous(ignoreCache: boolean = false): Observable<boolean> {
+    return this.getSession(ignoreCache).pipe(
+      map(s => !this.userIsAuthenticated(s))
+    );
+  }
+
+  public getUsername(ignoreCache: boolean = false): Observable<string | undefined> {
+    return this.getSession(ignoreCache).pipe(
+      filter((s): s is Claim[] => this.userIsAuthenticated(s)),
+      map(s => s.find(c => c.type === 'name')?.value)
+    );
+  }
+
+  public getAccountId(ignoreCache: boolean = false): Observable<string | undefined> {
+    return this.getSession(ignoreCache).pipe(
+      filter((s): s is Claim[] => this.userIsAuthenticated(s)),
+      map(s => this.findClaimValue(s, 'AccountId'))
+    );
+  }
+
+  public signOut(): void {
+    if (this._currentUser) {
+      this._currentUser.clearLocalStorage();
+    }
+  }
+
+  private userIsAuthenticated(s: Session): s is Claim[] {
+    return s !== null && this._roles.includes(this.requiredRole);
+  }
+
+  private findClaimValue(claims: Claim[], claimType: string): string | undefined {
+    return claims.find(c => c.type.localeCompare(claimType, undefined, { sensitivity: 'accent' }) === 0)?.value;
+  }
+
+  private mapUserToClaims(user: unknown): Claim[] {
+    if (Array.isArray(user)) {
+      return user
+        .filter(claim => typeof claim?.type === 'string')
+        .map(claim => ({
+          type: claim.type,
+          value: claim.value != null ? String(claim.value) : ''
+        }));
+    }
+
+    if (user && typeof user === 'object') {
+      return Object.entries(user).map(([type, value]) => ({
+        type,
+        value: value != null ? String(value) : ''
+      }));
+    }
+
+    return [];
+  }
+
+  private extractClaimsFromSessionResponse(user: unknown): Claim[] {
+    if (user && typeof user === 'object' && !Array.isArray(user)) {
+      const payload = user as Record<string, unknown>;
+      const nestedClaims = payload['claims'];
+      if (Array.isArray(nestedClaims)) {
+        return nestedClaims
+          .filter(claim => typeof claim === 'object' && claim !== null && typeof (claim as Record<string, unknown>)['type'] === 'string')
+          .map(claim => {
+            const record = claim as Record<string, unknown>;
+            return {
+              type: String(record['type']),
+              value: record['value'] != null ? String(record['value']) : ''
+            };
+          });
+      }
+    }
+
+    return this.mapUserToClaims(user);
+  }
+
+  private extractIsAuthenticatedFromSessionResponse(user: unknown): boolean | undefined {
+    if (user && typeof user === 'object' && !Array.isArray(user)) {
+      const payload = user as Record<string, unknown>;
+      if (typeof payload['isAuthenticated'] === 'boolean') {
+        return payload['isAuthenticated'];
+      }
+    }
+
+    return undefined;
+  }
+
+  private extractRolesFromSession(user: unknown, claims: Claim[]): string[] {
     const roles = new Set<string>();
 
-    if (Array.isArray(session)) {
-      this.extractRolesFromClaimArray(session, roles);
-    } else {
-      this.extractRolesFromJwtPayload(session as Record<string, unknown>, roles);
+    claims.forEach(claim => {
+      if (claim.type === 'role' || claim.type === 'roles' || claim.type === 'groups') {
+        this.addRolesFromProperty(claim.value, roles);
+      }
+
+      if (claim.type === 'realm_access') {
+        this.parseKeycloakRealmAccess(claim.value, roles);
+      }
+
+      if (claim.type === 'resource_access') {
+        this.parseKeycloakResourceAccess(claim.value, roles);
+      }
+    });
+
+    if (user && typeof user === 'object' && !Array.isArray(user)) {
+      const payload = user as Record<string, unknown>;
+      this.addRolesFromProperty(payload['role'], roles);
+      this.addRolesFromProperty(payload['roles'], roles);
+      this.addRolesFromProperty(payload['groups'], roles);
+
+      const realmAccess = payload['realm_access'] as Record<string, unknown> | undefined;
+      if (realmAccess?.['roles']) {
+        this.addRolesFromProperty(realmAccess['roles'], roles);
+      }
+
+      const resourceAccess = payload['resource_access'] as Record<string, unknown> | undefined;
+      if (resourceAccess && typeof resourceAccess === 'object') {
+        Object.values(resourceAccess).forEach((client: unknown) => {
+          const clientObj = client as Record<string, unknown> | undefined;
+          if (clientObj?.['roles']) {
+            this.addRolesFromProperty(clientObj['roles'], roles);
+          }
+        });
+      }
     }
 
     return Array.from(roles);
   }
 
-  private extractRolesFromClaimArray(claims: Claim[], roles: Set<string>): void {
-    // Direct 'role' claims
-    claims.forEach(claim => {
-      if (claim.type === 'role' && claim.value && !this.systemRoles.includes(claim.value.toLowerCase())) {
-        roles.add(claim.value.toLowerCase());
-      }
-    });
-
-    // Keycloak realm_access claim (JSON string)
-    const realmAccessClaim = claims.find(c => c.type === 'realm_access');
-    if (realmAccessClaim?.value) {
-      this.parseKeycloakRoles(realmAccessClaim.value, roles, true);
+  private addRolesFromProperty(value: unknown, roles: Set<string>): void {
+    if (!value) {
+      return;
     }
 
-    // Keycloak resource_access claim (JSON string)
-    const resourceAccessClaim = claims.find(c => c.type === 'resource_access');
-    if (resourceAccessClaim?.value) {
-      this.parseKeycloakResourceRoles(resourceAccessClaim.value, roles, true);
+    if (Array.isArray(value)) {
+      value.forEach(role => {
+        if (typeof role !== 'string') {
+          return;
+        }
+
+        const normalizedRole = role.toLowerCase();
+        if (!this.systemRoles.includes(normalizedRole)) {
+          roles.add(normalizedRole);
+        }
+      });
+      return;
+    }
+
+    if (typeof value === 'string') {
+      const normalizedRole = value.toLowerCase();
+      if (!this.systemRoles.includes(normalizedRole)) {
+        roles.add(normalizedRole);
+      }
     }
   }
 
-  private extractRolesFromJwtPayload(payload: Record<string, unknown>, roles: Set<string>): void {
-    // Direct role/roles properties
-    this.addRolesFromProperty(payload['role'], roles);
-    this.addRolesFromProperty(payload['roles'], roles);
-    this.addRolesFromProperty(payload['groups'], roles);
-
-    // Keycloak realm_access (object)
-    const realmAccess = payload['realm_access'] as Record<string, unknown> | undefined;
-    if (realmAccess?.['roles']) {
-      this.addRolesFromProperty(realmAccess['roles'], roles);
+  private parseKeycloakRealmAccess(jsonString: string, roles: Set<string>): void {
+    try {
+      const parsed = JSON.parse(jsonString) as Record<string, unknown>;
+      this.addRolesFromProperty(parsed['roles'], roles);
+    } catch {
     }
+  }
 
-    // Keycloak resource_access (object)
-    const resourceAccess = payload['resource_access'] as Record<string, unknown> | undefined;
-    if (resourceAccess && typeof resourceAccess === 'object') {
-      Object.values(resourceAccess).forEach((client: unknown) => {
+  private parseKeycloakResourceAccess(jsonString: string, roles: Set<string>): void {
+    try {
+      const parsed = JSON.parse(jsonString) as Record<string, unknown>;
+      Object.values(parsed).forEach((client: unknown) => {
         const clientObj = client as Record<string, unknown> | undefined;
         if (clientObj?.['roles']) {
           this.addRolesFromProperty(clientObj['roles'], roles);
         }
       });
-    }
-  }
-
-  private addRolesFromProperty(value: unknown, roles: Set<string>): void {
-    if (!value) return;
-
-    if (Array.isArray(value)) {
-      value.forEach((role: unknown) => {
-        if (typeof role === 'string' && !this.systemRoles.includes(role.toLowerCase())) {
-          roles.add(role.toLowerCase());
-        }
-      });
-    } else if (typeof value === 'string' && !this.systemRoles.includes(value.toLowerCase())) {
-      roles.add(value.toLowerCase());
-    }
-  }
-
-  private parseKeycloakRoles(jsonString: string, roles: Set<string>, isRealmAccess: boolean): void {
-    try {
-      const parsed = JSON.parse(jsonString);
-      if (isRealmAccess && parsed.roles && Array.isArray(parsed.roles)) {
-        this.addRolesFromProperty(parsed.roles, roles);
-      }
     } catch {
-      // Invalid JSON, ignore
     }
-  }
-
-  private parseKeycloakResourceRoles(jsonString: string, roles: Set<string>, _isResourceAccess: boolean): void {
-    try {
-      const resourceAccess = JSON.parse(jsonString);
-      Object.values(resourceAccess).forEach((client: unknown) => {
-        const clientObj = client as Record<string, unknown> | undefined;
-        if (clientObj?.['roles'] && Array.isArray(clientObj['roles'])) {
-          this.addRolesFromProperty(clientObj['roles'], roles);
-        }
-      });
-    } catch {
-      // Invalid JSON, ignore
-    }
-  }
-
-  // -------------------------------------------------------------------------
-  // Claim Extraction Utilities
-  // -------------------------------------------------------------------------
-
-  private extractProgramId(claims: Record<string, unknown> | null): string | null {
-    if (!claims) return null;
-    const key = Object.keys(claims).find(k => /programid|program_id|program$/i.test(k));
-    return key ? String(claims[key]) : null;
-  }
-
-  private extractAccountId(claims: Record<string, unknown> | null): string | null {
-    if (!claims) return null;
-
-    const possibleKeys = ['AccountId', 'account_id', 'accountid', 'account-id'];
-    for (const key of possibleKeys) {
-      if (claims[key]) {
-        return String(claims[key]);
-      }
-    }
-
-    const key = Object.keys(claims).find(k => /^accountid$/i.test(k));
-    return key ? String(claims[key]) : null;
   }
 }
-
-// -------------------------------------------------------------------------
-// Types
-// -------------------------------------------------------------------------
-
-export interface Claim {
-  type: string;
-  value: string;
-}
-
-export type Session = Claim[] | null;

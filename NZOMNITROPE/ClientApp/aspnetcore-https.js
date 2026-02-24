@@ -19,16 +19,22 @@ if (!certificateName) {
 const certFilePath = path.join(baseFolder, `${certificateName}.pem`);
 const keyFilePath = path.join(baseFolder, `${certificateName}.key`);
 
-if (!fs.existsSync(certFilePath) || !fs.existsSync(keyFilePath)) {
-  spawn('dotnet', [
-    'dev-certs',
-    'https',
-    '--export-path',
-    certFilePath,
-    '--format',
-    'Pem',
-    '--no-password',
-  ], { stdio: 'inherit', })
-  .on('exit', (code) => process.exit(code));
+if (fs.existsSync(certFilePath)) {
+  fs.rmSync(certFilePath);
 }
+
+if (fs.existsSync(keyFilePath)) {
+  fs.rmSync(keyFilePath);
+}
+
+spawn('dotnet', [
+  'dev-certs',
+  'https',
+  '--export-path',
+  certFilePath,
+  '--format',
+  'Pem',
+  '--no-password',
+], { stdio: 'inherit', })
+.on('exit', (code) => process.exit(code));
 

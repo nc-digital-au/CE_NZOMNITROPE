@@ -611,6 +611,27 @@ div.form-error-message {
   color: $theme-gray-eight !important;
 }
 
+// Blank layout flex column to prevent footer overlap
+app-blank > div {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+app-blank > div > router-outlet ~ *:not(footer) {
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+app-blank > div > router-outlet ~ *:not(footer) > .blank-layout-container {
+  flex: 1 0 auto;
+}
+
+app-blank > div > footer {
+  flex-shrink: 0;
+}
+
 // Landing page mobile responsive styles
 @media (max-width: 768px) {
   .blank-layout-container {

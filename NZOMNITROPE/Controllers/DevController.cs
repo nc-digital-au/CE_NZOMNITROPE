@@ -47,6 +47,32 @@ public class DevController : ControllerBase
 	        return NotFound();
     }
 
+    /// <summary>
+    /// Returns current authentication diagnostics for local troubleshooting.
+    /// Route: /.bff/auth-debug
+    /// </summary>
+    [HttpGet("auth-debug")]
+    public IActionResult GetAuthDebug()
+    {
+        if (!_environment.IsDevelopment())
+        {
+            return NotFound();
+        }
+
+        var claims = User.Claims
+            .Select(c => new { c.Type, c.Value })
+            .ToArray();
+
+        return Ok(new
+        {
+            IsAuthenticated = User?.Identity?.IsAuthenticated ?? false,
+            IdentityName = User?.Identity?.Name,
+            DetectedRole = GetUserRoleFromClaims(),
+            ClaimCount = claims.Length,
+            Claims = claims
+        });
+    }
+
     private string? GetUserRoleFromClaims()
     {
         if (User?.Identity?.IsAuthenticated != true)

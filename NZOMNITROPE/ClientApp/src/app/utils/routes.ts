@@ -1,5 +1,3 @@
-import { resource } from "@angular/core";
-
 export const routeNames = {
   default: 'home',
   authentication: 'authentication',
@@ -11,7 +9,6 @@ export const routeNames = {
   prescriber: 'prescriber',
   register: 'register',
   account: 'account',
-  forgotPassword: 'forgot-password',
   resetPassword: 'account/reset-password',
   dashboard: 'dashboard',
   enrol: 'enrol',
@@ -25,7 +22,6 @@ export const routeLinks = {
   authentication: {
     error: `/${routeNames.authentication}/${routeNames.error}`,
     register: `/${routeNames.authentication}/${routeNames.register}`,
-    forgotPassword: `/${routeNames.authentication}/${routeNames.forgotPassword}`,
     resetPassword: `/${routeNames.authentication}/${routeNames.resetPassword}`,
   },
   landing: `/${routeNames.landing}`,
