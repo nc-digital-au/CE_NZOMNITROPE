@@ -1,63 +1,26 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { catchError, filter, map, Observable, of, shareReplay, tap } from 'rxjs';
+// src/app/services/auth.service.ts
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { Injectable, Signal, computed, inject } from '@angular/core';
+import { Router } from '@angular/router';
+import { catchError, shareReplay, Observable, defer, of, map } from 'rxjs';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { environment } from '../../environments/environment';
+
+// OidcProxy.Net BFF endpoints
+const AUTH_ENDPOINTS = {
+  login: '/.auth/login',
+  logout: '/auth/logout',
+  me: '/.auth/me',
+  token: '/.auth/token',
+  forgotPassword: '/.auth/forgot-password'
+} as const;
 
 const ANONYMOUS: Session = null;
 const CACHE_SIZE = 1;
 
-
-export interface Claim {
-  type: string;
-  value: string;
-}
-export class AuthenticatedUser {
-  prescriberId: string;
-  prescriberNumber: string;
-  ahpraNumber: string;
-
-  private _claims: Claim[] = [];
-  private _lsKey = {
-    prescriberNumber: 'prescriber.number',
-  };
-
-  constructor(claims: Claim[] = []) {
-    this._claims = claims;
-    this.initializeProps();
-  }
-
-  storePrescriberNumber(value: string): void {
-    if (value && value !== 'undefined' && value !== 'null') {
-      localStorage.setItem(this._lsKey.prescriberNumber, value);
-      this.initializeProps();
-    }
-  }
-
-  clearLocalStorage(): void {
-    localStorage.removeItem(this._lsKey.prescriberNumber);
-  }
-
-  private initializeProps(): void {
-    this.prescriberId = this.readSessionValue('prescriber_id');
-    this.ahpraNumber = this.readSessionValue('ahpra_number');
-
-    let prescriberNumber = this.readSessionValue('prescriber_number');
-    if (prescriberNumber && prescriberNumber !== 'undefined' && prescriberNumber !== 'null') {
-      localStorage.setItem(this._lsKey.prescriberNumber, prescriberNumber);
-    } else {
-      const lsPrescriberNumber = localStorage.getItem(this._lsKey.prescriberNumber);
-      if (lsPrescriberNumber) {
-        prescriberNumber = lsPrescriberNumber;
-      }
-    }
-    this.prescriberNumber = prescriberNumber;
-  }
-
-  private readSessionValue(key: string): string {
-    return this._claims.find(c => c?.type === key)?.value || '';
-  }
-}
-
-export type Session = Claim[] | null;
+// Development fallback role when auth is disabled
+// TODO: Set to 'pharmacist' to test pharmacist role, or null to disable
+const DEV_FALLBACK_ROLE: 'patient' | 'pharmacist' | null = 'patient';
 
 @Injectable({
   providedIn: 'root'
@@ -113,7 +76,7 @@ export class AuthenticationService {
         shareReplay(CACHE_SIZE)
       );
     }
-    return this._session$;
+    return this.session$;
   }
 
   public getIsAuthenticated(ignoreCache: boolean = false) {
@@ -145,8 +108,18 @@ export class AuthenticationService {
     return s !== null && this._roles.includes(this.requiredRole);
   }
 
-  private userIsAnonymous(s: Session): s is null {
-    return s === null;
+  private extractAccountId(claims: Record<string, unknown> | null): string | null {
+    if (!claims) return null;
+
+    const possibleKeys = ['AccountId', 'account_id', 'accountid', 'account-id'];
+    for (const key of possibleKeys) {
+      if (claims[key]) {
+        return String(claims[key]);
+      }
+    }
+
+    const key = Object.keys(claims).find(k => /^accountid$/i.test(k));
+    return key ? String(claims[key]) : null;
   }
 
   private mapUserToClaims(user: unknown): Claim[] {
