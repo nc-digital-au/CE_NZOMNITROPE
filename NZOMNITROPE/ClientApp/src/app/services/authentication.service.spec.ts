@@ -103,15 +103,34 @@ describe('AuthenticationService', () => {
     req.flush(mockResponse);
   });
 
-  it('getIsAuthenticated should return false when patient role is missing', (done) => {
+  it('getIsAuthenticated should return true when session exists even if patient role is missing', (done) => {
     const mockResponse = {
       name: 'John Doe',
       role: 'prescriber'
     };
 
     service.getIsAuthenticated(true).subscribe(isAuthenticated => {
-      expect(isAuthenticated).toBeFalse();
+      expect(isAuthenticated).toBeTrue();
       expect(service.roles).toContain('prescriber');
+      done();
+    });
+
+    const req = httpMock.expectOne('/.auth/me');
+    expect(req.request.method).toBe('GET');
+    req.flush(mockResponse);
+  });
+
+  it('getIsAuthenticated should return true when patient is in URI role claim', (done) => {
+    const mockResponse = [
+      {
+        type: 'http://schemas.microsoft.com/ws/2008/06/identity/claims/role',
+        value: 'Patient'
+      }
+    ];
+
+    service.getIsAuthenticated(true).subscribe(isAuthenticated => {
+      expect(isAuthenticated).toBeTrue();
+      expect(service.roles).toContain('patient');
       done();
     });
 

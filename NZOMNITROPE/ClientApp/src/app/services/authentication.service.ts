@@ -69,7 +69,6 @@ export class AuthenticationService {
   private _roles: string[] = [];
   private readonly sessionEndpoint = environment.production ? '/.auth/me' : '/.bff/auth-debug';
 
-  private readonly requiredRole = 'patient';
   private readonly systemRoles = [
     'offline_access',
     'uma_authorization',
@@ -111,13 +110,8 @@ export class AuthenticationService {
           }
 
           this._roles = this.extractRolesFromSession(user, claims);
-
-          if (claims.length) {
-            this._currentUser = new AuthenticatedUser(claims);
-            return claims;
-          }
-
-          return ANONYMOUS;
+          this._currentUser = new AuthenticatedUser(claims);
+          return claims;
         }),
         catchError(() => {
           this._roles = [];
@@ -163,7 +157,7 @@ export class AuthenticationService {
   }
 
   private userIsAuthenticated(s: Session): s is Claim[] {
-    return s !== null && this._roles.includes(this.requiredRole);
+    return s !== null;
   }
 
   private findClaimValue(claims: Claim[], claimType: string): string | undefined {
@@ -225,15 +219,23 @@ export class AuthenticationService {
     const roles = new Set<string>();
 
     claims.forEach(claim => {
-      if (claim.type === 'role' || claim.type === 'roles' || claim.type === 'groups') {
+      const claimType = claim.type.toLowerCase();
+      const isDirectRoleClaim =
+        claimType === 'role' ||
+        claimType === 'roles' ||
+        claimType === 'groups' ||
+        claimType.endsWith('/role') ||
+        claimType.includes('claims/role');
+
+      if (isDirectRoleClaim) {
         this.addRolesFromProperty(claim.value, roles);
       }
 
-      if (claim.type === 'realm_access') {
+      if (claimType === 'realm_access') {
         this.parseKeycloakRealmAccess(claim.value, roles);
       }
 
-      if (claim.type === 'resource_access') {
+      if (claimType === 'resource_access') {
         this.parseKeycloakResourceAccess(claim.value, roles);
       }
     });
