@@ -126,32 +126,33 @@ export class RegisterComponent implements OnInit {
   }
 
   submitBarcodeValidation() {
-    this.barcodeFormSubmitted = true;
-    this.barcodeForm.markAllAsTouched();
-    this.barcodeForm.updateValueAndValidity({ onlySelf: false, emitEvent: false });
+    // this.barcodeFormSubmitted = true;
+    // this.barcodeForm.markAllAsTouched();
+    // this.barcodeForm.updateValueAndValidity({ onlySelf: false, emitEvent: false });
 
-    console.log('consent value:', this.consentCtrl?.value,
-                'errors:', this.consentCtrl?.errors,
-                'touched:', this.consentCtrl?.touched,
-                'invalid:', this.consentCtrl?.invalid);
+    // console.log('consent value:', this.consentCtrl?.value,
+    //             'errors:', this.consentCtrl?.errors,
+    //             'touched:', this.consentCtrl?.touched,
+    //             'invalid:', this.consentCtrl?.invalid);
 
-    if (this.barcodeForm.invalid) {
-      return;
-    }
+    // if (this.barcodeForm.invalid) {
+    //   return;
+    // }
 
-    const { barcode } = this.barcodeForm.value as any;
-    this._registrationService.validateProductBarcode(barcode)
-      .pipe(takeUntilDestroyed(this._destroyRef))
-      .subscribe((response) => {
-        if (response.isSuccess) {
-          const validBarcode = response.resultObject;
-          this.barcodeInvalid = !validBarcode;
-          if (validBarcode) this.stepper.next();
-        } else {
-          this.barcodeForm.setErrors({ invalid: true });
-          this.barcodeInvalid = true;
-        }
-      });
+    // const { barcode } = this.barcodeForm.value as any;
+    // this._registrationService.validateProductBarcode(barcode)
+    //   .pipe(takeUntilDestroyed(this._destroyRef))
+    //   .subscribe((response) => {
+    //     if (response.isSuccess) {
+    //       const validBarcode = response.resultObject;
+    //       this.barcodeInvalid = !validBarcode;
+    //       if (validBarcode) this.stepper.next();
+    //     } else {
+    //       this.barcodeForm.setErrors({ invalid: true });
+    //       this.barcodeInvalid = true;
+    //     }
+    //   });
+    this.barcodeInvalid = false;
   }
 
   submitPatientDetailsForm(){
