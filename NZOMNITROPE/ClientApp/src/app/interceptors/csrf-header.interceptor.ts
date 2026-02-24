@@ -19,15 +19,14 @@ export class CsrfHeaderInterceptor implements HttpInterceptor {
         headers: request.headers.set("X-CSRF", "1"),
       });
     }
-    
-    const programId = environment.programId;
-    if (!request.headers.has("X-ProgramId") && programId) {
+
+    const tenantId = environment.tenantId;
+    if (!request.headers.has("X-TenantId") && tenantId) {
       request = request.clone({
-        headers: request.headers.set("X-ProgramId", programId),
+        headers: request.headers.set("X-TenantId", tenantId),
       });
     }
 
     return next.handle(request);
   }
 }
-
