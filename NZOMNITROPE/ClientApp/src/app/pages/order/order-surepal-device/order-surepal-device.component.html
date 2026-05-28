@@ -45,13 +45,13 @@
 
           <app-order-form (formCreated)="onOrderFormCreated($event)"></app-order-form>
 
-          <mat-error *ngIf="orderForm?.errors?.['productSelection'] && orderForm?.touched">
-            {{ orderForm?.errors?.['productSelection'] }}
+          <mat-error *ngIf="orderForm.errors?.['productSelection'] && orderForm.touched">
+            {{ orderForm.errors?.['productSelection'] }}
           </mat-error>
-          <mat-error *ngIf="orderForm?.get('penReplacement')?.hasError('required') && orderForm?.touched">
+          <mat-error *ngIf="orderForm.get('penReplacement')?.hasError('required') && orderForm.touched">
             Please select Pen Replacement.
           </mat-error>
-          <mat-error *ngIf="orderForm?.get('needleKit')?.hasError('required') && orderForm?.touched">
+          <mat-error *ngIf="orderForm.get('needleKit')?.hasError('required') && orderForm.touched">
             Please select Needle Kit.
           </mat-error>
 

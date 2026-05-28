@@ -1,0 +1,13 @@
+.place-autocomplete-wrapper {
+	width: 100%;
+	margin-bottom: 16px;
+}
+
+.place-autocomplete-host {
+	width: 100%;
+}
+
+.place-autocomplete-host ::ng-deep gmp-place-autocomplete {
+	display: block;
+	width: 100%;
+}

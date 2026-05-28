@@ -28,7 +28,7 @@ export class DynamicFormComponent implements OnChanges {
     throw new Error('Method not implemented.');
   }
   @Input()
-  formDefinition: DynamicForm;
+  formDefinition: DynamicForm = new DynamicForm();
 
   @Output()
   formCreated = new EventEmitter<FormGroup>();
@@ -53,7 +53,7 @@ export class DynamicFormComponent implements OnChanges {
         this.buildForm(this.formDefinition.children);
       }
       setTimeout(() => {
-        this.formReady = true;
+        this.formReady = !!this.formDefinition;
         this.formCreated.emit(this.form);
         this._cd.detectChanges();
         this.tempFormCreated.emit(this.tempForm);
