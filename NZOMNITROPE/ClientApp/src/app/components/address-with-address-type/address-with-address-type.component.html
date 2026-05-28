@@ -9,12 +9,12 @@
     <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">
       Search address
     </mat-label>
-    <mat-form-field appearance="outline" class="w-100 m-b-20">
-      <input matInput #placesRef="ngx-places" ngx-gp-autocomplete [options]='options'
-        (onAddressChange)="handleAddressChange($event)" type="text" />
-      <mat-hint [innerHTML]="searchHint">
-      </mat-hint>
-    </mat-form-field>
+    <div class="place-autocomplete-wrapper m-b-20">
+      <div #placesContainer class="place-autocomplete-host"></div>
+      @if(searchHint){
+        <div class="place-autocomplete-hint" [innerHTML]="searchHint"></div>
+      }
+    </div>
   </div>
   <app-dynamic-form [formDefinition]="addressFormDefinition" (formCreated)="onFormCreated($event)">
     <ng-content></ng-content>

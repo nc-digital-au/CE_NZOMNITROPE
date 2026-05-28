@@ -11,7 +11,8 @@
       <div class="grid-container">
         <div class="grid-box first-box">
           <p>If you are returning, please re-enter your details to login.</p>
-          <a mat-flat-button class="login-button" href="/.auth/login">LOGIN</a>
+          <!-- Include landingpage query param so the OIDC proxy redirects back to the SPA home route after login -->
+          <a mat-flat-button class="login-button" href="/.auth/login?landingpage=/home">LOGIN</a>
           <div class="forgot-password">
             <span>Forgot your password?</span>
             <a href="/.auth/forgot-password" class="text-decoration-none f-w-500 f-s-14">
