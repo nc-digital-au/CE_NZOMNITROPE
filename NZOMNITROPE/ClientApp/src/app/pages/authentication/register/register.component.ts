@@ -3,7 +3,7 @@ import { AsyncPipe, CommonModule } from '@angular/common';
 import { Component, DestroyRef, EventEmitter, inject, OnInit, Output, ViewChild } from '@angular/core';
 import { ControlContainer, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatCard, MatCardContent, MatCardHeader, MatCardTitle } from '@angular/material/card';
-import { MatStep, MatStepLabel, MatStepper, MatStepperNext, MatStepperPrevious, StepperOrientation } from '@angular/material/stepper';
+import { MatStep, MatStepLabel, MatStepper, MatStepperPrevious, StepperOrientation } from '@angular/material/stepper';
 import { map, Observable, tap } from 'rxjs';
 import { MatButton } from '@angular/material/button';
 import { TermsFormComponent } from './terms-form/terms-form.component';
@@ -30,7 +30,6 @@ import { MatProgressSpinner } from '@angular/material/progress-spinner';
     MatStep,
     MatStepLabel,
     MatStepperPrevious,
-    MatStepperNext,
     MatCard,
     MatCardContent,
     MatButton,
@@ -250,6 +249,7 @@ export class RegisterComponent implements OnInit {
       mobile: guardianData.mobilePhone,
       middleName: undefined,
       phone: undefined,
+      title: Title.Unknown,
     });
     const addressDto = new DeliveryModelDto({
       delivetToName: collectingFormData.nameOfPersonCollecting,

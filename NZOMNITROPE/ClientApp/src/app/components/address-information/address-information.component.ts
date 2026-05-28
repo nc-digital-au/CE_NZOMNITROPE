@@ -1,6 +1,5 @@
-import { NgxGpAutocompleteDirective, NgxGpAutocompleteModule, NgxGpAutocompleteOptions } from '@angular-magic/ngx-gp-autocomplete';
 import { CommonModule } from '@angular/common';
-import { Component, Input, ViewChild, inject } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Input, ViewChild, inject } from '@angular/core';
 import { ControlContainer, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Loader } from '@googlemaps/js-api-loader';
 import { environment } from 'src/environments/environment';
@@ -17,7 +16,6 @@ import { requiredLength } from 'src/app/utils/validators/required-length.validat
     CommonModule,
     MaterialModule,
     ReactiveFormsModule,
-    NgxGpAutocompleteModule,
   ],
   providers:[
     {
@@ -37,9 +35,9 @@ import { requiredLength } from 'src/app/utils/validators/required-length.validat
     },
   ],
 })
-export class AddressInformationComponent {
+export class AddressInformationComponent implements AfterViewInit {
 
-  @ViewChild('ngxPlaces') placesRef: NgxGpAutocompleteDirective;
+  @ViewChild('placesContainer') placesContainer: ElementRef<HTMLDivElement>;
   @Input({required:true}) controlKey = '';
   @Input() addressType: string;
 
@@ -48,11 +46,6 @@ export class AddressInformationComponent {
     return this.parentContainer.control as FormGroup;
   }
 
-  options: NgxGpAutocompleteOptions = {
-    componentRestrictions: { country: ['au'] },
-    fields:['address_components', 'geometry'],
-    types:['address']
-  };
   eAddressState = AddressState;
 
   address = this.fb.nonNullable.group({
@@ -64,7 +57,7 @@ export class AddressInformationComponent {
     addressType: 'business',
   })
 
-  constructor(private fb: FormBuilder){
+  constructor(private fb: FormBuilder, private loader: Loader){
 
   }
 
@@ -72,40 +65,92 @@ export class AddressInformationComponent {
     this.parentFormGroup.addControl(this.controlKey, this.address);
   }
 
+  ngAfterViewInit(): void {
+    setTimeout(() => void this.initializePlaceAutocomplete(), 0);
+  }
+
   ngOnDestroy(){
     this.parentFormGroup.removeControl(this.controlKey);
   }
 
-  public handleAddressChange(place: google.maps.places.PlaceResult) {
+  public handleAddressChange(place: google.maps.places.PlaceResult | any) {
     let streetNumber = '';
     let streetRoute = '';
-    for (const component of place.address_components as google.maps.GeocoderAddressComponent[]) {
+    const addressComponents = place?.address_components ?? place?.addressComponents ?? [];
+    for (const component of addressComponents) {
       const componentType = component.types[0];
+      const longName = component.long_name ?? component.longText ?? '';
+      const shortName = component.short_name ?? component.shortText ?? '';
       switch (componentType) {
         case "street_number": {
-          streetNumber = component.long_name;
+          streetNumber = longName;
           break;
         }
         case "route": {
-          streetRoute = component.short_name;
+          streetRoute = shortName;
           break;
         }
         case "postal_code": {
-          this.postcode.setValue(component.long_name);
+          this.postcode.setValue(longName);
           break;
         }
 
         case "locality":
-          this.city.setValue(component.long_name);
+          this.city.setValue(longName);
           break;
 
         case "administrative_area_level_1": {
-          this.addressState.setValue(AddressState[component.short_name as keyof typeof AddressState]);
+          this.addressState.setValue(AddressState[shortName as keyof typeof AddressState]);
           break;
         }
       }
     }
     this.streetAddress.setValue(`${streetNumber} ${streetRoute}`);
+  }
+
+  private async initializePlaceAutocomplete(): Promise<void> {
+    const host = this.placesContainer?.nativeElement;
+    if (!host) {
+      return;
+    }
+
+    const placesLibrary = await this.loader.load().then(() => google.maps.importLibrary('places'));
+    const PlaceAutocompleteElementCtor =
+      (placesLibrary as any)?.PlaceAutocompleteElement ??
+      (google.maps.places as any)?.PlaceAutocompleteElement;
+
+    if (!PlaceAutocompleteElementCtor) {
+      return;
+    }
+
+    const autocompleteElement = new PlaceAutocompleteElementCtor({
+      componentRestrictions: { country: ['au'] },
+      types: ['address']
+    });
+
+    const onPlaceSelect = (event: Event) => {
+      void this.handlePlaceSelection(event as CustomEvent);
+    };
+
+    autocompleteElement.addEventListener('gmp-placeselect', onPlaceSelect);
+    autocompleteElement.addEventListener('gmp-select', onPlaceSelect);
+
+    host.innerHTML = '';
+    host.appendChild(autocompleteElement);
+  }
+
+  private async handlePlaceSelection(event: CustomEvent): Promise<void> {
+    const prediction = (event as any)?.placePrediction ?? event?.detail?.placePrediction;
+    if (!prediction?.toPlace) {
+      return;
+    }
+
+    const place = prediction.toPlace();
+    if (place?.fetchFields) {
+      await place.fetchFields({ fields: ['addressComponents', 'displayName'] });
+    }
+
+    this.handleAddressChange(place);
   }
 
   setErrorMessage = (formName: string, errorLabel: string) => getErrorMessage(this.address, formName, errorLabel);
