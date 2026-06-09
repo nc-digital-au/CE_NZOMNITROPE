@@ -42,6 +42,45 @@ var app = builder.Build();
 // Use forwarded headers for Azure App Service
 app.UseForwardedHeaders();
 
+app.Use(async (context, next) =>
+{
+    var headers = context.Response.Headers;
+
+    if (!headers.ContainsKey("X-Content-Type-Options"))
+    {
+        headers["X-Content-Type-Options"] = "nosniff";
+    }
+
+    if (!headers.ContainsKey("X-Frame-Options"))
+    {
+        headers["X-Frame-Options"] = "DENY";
+    }
+
+    if (!headers.ContainsKey("Referrer-Policy"))
+    {
+        headers["Referrer-Policy"] = "strict-origin-when-cross-origin";
+    }
+
+    if (!headers.ContainsKey("Permissions-Policy"))
+    {
+        headers["Permissions-Policy"] = "camera=(), microphone=(), geolocation=()";
+    }
+
+    if (!headers.ContainsKey("Content-Security-Policy"))
+    {
+        headers["Content-Security-Policy"] =
+            "default-src 'self'; " +
+            "script-src 'self' https://www.googletagmanager.com https://www.google-analytics.com https://maps.googleapis.com https://maps.gstatic.com; " +
+            "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; " +
+            "img-src 'self' data: https://www.google-analytics.com https://maps.googleapis.com https://maps.gstatic.com; " +
+            "font-src 'self' data: https://fonts.gstatic.com; " +
+            "connect-src 'self' https://www.google-analytics.com https://maps.googleapis.com https://maps.gstatic.com; " +
+            "object-src 'none'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'";
+    }
+
+    await next();
+});
+
 app.UseDefaultFiles();
 app.UseStaticFiles();
 

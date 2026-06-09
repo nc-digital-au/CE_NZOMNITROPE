@@ -2,7 +2,7 @@
   <mat-label class="mat-subtitle-2 f-w-600 d-inline-block">{{ displayFormElement.label }}:</mat-label>
   @switch (displayFormElement.format) {
     @case (DisplayFormat.Html) {
-      <span [innerHTML]="displayFormElement.data"></span>
+      <span [textContent]="displayFormElement.data"></span>
     }
     @case (DisplayFormat.Date) {
       {{ displayFormElement.data | date: 'dd/MM/yyyy' }}
