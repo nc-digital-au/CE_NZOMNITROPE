@@ -4,12 +4,8 @@ import { Injectable } from '@angular/core';
 export class LoginService {
   constructor() {}
 
-  checkusernameandpassword(uname: string, pwd: string) {
-    if (uname === 'admin' && pwd === 'admin123') {
-      localStorage.setItem('username', 'admin');
-      return true;
-    } else {
-      return false;
-    }
+  // Legacy client-side credential path is intentionally disabled.
+  checkusernameandpassword(_uname: string, _pwd: string): boolean {
+    return false;
   }
 }
