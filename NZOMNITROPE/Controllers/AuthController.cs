@@ -53,10 +53,28 @@ public class AuthController : ControllerBase
             return BadRequest("OIDC configuration is missing");
         }
 
-        var redirectTarget = string.IsNullOrWhiteSpace(returnUrl) ? postLogoutPath : returnUrl;
-        var redirectUri = Uri.TryCreate(redirectTarget, UriKind.Absolute, out var absolute)
-            ? absolute.ToString()
-            : $"{Request.Scheme}://{Request.Host}{redirectTarget}";
+        var redirectTarget = string.IsNullOrWhiteSpace(returnUrl) ? postLogoutPath : returnUrl!;
+        var appBaseUri = $"{Request.Scheme}://{Request.Host}";
+
+        if (Uri.TryCreate(redirectTarget, UriKind.Absolute, out var absoluteRedirect))
+        {
+            if (!Uri.TryCreate(appBaseUri, UriKind.Absolute, out var appBaseAbsolute) ||
+                Uri.Compare(absoluteRedirect, appBaseAbsolute, UriComponents.SchemeAndServer, UriFormat.Unescaped, StringComparison.OrdinalIgnoreCase) != 0)
+            {
+                redirectTarget = postLogoutPath;
+            }
+            else
+            {
+                redirectTarget = absoluteRedirect.PathAndQuery + absoluteRedirect.Fragment;
+            }
+        }
+
+        if (!redirectTarget.StartsWith('/'))
+        {
+            redirectTarget = "/";
+        }
+
+        var redirectUri = $"{appBaseUri}{redirectTarget}";
 
         foreach (var cookieName in Request.Cookies.Keys)
         {

@@ -12,7 +12,7 @@
   <div class="place-autocomplete-wrapper m-b-20">
     <div #placesContainer class="place-autocomplete-host"></div>
     @if(searchHint){
-      <div class="place-autocomplete-hint" [innerHTML]="searchHint"></div>
+      <div class="place-autocomplete-hint">{{ searchHint }}</div>
     }
   </div>
 </div>

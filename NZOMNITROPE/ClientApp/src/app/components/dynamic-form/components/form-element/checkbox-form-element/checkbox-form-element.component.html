@@ -1,6 +1,6 @@
 <div [formGroup]="form" class="m-b-10">
   <mat-checkbox color="primary" [formControlName]="checkboxFormElement.name">
-    <div class="checkbox-form-label" [innerHTML]="checkboxFormElement.label" [class.required]="checkboxFormElement['validation']?.required"></div>
+    <div class="checkbox-form-label" [class.required]="checkboxFormElement['validation']?.required">{{ checkboxFormElement.label }}</div>
   </mat-checkbox>
   <mat-error class="f-s-12 p-x-16">
     @if (tempForm.submitted) {
